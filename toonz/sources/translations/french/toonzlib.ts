@@ -498,6 +498,10 @@ Probablement le codec peut ne pas fonctionner correctement.</translation>
         <source>Move Center   %1  Frame %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>color model</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rasterizer</name>

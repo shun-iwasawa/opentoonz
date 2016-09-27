@@ -1121,6 +1121,18 @@ Cosa vuoi fare?</translation>
         <source>Palette:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Append Default Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When activated, styles of the default palette
+($TOONZSTUDIOPALETTE\cleanup_default.tpl) will 
+be appended to the palette after conversion in 
+order to save the effort of creating styles 
+before color designing.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DVGui::ProgressDialog</name>
@@ -1458,11 +1470,11 @@ Cosa vuoi fare?</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation>Larghezza:</translation>
+        <translation type="vanished">Larghezza:</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation>Altezza:</translation>
+        <translation type="vanished">Altezza:</translation>
     </message>
     <message>
         <source>H Resolution:</source>
@@ -2291,6 +2303,10 @@ Vuoi crearla?</translation>
     </message>
     <message>
         <source>Resolution:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3428,7 +3444,7 @@ Vuoi crearla?</translation>
     </message>
     <message>
         <source>Onion Skin</source>
-        <translation>Onion Skin</translation>
+        <translation type="vanished">Onion Skin</translation>
     </message>
     <message>
         <source>Duplicate</source>
@@ -3808,7 +3824,7 @@ Vuoi crearla?</translation>
     </message>
     <message>
         <source>Pressure sensibility</source>
-        <translation>Sensibilità alla Pressione</translation>
+        <translation type="vanished">Sensibilità alla Pressione</translation>
     </message>
     <message>
         <source>Segment Ink</source>
@@ -4395,6 +4411,38 @@ Decrementa lo spessore minimo del pennello</translation>
         <source>&amp;About OpenToonz...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Save All Levels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Camera Capture...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle Maximize Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle Main Window&apos;s Full Screen Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion Skin Toggle</source>
+        <translation type="unfinished">Onion Skin</translation>
+    </message>
+    <message>
+        <source>Zero Thick Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh Folder Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pressure Sensitivity</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -4642,6 +4690,13 @@ Cosa vuoi fare?</translation>
     </message>
 </context>
 <context>
+    <name>MyViewFinder</name>
+    <message>
+        <source>Camera is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OutputSettingsPopup</name>
     <message>
         <source>Save in:</source>
@@ -4697,7 +4752,7 @@ Cosa vuoi fare?</translation>
     </message>
     <message>
         <source>Multiple Rendering: </source>
-        <translation>Render Multiplo:</translation>
+        <translation type="vanished">Render Multiplo:</translation>
     </message>
     <message>
         <source>Do stereoscopy</source>
@@ -5022,6 +5077,175 @@ Cosa vuoi fare?</translation>
     </message>
 </context>
 <context>
+    <name>PencilTestPopup</name>
+    <message>
+        <source>Camera Capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Aggiorna</translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished">File</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save images as they are captured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image adjust</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upside down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capture white BG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show onion skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use interval timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capture
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Chiudi</translation>
+    </message>
+    <message>
+        <source>Next Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Camera:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resolution:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">Nome:</translation>
+    </message>
+    <message>
+        <source>Frame:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save In:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation type="unfinished">Soglia:</translation>
+    </message>
+    <message>
+        <source>Contrast:</source>
+        <translation type="unfinished">Contrasto:</translation>
+    </message>
+    <message>
+        <source>Brightness:</source>
+        <translation type="unfinished">Luminosità:</translation>
+    </message>
+    <message>
+        <source>BG reduction:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity(%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval(sec):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No camera found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- Select camera -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Capturing
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Capturing
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No level name specified: please choose a valid level name</source>
+        <translation type="unfinished">Il nome del livello non è stato specificato: scegliere un nome di livello valido.</translation>
+    </message>
+    <message>
+        <source>Folder %1 doesn&apos;t exist.
+Do you want to create it?</source>
+        <translation type="unfinished">La cartella %1 non esiste.
+Vuoi crearla?</translation>
+    </message>
+    <message>
+        <source>Unable to create</source>
+        <translation type="unfinished">Impossibile creare</translation>
+    </message>
+    <message>
+        <source>The level name specified is already used: please choose a different level name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The save in path specified does not match with the existing level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The captured image size does not match with the existing level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File %1 does exist.
+Do you want to overwrite it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to load %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PltGizmoPopup</name>
     <message>
         <source>Palette Gizmo</source>
@@ -5116,7 +5340,7 @@ Cosa vuoi fare?</translation>
     </message>
     <message>
         <source>Save Automatically Every Minutes</source>
-        <translation>Salva Automaticamente Ogni Minuti</translation>
+        <translation type="vanished">Salva Automaticamente Ogni Minuti</translation>
     </message>
     <message>
         <source>Backup Animation Levels when Saving</source>
@@ -5330,7 +5554,6 @@ Cosa vuoi fare?</translation>
         <source>Raster Level</source>
         <translation></translation>
     </message>
-
     <message>
         <source>Width:</source>
         <translation>Larghezza:</translation>
@@ -5609,6 +5832,110 @@ Cosa vuoi fare?</translation>
     </message>
     <message>
         <source>Palette Type on Loading Raster Image as Color Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically Save the Scene File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically Save Non-Scene Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>My Documents/OpenToonz*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desktop/OpenToonz*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stuff Folder*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Project Path(s): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced: Multiple paths can be separated by ** (No Spaces)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All imported images will use the same DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Onion Skin During Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pixel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval(Minutes): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional Project Locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels Only:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rooms*:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenToonz can use FFmpeg for additional file formats.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg is not bundled with OpenToonz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NOTE: This is an experimental feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please SAVE YOUR WORK before exporting in MP4, WEBM, or GIF format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide the path where FFmpeg is located on your computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg Path: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds to wait for FFmpeg to complete processing the output:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: FFmpeg begins working once all images have been processed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg Timeout:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6149,7 +6476,7 @@ Vuoi importarlo o caricarlo dalla sua posizione originale?</translation>
     <message>
         <source>%1: the current scene has been modified.
 Do you want to save your changes?</source>
-        <translation>%1: la scena corrente è stata modificata.
+        <translation type="vanished">%1: la scena corrente è stata modificata.
 Vuoi salvare i cambiamenti?</translation>
     </message>
     <message>
@@ -6841,21 +7168,6 @@ Are you sure ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> Following file(s) are modified.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>
-Are you sure to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> anyway ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
@@ -7196,6 +7508,71 @@ Are you sure to </source>
         <source>https://opentoonz.github.io/e/</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Change current drawing %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: the current scene has been modified.
+What would you like to do?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Scene Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> The following file(s) have been modified.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+What would you like to do? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Anyway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This scene is incompatible with pixels only mode of the current OpenToonz version.
+What would you like to do?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn off pixels only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep pixels only mode on and resize the scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Zero Thickness Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Zero Thickness Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add color model&apos;s palette to the destination palette.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RenameAsToonzPopup</name>
@@ -7262,6 +7639,13 @@ Il file audio non sarà incluso nel clip renderizzato.</translation>
                            The output result may differ from what you expect. What do you want to do?</source>
         <translation>La scena %1 ha risoluzione differente dalla scena %2.
 Il risultato del render può essere diverso dal previsto. Cosa vuoi fare?</translation>
+    </message>
+</context>
+<context>
+    <name>RenderListener</name>
+    <message>
+        <source>Finalizing render, please wait.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8414,7 +8798,7 @@ Per favore sottometti o ripristina i cambiamenti prima di proseguire.</translati
         <source>Regenerate Frame Preview</source>
         <translation>Rigenera l&apos;Anteprima del Fotogramma</translation>
     </message>
-   <message>
+    <message>
         <source>Select </source>
         <translation></translation>
     </message>
@@ -8508,6 +8892,10 @@ Per favore sottometti o ripristina i cambiamenti prima di proseguire.</translati
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
+    <message>
+        <source>Couldn&apos;t find any matching command.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShortcutTree</name>
@@ -8577,6 +8965,10 @@ Per favore sottometti o ripristina i cambiamenti prima di proseguire.</translati
     </message>
     <message>
         <source>Misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Playback</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8761,7 +9153,11 @@ Clicca la freccia per creare un nuovo sub-xsheet</translation>
     </message>
     <message>
         <source>It is not possible to save automatically an untitled scene.</source>
-        <translation>Impossibile salvare automaticamente una scena senza nome.</translation>
+        <translation type="vanished">Impossibile salvare automaticamente una scena senza nome.</translation>
+    </message>
+    <message>
+        <source>It is not possible to automatically save an untitled scene.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9544,6 +9940,10 @@ Per favore fai riferimento alla Guida utente per i dettagli.</translation>
     </message>
     <message>
         <source>Double Click to Toggle Onion Skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pinned Center : Col%1%2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

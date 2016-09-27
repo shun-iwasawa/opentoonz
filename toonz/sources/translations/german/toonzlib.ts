@@ -332,6 +332,10 @@ Wahrscheinlich funktioniert der Codec nicht korrekt.</translation>
         <source>Add Style  to Palette %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>color model</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TScriptBinding::CenterlineVectorizer</name>

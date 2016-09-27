@@ -130,6 +130,18 @@ Possibly the preset file has been corrupted</source>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation>プリセット名に &quot;,&quot; (カンマ)を使用できません</translation>
     </message>
+    <message>
+        <source>DPI</source>
+        <translation>DPI</translation>
+    </message>
+    <message>
+        <source>Pixels</source>
+        <translation>ピクセルサイズ</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -299,7 +311,11 @@ Possibly the preset file has been corrupted</source>
     <name>DVGui::ProgressDialog</name>
     <message>
         <source>Toonz</source>
-        <translation>OpenToonz</translation>
+        <translation type="vanished">OpenToonz</translation>
+    </message>
+    <message>
+        <source>OpenToonz</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1318,6 +1334,10 @@ Select FX nodes and related links before copying or cutting the selection you wa
         <source>New Page</source>
         <translation>新規ページ</translation>
     </message>
+    <message>
+        <source>Name Editor</source>
+        <translation>スタイル名エディタ</translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1844,7 +1864,7 @@ Are you sure?</source>
         <translation>設定</translation>
     </message>
     <message>
-        <source>OpenToonz 1.0</source>
+        <source>OpenToonz 1.1</source>
         <translation></translation>
     </message>
 </context>

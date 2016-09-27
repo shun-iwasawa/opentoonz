@@ -130,6 +130,18 @@ Possibly the preset file has been corrupted</source>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -299,7 +311,11 @@ Possibly the preset file has been corrupted</source>
     <name>DVGui::ProgressDialog</name>
     <message>
         <source>Toonz</source>
-        <translation type="unfinished">Toonz</translation>
+        <translation type="obsolete">Toonz</translation>
+    </message>
+    <message>
+        <source>OpenToonz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1302,6 +1318,10 @@ Sélectionnez les nœuds FX et les liens connexes avant de copier ou couper la s
         <source>New Page</source>
         <translation type="unfinished">Nouvelle Page</translation>
     </message>
+    <message>
+        <source>Name Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1825,7 +1845,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OpenToonz 1.0</source>
+        <source>OpenToonz 1.1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

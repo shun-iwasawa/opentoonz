@@ -133,6 +133,18 @@ Possibly the preset file has been corrupted</source>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -306,7 +318,11 @@ Possibly the preset file has been corrupted</source>
     <name>DVGui::ProgressDialog</name>
     <message>
         <source>Toonz</source>
-        <translation>OpenToonz</translation>
+        <translation type="vanished">OpenToonz</translation>
+    </message>
+    <message>
+        <source>OpenToonz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1325,6 +1341,10 @@ Wählen Sie Effekt-Nodes und verwandte Links, die Sie einfügen möchten, bevor 
         <source>New Page</source>
         <translation>Neue Seite</translation>
     </message>
+    <message>
+        <source>Name Editor</source>
+        <translation type="unfinished">Stil-Name-Editor</translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1860,7 +1880,7 @@ Sind Sie sicher?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OpenToonz 1.0</source>
+        <source>OpenToonz 1.1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

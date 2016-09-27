@@ -138,6 +138,10 @@
         <source>Pressure</source>
         <translation>Druck</translation>
     </message>
+    <message>
+        <source>Smooth:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrushToolOptionsBox</name>

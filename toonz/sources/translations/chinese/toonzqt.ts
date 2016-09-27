@@ -130,6 +130,18 @@ Possibly the preset file has been corrupted</source>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation>不能在预设名称中使用 &quot;,&quot; (逗号)</translation>
     </message>
+    <message>
+        <source>DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -299,7 +311,11 @@ Possibly the preset file has been corrupted</source>
     <name>DVGui::ProgressDialog</name>
     <message>
         <source>Toonz</source>
-        <translation>OpenToonz</translation>
+        <translation type="vanished">OpenToonz</translation>
+    </message>
+    <message>
+        <source>OpenToonz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1318,6 +1334,10 @@ Select FX nodes and related links before copying or cutting the selection you wa
         <source>New Page</source>
         <translation>新建页</translation>
     </message>
+    <message>
+        <source>Name Editor</source>
+        <translation type="unfinished">名称编辑器</translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1841,8 +1861,8 @@ Are you sure?</source>
         <translation>设置</translation>
     </message>
     <message>
-        <source>OpenToonz 1.0</source>
-        <translation></translation>
+        <source>OpenToonz 1.1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

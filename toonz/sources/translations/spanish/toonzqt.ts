@@ -130,6 +130,18 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation>El nombre del ajuste no puede utilizar &apos;,&apos;(coma).</translation>
     </message>
+    <message>
+        <source>DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -299,7 +311,11 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     <name>DVGui::ProgressDialog</name>
     <message>
         <source>Toonz</source>
-        <translation>OpenToonz</translation>
+        <translation type="vanished">OpenToonz</translation>
+    </message>
+    <message>
+        <source>OpenToonz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1302,6 +1318,10 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
         <source>New Page</source>
         <translation>Nueva página</translation>
     </message>
+    <message>
+        <source>Name Editor</source>
+        <translation type="unfinished">Editor de nombres</translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1836,7 +1856,11 @@ Are you sure?</source>
     </message>
     <message>
         <source>OpenToonz 1.0</source>
-        <translation>OpenToonz 1.0</translation>
+        <translation type="vanished">OpenToonz 1.0</translation>
+    </message>
+    <message>
+        <source>OpenToonz 1.1</source>
+        <translation type="unfinished">OpenToonz 1.1</translation>
     </message>
 </context>
 <context>

@@ -1380,7 +1380,7 @@ before color designing.</source>
     </message>
     <message>
         <source>Scan &amp; Cleanup</source>
-        <translation>扫描&amp;清稿</translation>
+        <translation type="vanished">扫描&amp;清稿</translation>
     </message>
     <message>
         <source>Level</source>
@@ -1470,11 +1470,11 @@ before color designing.</source>
     </message>
     <message>
         <source>Width:</source>
-        <translation>宽度:</translation>
+        <translation type="vanished">宽度:</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation>高度:</translation>
+        <translation type="vanished">高度:</translation>
     </message>
     <message>
         <source>H Resolution:</source>
@@ -2304,6 +2304,10 @@ Do you want to create it?</source>
     <message>
         <source>Resolution:</source>
         <translation>分辨率:</translation>
+    </message>
+    <message>
+        <source>Resolution</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3440,7 +3444,7 @@ Do you want to create it?</source>
     </message>
     <message>
         <source>Onion Skin</source>
-        <translation>洋葱皮</translation>
+        <translation type="vanished">洋葱皮</translation>
     </message>
     <message>
         <source>Duplicate</source>
@@ -3820,7 +3824,7 @@ Do you want to create it?</source>
     </message>
     <message>
         <source>Pressure sensibility</source>
-        <translation>压力灵敏度</translation>
+        <translation type="vanished">压力灵敏度</translation>
     </message>
     <message>
         <source>Segment Ink</source>
@@ -4410,6 +4414,34 @@ Do you want to create it?</source>
         <source>Refresh Folder Tree</source>
         <translation>刷新文件夹树</translation>
     </message>
+    <message>
+        <source>&amp;Save All Levels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Camera Capture...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle Maximize Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle Main Window&apos;s Full Screen Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Onion Skin Toggle</source>
+        <translation type="unfinished">显示/隐藏洋葱皮</translation>
+    </message>
+    <message>
+        <source>Zero Thick Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pressure Sensitivity</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -4660,6 +4692,13 @@ What do you want to do?</source>
     </message>
 </context>
 <context>
+    <name>MyViewFinder</name>
+    <message>
+        <source>Camera is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OutputSettingsPopup</name>
     <message>
         <source>Save in:</source>
@@ -4707,7 +4746,7 @@ What do you want to do?</source>
     </message>
     <message>
         <source>Multiple Rendering: </source>
-        <translation>多重渲染: </translation>
+        <translation type="vanished">多重渲染: </translation>
     </message>
     <message>
         <source>Do stereoscopy</source>
@@ -5040,6 +5079,175 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
+    <name>PencilTestPopup</name>
+    <message>
+        <source>Camera Capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">刷新</translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished">文件</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation type="unfinished">选项</translation>
+    </message>
+    <message>
+        <source>Save images as they are captured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image adjust</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upside down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capture white BG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show onion skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use interval timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capture
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <source>Next Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Camera:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resolution:</source>
+        <translation type="unfinished">分辨率:</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished">名称:</translation>
+    </message>
+    <message>
+        <source>Frame:</source>
+        <translation type="unfinished">帧:</translation>
+    </message>
+    <message>
+        <source>File Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save In:</source>
+        <translation type="unfinished">保存位置:</translation>
+    </message>
+    <message>
+        <source>Color type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Threshold:</source>
+        <translation type="unfinished">阈值:</translation>
+    </message>
+    <message>
+        <source>Contrast:</source>
+        <translation type="unfinished">对比度:</translation>
+    </message>
+    <message>
+        <source>Brightness:</source>
+        <translation type="unfinished">亮度:</translation>
+    </message>
+    <message>
+        <source>BG reduction:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity(%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval(sec):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No camera found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- Select camera -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Capturing
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Capturing
+[Return key]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No level name specified: please choose a valid level name</source>
+        <translation type="unfinished">未指定层级名称: 请选择一个有效的层级名称</translation>
+    </message>
+    <message>
+        <source>Folder %1 doesn&apos;t exist.
+Do you want to create it?</source>
+        <translation type="unfinished">文件夹 %1不存在。
+要创建它吗？</translation>
+    </message>
+    <message>
+        <source>Unable to create</source>
+        <translation type="unfinished">无法创建</translation>
+    </message>
+    <message>
+        <source>The level name specified is already used: please choose a different level name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The save in path specified does not match with the existing level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The captured image size does not match with the existing level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File %1 does exist.
+Do you want to overwrite it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to load %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PltGizmoPopup</name>
     <message>
         <source>Palette Gizmo</source>
@@ -5134,7 +5342,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Save Automatically Every Minutes</source>
-        <translation>自动保存间隔(分钟)</translation>
+        <translation type="vanished">自动保存间隔(分钟)</translation>
     </message>
     <message>
         <source>Backup Animation Levels when Saving</source>
@@ -5446,7 +5654,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>pixel</source>
-        <translation type="vanished">像素</translation>
+        <translation>像素</translation>
     </message>
     <message>
         <source>Minimize Raster Memory Fragmentation *</source>
@@ -5638,7 +5846,107 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Rooms *:</source>
-        <translation>工作区*:</translation>
+        <translation type="vanished">工作区*:</translation>
+    </message>
+    <message>
+        <source>Save Automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically Save the Scene File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically Save Non-Scene Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>My Documents/OpenToonz*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desktop/OpenToonz*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stuff Folder*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Project Path(s): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced: Multiple paths can be separated by ** (No Spaces)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All imported images will use the same DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import/Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Onion Skin During Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval(Minutes): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional Project Locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels Only:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rooms*:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenToonz can use FFmpeg for additional file formats.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg is not bundled with OpenToonz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NOTE: This is an experimental feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please SAVE YOUR WORK before exporting in MP4, WEBM, or GIF format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide the path where FFmpeg is located on your computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg Path: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of seconds to wait for FFmpeg to complete processing the output:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: FFmpeg begins working once all images have been processed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg Timeout:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6267,7 +6575,7 @@ Are you sure you want to revert to previous version?</source>
     <message>
         <source>%1: the current scene has been modified.
 Do you want to save your changes?</source>
-        <translation>%1: 当前场景已经被修改。
+        <translation type="vanished">%1: 当前场景已经被修改。
 要保存更改吗？</translation>
     </message>
     <message>
@@ -6874,19 +7182,19 @@ Are you sure ?</source>
         <source> Following file(s) are modified.
 
 </source>
-        <translation> 下列文件已经被修改。
+        <translation type="vanished"> 下列文件已经被修改。
 
 </translation>
     </message>
     <message>
         <source>
 Are you sure to </source>
-        <translation>
+        <translation type="vanished">
 您确定要</translation>
     </message>
     <message>
         <source> anyway ?</source>
-        <translation>吗？</translation>
+        <translation type="vanished">吗？</translation>
     </message>
     <message>
         <source>OK</source>
@@ -7242,6 +7550,67 @@ Are you sure to </source>
         <source>Add color model&apos;s palette to the destination palette.</source>
         <translation>将色彩模型的调色板添加到目标调色板。</translation>
     </message>
+    <message>
+        <source>Change current drawing %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: the current scene has been modified.
+What would you like to do?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Scene Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> The following file(s) have been modified.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+What would you like to do? </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Anyway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This scene is incompatible with pixels only mode of the current OpenToonz version.
+What would you like to do?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn off pixels only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep pixels only mode on and resize the scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Zero Thickness Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Zero Thickness Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RenameAsToonzPopup</name>
@@ -7308,6 +7677,13 @@ The audio file will not be included in the rendered clip.</source>
                            The output result may differ from what you expect. What do you want to do?</source>
         <translation>场景 %1 的分辨率不同于场景 %2。
                            输出结果可能和您所要的不一样。要怎么做？</translation>
+    </message>
+</context>
+<context>
+    <name>RenderListener</name>
+    <message>
+        <source>Finalizing render, please wait.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8555,6 +8931,10 @@ Please commit or revert changes first.</source>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
+    <message>
+        <source>Couldn&apos;t find any matching command.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShortcutTree</name>
@@ -8625,6 +9005,10 @@ Please commit or revert changes first.</source>
     <message>
         <source>Misc</source>
         <translation>杂项</translation>
+    </message>
+    <message>
+        <source>Playback</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8808,7 +9192,11 @@ Click the arrow button to create a new sub-xsheet</source>
     </message>
     <message>
         <source>It is not possible to save automatically an untitled scene.</source>
-        <translation>无法自动保存未命名的场景。</translation>
+        <translation type="vanished">无法自动保存未命名的场景。</translation>
+    </message>
+    <message>
+        <source>It is not possible to automatically save an untitled scene.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9592,6 +9980,10 @@ Please refer to the user guide for details.</source>
     <message>
         <source>Double Click to Toggle Onion Skin</source>
         <translation>[双击]以显示/隐藏洋葱皮</translation>
+    </message>
+    <message>
+        <source>Pinned Center : Col%1%2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
