@@ -118,6 +118,9 @@ public:
     return m_replaceAfterSaveLevelAs;
   }
 
+  void enableStartupPopup(bool on);
+  bool isStartupPopupEnabled() { return m_startupPopupEnabled; }
+
   void setProjectRoot(int index);
   int getProjectRoot() { return m_projectRoot; }
 
@@ -415,6 +418,9 @@ public:
   int getTextureSize() const { return m_textureSize; }
   bool useDrawPixel() { return m_textureSize == 0; }
 
+  void setShortcutPreset(std::string preset);
+  QString getShortcutPreset() { return m_shortcutPreset; }
+
   int getShmMax() const {
     return m_shmmax;
   }  //! \sa The \p sysctl unix command.
@@ -442,7 +448,8 @@ private:
   std::vector<LevelFormat> m_levelFormats;
 
   QString m_units, m_cameraUnits, m_scanLevelType, m_currentRoomChoice,
-      m_oldUnits, m_oldCameraUnits, m_ffmpegPath, m_customProjectRoot;
+      m_oldUnits, m_oldCameraUnits, m_ffmpegPath, m_shortcutPreset,
+      m_customProjectRoot;
 
   double m_defLevelWidth, m_defLevelHeight, m_defLevelDpi;
 
@@ -470,7 +477,8 @@ private:
   bool m_rasterOptimizedMemory, m_saveUnpaintedInCleanup,
       m_askForOverrideRender, m_automaticSVNFolderRefreshEnabled, m_SVNEnabled,
       m_levelsBackupEnabled, m_minimizeSaveboxAfterEditing,
-      m_sceneNumberingEnabled, m_animationSheetEnabled, m_inksOnly;
+      m_sceneNumberingEnabled, m_animationSheetEnabled, m_inksOnly,
+      m_startupPopupEnabled;
   bool m_fillOnlySavebox, m_show0ThickLines, m_regionAntialias;
   bool m_onionSkinDuringPlayback;
   TPixel32 m_viewerBGColor, m_previewBGColor, m_chessboardColor1,

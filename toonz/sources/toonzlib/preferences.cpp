@@ -257,6 +257,7 @@ Preferences::Preferences()
     , m_autosaveEnabled(false)
     , m_autosaveSceneEnabled(true)
     , m_autosaveOtherFilesEnabled(true)
+    , m_startupPopupEnabled(true)
     , m_defaultViewerEnabled(false)
     , m_saveUnpaintedInCleanup(true)
     , m_askForOverrideRender(true)
@@ -292,7 +293,8 @@ Preferences::Preferences()
     , m_projectRoot(0x08)
     , m_customProjectRoot("")
     , m_precompute(true)
-    , m_ffmpegTimeout(30) {
+    , m_ffmpegTimeout(30)
+    , m_shortcutPreset("defopentoonz") {
   TCamera camera;
   m_defLevelType   = PLI_XSHLEVEL;
   m_defLevelWidth  = camera.getSize().lx;
@@ -329,6 +331,7 @@ Preferences::Preferences()
   getValue(*m_settings, "autosaveSceneEnabled", m_autosaveSceneEnabled);
   getValue(*m_settings, "autosaveOtherFilesEnabled",
            m_autosaveOtherFilesEnabled);
+  getValue(*m_settings, "startupPopupEnabled", m_startupPopupEnabled);
   getValue(*m_settings, "defaultViewerEnabled", m_defaultViewerEnabled);
   getValue(*m_settings, "rasterOptimizedMemory", m_rasterOptimizedMemory);
   getValue(*m_settings, "saveUnpaintedInCleanup", m_saveUnpaintedInCleanup);
@@ -557,6 +560,9 @@ Preferences::Preferences()
   if (ffmpegPath != "") m_ffmpegPath = ffmpegPath;
   setFfmpegPath(m_ffmpegPath.toStdString());
   getValue(*m_settings, "ffmpegTimeout", m_ffmpegTimeout);
+  QString shortcutPreset = m_settings->value("shortcutPreset").toString();
+  if (shortcutPreset != "") m_shortcutPreset = shortcutPreset;
+  setShortcutPreset(m_shortcutPreset.toStdString());
 }
 
 //-----------------------------------------------------------------
@@ -659,6 +665,13 @@ void Preferences::enableAutosaveScene(bool on) {
 void Preferences::enableAutosaveOtherFiles(bool on) {
   m_autosaveOtherFilesEnabled = on;
   m_settings->setValue("autosaveOtherFilesEnabled", on ? "1" : "0");
+}
+
+//-----------------------------------------------------------------
+
+void Preferences::enableStartupPopup(bool on) {
+  m_startupPopupEnabled = on;
+  m_settings->setValue("startupPopupEnabled", on ? "1" : "0");
 }
 
 //-----------------------------------------------------------------
@@ -1238,6 +1251,13 @@ void Preferences::setFfmpegPath(std::string path) {
   m_ffmpegPath        = QString::fromStdString(path);
   std::string strPath = m_ffmpegPath.toStdString();
   m_settings->setValue("ffmpegPath", m_ffmpegPath);
+}
+
+//-----------------------------------------------------------------
+
+void Preferences::setShortcutPreset(std::string preset) {
+  m_shortcutPreset = QString::fromStdString(preset);
+  m_settings->setValue("shortcutPreset", m_shortcutPreset);
 }
 
 //-----------------------------------------------------------------
