@@ -585,6 +585,10 @@ Possibly the preset file has been corrupted</source>
         <source>&amp;Display Areas as Filled</source>
         <translation>将区域显示为已填充(&amp;D)</translation>
     </message>
+    <message>
+        <source>&amp;Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FrameNavigator</name>
@@ -1301,11 +1305,11 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Update</source>
-        <translation>更新</translation>
+        <translation type="vanished">更新</translation>
     </message>
     <message>
         <source>Don&apos;t Update</source>
-        <translation>不更新</translation>
+        <translation type="vanished">不更新</translation>
     </message>
     <message>
         <source>     (Color Model: </source>
@@ -1324,7 +1328,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Remove Links</source>
-        <translation>移除链接</translation>
+        <translation type="vanished">移除链接</translation>
     </message>
     <message>
         <source>New Style</source>
@@ -1678,7 +1682,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>It is not possible to assing a shortcut with modifiers to the visualization commands.</source>
-        <translation>无法分配带修饰键的快捷键给可视化命令。</translation>
+        <translation type="vanished">无法分配带修饰键的快捷键给可视化命令。</translation>
     </message>
     <message>
         <source>It is not possible to save the motion path.</source>
@@ -1756,7 +1760,7 @@ Are you sure?</source>
     </message>
     <message>
         <source>Remove Link  in Palette : %1</source>
-        <translation>移除调色板 %1 的链接</translation>
+        <translation type="vanished">移除调色板 %1 的链接</translation>
     </message>
     <message>
         <source>Get Color from Studio Palette</source>
@@ -1862,6 +1866,14 @@ Are you sure?</source>
     </message>
     <message>
         <source>OpenToonz 1.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove Reference  in Palette : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It is not possible to assign a shortcut with modifiers to the visualization commands.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

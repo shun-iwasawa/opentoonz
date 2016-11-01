@@ -585,6 +585,10 @@ Possibly the preset file has been corrupted</source>
         <source>&amp;Display Areas as Filled</source>
         <translation>領域を塗りつぶししたとして表示 (&amp;D)</translation>
     </message>
+    <message>
+        <source>&amp;Locator</source>
+        <translation>ロケーター (&amp;L)</translation>
+    </message>
 </context>
 <context>
     <name>FrameNavigator</name>
@@ -1301,11 +1305,11 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Update</source>
-        <translation>更新する</translation>
+        <translation type="vanished">更新する</translation>
     </message>
     <message>
         <source>Don&apos;t Update</source>
-        <translation>更新しない</translation>
+        <translation type="vanished">更新しない</translation>
     </message>
     <message>
         <source>     (Color Model: </source>
@@ -1324,7 +1328,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Remove Links</source>
-        <translation>スタジオパレットとのリンクを消去</translation>
+        <translation type="vanished">スタジオパレットとのリンクを消去</translation>
     </message>
     <message>
         <source>New Style</source>
@@ -1680,7 +1684,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>It is not possible to assing a shortcut with modifiers to the visualization commands.</source>
-        <translation>視覚化コマンドには、修飾キーと組み合わせたキーボードショートカットを割り当てできません。</translation>
+        <translation type="vanished">視覚化コマンドには、修飾キーと組み合わせたキーボードショートカットを割り当てできません。</translation>
     </message>
     <message>
         <source>It is not possible to save the motion path.</source>
@@ -1759,7 +1763,7 @@ Are you sure?</source>
     </message>
     <message>
         <source>Remove Link  in Palette : %1</source>
-        <translation>リンクを消去 : パレット %1</translation>
+        <translation type="vanished">リンクを消去 : パレット %1</translation>
     </message>
     <message>
         <source>Get Color from Studio Palette</source>
@@ -1866,6 +1870,14 @@ Are you sure?</source>
     <message>
         <source>OpenToonz 1.1</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Remove Reference  in Palette : %1</source>
+        <translation>スタジオパレットへの参照を消去：パレット%1</translation>
+    </message>
+    <message>
+        <source>It is not possible to assign a shortcut with modifiers to the visualization commands.</source>
+        <translation>視覚化コマンドには、修飾キーと組み合わせたキーボードショートカットを割り当てできません。</translation>
     </message>
 </context>
 <context>

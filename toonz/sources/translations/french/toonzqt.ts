@@ -585,6 +585,10 @@ Possibly the preset file has been corrupted</source>
         <source>&amp;Display Areas as Filled</source>
         <translation>Display Areas as Filled</translation>
     </message>
+    <message>
+        <source>&amp;Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FrameNavigator</name>
@@ -1284,14 +1288,6 @@ Sélectionnez les nœuds FX et les liens connexes avant de copier ou couper la s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>     (Color Model: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1304,10 +1300,6 @@ Sélectionnez les nœuds FX et les liens connexes avant de copier ou couper la s
     <name>PaletteViewerGUI::PageViewer</name>
     <message>
         <source>- No Styles -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove Links</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1667,7 +1659,7 @@ Sélectionnez les nœuds FX et les liens connexes avant de copier ou couper la s
     </message>
     <message>
         <source>It is not possible to assing a shortcut with modifiers to the visualization commands.</source>
-        <translation>Il n&apos;est pas possible de attribuer un raccourci avec des modificateurs aux commandes de visualisation.</translation>
+        <translation type="vanished">Il n&apos;est pas possible de attribuer un raccourci avec des modificateurs aux commandes de visualisation.</translation>
     </message>
     <message>
         <source>It is not possible to save the motion path.</source>
@@ -1746,10 +1738,6 @@ Are you sure?</source>
     </message>
     <message>
         <source>Toggle Link  in Palette : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove Link  in Palette : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1846,6 +1834,14 @@ Are you sure?</source>
     </message>
     <message>
         <source>OpenToonz 1.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove Reference  in Palette : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It is not possible to assign a shortcut with modifiers to the visualization commands.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

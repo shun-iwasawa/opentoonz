@@ -585,6 +585,10 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
         <source>&amp;Display Areas as Filled</source>
         <translation>Mostrar áreas &amp;rellenas</translation>
     </message>
+    <message>
+        <source>&amp;Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FrameNavigator</name>
@@ -1285,11 +1289,11 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Update</source>
-        <translation>Actualizar</translation>
+        <translation type="vanished">Actualizar</translation>
     </message>
     <message>
         <source>Don&apos;t Update</source>
-        <translation>No actualizar</translation>
+        <translation type="vanished">No actualizar</translation>
     </message>
     <message>
         <source>     (Color Model: </source>
@@ -1308,7 +1312,7 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Remove Links</source>
-        <translation>Eliminar vínculos</translation>
+        <translation type="vanished">Eliminar vínculos</translation>
     </message>
     <message>
         <source>New Style</source>
@@ -1676,7 +1680,7 @@ Para más información visitar el sitio %1:</translation>
     </message>
     <message>
         <source>It is not possible to assing a shortcut with modifiers to the visualization commands.</source>
-        <translation>No es posible asignar a los comandos de visualización un atajo de teclado que use teclas modificadoras.</translation>
+        <translation type="vanished">No es posible asignar a los comandos de visualización un atajo de teclado que use teclas modificadoras.</translation>
     </message>
     <message>
         <source>It is not possible to save the motion path.</source>
@@ -1760,7 +1764,7 @@ Are you sure?</source>
     </message>
     <message>
         <source>Remove Link  in Palette : %1</source>
-        <translation>Eliminar vínculo en paleta: %1</translation>
+        <translation type="vanished">Eliminar vínculo en paleta: %1</translation>
     </message>
     <message>
         <source>Get Color from Studio Palette</source>
@@ -1861,6 +1865,14 @@ Are you sure?</source>
     <message>
         <source>OpenToonz 1.1</source>
         <translation type="unfinished">OpenToonz 1.1</translation>
+    </message>
+    <message>
+        <source>Remove Reference  in Palette : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>It is not possible to assign a shortcut with modifiers to the visualization commands.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

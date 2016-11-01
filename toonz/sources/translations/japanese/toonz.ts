@@ -726,6 +726,18 @@ What do you want to do?</source>
         <source>Cleanup Settings: %1</source>
         <translation>トレース設定: %1</translation>
     </message>
+    <message>
+        <source>Autocenter</source>
+        <translation>自動位置合わせ</translation>
+    </message>
+    <message>
+        <source>Pegbar Holes</source>
+        <translation>タップ穴の位置</translation>
+    </message>
+    <message>
+        <source>Field Guide</source>
+        <translation>フィールドガイド</translation>
+    </message>
 </context>
 <context>
     <name>CleanupTab</name>
@@ -805,6 +817,10 @@ What do you want to do?</source>
     <message>
         <source>Fit to Window</source>
         <translation>ウィンドウに全体を表示</translation>
+    </message>
+    <message>
+        <source>Update Colors by Using Picked Positions</source>
+        <translation>サンプル位置を用いて色を更新する</translation>
     </message>
 </context>
 <context>
@@ -1131,6 +1147,10 @@ before color designing.</source>
         <translation>このオプションがONのとき、デフォルトパレット ($TOONZSTUDIOPALETTE\cleanup_default.tpl)
 のスタイルが変換後のパレットに追加されます。色見本を作成する際に、スタイルを新規作成する
 手間を省くことができます。</translation>
+    </message>
+    <message>
+        <source>Remove Unused Styles from Input Palette</source>
+        <translation>入力パレットから使用されていない色を消去する</translation>
     </message>
 </context>
 <context>
@@ -2682,6 +2702,13 @@ Do you want to create it?</source>
     <message>
         <source> you can load only TNZ or CLN files for cleanup task.</source>
         <translation>トレースタスクにはTNZまたはCLNファイルのみ使用できます。</translation>
+    </message>
+</context>
+<context>
+    <name>LocatorPopup</name>
+    <message>
+        <source>Locator</source>
+        <translation>ロケーター</translation>
     </message>
 </context>
 <context>
@@ -4441,6 +4468,18 @@ Do you want to create it?</source>
         <source>Pressure Sensitivity</source>
         <translation>圧力感知</translation>
     </message>
+    <message>
+        <source>Toggle Link to Studio Palette</source>
+        <translation>スタジオパレットとの同期を切り替え</translation>
+    </message>
+    <message>
+        <source>Remove Reference to Studio Palette</source>
+        <translation>スタジオパレットへの参照を削除</translation>
+    </message>
+    <message>
+        <source>&amp;Startup Popup...</source>
+        <translation>スタートアップウィンドウ(&amp;S) ...</translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -5259,6 +5298,10 @@ Do you want to overwrite it?</source>
         <source>- Select camera -</source>
         <translation>- カメラを選択してください -</translation>
     </message>
+    <message>
+        <source>Video Capture Filter Settings...</source>
+        <translation>ビデオキャプチャ設定 ...</translation>
+    </message>
 </context>
 <context>
     <name>PltGizmoPopup</name>
@@ -5961,6 +6004,10 @@ Do you want to overwrite it?</source>
     <message>
         <source>FFmpeg Timeout:</source>
         <translation>FFmpegのタイムアウト時間：</translation>
+    </message>
+    <message>
+        <source>Show Startup Window when OpenToonz Starts</source>
+        <translation>OpenToonzの起動時にスタートアップウィンドウを表示する</translation>
     </message>
 </context>
 <context>
@@ -7628,6 +7675,21 @@ What would you like to do?</source>
         <source>Keep pixels only mode on and resize the scene</source>
         <translation>ピクセル単位モードを維持し、シーンのカメラサイズを変更する</translation>
     </message>
+    <message>
+        <source>&lt;custom&gt;</source>
+        <translation>&lt;カスタム&gt;</translation>
+    </message>
+    <message>
+        <source>The file name already exists.
+Do you want to overwrite it?</source>
+        <translation>ファイル名は、既に存在します。
+上書きしてもよろしいですか？</translation>
+    </message>
+    <message>
+        <source>Deleting &quot;%1&quot;.
+Are you sure?</source>
+        <translation>%1 を削除します。よろしいですか？</translation>
+    </message>
 </context>
 <context>
     <name>RenameAsToonzPopup</name>
@@ -8937,6 +8999,14 @@ Please commit or revert changes first.</source>
         <source>  ::  Zoom : </source>
         <translation>：：ズーム：</translation>
     </message>
+    <message>
+        <source>Safe Area (Right Click to Select)</source>
+        <translation>セーフエリア （右クリックで選択）</translation>
+    </message>
+    <message>
+        <source>Field Guide</source>
+        <translation>フィールドガイド</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutPopup</name>
@@ -8951,6 +9021,66 @@ Please commit or revert changes first.</source>
     <message>
         <source>Couldn&apos;t find any matching command.</source>
         <translation>コマンドが見つかりませんでした。</translation>
+    </message>
+    <message>
+        <source>Export Current Shortcuts</source>
+        <translation>現在の設定をエクスポート</translation>
+    </message>
+    <message>
+        <source>Delete Current Preset</source>
+        <translation>現在のプリセットを削除</translation>
+    </message>
+    <message>
+        <source>Save Current Shortcuts as New Preset</source>
+        <translation>現在の設定をプリセットに保存</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message>
+        <source>Use selected preset as shortcuts</source>
+        <translation>選択されたプリセットを用いる</translation>
+    </message>
+    <message>
+        <source>Clear All Shortcuts</source>
+        <translation>全てのショートカット設定を消去</translation>
+    </message>
+    <message>
+        <source>This will erase ALL shortcuts. Continue?</source>
+        <translation>全てのショートカットを消去します。続行しますか？</translation>
+    </message>
+    <message>
+        <source>This will overwrite all current shortcuts. Continue?</source>
+        <translation>現在の全てのショートカット設定が上書きされます。続行しますか？</translation>
+    </message>
+    <message>
+        <source>A file named </source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <source> already exists.  Do you want to replace it?</source>
+        <translation>は、既に存在します。置き換えてもよろしいですか？</translation>
+    </message>
+    <message>
+        <source>OpenToonz - Setting Shortcuts</source>
+        <translation>ショートカットの設定</translation>
+    </message>
+    <message>
+        <source>Included presets cannot be deleted.</source>
+        <translation>既定のプリセットは消去できません。</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the preset: </source>
+        <translation>以下のプリセットを削除してよろしいですか：</translation>
+    </message>
+    <message>
+        <source>?</source>
+        <translation>？</translation>
+    </message>
+    <message>
+        <source>Load from file...</source>
+        <translation>ファイルから読み込む...</translation>
     </message>
 </context>
 <context>
@@ -9162,6 +9292,159 @@ Assign to &apos;%3&apos;?</source>
     <message>
         <source>Failed to create menubar</source>
         <translation>メニューバーの作成に失敗しました</translation>
+    </message>
+</context>
+<context>
+    <name>StartupPopup</name>
+    <message>
+        <source>OpenToonz Startup</source>
+        <translation>OpenToonz スタートアップ</translation>
+    </message>
+    <message>
+        <source>Choose Project</source>
+        <translation>プロジェクトを選択</translation>
+    </message>
+    <message>
+        <source>Create a New Scene</source>
+        <translation>新規シーンを作成</translation>
+    </message>
+    <message>
+        <source>Open Scene</source>
+        <translation>シーンを開く</translation>
+    </message>
+    <message>
+        <source>Scene Name:</source>
+        <translation>シーン名：</translation>
+    </message>
+    <message>
+        <source>Width:</source>
+        <translation>幅：</translation>
+    </message>
+    <message>
+        <source>Height:</source>
+        <translation>高さ：</translation>
+    </message>
+    <message>
+        <source>DPI:</source>
+        <translation>DPI：</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <source>Resolution:</source>
+        <translation>ピクセルサイズ：</translation>
+    </message>
+    <message>
+        <source>Frame Rate:</source>
+        <translation>フレームレート:</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>追加</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>消去</translation>
+    </message>
+    <message>
+        <source>Show this at startup</source>
+        <translation>起動時にこのウィンドウを表示する</translation>
+    </message>
+    <message>
+        <source>Create Scene</source>
+        <translation>シーンを作成</translation>
+    </message>
+    <message>
+        <source>New Project...</source>
+        <translation>新規プロジェクト...</translation>
+    </message>
+    <message>
+        <source>Open Another Scene...</source>
+        <translation>その他のシーンを開く...</translation>
+    </message>
+    <message>
+        <source>pixel</source>
+        <translation>pixel</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation>cm</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>inch</source>
+        <translation>inch</translation>
+    </message>
+    <message>
+        <source>field</source>
+        <translation>フィールド</translation>
+    </message>
+    <message>
+        <source>Save In:</source>
+        <translation>保存先の指定：</translation>
+    </message>
+    <message>
+        <source>Camera Size:</source>
+        <translation>カメラサイズ：</translation>
+    </message>
+    <message>
+        <source>Units:</source>
+        <translation>単位：</translation>
+    </message>
+    <message>
+        <source>No Recent Scenes</source>
+        <translation>最近開いたシーンがありません</translation>
+    </message>
+    <message>
+        <source>The name cannot be empty.</source>
+        <translation>シーン名が空です。</translation>
+    </message>
+    <message>
+        <source>The chosen file path is not valid.</source>
+        <translation>選択されたファイルパスは無効です。</translation>
+    </message>
+    <message>
+        <source>The width must be 1 or more.</source>
+        <translation>幅は1以上でなくてはいけません。</translation>
+    </message>
+    <message>
+        <source>The height must be 1 or more.</source>
+        <translation>高さは1以上でなくてはいけません。</translation>
+    </message>
+    <message>
+        <source>The frame rate must be 1 or more.</source>
+        <translation>フレームレートは1以上でなくてはいけません。</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>プリセット名</translation>
+    </message>
+    <message>
+        <source>Enter the name for %1</source>
+        <translation>%1の名前を入力してください</translation>
+    </message>
+    <message>
+        <source>Error : Preset Name is Invalid</source>
+        <translation>エラー：プリセット名が無効です</translation>
+    </message>
+    <message>
+        <source>The preset name must not use &apos;,&apos;(comma).</source>
+        <translation>プリセット名には &apos;,&apos;（カンマ）を使用できません。</translation>
+    </message>
+    <message>
+        <source>Bad camera preset</source>
+        <translation>カメラプリセット名が不正です</translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; doesn&apos;t seem to be a well formed camera preset. 
+Possibly the preset file has been corrupted</source>
+        <translation>&apos;%1&apos;はカメラプリセットの書式として正しくないようです。
+プリセットファイルが破損している可能性があります</translation>
     </message>
 </context>
 <context>

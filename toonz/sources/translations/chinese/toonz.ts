@@ -727,6 +727,18 @@ What do you want to do?</source>
         <source>Cleanup Settings: %1</source>
         <translation>清稿设置: %1</translation>
     </message>
+    <message>
+        <source>Autocenter</source>
+        <translation type="unfinished">自动定位中心</translation>
+    </message>
+    <message>
+        <source>Pegbar Holes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Field Guide</source>
+        <translation type="unfinished">规格板</translation>
+    </message>
 </context>
 <context>
     <name>CleanupTab</name>
@@ -806,6 +818,10 @@ What do you want to do?</source>
     <message>
         <source>Fit to Window</source>
         <translation>适合窗口</translation>
+    </message>
+    <message>
+        <source>Update Colors by Using Picked Positions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1132,6 +1148,10 @@ before color designing.</source>
         <translation>启用该选项时，会在转换完成后附加默认调色板
 ($TOONZSTUDIOPALETTE\cleanup_default.tpl)的样式到调色板中。
 这样可以在创建色板的时候，省去新建样式的功夫。</translation>
+    </message>
+    <message>
+        <source>Remove Unused Styles from Input Palette</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2687,6 +2707,13 @@ Do you want to create it?</source>
     <message>
         <source> you can load only TNZ or CLN files for cleanup task.</source>
         <translation>只能加载 TNZ 或 CLN 文件到清稿任务。</translation>
+    </message>
+</context>
+<context>
+    <name>LocatorPopup</name>
+    <message>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4442,6 +4469,18 @@ Do you want to create it?</source>
         <source>Pressure Sensitivity</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Toggle Link to Studio Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove Reference to Studio Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Startup Popup...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -5246,6 +5285,10 @@ Do you want to overwrite it?</source>
         <source>Failed to load %1.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Video Capture Filter Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PltGizmoPopup</name>
@@ -5946,6 +5989,10 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>FFmpeg Timeout:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Startup Window when OpenToonz Starts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7611,6 +7658,20 @@ What would you like to do?</source>
         <source>Show Zero Thickness Lines</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;custom&gt;</source>
+        <translation type="unfinished">&lt;自定&gt;</translation>
+    </message>
+    <message>
+        <source>The file name already exists.
+Do you want to overwrite it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting &quot;%1&quot;.
+Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RenameAsToonzPopup</name>
@@ -8920,6 +8981,14 @@ Please commit or revert changes first.</source>
         <source>  ::  Zoom : </source>
         <translation>    ::    缩放: </translation>
     </message>
+    <message>
+        <source>Safe Area (Right Click to Select)</source>
+        <translation type="unfinished">安全区域(右键单击可选择)</translation>
+    </message>
+    <message>
+        <source>Field Guide</source>
+        <translation type="unfinished">规格板</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutPopup</name>
@@ -8933,6 +9002,66 @@ Please commit or revert changes first.</source>
     </message>
     <message>
         <source>Couldn&apos;t find any matching command.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Current Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Current Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Current Shortcuts as New Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">应用</translation>
+    </message>
+    <message>
+        <source>Use selected preset as shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear All Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This will erase ALL shortcuts. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This will overwrite all current shortcuts. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A file named </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already exists.  Do you want to replace it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenToonz - Setting Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Included presets cannot be deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the preset: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load from file...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9145,6 +9274,158 @@ Assign to &apos;%3&apos;?</source>
     <message>
         <source>Failed to create menubar</source>
         <translation>创建菜单栏失败</translation>
+    </message>
+</context>
+<context>
+    <name>StartupPopup</name>
+    <message>
+        <source>OpenToonz Startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create a New Scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scene Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Width:</source>
+        <translation type="unfinished">宽度:</translation>
+    </message>
+    <message>
+        <source>Height:</source>
+        <translation type="unfinished">高度:</translation>
+    </message>
+    <message>
+        <source>DPI:</source>
+        <translation type="unfinished">DPI:</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished">X</translation>
+    </message>
+    <message>
+        <source>Resolution:</source>
+        <translation type="unfinished">分辨率:</translation>
+    </message>
+    <message>
+        <source>Frame Rate:</source>
+        <translation type="unfinished">帧速率:</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished">添加</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show this at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Project...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Another Scene...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pixel</source>
+        <translation type="unfinished">像素</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished">cm</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <source>inch</source>
+        <translation type="unfinished">inch</translation>
+    </message>
+    <message>
+        <source>field</source>
+        <translation type="unfinished">field</translation>
+    </message>
+    <message>
+        <source>Save In:</source>
+        <translation type="unfinished">保存位置:</translation>
+    </message>
+    <message>
+        <source>Camera Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Units:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Recent Scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The chosen file path is not valid.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The width must be 1 or more.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The height must be 1 or more.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The frame rate must be 1 or more.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter the name for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error : Preset Name is Invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The preset name must not use &apos;,&apos;(comma).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad camera preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; doesn&apos;t seem to be a well formed camera preset. 
+Possibly the preset file has been corrupted</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
