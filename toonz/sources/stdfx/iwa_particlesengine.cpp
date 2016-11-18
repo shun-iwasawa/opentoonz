@@ -878,7 +878,7 @@ void Iwa_Particles_Engine::do_render(
     struct particles_values &values, float opacity_range, int dist_frame,
     std::map<std::pair<int, int>, float> &partScales, TTile *baseImgTile) {
   /*- カメラに対してタテになっている粒子を描かずに飛ばす -*/
-  if (abs(cosf(part->flap_phi * 3.14159f / 180.0f)) < 0.03f) {
+  if (fabs(cosf(part->flap_phi * 3.14159f / 180.0f)) < 0.03f) {
     return;
   }
   // Retrieve the particle frame - that is, the *column frame* from which we are
@@ -925,8 +925,8 @@ void Iwa_Particles_Engine::do_render(
       float3 lightVec = {sinf(liTheta) * sinf(liPhi),
                          cosf(liTheta) * sinf(liPhi), cosf(liPhi)};
       /*- 法線ベクトルと光源ベクトルの内積の絶対値 -*/
-      illuminant = abs(normVec.x * lightVec.x + normVec.y * lightVec.y +
-                       normVec.z * lightVec.z);
+      illuminant = fabs(normVec.x * lightVec.x + normVec.y * lightVec.y +
+                        normVec.z * lightVec.z);
     }
   }
 

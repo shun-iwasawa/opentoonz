@@ -121,8 +121,9 @@ void Iwa_AdjustExposureFx::doCompute_CPU(TTile &tile, double frame,
   float scale    = (float)m_scale->getValue(frame);
   float offset   = (float)m_offset->getValue(frame);
 
-  float exposureOffset = (powf(10.0f, (float)(abs(offset) / hardness)) - 1.0f) *
-                         ((offset < 0.0f) ? -1.0f : 1.0f);
+  float exposureOffset =
+      (powf(10.0f, (float)(fabs(offset) / hardness)) - 1.0f) *
+      ((offset < 0.0f) ? -1.0f : 1.0f);
 
   float4 *pix = tile_host;
 

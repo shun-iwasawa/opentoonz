@@ -312,8 +312,8 @@ void Iwa_GradientWarpFx::get_render_real_hv(const double frame,
                                             double &v_maxlen) {
   /*--- ベクトルにする(プラス値) --- */
   TPointD rend_vect;
-  rend_vect.x = abs(m_h_maxlen->getValue(frame));
-  rend_vect.y = abs(m_v_maxlen->getValue(frame));
+  rend_vect.x = fabs(m_h_maxlen->getValue(frame));
+  rend_vect.y = fabs(m_v_maxlen->getValue(frame));
   /*--- 拡大縮小(移動回転しないで)のGeometryを反映させる ---*/
   rend_vect = rend_vect * sqrt(fabs(affine.det()));
   /*--- 方向は無視して長さを返す(プラス値) ---*/

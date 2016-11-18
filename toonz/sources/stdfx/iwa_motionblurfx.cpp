@@ -314,8 +314,8 @@ void Iwa_MotionBlurCompFx::makeZanzoFilter_CPU(
           continue;
 
         /*- 近傍４ピクセルで線形補間する -*/
-        float xRatio = 1.0f - abs(pos.x - p0.x);
-        float yRatio = 1.0f - abs(pos.y - p0.y);
+        float xRatio = 1.0f - fabs(pos.x - p0.x);
+        float yRatio = 1.0f - fabs(pos.y - p0.y);
 
         /*- 続いて、ガンマ強弱の値を得る -*/
         /*- 近傍点のフレームのオフセット値 -*/
@@ -674,10 +674,10 @@ void Iwa_MotionBlurCompFx::doCompute(TTile &tile, double frame,
     if (points.at(p).y > maxY) maxY = points.at(p).y;
     if (points.at(p).y < minY) minY = points.at(p).y;
   }
-  int marginLeft   = (int)ceil(abs(minX));
-  int marginRight  = (int)ceil(abs(maxX));
-  int marginTop    = (int)ceil(abs(maxY));
-  int marginBottom = (int)ceil(abs(minY));
+  int marginLeft   = (int)ceil(fabs(minX));
+  int marginRight  = (int)ceil(fabs(maxX));
+  int marginTop    = (int)ceil(fabs(maxY));
+  int marginBottom = (int)ceil(fabs(minY));
 
   /*- 動かない（＝フィルタマージンが全て０）場合、入力タイルをそのまま返す -*/
   if (marginLeft == 0 && marginRight == 0 && marginTop == 0 &&
@@ -870,10 +870,10 @@ bool Iwa_MotionBlurCompFx::doGetBBox(double frame, TRectD &bBox,
     if (points.at(p).y > maxY) maxY = points.at(p).y;
     if (points.at(p).y < minY) minY = points.at(p).y;
   }
-  int marginLeft   = (int)ceil(abs(minX));
-  int marginRight  = (int)ceil(abs(maxX));
-  int marginTop    = (int)ceil(abs(maxY));
-  int marginBottom = (int)ceil(abs(minY));
+  int marginLeft   = (int)ceil(fabs(minX));
+  int marginRight  = (int)ceil(fabs(maxX));
+  int marginTop    = (int)ceil(fabs(maxY));
+  int marginBottom = (int)ceil(fabs(minY));
 
   TRectD enlargedBBox(
       bBox.x0 - (double)marginLeft, bBox.y0 - (double)marginBottom,

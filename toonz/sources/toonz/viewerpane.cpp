@@ -677,7 +677,7 @@ void SceneViewerPanel::playAudioFrame(int frame) {
                 ->getProperties()
                 ->getOutputProperties()
                 ->getFrameRate();
-    m_samplesPerFrame = m_sound->getSampleRate() / abs(m_fps);
+    m_samplesPerFrame = m_sound->getSampleRate() / fabs(m_fps);
   }
   if (!m_sound) return;
   m_viewerFps = m_flipConsole->getCurrentFps();
