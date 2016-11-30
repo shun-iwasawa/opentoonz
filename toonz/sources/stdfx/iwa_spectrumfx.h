@@ -19,7 +19,7 @@ struct float4 {
   float x, y, z, w;
 };
 
-class Iwa_SpectrumFx final : public TStandardRasterFx {
+class Iwa_SpectrumFx : public TStandardRasterFx {
   FX_PLUGIN_DECLARATION(Iwa_SpectrumFx)
 
 protected:
@@ -38,7 +38,7 @@ protected:
   TDoubleParamP m_lightIntensity;
 
   /*- シャボン色マップの生成 -*/
-  void calcBubbleMap(float3 *bubbleColor, double frame);
+  void calcBubbleMap(float3 *bubbleColor, double frame, bool computeAngularAxis = false);
 
   template <typename RASTER, typename PIXEL>
   void convertRaster(const RASTER ras, TDimensionI dim, float3 *bubbleColor);
