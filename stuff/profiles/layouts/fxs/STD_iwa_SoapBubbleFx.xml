@@ -1,6 +1,7 @@
 <fxlayout>
   <page name="Color and Shape">
     <vbox>
+      <control>renderMode</control>
       <separator label="Bubble Color"/>
       <control>intensity</control>
       <control>refractiveIndex</control>

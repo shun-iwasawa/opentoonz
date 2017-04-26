@@ -66,6 +66,7 @@ static float* dt(float* f, int n, float a = 1.0f) {
 
 Iwa_SoapBubbleFx::Iwa_SoapBubbleFx()
     : Iwa_SpectrumFx()
+    , m_renderMode(new TIntEnumParam(RENDER_MODE_BUBBLE, "Bubble"))
     , m_binarize_threshold(0.5)
     , m_shape_aspect_ratio(1.0)
     , m_blur_radius(5.0)
@@ -87,6 +88,10 @@ Iwa_SoapBubbleFx::Iwa_SoapBubbleFx()
   addInputPort("Thickness", m_input);
   addInputPort("Shape", m_shape);
   addInputPort("Depth", m_depth);
+
+  bindParam(this, "renderMode", m_renderMode);
+  m_renderMode->addItem(RENDER_MODE_THICKNESS, "Thickness");
+  m_renderMode->addItem(RENDER_MODE_DEPTH, "Depth");
 
   bindParam(this, "binarizeThresold", m_binarize_threshold);
   bindParam(this, "shapeAspectRatio", m_shape_aspect_ratio);
@@ -132,12 +137,19 @@ void Iwa_SoapBubbleFx::doCompute(TTile& tile, double frame,
   TRectD bBox(tile.m_pos, TPointD(dim.lx, dim.ly));
   QList<TRasterGR8P> allocatedRasList;
 
+  if (m_renderMode->getValue() == RENDER_MODE_DEPTH && m_depth.isConnected()) {
+    m_depth->allocateAndCompute(tile, bBox.getP00(), dim, tile.getRaster(),
+                                frame, settings);
+    return;
+  }
+
   /* soap bubble color map */
   TRasterGR8P bubbleColor_ras(sizeof(float3) * 256 * 256, 1);
   bubbleColor_ras->lock();
   allocatedRasList.append(bubbleColor_ras);
   float3* bubbleColor_p = (float3*)bubbleColor_ras->getRawData();
-  calcBubbleMap(bubbleColor_p, frame, true);
+  if (m_renderMode->getValue() == RENDER_MODE_BUBBLE)
+    calcBubbleMap(bubbleColor_p, frame, true);
 
   if (checkCancelAndReleaseRaster(allocatedRasList, tile, settings)) return;
 
@@ -296,6 +308,7 @@ template <typename RASTER, typename PIXEL>
 void Iwa_SoapBubbleFx::convertToRaster(const RASTER ras, float* thickness_map_p,
                                        float* depth_map_p, float* alpha_map_p,
                                        TDimensionI dim, float3* bubbleColor_p) {
+  int renderMode     = m_renderMode->getValue();
   float* depth_p     = depth_map_p;
   float* thickness_p = thickness_map_p;
   float* alpha_p     = alpha_map_p;
@@ -308,6 +321,25 @@ void Iwa_SoapBubbleFx::convertToRaster(const RASTER ras, float* thickness_map_p,
         alpha *= (float)pix->m / (float)PIXEL::maxChannelValue;
       if (alpha == 0.0f) { /* no change for the transparent pixels */
         pix->m = (typename PIXEL::Channel)0;
+        continue;
+      }
+
+      // thickness and depth render mode
+      if (renderMode != RENDER_MODE_BUBBLE) {
+        float val = alpha * (float)PIXEL::maxChannelValue + 0.5f;
+        pix->m = (typename PIXEL::Channel)((val > (float)PIXEL::maxChannelValue)
+                                               ? (float)PIXEL::maxChannelValue
+                                               : val);
+        float mapVal =
+            (renderMode == RENDER_MODE_THICKNESS) ? (*thickness_p) : (*depth_p);
+        val = alpha * mapVal * (float)PIXEL::maxChannelValue + 0.5f;
+        typename PIXEL::Channel chanVal =
+            (typename PIXEL::Channel)((val > (float)PIXEL::maxChannelValue)
+                                          ? (float)PIXEL::maxChannelValue
+                                          : val);
+        pix->r = chanVal;
+        pix->g = chanVal;
+        pix->b = chanVal;
         continue;
       }
 

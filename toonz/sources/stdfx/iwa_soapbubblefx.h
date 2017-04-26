@@ -21,16 +21,19 @@ protected:
   TRasterFxPort m_shape;
   /* another option, to input a depth map directly */
   TRasterFxPort m_depth;
+  // rendering mode
+  TIntEnumParamP m_renderMode;
   // shape parameters
   TDoubleParamP m_binarize_threshold;
   TDoubleParamP m_shape_aspect_ratio;
   TDoubleParamP m_blur_radius;
   TDoubleParamP m_blur_power;
   TBoolParamP m_multi_source;
-  TBoolParamP
-      m_mask_center;  // obsolete parameter. to be conerted to m_center_opacity
   TDoubleParamP m_center_opacity;
   TBoolParamP m_fit_thickness;
+
+  // obsolete parameter. to be conerted to m_center_opacity
+  TBoolParamP m_mask_center;
 
   // noise parameters
   TIntParamP m_normal_sample_distance;
@@ -41,6 +44,8 @@ protected:
   TDoubleParamP m_noise_evolution;
   TDoubleParamP m_noise_depth_mix_ratio;
   TDoubleParamP m_noise_thickness_mix_ratio;
+
+  enum { RENDER_MODE_BUBBLE, RENDER_MODE_THICKNESS, RENDER_MODE_DEPTH };
 
   template <typename RASTER, typename PIXEL>
   void convertToBrightness(const RASTER srcRas, float* dst, float* alpha,

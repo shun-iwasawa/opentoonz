@@ -1177,6 +1177,7 @@
   <item>"STD_iwa_PNPerspectiveFx.waveHeight"		"Wave Height"</item>
   
   <item>"STD_iwa_SoapBubbleFx"	"SoapBubble Iwa"	</item>
+  <item>"STD_iwa_SoapBubbleFx.renderMode"	"Render Mode"	</item>
   <item>"STD_iwa_SoapBubbleFx.intensity"	"Intensity"	</item>
   <item>"STD_iwa_SoapBubbleFx.refractiveIndex"	"Refractive Index"	</item>
   <item>"STD_iwa_SoapBubbleFx.thickMax"	"Thick Max"	</item>
