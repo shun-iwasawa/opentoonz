@@ -1143,6 +1143,8 @@
   <item>"STD_iwa_SpectrumFx.RGamma"	"R Gamma"	</item>
   <item>"STD_iwa_SpectrumFx.GGamma"	"G Gamma"	</item>
   <item>"STD_iwa_SpectrumFx.BGamma"	"B Gamma"	</item>
+  <item>"STD_iwa_SpectrumFx.loopSpectrumFadeWidth"	"Loop Spectrum Fade Width"	</item>
+  <item>"STD_iwa_SpectrumFx.spectrumShift"	"Spectrum Shift"	</item>
   <item>"STD_iwa_SpectrumFx.lensFactor"	"Lens Factor"	</item>
   <item>"STD_iwa_SpectrumFx.lightThres"	"Light Threshod"</item>
   <item>"STD_iwa_SpectrumFx.lightIntensity"	"Light Intensity"</item>
@@ -1182,6 +1184,8 @@
   <item>"STD_iwa_SoapBubbleFx.RGamma"	"R Gamma"	</item>
   <item>"STD_iwa_SoapBubbleFx.GGamma"	"G Gamma"	</item>
   <item>"STD_iwa_SoapBubbleFx.BGamma"	"B Gamma"	</item>
+  <item>"STD_iwa_SoapBubbleFx.loopSpectrumFadeWidth"	"Loop Spectrum Fade Width"	</item>
+  <item>"STD_iwa_SoapBubbleFx.spectrumShift"	"Spectrum Shift"	</item>
   <item>"STD_iwa_SoapBubbleFx.binarizeThresold"	"Threshold"	</item>
   <item>"STD_iwa_SoapBubbleFx.multiSource"	"Multiple Bubbles in Shape Image"	</item>
   <item>"STD_iwa_SoapBubbleFx.maskCenter"	"Mask Center of the Bubble"	</item>
