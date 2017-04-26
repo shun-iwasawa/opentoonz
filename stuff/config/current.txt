@@ -1185,6 +1185,8 @@
   <item>"STD_iwa_SoapBubbleFx.binarizeThresold"	"Threshold"	</item>
   <item>"STD_iwa_SoapBubbleFx.multiSource"	"Multiple Bubbles in Shape Image"	</item>
   <item>"STD_iwa_SoapBubbleFx.maskCenter"	"Mask Center of the Bubble"	</item>
+  <item>"STD_iwa_SoapBubbleFx.centerOpacity"	"Opacity of Bubble's Center"	</item>
+  <item>"STD_iwa_SoapBubbleFx.fitThickness"	"Fit Thickness Image to Each Bubble"	</item>
   <item>"STD_iwa_SoapBubbleFx.shapeAspectRatio"	"Shape Aspect Ratio"	</item>
   <item>"STD_iwa_SoapBubbleFx.blurRadius"	"Blur Radius"	</item>
   <item>"STD_iwa_SoapBubbleFx.blurPower"	"Power"	</item>
