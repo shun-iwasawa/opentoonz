@@ -1012,7 +1012,7 @@ int Naa2TlvConverter::measureThickness(int x0, int y0) {
 //-----------------------------------------------------------------------------
 
 TToonzImageP Naa2TlvConverter::makeTlv(bool transparentSyntheticInks,
-                                       QList<int> &usedStyleIds) {
+                                       QList<int> &usedStyleIds, double dpi) {
   if (!m_valid || m_colors.empty() || m_regions.empty() || !m_regionRas)
     return TToonzImageP();
   int lx                = m_regionRas->getLx();
@@ -1119,7 +1119,11 @@ TToonzImageP Naa2TlvConverter::makeTlv(bool transparentSyntheticInks,
 
   TToonzImageP ti = new TToonzImage(ras, ras->getBounds());
   ti->setPalette(palette);
-  ti->setDpi(72, 72);
+
+  if (dpi > 0.0)  // for now, accept only square pixel
+    ti->setDpi(dpi, dpi);
+  else
+    ti->setDpi(72, 72);
 
   return ti;
 }
