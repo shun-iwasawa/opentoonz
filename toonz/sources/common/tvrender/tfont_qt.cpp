@@ -11,6 +11,7 @@
 #include <QFontMetrics>
 #include <QImage>
 #include <QPainterPath>
+#include <QPainter>
 #include <QRawFont>
 
 #include <vector>
@@ -153,10 +154,10 @@ TPoint TFont::drawChar(TVectorImageP &image, wchar_t charcode,
 
 //-----------------------------------------------------------------------------
 
-TPoint TFont::drawChar(TRasterGR8P &outImage, TPoint &unused, wchar_t charcode,
+TPoint TFont::drawChar(QImage &outImage, TPoint &unused, wchar_t charcode,
                        wchar_t nextCharCode) const {
   QRawFont raw(QRawFont::fromFont(m_pimpl->m_font));
-
+  
   QChar chars[2] = {charcode, nextCharCode};
   quint32 indices[2];
   int count = 2;
@@ -165,15 +166,28 @@ TPoint TFont::drawChar(TRasterGR8P &outImage, TPoint &unused, wchar_t charcode,
     return TPoint(0, 0);
   }
 
-  QImage image(raw.alphaMapForGlyph(indices[0], QRawFont::PixelAntialiasing));
-
-  if (image.format() != QImage::Format_Indexed8)
+  QImage image = raw.alphaMapForGlyph(indices[0], QRawFont::PixelAntialiasing);
+  if (image.format() != QImage::Format_Indexed8 && image.format() != QImage::Format_Alpha8)
     throw TException(L"bad QImage format " + image.format());
+  
+  QRectF boundingRect = raw.boundingRect(indices[0]);
 
+  outImage = QImage(image.width(), raw.ascent()+raw.descent(), QImage::Format_Grayscale8);
+  outImage.fill(255);
+  QPainter painter(&outImage);
+  painter.drawImage(0, boundingRect.top()+raw.ascent(), image);
+
+  //std::cout << "rect POS:( " << boundingRect.top() << ", " << boundingRect.left() << ") -> "
+  //  << "POS:( " << boundingRect.bottom() << ", " << boundingRect.right() << ") "
+  //  << "  SIZE:( " << boundingRect.width() << ", " << boundingRect.height() << ")" << std::endl;
+
+
+  /*
   int height = image.height();
   int width  = image.width();
 
   outImage = TRasterGR8P(width, height);
+  //outImage->lock();
 
 #if 0
   TPixelGR8 bgp;
@@ -182,8 +196,16 @@ TPoint TFont::drawChar(TRasterGR8P &outImage, TPoint &unused, wchar_t charcode,
 #endif
   void *data = outImage->getRawData();
 
-  memcpy(data, image.bits(), image.byteCount());
-
+  
+  for (int j = 0; j < height; j++){
+    TPixelGR8* dp = outImage->pixels(j);
+    uchar* sp = image.scanLine(j);
+    for (int i = 0; i < width; i++, dp++, sp++){
+      *dp = TPixelGR8::maxChannelValue - *sp;
+    }
+  }
+  //memcpy(data, image.bits(), image.byteCount());
+  */
   return getDistance(charcode, nextCharCode);
 }
 
@@ -191,24 +213,36 @@ TPoint TFont::drawChar(TRasterGR8P &outImage, TPoint &unused, wchar_t charcode,
 
 TPoint TFont::drawChar(TRasterCM32P &outImage, TPoint &unused, int inkId,
                        wchar_t charcode, wchar_t nextCharCode) const {
-  TRasterGR8P grayAppImage;
+  QImage grayAppImage;
   this->drawChar(grayAppImage, unused, charcode, nextCharCode);
 
-  int lx = grayAppImage->getLx();
-  int ly = grayAppImage->getLy();
+  int lx = grayAppImage.width();
+  int ly = grayAppImage.height();
+  //int lx = grayAppImage->getLx();
+  //int ly = grayAppImage->getLy();
 
   outImage = TRasterCM32P(lx, ly);
+  //outImage->lock();
 
   assert(TPixelCM32::getMaxTone() == 255);
   TPixelCM32 bgColor(0, 0, TPixelCM32::getMaxTone());
-  grayAppImage->lock();
-  outImage->lock();
   int ty = 0;
+  
+  
+/*  for (int j = 0; j < height; j++){
+    TPixelGR8* dp = outImage->pixels(j);
+    uchar* sp = image.scanLine(j);
+    for (int i = 0; i < width; i++, dp++, sp++){
+      *dp = TPixelGR8::maxChannelValue - *sp;
+    }
+  }
+  */
+
   for (int gy = ly - 1; gy >= 0; --gy, ++ty) {
-    TPixelGR8 *srcPix  = grayAppImage->pixels(gy);
+    uchar *srcPix  = grayAppImage.scanLine(gy);
     TPixelCM32 *tarPix = outImage->pixels(ty);
     for (int x = 0; x < lx; ++x) {
-      int tone = srcPix->value;
+      int tone = (int)(*srcPix);
 
       if (tone == 255)
         *tarPix = bgColor;
@@ -219,8 +253,8 @@ TPoint TFont::drawChar(TRasterCM32P &outImage, TPoint &unused, int inkId,
       ++tarPix;
     }
   }
-  grayAppImage->unlock();
-  outImage->unlock();
+  //grayAppImage->unlock();
+  //outImage->unlock();
 
   return getDistance(charcode, nextCharCode);
 }

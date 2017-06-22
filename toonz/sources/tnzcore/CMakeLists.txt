@@ -248,7 +248,7 @@ set(SOURCES
 if(BUILD_TARGET_WIN)
     set(SOURCES ${SOURCES}
         ../common/tsound/tsound_nt.cpp
-        ../common/tvrender/tfont_nt.cpp
+        ../common/tvrender/tfont_qt.cpp
     )
 elseif(BUILD_TARGET_APPLE)
     set(SOURCES ${SOURCES}

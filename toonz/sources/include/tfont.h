@@ -31,12 +31,12 @@ class TFont;
 // TFont declaration. The class is currently not directly available under 64-bit
 // MAC OSX.
 
-#if !defined(__LP64__) || !defined(MACOSX)
+//#if !defined(__LP64__) || !defined(MACOSX)
 
-#ifdef MACOSX
-#include <ApplicationServices/ApplicationServices.h>
-#include <Carbon/Carbon.h>
-#endif
+//#ifdef MACOSX
+//#include <ApplicationServices/ApplicationServices.h>
+//#include <Carbon/Carbon.h>
+//#endif
 
 //=================================================================================================
 
@@ -50,20 +50,21 @@ private:
   friend class TFontManager;
   Impl *m_pimpl;
 
-#ifdef _WIN32
+/*#ifdef _WIN32
   TFont(const LOGFONTW &, HDC hdc);
 #elif defined(MACOSX)
   TFont(ATSUFontID, int size);
 #else
+  */
   TFont(const std::wstring family, const std::wstring face, int size);
-#endif
+//#endif
 
 public:
   ~TFont();
 
   TPoint drawChar(TVectorImageP &outImage, wchar_t charcode,
                   wchar_t nextCode = 0) const;
-  TPoint drawChar(TRasterGR8P &outImage, TPoint &glyphOrigin, wchar_t charcode,
+  TPoint drawChar(QImage &outImage, TPoint &glyphOrigin, wchar_t charcode,
                   wchar_t nextCode = 0) const;
   TPoint drawChar(TRasterCM32P &outImage, TPoint &glyphOrigin, int inkId,
                   wchar_t charcode, wchar_t nextCode = 0) const;
@@ -89,7 +90,7 @@ private:
   TFont &operator=(const TFont &);
 };
 
-#endif  //!__LP64__ || !MACOSX
+//#endif  //!__LP64__ || !MACOSX
 
 //-----------------------------------------------------------------------------
 
@@ -147,7 +148,7 @@ public:
     return getCurrentFont()->drawChar(outImage, charcode, nextCode);
   }
 
-  TPoint drawChar(TRasterGR8P &outImage, TPoint &glyphOrigin, wchar_t charcode,
+  TPoint drawChar(QImage &outImage, TPoint &glyphOrigin, wchar_t charcode,
                   wchar_t nextCode = 0) {
     return getCurrentFont()->drawChar(outImage, glyphOrigin, charcode,
                                       nextCode);
