@@ -879,7 +879,6 @@ glPushMatrix();
 
       TPoint rasterCenter(dim.lx / 2, dim.ly / 2);
       TTranslation transl1(convert(rasterCenter));
-      //TTranslation transl1(convert(descenderP + rasterCenter));
       TTranslation transl2(m_string[j].m_charPosition);
       GLRasterPainter::drawRaster(transl2 * m_scale * transl1, ti, false);
 
@@ -971,9 +970,7 @@ void TypeTool::addTextToToonzImage(const TToonzImageP &currentImage) {
 
   TRasterCM32P targetRaster = currentImage->getRaster();
   TRect changedArea;
-
-  //TPoint descenderP(0, TFontManager::instance()->getLineDescender());
-
+  
   UINT j;
   for (j = 0; j < size; j++) {
     if (m_string[j].isReturn()) continue;
@@ -991,9 +988,6 @@ vi->transform( TRotation(m_startPoint,-90) );
     }
   }
 
-  //changedArea = changedArea;
-  //changedArea = changedArea + descenderP;
-
   if (!changedArea.isEmpty()) {
     TTileSetCM32 *beforeTiles = new TTileSetCM32(targetRaster->getSize());
     beforeTiles->add(targetRaster, changedArea);
@@ -1003,11 +997,9 @@ vi->transform( TRotation(m_startPoint,-90) );
 
       if (TToonzImageP srcTi = m_string[j].m_char) {
         TRasterCM32P srcRaster = srcTi->getRaster();
-        //TTranslation transl1(convert(descenderP));
         TTranslation transl2(m_string[j].m_charPosition +
                              convert(targetRaster->getCenter()));
         TRop::over(targetRaster, srcRaster, transl2 * m_scale);
-        //TRop::over(targetRaster, srcRaster, transl2 * m_scale * transl1);
       }
     }
 

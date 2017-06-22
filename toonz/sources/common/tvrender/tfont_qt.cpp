@@ -177,35 +177,6 @@ TPoint TFont::drawChar(QImage &outImage, TPoint &unused, wchar_t charcode,
   QPainter painter(&outImage);
   painter.drawImage(0, boundingRect.top()+raw.ascent(), image);
 
-  //std::cout << "rect POS:( " << boundingRect.top() << ", " << boundingRect.left() << ") -> "
-  //  << "POS:( " << boundingRect.bottom() << ", " << boundingRect.right() << ") "
-  //  << "  SIZE:( " << boundingRect.width() << ", " << boundingRect.height() << ")" << std::endl;
-
-
-  /*
-  int height = image.height();
-  int width  = image.width();
-
-  outImage = TRasterGR8P(width, height);
-  //outImage->lock();
-
-#if 0
-  TPixelGR8 bgp;
-  bgp.value = 255;
-  outImage->fill(bgp);
-#endif
-  void *data = outImage->getRawData();
-
-  
-  for (int j = 0; j < height; j++){
-    TPixelGR8* dp = outImage->pixels(j);
-    uchar* sp = image.scanLine(j);
-    for (int i = 0; i < width; i++, dp++, sp++){
-      *dp = TPixelGR8::maxChannelValue - *sp;
-    }
-  }
-  //memcpy(data, image.bits(), image.byteCount());
-  */
   return getDistance(charcode, nextCharCode);
 }
 
@@ -218,26 +189,14 @@ TPoint TFont::drawChar(TRasterCM32P &outImage, TPoint &unused, int inkId,
 
   int lx = grayAppImage.width();
   int ly = grayAppImage.height();
-  //int lx = grayAppImage->getLx();
-  //int ly = grayAppImage->getLy();
 
   outImage = TRasterCM32P(lx, ly);
-  //outImage->lock();
+  outImage->lock();
 
   assert(TPixelCM32::getMaxTone() == 255);
   TPixelCM32 bgColor(0, 0, TPixelCM32::getMaxTone());
   int ty = 0;
-  
-  
-/*  for (int j = 0; j < height; j++){
-    TPixelGR8* dp = outImage->pixels(j);
-    uchar* sp = image.scanLine(j);
-    for (int i = 0; i < width; i++, dp++, sp++){
-      *dp = TPixelGR8::maxChannelValue - *sp;
-    }
-  }
-  */
-
+    
   for (int gy = ly - 1; gy >= 0; --gy, ++ty) {
     uchar *srcPix  = grayAppImage.scanLine(gy);
     TPixelCM32 *tarPix = outImage->pixels(ty);
@@ -253,8 +212,7 @@ TPoint TFont::drawChar(TRasterCM32P &outImage, TPoint &unused, int inkId,
       ++tarPix;
     }
   }
-  //grayAppImage->unlock();
-  //outImage->unlock();
+  outImage->unlock();
 
   return getDistance(charcode, nextCharCode);
 }
