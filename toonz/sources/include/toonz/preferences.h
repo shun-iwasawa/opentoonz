@@ -269,6 +269,9 @@ public:
     return m_paletteTypeOnLoadRasterImageAsColorModel;
   }
 
+  void setDefaultImportPolicy(int policy);
+  int getDefaultImportPolicy() { return m_importPolicy; }
+
   // Drawing  tab
 
   void setScanLevelType(std::string s);
@@ -352,6 +355,12 @@ public:
   bool isInputCellsWithoutDoubleClickingEnabled() const {
     return m_inputCellsWithoutDoubleClickingEnabled;
   }
+
+  void enableShowXSheetToolbar(bool on);
+  bool isShowXSheetToolbarEnabled() const { return m_showXSheetToolbar; }
+
+  void enableExpandFunctionHeader(bool on);
+  bool isExpandFunctionHeaderEnabled() const { return m_expandFunctionHeader; }
 
   // Animation  tab
 
@@ -482,7 +491,7 @@ private:
       m_chunkSize, m_blanksCount, m_onionPaperThickness, m_step, m_shrink,
       m_textureSize, m_autocreationType, m_keyframeType, m_animationStep,
       m_ffmpegTimeout;  // seconds
-  int m_projectRoot;
+  int m_projectRoot, m_importPolicy;
   int m_currentLanguage, m_currentStyleSheet,
       m_undoMemorySize,  // in megabytes
       m_dragCellsBehaviour, m_lineTestFpsCapture, m_defLevelType, m_xsheetStep,
@@ -493,7 +502,8 @@ private:
       m_ignoreAlphaonColumn1Enabled, m_previewAlwaysOpenNewFlipEnabled,
       m_rewindAfterPlaybackEnabled, m_fitToFlipbookEnabled, m_autosaveEnabled,
       m_autosaveSceneEnabled, m_autosaveOtherFilesEnabled,
-      m_defaultViewerEnabled, m_pixelsOnly;
+      m_defaultViewerEnabled, m_pixelsOnly, m_showXSheetToolbar,
+      m_expandFunctionHeader;
   bool m_rasterOptimizedMemory, m_saveUnpaintedInCleanup,
       m_askForOverrideRender, m_automaticSVNFolderRefreshEnabled, m_SVNEnabled,
       m_levelsBackupEnabled, m_minimizeSaveboxAfterEditing,
