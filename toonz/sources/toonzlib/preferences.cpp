@@ -1210,13 +1210,8 @@ QString Preferences::getCurrentStyleSheetName() const {
 QString Preferences::getCurrentStyleSheetPath() const {
   if (m_currentStyleSheet.isEmpty()) return QString();
   TFilePath path(TEnv::getConfigDir() + "qss");
-#ifdef MACOSX
-  QString string = m_currentStyleSheet + QString("/") + m_currentStyleSheet +
-                   QString("_mac.qss");
-#else
   QString string = m_currentStyleSheet + QString("/") + m_currentStyleSheet +
                    QString(".qss");
-#endif
   return QString("file:///" + path.getQString() + "/" + string);
 }
 
