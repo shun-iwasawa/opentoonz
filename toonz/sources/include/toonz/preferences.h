@@ -76,6 +76,8 @@ public:
                     header)     */
   };
 
+  enum SnappingTarge { SnapStrokes, SnapGuides, SnapAll };
+
 public:
   static Preferences *instance();
 
@@ -322,6 +324,9 @@ public:
     return m_useNumpadForSwitchingStyles;
   }
 
+  void setVectorSnappingTarget(int target);
+  int getVectorSnappingTarget() { return m_vectorSnappingTarget; }
+
   // Xsheet  tab
 
   void setXsheetStep(int step);  //!< Sets the step used for the <I>next/prev
@@ -503,7 +508,7 @@ private:
   QString m_currentLanguage, m_currentStyleSheet;
   int m_undoMemorySize,  // in megabytes
       m_dragCellsBehaviour, m_lineTestFpsCapture, m_defLevelType, m_xsheetStep,
-      m_shmmax, m_shmseg, m_shmall, m_shmmni;
+      m_shmmax, m_shmseg, m_shmall, m_shmmni, m_vectorSnappingTarget;
 
   bool m_autoExposeEnabled, m_autoCreateEnabled, m_subsceneFolderEnabled,
       m_generatedMovieViewEnabled, m_xsheetAutopanEnabled,
