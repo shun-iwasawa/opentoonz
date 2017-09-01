@@ -549,8 +549,16 @@ void RenameCellField::showInRowCol(int row, int col, bool multiColumnSelected) {
   TXshCell cell = xsh->getCell(row, col);
   QPoint xy     = m_viewer->positionToXY(CellPosition(row, col)) - QPoint(1, 2);
   if (!cell.isEmpty()) {
-    setFixedSize(o->cellWidth(), o->cellHeight() + 2);
-    move(xy + QPoint(1, 1));
+    // Do not cover left side of the cell in order to enable grabbing the drag
+    // handle
+    if (o->isVerticalTimeline()) {
+      int dragHandleWidth = o->rect(PredefinedRect::DRAG_HANDLE_CORNER).width();
+      setFixedSize(o->cellWidth() - dragHandleWidth, o->cellHeight() + 2);
+      move(xy + QPoint(1 + dragHandleWidth, 1));
+    } else {
+      setFixedSize(o->cellWidth(), o->cellHeight() + 2);
+      move(xy + QPoint(1, 1));
+    }
 
     TFrameId fid           = cell.getFrameId();
     std::wstring levelName = cell.m_level->getName();
