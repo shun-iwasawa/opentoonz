@@ -730,33 +730,26 @@ void RenameCellField::focusOutEvent(QFocusEvent *e) {
 // Override shortcut keys for cell selection commands
 
 bool RenameCellField::eventFilter(QObject *obj, QEvent *e) {
-  // We really shouldn't allow OT defined shortcuts to be checked and used while
-  // renaming a cell
-  // but if we must, we should only return true or false if we're executing our
-  // OT action;
-  // otherwise pass event forward in case another object is interested in it.
   if (e->type() != QEvent::ShortcutOverride)
-    return QObject::eventFilter(obj, e);  // return false;
+    return QLineEdit::eventFilter(obj, e);  // return false;
 
   TCellSelection *cellSelection = dynamic_cast<TCellSelection *>(
       TApp::instance()->getCurrentSelection()->getSelection());
-  if (!cellSelection) return QObject::eventFilter(obj, e);  // return false;
+  if (!cellSelection) return QLineEdit::eventFilter(obj, e);
 
   QKeyEvent *ke = (QKeyEvent *)e;
   std::string keyStr =
       QKeySequence(ke->key() + ke->modifiers()).toString().toStdString();
   QAction *action = CommandManager::instance()->getActionFromShortcut(keyStr);
-  if (!action) return QObject::eventFilter(obj, e);  // return false;
+  if (!action) return QLineEdit::eventFilter(obj, e);
 
   std::string actionId = CommandManager::instance()->getIdFromAction(action);
 
-  // These are usally standard ctrl/command strokes for text editing.
-  // Default to standard behavior and don't execute OT's action while renaming
-  // cell.
-  if (actionId == "MI_Undo" || actionId == "MI_Redo" ||
-      actionId == "MI_Clear" || actionId == "MI_Copy" ||
-      actionId == "MI_Paste" || actionId == "MI_Cut")
-    return QObject::eventFilter(obj, e);  // return true;
+  // Even the standard ctrl/command strokes for text editing,
+  // they are needed to invoke OT's commands while renaming cell
+  // if the commands are enabled in the cell selection.
+  // Since they are merely used for cell renaming but frequently
+  // used for xsheet editing.
   return TCellSelection::isEnabledCommand(actionId);
 }
 
