@@ -753,11 +753,19 @@ bool RenameCellField::eventFilter(QObject *obj, QEvent *e) {
 
   std::string actionId = CommandManager::instance()->getIdFromAction(action);
 
-  // Even the standard ctrl/command strokes for text editing,
-  // they are needed to invoke OT's commands while renaming cell
-  // if the commands are enabled in the cell selection.
-  // Since they are merely used for cell renaming but frequently
-  // used for xsheet editing.
+  // These are usally standard ctrl/command strokes for text editing.
+  // Default to standard behavior and don't execute OT's action while renaming
+  // cell if users prefer to do so.
+  // Or, always invoke OT's commands when renaming cell even the standard
+  // command strokes for text editing.
+  // The latter option is demanded by Japanese animation industry in order to
+  // gain efficiency for inputting xsheet.
+  if (!Preferences::instance()->isShortcutCommandsWhileRenamingCellEnabled() &&
+      (actionId == "MI_Undo" || actionId == "MI_Redo" ||
+       actionId == "MI_Clear" || actionId == "MI_Copy" ||
+       actionId == "MI_Paste" || actionId == "MI_Cut"))
+    return QLineEdit::eventFilter(obj, e);
+
   return TCellSelection::isEnabledCommand(actionId);
 }
 
