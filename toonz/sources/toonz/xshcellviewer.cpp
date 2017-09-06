@@ -772,6 +772,11 @@ bool RenameCellField::eventFilter(QObject *obj, QEvent *e) {
 //-----------------------------------------------------------------------------
 
 void RenameCellField::keyPressEvent(QKeyEvent *event) {
+  if (event->key() == Qt::Key_Escape) {
+    clearFocus();
+    return;
+  }
+
   // move the cell selection
   TCellSelection *cellSelection = dynamic_cast<TCellSelection *>(
       TApp::instance()->getCurrentSelection()->getSelection());
@@ -789,8 +794,16 @@ void RenameCellField::keyPressEvent(QKeyEvent *event) {
   switch (int key = event->key()) {
   case Qt::Key_Up:
   case Qt::Key_Down:
+    offset = m_viewer->orientation()->arrowShift(key);
+    break;
   case Qt::Key_Left:
   case Qt::Key_Right:
+    // ctrl+left/right arrow for moving cursor to the end in the field
+    if (isCtrlPressed &&
+        !Preferences::instance()->isUseArrowKeyToShiftCellSelectionEnabled()) {
+      QLineEdit::keyPressEvent(event);
+      return;
+    }
     offset = m_viewer->orientation()->arrowShift(key);
     break;
   default:
