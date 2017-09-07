@@ -610,10 +610,8 @@ Preferences::Preferences()
   // in case there is no personal settings
   if (savePath != loadPath) {
     // copy the template settins to the personal one
-    if (TFileStatus(loadPath).doesExist()) {
-      TSystem::mkDir(savePath.getParentDir());
+    if (TFileStatus(loadPath).doesExist())
       TSystem::copyFile(savePath, loadPath);
-    }
     m_settings.reset(
         new QSettings(QString::fromStdWString(savePath.getWideString()),
                       QSettings::IniFormat));
