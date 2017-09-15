@@ -161,30 +161,12 @@ Please select a different device or check the microphone.</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <source>From</source>
-        <translation>セルの</translation>
-    </message>
-    <message>
-        <source>frame</source>
-        <comment>from frame</comment>
-        <translation>番から</translation>
-    </message>
-    <message>
         <source>with</source>
         <translation> </translation>
     </message>
     <message>
         <source>frames increment</source>
         <translation>番ごとに</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation> </translation>
-    </message>
-    <message>
-        <source>frame</source>
-        <comment>to frame</comment>
-        <translation>番までを</translation>
     </message>
     <message>
         <source>inserting</source>
@@ -219,6 +201,24 @@ Please select a different device or check the microphone.</source>
 pick up all frames in the selected level.</source>
         <translation>この値を０にすると、選択されたレベルの
 全てのフレームを自動的に配置します。</translation>
+    </message>
+    <message>
+        <source>From frame</source>
+        <translation>セルの</translation>
+    </message>
+    <message>
+        <source> </source>
+        <comment>from frame</comment>
+        <translation>番から</translation>
+    </message>
+    <message>
+        <source>To frame</source>
+        <translation> </translation>
+    </message>
+    <message>
+        <source> </source>
+        <comment>to frame</comment>
+        <translation>番までを</translation>
     </message>
 </context>
 <context>

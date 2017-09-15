@@ -218,20 +218,20 @@ AutoInputCellNumberPopup::AutoInputCellNumberPopup()
   mainLay->setHorizontalSpacing(5);
   mainLay->setVerticalSpacing(10);
   {
-    mainLay->addWidget(new QLabel(tr("From"), this), 0, 0,
+    mainLay->addWidget(new QLabel(tr("From frame"), this), 0, 0,
                        Qt::AlignRight | Qt::AlignVCenter);
     mainLay->addWidget(m_from, 0, 1);
-    mainLay->addWidget(new QLabel(tr("frame", "from frame"), this), 0, 2, 1, 2);
+    mainLay->addWidget(new QLabel(tr(" ", "from frame"), this), 0, 2, 1, 2);
 
     mainLay->addWidget(new QLabel(tr("with"), this), 1, 0, 1, 2,
                        Qt::AlignRight | Qt::AlignVCenter);
     mainLay->addWidget(m_increment, 1, 2);
     mainLay->addWidget(new QLabel(tr("frames increment"), this), 1, 3);
 
-    mainLay->addWidget(new QLabel(tr("To"), this), 2, 0,
+    mainLay->addWidget(new QLabel(tr("To frame"), this), 2, 0,
                        Qt::AlignRight | Qt::AlignVCenter);
     mainLay->addWidget(m_to, 2, 1);
-    mainLay->addWidget(new QLabel(tr("frame", "to frame"), this), 2, 2, 1, 2);
+    mainLay->addWidget(new QLabel(tr(" ", "to frame"), this), 2, 2, 1, 2);
 
     mainLay->addWidget(new QLabel(tr("inserting"), this), 3, 0, 1, 2,
                        Qt::AlignRight | Qt::AlignVCenter);
