@@ -4639,6 +4639,10 @@ Do you want to create it?</source>
         <source>&amp;Command Bar</source>
         <translation>コマンドバー (&amp;C)</translation>
     </message>
+    <message>
+        <source>Reframe with Blanks...</source>
+        <translation>空コマを入れてリフレーム...</translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -6518,6 +6522,22 @@ Is it OK to release these shortcuts?</source>
         <source>Enable OpenToonz Commands&apos; Shortcut Keys While Renaming Cell</source>
         <translation>タイムシートのコマ入力時にOpenToonzコマンドのショートカットキーを有効にする</translation>
     </message>
+    <message>
+        <source>Life is too short for Comic Sans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Good luck.  You&apos;re on your own from here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Font *:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Font Weight *:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesPopup::FormatProperties</name>
@@ -8234,6 +8254,45 @@ Are you sure?</source>
     <message>
         <source>Command Bar</source>
         <translation>コマンドバー</translation>
+    </message>
+    <message>
+        <source>Reframe to %1&apos;s with %2 blanks</source>
+        <translation>リフレーム： %1 コマ 中 %2</translation>
+    </message>
+</context>
+<context>
+    <name>ReframePopup</name>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>steps</source>
+        <translation>コマ</translation>
+    </message>
+    <message>
+        <source>with</source>
+        <translation>中</translation>
+    </message>
+    <message>
+        <source>blanks</source>
+        <translation> </translation>
+    </message>
+    <message>
+        <source>(</source>
+        <translation>(</translation>
+    </message>
+    <message>
+        <source> blank cells will be inserted.)</source>
+        <translation>コマの空コマが挿入されます。)</translation>
+    </message>
+    <message>
+        <source>Reframe with Blanks</source>
+        <translation>空コマを入れてリフレーム</translation>
     </message>
 </context>
 <context>

@@ -2051,6 +2051,7 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe2));
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe3));
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe4));
+        reframeSubMenu->addAction(cmdManager->getAction(MI_ReframeWithBlanks));
       }
       menu.addMenu(reframeSubMenu);
     }
