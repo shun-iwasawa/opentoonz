@@ -2054,6 +2054,7 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
         reframeSubMenu->addAction(cmdManager->getAction(MI_ReframeWithBlanks));
       }
       menu.addMenu(reframeSubMenu);
+      menu.addAction(cmdManager->getAction(MI_AutoInputCellNumber));
     }
 
     if (containsRasterLevel(m_viewer->getColumnSelection())) {

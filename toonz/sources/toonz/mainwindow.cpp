@@ -1856,6 +1856,8 @@ void MainWindow::defineActions() {
   createMenuCellsAction(MI_Reframe4, tr("4's"), "");
 
   createMenuCellsAction(MI_ReframeWithBlanks, tr("Reframe with Blanks..."), "");
+  createMenuCellsAction(MI_AutoInputCellNumber, tr("Auto Input Cell Number..."),
+                        "");
 
   createRightClickMenuAction(MI_SetKeyframes, tr("&Set Key"), "Z");
 

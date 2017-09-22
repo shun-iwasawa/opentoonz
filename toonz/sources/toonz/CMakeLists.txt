@@ -152,6 +152,7 @@ set(MOC_HEADERS
     styleshortcutswitchablepanel.h
 	cameracapturelevelcontrol.h
 	reframepopup.h
+	autoinputcellnumberpopup.h
 # Tracker file
     dummyprocessor.h
     metnum.h
@@ -319,6 +320,7 @@ set(SOURCES
     styleshortcutswitchablepanel.cpp
 	cameracapturelevelcontrol.cpp
 	reframepopup.cpp
+	autoinputcellnumberpopup.cpp
 # Tracker file
     dummyprocessor.cpp
     metnum.cpp
