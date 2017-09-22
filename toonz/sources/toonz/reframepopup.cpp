@@ -18,7 +18,7 @@
 
 ReframePopup::ReframePopup()
     : Dialog(TApp::instance()->getMainWindow(), true, true, "ReframePopup") {
-  setWindowTitle(tr("Reframe with Blanks"));
+  setWindowTitle(tr("Reframe with Empty Inbetweens"));
   m_step  = new DVGui::IntLineEdit(this, 1, 1);
   m_blank = new DVGui::IntLineEdit(this, 0, 0);
 
@@ -39,7 +39,7 @@ ReframePopup::ReframePopup()
     mainLay->addSpacing(10);
     mainLay->addWidget(new QLabel(tr("with"), this));
     mainLay->addWidget(m_blank);
-    mainLay->addWidget(new QLabel(tr("blanks"), this));
+    mainLay->addWidget(new QLabel(tr("empty inbetweens"), this));
   }
   m_topLayout->addLayout(mainLay);
 

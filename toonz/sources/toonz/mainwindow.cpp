@@ -1855,7 +1855,8 @@ void MainWindow::defineActions() {
 
   createMenuCellsAction(MI_Reframe4, tr("4's"), "");
 
-  createMenuCellsAction(MI_ReframeWithBlanks, tr("Reframe with Blanks..."), "");
+  createMenuCellsAction(MI_ReframeWithEmptyInbetweens,
+                        tr("Reframe with Empty Inbetweens..."), "");
   createMenuCellsAction(MI_AutoInputCellNumber, tr("Auto Input Cell Number..."),
                         "");
 

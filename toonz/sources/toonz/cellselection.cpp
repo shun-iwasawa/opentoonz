@@ -1204,7 +1204,8 @@ void TCellSelection::enableCommands() {
   enableCommand(this, MI_Reframe2, &TCellSelection::reframe2Cells);
   enableCommand(this, MI_Reframe3, &TCellSelection::reframe3Cells);
   enableCommand(this, MI_Reframe4, &TCellSelection::reframe4Cells);
-  enableCommand(this, MI_ReframeWithBlanks, &TCellSelection::reframeWithBlanks);
+  enableCommand(this, MI_ReframeWithEmptyInbetweens,
+                &TCellSelection::reframeWithEmptyInbetweens);
 }
 //-----------------------------------------------------------------------------
 // Used in RenameCellField::eventFilter()
@@ -1241,7 +1242,7 @@ bool TCellSelection::isEnabledCommand(
                                         MI_Reframe2,
                                         MI_Reframe3,
                                         MI_Reframe4,
-                                        MI_ReframeWithBlanks,
+                                        MI_ReframeWithEmptyInbetweens,
                                         MI_Undo,
                                         MI_Redo};
   return commands.contains(commandId);

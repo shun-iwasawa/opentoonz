@@ -50,8 +50,8 @@ void TColumnSelection::enableCommands() {
   enableCommand(this, MI_Reframe2, &TColumnSelection::reframe2Cells);
   enableCommand(this, MI_Reframe3, &TColumnSelection::reframe3Cells);
   enableCommand(this, MI_Reframe4, &TColumnSelection::reframe4Cells);
-  enableCommand(this, MI_ReframeWithBlanks,
-                &TColumnSelection::reframeWithBlanks);
+  enableCommand(this, MI_ReframeWithEmptyInbetweens,
+                &TColumnSelection::reframeWithEmptyInbetweens);
 }
 
 //-----------------------------------------------------------------------------

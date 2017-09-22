@@ -2584,7 +2584,8 @@ void CellArea::createCellMenu(QMenu &menu, bool isCellSelected) {
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe2));
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe3));
         reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe4));
-        reframeSubMenu->addAction(cmdManager->getAction(MI_ReframeWithBlanks));
+        reframeSubMenu->addAction(
+            cmdManager->getAction(MI_ReframeWithEmptyInbetweens));
       }
       menu.addMenu(reframeSubMenu);
 

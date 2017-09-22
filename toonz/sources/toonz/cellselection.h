@@ -101,7 +101,7 @@ public:
   void reframe3Cells() { reframeCells(3); }
   void reframe4Cells() { reframeCells(4); }
 
-  void reframeWithBlanks();
+  void reframeWithEmptyInbetweens();
 
   void renameCells(TXshCell &cell);
   // rename cells for each columns with correspondent item in the list

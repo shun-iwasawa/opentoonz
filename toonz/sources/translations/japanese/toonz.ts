@@ -4723,7 +4723,7 @@ Do you want to create it?</source>
         <translation>コマンドバー (&amp;C)</translation>
     </message>
     <message>
-        <source>Reframe with Blanks...</source>
+        <source>Reframe with Empty Inbetweens...</source>
         <translation>空コマを入れてリフレーム...</translation>
     </message>
 </context>
@@ -8370,10 +8370,6 @@ Are you sure?</source>
         <translation>中</translation>
     </message>
     <message>
-        <source>blanks</source>
-        <translation> </translation>
-    </message>
-    <message>
         <source>(</source>
         <translation>(</translation>
     </message>
@@ -8382,8 +8378,12 @@ Are you sure?</source>
         <translation>コマの空コマが挿入されます。)</translation>
     </message>
     <message>
-        <source>Reframe with Blanks</source>
+        <source>Reframe with Empty Inbetweens</source>
         <translation>空コマを入れてリフレーム</translation>
+    </message>
+    <message>
+        <source>empty inbetweens</source>
+        <translation> </translation>
     </message>
 </context>
 <context>

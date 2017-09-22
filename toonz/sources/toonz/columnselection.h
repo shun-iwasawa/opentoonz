@@ -50,7 +50,7 @@ public:
   void reframe3Cells() { reframeCells(3); }
   void reframe4Cells() { reframeCells(4); }
 
-  void reframeWithBlanks();
+  void reframeWithEmptyInbetweens();
 };
 
 #endif  // TCELLSELECTION_H

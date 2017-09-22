@@ -710,7 +710,7 @@ void TColumnSelection::reframeCells(int count) {
 
 //=============================================================================
 
-void TCellSelection::reframeWithBlanks() {
+void TCellSelection::reframeWithEmptyInbetweens() {
   if (isEmpty() || areAllColSelectedLocked()) return;
 
   std::vector<int> colIndeces;
@@ -750,7 +750,7 @@ void TCellSelection::reframeWithBlanks() {
   TApp::instance()->getCurrentXsheet()->notifyXsheetChanged();
 }
 
-void TColumnSelection::reframeWithBlanks() {
+void TColumnSelection::reframeWithEmptyInbetweens() {
   if (isEmpty()) return;
 
   int rowCount =
