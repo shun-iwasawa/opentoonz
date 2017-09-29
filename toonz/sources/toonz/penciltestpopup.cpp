@@ -8,6 +8,8 @@
 #include "cellselection.h"
 #include "toonzqt/tselectionhandle.h"
 #include "cameracapturelevelcontrol.h"
+#include "iocommand.h"
+
 // TnzQt includes
 #include "toonzqt/menubarcommand.h"
 #include "toonzqt/filefield.h"
@@ -92,6 +94,8 @@ TEnv::StringVar CamCapSaveInPopupEpisode("CamCapSaveInPopupEpisode", "1");
 TEnv::StringVar CamCapSaveInPopupSequence("CamCapSaveInPopupSequence", "1");
 TEnv::StringVar CamCapSaveInPopupScene("CamCapSaveInPopupScene", "1");
 TEnv::IntVar CamCapSaveInPopupAutoSubName("CamCapSaveInPopupAutoSubName", 1);
+TEnv::IntVar CamCapSaveInPopupCreateSceneInFolder(
+    "CamCapSaveInPopupCreateSceneInFolder", 0);
 
 namespace {
 
@@ -707,6 +711,7 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
 
   QCheckBox* showPopupOnLaunchCB =
       new QCheckBox(tr("Show This on Launch of the Camera Capture"), this);
+  m_createSceneInFolderCB = new QCheckBox(tr("Save Scene in Subfolder"), this);
 
   QPushButton* okBtn     = new QPushButton(tr("OK"), this);
   QPushButton* cancelBtn = new QPushButton(tr("Cancel"), this);
@@ -743,6 +748,11 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
   m_subNameFormatCombo->setCurrentIndex(CamCapSaveInPopupAutoSubName - 1);
 
   showPopupOnLaunchCB->setChecked(CamCapOpenSaveInPopupOnLaunch != 0);
+  m_createSceneInFolderCB->setChecked(CamCapSaveInPopupCreateSceneInFolder !=
+                                      0);
+  m_createSceneInFolderCB->setToolTip(
+      tr("Save the current scene in the subfolder.\nSet the output folder path "
+         "to the subfolder as well."));
 
   addButtonBarWidget(okBtn, cancelBtn);
 
@@ -807,6 +817,8 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
       subNameLay->setColumnStretch(1, 1);
       subNameGroupBox->setLayout(subNameLay);
       subFolderLay->addWidget(subNameGroupBox, 0);
+
+      subFolderLay->addWidget(m_createSceneInFolderCB, 0, Qt::AlignLeft);
     }
     subFolderFrame->setLayout(subFolderLay);
     m_topLayout->addWidget(subFolderFrame);
@@ -816,7 +828,7 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
     m_topLayout->addStretch(1);
   }
 
-  resize(300, 400);
+  resize(300, 440);
 
   //---- signal-slot connection
   bool ret = true;
@@ -838,6 +850,8 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
 
   ret = ret && connect(showPopupOnLaunchCB, SIGNAL(clicked(bool)), this,
                        SLOT(onShowPopupOnLaunchCBClicked(bool)));
+  ret = ret && connect(m_createSceneInFolderCB, SIGNAL(clicked(bool)), this,
+                       SLOT(onCreateSceneInFolderCBClicked(bool)));
   ret = ret && connect(setAsDefaultBtn, SIGNAL(pressed()), this,
                        SLOT(onSetAsDefaultBtnPressed()));
 
@@ -861,6 +875,15 @@ QString PencilTestSaveInFolderPopup::getPath() {
 
 QString PencilTestSaveInFolderPopup::getParentPath() {
   return m_parentFolderField->getPath();
+}
+
+//-----------------------------------------------------------------------------
+
+void PencilTestSaveInFolderPopup::showEvent(QShowEvent* event) {
+  // Show "Save the scene" check box only when the scene is untitled
+  bool isUntitled =
+      TApp::instance()->getCurrentScene()->getScene()->isUntitled();
+  m_createSceneInFolderCB->setVisible(isUntitled);
 }
 
 //-----------------------------------------------------------------------------
@@ -931,6 +954,12 @@ void PencilTestSaveInFolderPopup::onShowPopupOnLaunchCBClicked(bool on) {
 
 //-----------------------------------------------------------------------------
 
+void PencilTestSaveInFolderPopup::onCreateSceneInFolderCBClicked(bool on) {
+  CamCapSaveInPopupCreateSceneInFolder = (on) ? 1 : 0;
+}
+
+//-----------------------------------------------------------------------------
+
 void PencilTestSaveInFolderPopup::onSetAsDefaultBtnPressed() {
   CamCapSaveInParentFolder = m_parentFolderField->getPath().toStdString();
 }
@@ -987,7 +1016,36 @@ void PencilTestSaveInFolderPopup::onOkPressed() {
     return;
   }
 
+  createSceneInFolder();
   accept();
+}
+
+//-----------------------------------------------------------------------------
+
+void PencilTestSaveInFolderPopup::createSceneInFolder() {
+  // make sure that the check box is displayed (= the scene is untitled) and is
+  // checked.
+  if (m_createSceneInFolderCB->isHidden() ||
+      !m_createSceneInFolderCB->isChecked())
+    return;
+  // just in case
+  if (!m_subFolderCB->isChecked()) return;
+
+  // set the output folder
+  ToonzScene* scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+
+  TFilePath fp(getPath().toStdWString());
+  TOutputProperties* prop = scene->getProperties()->getOutputProperties();
+  TFilePath outFp         = prop->getPath().withParentDir(fp);
+
+  prop->setPath(outFp);
+
+  // save the scene
+  TFilePath sceneFp =
+      scene->decodeFilePath(fp) +
+      TFilePath(m_subFolderNameField->text().toStdWString()).withType("tnz");
+  IoCmd::saveScene(sceneFp, 0);
 }
 
 //=============================================================================
@@ -1095,7 +1153,8 @@ PencilTestPopup::PencilTestPopup()
   m_saveOnCaptureCB->setChecked(true);
 
   imageFrame->setObjectName("CleanupSettingsFrame");
-  m_colorTypeCombo->addItems({tr("Color"), tr("Grayscale"), tr("Black & White")});
+  m_colorTypeCombo->addItems(
+      {tr("Color"), tr("Grayscale"), tr("Black & White")});
   m_colorTypeCombo->setCurrentIndex(0);
   m_upsideDownCB->setChecked(false);
 
