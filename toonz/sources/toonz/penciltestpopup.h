@@ -159,6 +159,7 @@ public:
   PencilTestSaveInFolderPopup(QWidget* parent = 0);
   QString getPath();
   QString getParentPath();
+  void updateParentFolder();
 
 protected:
   void showEvent(QShowEvent* event);
@@ -257,6 +258,9 @@ protected slots:
   void onCaptureFilterSettingsBtnPressed();
 
   void refreshFrameInfo();
+
+  void onSaveInPathEdited();
+  void onSceneSwitched();
 
 public slots:
   void openSaveInFolderPopup();

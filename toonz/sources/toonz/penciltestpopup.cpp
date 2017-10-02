@@ -684,10 +684,7 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
     : Dialog(parent, true, false, "PencilTestSaveInFolder") {
   setWindowTitle("Create the Destination Subfolder to Save");
 
-  QString parentFolder = QString::fromStdString(CamCapSaveInParentFolder);
-  if (parentFolder.isEmpty())
-    parentFolder = QString("+%1").arg(QString::fromStdString(TProject::Extras));
-  m_parentFolderField = new FileField(this, parentFolder);
+  m_parentFolderField = new FileField(this);
 
   QPushButton* setAsDefaultBtn = new QPushButton(tr("Set As Default"), this);
   setAsDefaultBtn->setToolTip(
@@ -857,7 +854,6 @@ PencilTestSaveInFolderPopup::PencilTestSaveInFolderPopup(QWidget* parent)
 
   ret = ret && connect(okBtn, SIGNAL(clicked(bool)), this, SLOT(onOkPressed()));
   ret = ret && connect(cancelBtn, SIGNAL(clicked(bool)), this, SLOT(reject()));
-
   assert(ret);
 
   updateSubFolderName();
@@ -1046,6 +1042,25 @@ void PencilTestSaveInFolderPopup::createSceneInFolder() {
       scene->decodeFilePath(fp) +
       TFilePath(m_subFolderNameField->text().toStdWString()).withType("tnz");
   IoCmd::saveScene(sceneFp, 0);
+}
+
+//-----------------------------------------------------------------------------
+
+void PencilTestSaveInFolderPopup::updateParentFolder() {
+  // If the parent folder is saved in the scene, use it
+  ToonzScene* scene = TApp::instance()->getCurrentScene()->getScene();
+  QString parentFolder =
+      scene->getProperties()->cameraCaptureSaveInPath().getQString();
+  if (parentFolder.isEmpty()) {
+    // else then, if the user-env stores the parent folder value, use it
+    parentFolder = QString::fromStdString(CamCapSaveInParentFolder);
+    // else, use "+extras" project folder
+    if (parentFolder.isEmpty())
+      parentFolder =
+          QString("+%1").arg(QString::fromStdString(TProject::Extras));
+  }
+
+  m_parentFolderField->setPath(parentFolder);
 }
 
 //=============================================================================
@@ -1406,7 +1421,7 @@ PencilTestPopup::PencilTestPopup()
   ret = ret && connect(subfolderButton, SIGNAL(clicked(bool)), this,
                        SLOT(openSaveInFolderPopup()));
   ret = ret && connect(m_saveInFileFld, SIGNAL(pathChanged()), this,
-                       SLOT(refreshFrameInfo()));
+                       SLOT(onSaveInPathEdited()));
   ret = ret && connect(m_fileTypeCombo, SIGNAL(activated(int)), this,
                        SLOT(refreshFrameInfo()));
   ret = ret && connect(m_frameNumberEdit, SIGNAL(editingFinished()), this,
@@ -1822,9 +1837,9 @@ void PencilTestPopup::showEvent(QShowEvent* event) {
   }
 
   TSceneHandle* sceneHandle = TApp::instance()->getCurrentScene();
-  connect(sceneHandle, SIGNAL(sceneSwitched()), this, SLOT(refreshFrameInfo()));
+  connect(sceneHandle, SIGNAL(sceneSwitched()), this, SLOT(onSceneSwitched()));
   connect(sceneHandle, SIGNAL(castChanged()), this, SLOT(refreshFrameInfo()));
-  refreshFrameInfo();
+  onSceneSwitched();
 }
 
 //-----------------------------------------------------------------------------
@@ -2266,8 +2281,9 @@ void PencilTestPopup::openSaveInFolderPopup() {
     m_saveInFileFld->setPath(m_saveInFolderPopup->getPath());
     if (oldPath == m_saveInFileFld->getPath())
       setToNextNewLevel();
-    else
-      refreshFrameInfo();
+    else {
+      onSaveInPathEdited();
+    }
   }
 }
 
@@ -2518,6 +2534,23 @@ void PencilTestPopup::refreshFrameInfo() {
                                       .arg(infoColor.name()));
   m_frameInfoLabel->setText(labelStr);
   m_frameInfoLabel->setToolTip(tooltipStr);
+}
+
+//-----------------------------------------------------------------------------
+
+void PencilTestPopup::onSaveInPathEdited() {
+  ToonzScene* scene = TApp::instance()->getCurrentScene()->getScene();
+  TFilePath saveInPath(m_saveInFileFld->getPath().toStdWString());
+  scene->getProperties()->setCameraCaptureSaveInPath(saveInPath);
+  refreshFrameInfo();
+}
+
+//-----------------------------------------------------------------------------
+
+void PencilTestPopup::onSceneSwitched() {
+  m_saveInFolderPopup->updateParentFolder();
+  m_saveInFileFld->setPath(m_saveInFolderPopup->getParentPath());
+  refreshFrameInfo();
 }
 
 //-----------------------------------------------------------------------------
