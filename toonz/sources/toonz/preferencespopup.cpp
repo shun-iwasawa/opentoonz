@@ -1086,6 +1086,15 @@ void PreferencesPopup::onWatchFileSystemClicked(int on) {
       "WatchFileSystem");
 }
 
+//-----------------------------------------------------------------------------
+
+void PreferencesPopup::onPathAliasPriorityChanged(int index) {
+  m_pref->setPathAliasPriority(
+      static_cast<Preferences::PathAliasPriority>(index));
+  TApp::instance()->getCurrentScene()->notifyPreferenceChanged(
+      "PathAliasPriority");
+}
+
 //**********************************************************************************
 //    PrefencesPopup's  constructor
 //**********************************************************************************
@@ -1142,6 +1151,8 @@ PreferencesPopup::PreferencesPopup()
   m_customProjectRootLabel     = new QLabel(tr("Custom Project Path(s): "));
   m_projectRootDirections      = new QLabel(
       tr("Advanced: Multiple paths can be separated by ** (No Spaces)"));
+
+  QComboBox *pathAliasPriority = new QComboBox();
 
   QLabel *note_general =
       new QLabel(tr("* Changes will take effect the next time you run Toonz"));
@@ -1406,6 +1417,19 @@ PreferencesPopup::PreferencesPopup()
     m_customProjectRootLabel->hide();
     m_projectRootDirections->hide();
   }
+
+  QStringList pathAliasPriorityList;
+  pathAliasPriorityList
+      << tr("Project Folder Aliases (+drawings, +scenes, etc.)")
+      << tr("Scene Folder Alias ($scenefolder)")
+      << tr("Use Project Folder Aliases Only");
+  pathAliasPriority->addItems(pathAliasPriorityList);
+  pathAliasPriority->setCurrentIndex(
+      static_cast<int>(m_pref->getPathAliasPriority()));
+  pathAliasPriority->setToolTip(
+      tr("This option defines which alias to be used\nif both are possible on "
+         "coding file path."));
+
   //--- Interface ------------------------------
   QStringList styleSheetList;
   currentIndex = 0;
@@ -1755,6 +1779,18 @@ PreferencesPopup::PreferencesPopup()
       }
       projectGroupBox->setLayout(projectRootLay);
       generalFrameLay->addWidget(projectGroupBox, 0);
+
+      QHBoxLayout *pathAliasLay = new QHBoxLayout();
+      pathAliasLay->setMargin(0);
+      pathAliasLay->setSpacing(5);
+      {
+        QLabel *PAPLabel = new QLabel(tr("Path Alias Priority:"), this);
+        PAPLabel->setToolTip(pathAliasPriority->toolTip());
+        pathAliasLay->addWidget(PAPLabel, 0);
+        pathAliasLay->addWidget(pathAliasPriority, 0);
+        pathAliasLay->addStretch(1);
+      }
+      generalFrameLay->addLayout(pathAliasLay, 0);
       generalFrameLay->addStretch(1);
 
       generalFrameLay->addWidget(note_general, 0);
@@ -2326,6 +2362,9 @@ PreferencesPopup::PreferencesPopup()
                        SLOT(onProjectRootChanged()));
   ret = ret && connect(m_projectRootCustom, SIGNAL(stateChanged(int)),
                        SLOT(onProjectRootChanged()));
+  ret = ret && connect(pathAliasPriority, SIGNAL(currentIndexChanged(int)),
+                       SLOT(onPathAliasPriorityChanged(int)));
+
   //--- Interface ----------------------
   ret = ret &&
         connect(styleSheetType, SIGNAL(currentIndexChanged(const QString &)),

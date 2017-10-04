@@ -1395,15 +1395,50 @@ bool IoCmd::saveScene(const TFilePath &path, int flags) {
                             QObject::tr("Cancel"), 0);
     if (ret == 2 || ret == 0) return false;
   }
+
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+
+  // If the scene will be saved in the different folder, check out the scene
+  // cast.
+  // if the cast contains the level specified with $scenefolder alias,
+  // open a warning popup notifying that such level will lose link.
+  TFilePath oldFullPath = scene->decodeFilePath(scene->getScenePath());
+  TFilePath newFullPath = scene->decodeFilePath(scenePath);
+  if (!overwrite && oldFullPath.getParentDir() != newFullPath.getParentDir()) {
+    TLevelSet *levelSet = scene->getLevelSet();
+    std::vector<TXshLevel *> levels;
+    levelSet->listLevels(levels);
+    QString fileString;
+    bool found = false;
+    for (int i = 0; i < levels.size(); i++) {
+      TXshLevel *level = levels.at(i);
+      if (!level->getPath().isEmpty() &&
+          TFilePath("$scenefolder").isAncestorOf(level->getPath())) {
+        level->setDirtyFlag(true);
+        fileString.append("    " + QString::fromStdWString(level->getName()) +
+                          " (" + level->getPath().getQString() + ")\n");
+        found = true;
+      }
+    }
+    if (found) {
+      warning(
+          QObject::tr(
+              "The following level(s) use path with $scenefolder alias.\n\n") +
+          fileString +
+          QObject::tr("\nThey will not be opened properly when you load the "
+                      "scene next time.\nDirty flags are applied to such "
+                      "levels.\nPlease remember to update the paths before "
+                      "closing the scene."));
+    }
+  }
+
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  ToonzScene *scene         = TApp::instance()->getCurrentScene()->getScene();
   TXsheet *xsheet           = 0;
   if (saveSubxsheet) xsheet = TApp::instance()->getCurrentXsheet()->getXsheet();
   if (app->getCurrentScene()->getDirtyFlag())
     scene->getContentHistory(true)->modifiedNow();
 
-  if (scene->decodeFilePath(scene->getScenePath()) !=
-      scene->decodeFilePath(scenePath)) {
+  if (oldFullPath != newFullPath) {
     IconGenerator::instance()->clearRequests();
     IconGenerator::instance()->clearSceneIcons();
 
