@@ -1869,6 +1869,7 @@ void MainWindow::defineActions() {
                         "");
 
   createRightClickMenuAction(MI_SetKeyframes, tr("&Set Key"), "Z");
+  createRightClickMenuAction(MI_PasteNumbers, tr("&Paste Numbers"), "");
 
   createToggle(MI_ViewCamera, tr("&Camera Box"), "",
                ViewCameraToggleAction ? 1 : 0, MenuViewCommandType);
@@ -2357,9 +2358,9 @@ RecentFiles::~RecentFiles() {}
 
 void RecentFiles::addFilePath(QString path, FileType fileType) {
   QList<QString> files =
-      (fileType == Scene) ? m_recentScenes : (fileType == Level)
-                                                 ? m_recentLevels
-                                                 : m_recentFlipbookImages;
+      (fileType == Scene)
+          ? m_recentScenes
+          : (fileType == Level) ? m_recentLevels : m_recentFlipbookImages;
   int i;
   for (i = 0; i < files.size(); i++)
     if (files.at(i) == path) files.removeAt(i);
@@ -2484,9 +2485,9 @@ void RecentFiles::saveRecentFiles() {
 
 QList<QString> RecentFiles::getFilesNameList(FileType fileType) {
   QList<QString> files =
-      (fileType == Scene) ? m_recentScenes : (fileType == Level)
-                                                 ? m_recentLevels
-                                                 : m_recentFlipbookImages;
+      (fileType == Scene)
+          ? m_recentScenes
+          : (fileType == Level) ? m_recentLevels : m_recentFlipbookImages;
   QList<QString> names;
   int i;
   for (i = 0; i < files.size(); i++) {
@@ -2513,9 +2514,9 @@ void RecentFiles::refreshRecentFilesMenu(FileType fileType) {
     menu->setEnabled(false);
   else {
     CommandId clearActionId =
-        (fileType == Scene) ? MI_ClearRecentScene : (fileType == Level)
-                                                        ? MI_ClearRecentLevel
-                                                        : MI_ClearRecentImage;
+        (fileType == Scene)
+            ? MI_ClearRecentScene
+            : (fileType == Level) ? MI_ClearRecentLevel : MI_ClearRecentImage;
     menu->setActions(names);
     menu->addSeparator();
     QAction *clearAction = CommandManager::instance()->getAction(clearActionId);
