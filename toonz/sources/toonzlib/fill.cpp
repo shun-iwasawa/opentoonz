@@ -49,7 +49,30 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
   for (; pix <= limit; pix++) {
     if (pix->getPaint() == paint) break;
     tone = pix->getTone();
-    if (tone > oldtone || tone == 0) break;
+    if (tone == 0) break;
+    // prevent fill area from protruding behind the colored line
+    if (tone > oldtone) {
+      if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
+      while (pix != pix0) {
+        // iterate back in order to leave the pixel with the lowest tone
+        // unpainted
+        pix--;
+        if (pix->getTone() > oldtone) {
+          // check if the current pixel is NOT with the lowest tone among the
+          // vertical neighbors as well
+          if (p.y > 0 && p.y < r->getLy() - 1) {
+            TPixelCM32 *upPix   = pix - r->getWrap();
+            TPixelCM32 *downPix = pix + r->getWrap();
+            if (upPix->getTone() > pix->getTone() &&
+                downPix->getTone() > pix->getTone())
+              continue;
+          }
+          break;
+        }
+      }
+      pix++;
+      break;
+    }
     oldtone = tone;
   }
   if (tone == 0) {
@@ -72,7 +95,30 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
   for (pix--; pix >= limit; pix--) {
     if (pix->getPaint() == paint) break;
     tone = pix->getTone();
-    if (tone > oldtone || tone == 0) break;
+    if (tone == 0) break;
+    // prevent fill area from protruding behind the colored line
+    if (tone > oldtone) {
+      if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
+      while (pix != pix0) {
+        // iterate forward in order to leave the pixel with the lowest tone
+        // unpainted
+        pix++;
+        if (pix->getTone() > oldtone) {
+          // check if the current pixel is NOT with the lowest tone among the
+          // vertical neighbors as well
+          if (p.y > 0 && p.y < r->getLy() - 1) {
+            TPixelCM32 *upPix   = pix - r->getWrap();
+            TPixelCM32 *downPix = pix + r->getWrap();
+            if (upPix->getTone() > pix->getTone() &&
+                downPix->getTone() > pix->getTone())
+              continue;
+          }
+          break;
+        }
+      }
+      pix--;
+      break;
+    }
     oldtone = tone;
   }
   if (tone == 0) {
@@ -234,7 +280,8 @@ bool fill(const TRasterCM32P &r, const FillParameters &params,
   /*- 画面外のクリックの場合はreturn -*/
   if (!bbbox.contains(p)) return false;
   /*- 既に同じ色が塗られている場合はreturn -*/
-  if ((r->pixels(p.y) + p.x)->getPaint() == paint) return false;
+  int paintAtClickedPos = (r->pixels(p.y) + p.x)->getPaint();
+  if (paintAtClickedPos == paint) return false;
   /*- 「透明部分だけを塗る」オプションが有効で、既に色が付いている場合はreturn
    * -*/
   if (params.m_emptyOnly && (r->pixels(p.y) + p.x)->getPaint() != 0)
@@ -252,7 +299,6 @@ bool fill(const TRasterCM32P &r, const FillParameters &params,
   default:
     assert(false);
   }
-
   /*-- 四隅の色を見て、一つでも変わったらsaveBoxを更新する --*/
   TPixelCM32 borderIndex[4];
   TPixelCM32 *borderPix[4];
@@ -294,7 +340,11 @@ bool fill(const TRasterCM32P &r, const FillParameters &params,
     while (pix <= limit) {
       oldtone = threshTone(*oldpix, fillDepth);
       tone    = threshTone(*pix, fillDepth);
-      if (pix->getPaint() != paint && tone <= oldtone && tone != 0) {
+      // the last condition is added in order to prevent fill area from
+      // protruding behind the colored line
+      if (pix->getPaint() != paint && tone <= oldtone && tone != 0 &&
+          (pix->getPaint() != pix->getInk() ||
+           pix->getPaint() == paintAtClickedPos)) {
         fillRow(r, TPoint(x, y), xc, xd, paint, params.m_palette, saver);
         if (xc < xa) seeds.push(FillSeed(xc, xa - 1, y, -dy));
         if (xd > xb) seeds.push(FillSeed(xb + 1, xd, y, -dy));
