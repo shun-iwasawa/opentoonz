@@ -52,11 +52,14 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
     if (tone == 0) break;
     // prevent fill area from protruding behind the colored line
     if (tone > oldtone) {
+      // not-yet-colored line case
       if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
       while (pix != pix0) {
         // iterate back in order to leave the pixel with the lowest tone
         // unpainted
         pix--;
+        // make the one-pixel-width semi-transparent line to be painted
+        if (pix->getInk() != pix->getPaint()) break;
         if (pix->getTone() > oldtone) {
           // check if the current pixel is NOT with the lowest tone among the
           // vertical neighbors as well
@@ -98,11 +101,14 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
     if (tone == 0) break;
     // prevent fill area from protruding behind the colored line
     if (tone > oldtone) {
+      // not-yet-colored line case
       if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
       while (pix != pix0) {
         // iterate forward in order to leave the pixel with the lowest tone
         // unpainted
         pix++;
+        // make the one-pixel-width semi-transparent line to be painted
+        if (pix->getInk() != pix->getPaint()) break;
         if (pix->getTone() > oldtone) {
           // check if the current pixel is NOT with the lowest tone among the
           // vertical neighbors as well
