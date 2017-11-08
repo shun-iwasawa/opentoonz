@@ -32,9 +32,14 @@ inline TPoint nearestInkNotDiagonal(const TRasterCM32P &r, const TPoint &p) {
 // la riga ridisegnata va da *xa a *xb compresi
 // x1 <= *xa <= *xb <= x2
 // N.B. se non viene disegnato neanche un pixel *xa>*xb
+//
+// "prevailing" is set to false on revert-filling the border of
+// region in the Rectangular, Freehand and Polyline fill procedures
+// in order to make the paint to protlude behind the line.
 
 void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
-             int paint, TPalette *palette, TTileSaverCM32 *saver) {
+             int paint, TPalette *palette, TTileSaverCM32 *saver,
+             bool prevailing = true) {
   int tone, oldtone;
   TPixelCM32 *pix, *pix0, *limit, *tmp_limit;
 
@@ -53,13 +58,14 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
     // prevent fill area from protruding behind the colored line
     if (tone > oldtone) {
       // not-yet-colored line case
-      if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
+      if (prevailing && !pix->isPurePaint() && pix->getInk() != pix->getPaint())
+        break;
       while (pix != pix0) {
         // iterate back in order to leave the pixel with the lowest tone
         // unpainted
         pix--;
         // make the one-pixel-width semi-transparent line to be painted
-        if (pix->getInk() != pix->getPaint()) break;
+        if (prevailing && pix->getInk() != pix->getPaint()) break;
         if (pix->getTone() > oldtone) {
           // check if the current pixel is NOT with the lowest tone among the
           // vertical neighbors as well
@@ -102,13 +108,14 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
     // prevent fill area from protruding behind the colored line
     if (tone > oldtone) {
       // not-yet-colored line case
-      if (!pix->isPurePaint() && pix->getInk() != pix->getPaint()) break;
+      if (prevailing && !pix->isPurePaint() && pix->getInk() != pix->getPaint())
+        break;
       while (pix != pix0) {
         // iterate forward in order to leave the pixel with the lowest tone
         // unpainted
         pix++;
         // make the one-pixel-width semi-transparent line to be painted
-        if (pix->getInk() != pix->getPaint()) break;
+        if (prevailing && pix->getInk() != pix->getPaint()) break;
         if (pix->getTone() > oldtone) {
           // check if the current pixel is NOT with the lowest tone among the
           // vertical neighbors as well
@@ -323,7 +330,7 @@ bool fill(const TRasterCM32P &r, const FillParameters &params,
 
   std::stack<FillSeed> seeds;
 
-  fillRow(r, p, xa, xb, paint, params.m_palette, saver);
+  fillRow(r, p, xa, xb, paint, params.m_palette, saver, params.m_prevailing);
   seeds.push(FillSeed(xa, xb, y, 1));
   seeds.push(FillSeed(xa, xb, y, -1));
 
@@ -351,7 +358,8 @@ bool fill(const TRasterCM32P &r, const FillParameters &params,
       if (pix->getPaint() != paint && tone <= oldtone && tone != 0 &&
           (pix->getPaint() != pix->getInk() ||
            pix->getPaint() == paintAtClickedPos)) {
-        fillRow(r, TPoint(x, y), xc, xd, paint, params.m_palette, saver);
+        fillRow(r, TPoint(x, y), xc, xd, paint, params.m_palette, saver,
+                params.m_prevailing);
         if (xc < xa) seeds.push(FillSeed(xc, xa - 1, y, -dy));
         if (xd > xb) seeds.push(FillSeed(xb + 1, xd, y, -dy));
         if (oldxd >= xc - 1)
