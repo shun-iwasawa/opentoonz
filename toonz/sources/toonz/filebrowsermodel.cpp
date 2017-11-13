@@ -1121,7 +1121,6 @@ void DvDirModelRootNode::refreshChildren() {
 }
 
 //-----------------------------------------------------------------------------
-// TODO
 DvDirModelNode *DvDirModelRootNode::getNodeByPath(const TFilePath &path) {
   // Check first for version control nodes
   DvDirModelNode *node = 0;
