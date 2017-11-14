@@ -70,6 +70,7 @@
 #include "toonz/txshcell.h"
 #include "toonz/cleanupcolorstyles.h"
 #include "toonz/palettecmd.h"
+#include "toonz/preferences.h"
 #include "tw/stringtable.h"
 
 // TnzBase includes
@@ -795,7 +796,7 @@ StyleEditorPanel::StyleEditorPanel(QWidget *parent) : TPanel(parent) {
   setWidget(m_styleEditor);
 
   m_styleEditor->setLevelHandle(TApp::instance()->getCurrentLevel());
-
+  setMinimumWidth(200);
   resize(340, 630);
 }
 
