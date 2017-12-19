@@ -1,0 +1,14 @@
+<fxlayout>
+	<page name="Barrel Distort Iwa">
+ 	<vbox>
+		<control>center</control>
+		<control>distortion</control>
+		<control>distortionAspect</control>
+		<control>precision</control>
+		<control>chromaticAberration</control>
+		<control>vignetteAmount</control>
+		<control>vignetteGamma</control>
+		<control>vignetteMidpoint</control>
+  	</vbox>
+  	</page>
+</fxlayout>
