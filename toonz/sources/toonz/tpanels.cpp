@@ -13,6 +13,8 @@
 
 #include "xsheetviewer.h"
 #include "sceneviewer.h"
+//ためしに
+#include "openglsceneviewer.h"
 #include "toolbar.h"
 #include "commandbar.h"
 #include "flipbook.h"
@@ -846,6 +848,22 @@ public:
 OpenFloatingPanel openSceneViewerCommand(MI_OpenLevelView, "SceneViewer",
                                          QObject::tr("Viewer"));
 //-----------------------------------------------------------------------------
+
+//=============================================================================
+// OpenGLSceneViewer - experimental
+//-----------------------------------------------------------------------------
+
+class OpenGLSceneViewerFactory final : public TPanelFactory {
+public:
+  OpenGLSceneViewerFactory() : TPanelFactory("OpenGLSceneViewer") {}
+  void initialize(TPanel *panel) override {
+    OpenGLSceneViewer *viewer = new OpenGLSceneViewer(panel);
+    panel->setWidget(viewer);
+  }
+} openglSceneViewerFactory;
+
+OpenFloatingPanel openOpenGLSceneViewerCommand(MI_OpenGLSceneViewer, "OpenGLSceneViewer",
+  QObject::tr("Modern Viewer"));
 
 //-----------------------------------------------------------------------------
 

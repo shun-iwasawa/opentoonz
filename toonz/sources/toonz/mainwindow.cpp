@@ -2002,6 +2002,7 @@ void MainWindow::defineActions() {
   createMenuWindowsAction(MI_OpenToolOptionBar, tr("&Tool Option Bar"), "");
   createMenuWindowsAction(MI_OpenCommandToolbar, tr("&Command Bar"), "");
   createMenuWindowsAction(MI_OpenLevelView, tr("&Viewer"), "");
+  createMenuWindowsAction(MI_OpenGLSceneViewer, tr("&Modern Viewer"), "");
 #ifdef LINETEST
   createMenuWindowsAction(MI_OpenLineTestCapture, tr("&LineTest Capture"), "");
   createMenuWindowsAction(MI_OpenLineTestView, tr("&LineTest Viewer"), "");

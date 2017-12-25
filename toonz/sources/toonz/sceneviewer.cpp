@@ -1023,6 +1023,10 @@ void SceneViewer::drawCameraStand() {
       !m_drawCameraTest) {
     glPushMatrix();
     tglMultMatrix(m_drawTableAff);
+    //std::cout << "m_drawTableAff = " << m_drawTableAff.a11 << ", "
+    //  << m_drawTableAff.a21 << ", " << m_drawTableAff.a12 << ", "
+    //  << m_drawTableAff.a22 << ", " << m_drawTableAff.a13 << ", "
+    //  << m_drawTableAff.a23 << std::endl;
     ViewerDraw::drawDisk(m_tableDLId);
     glPopMatrix();
   }

@@ -201,6 +201,7 @@ public:
   //! in Camera view Mode (m_referenceMode = CAMERA_REFERENCE) the returned
   //! affine is composed with camera
   //! transformation.
+  //ok
   TAffine getViewMatrix() const override;
   //! Return the view matrix.
   //! The view matrix is a matrix contained in \b m_viewAff
@@ -221,6 +222,7 @@ public:
   void invalidateAll() override;
   void GLInvalidateAll() override;
   void GLInvalidateRect(const TRectD &rect) override;
+  //ok
   void invalidateToolStatus() override;
 
   TPointD getPan3D() const { return m_pan3D; }
@@ -267,6 +269,7 @@ public:
   TPointD winToWorld(const QPoint &pos) const;
   TPointD winToWorld(const TPoint &winPos) const override;
 
+  //ok
   TPoint worldToPos(const TPointD &worldPos) const override;
 
 protected:

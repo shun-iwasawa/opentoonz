@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDesktopWidget>
 #include <QSvgRenderer>
+#include <QSurfaceFormat>
 
 using namespace DVGui;
 
@@ -199,6 +200,23 @@ QPixmap svgToPixmap(const QString &svgFilePath, const QSize &size,
 int getDevPixRatio() {
   static int devPixRatio = QApplication::desktop()->devicePixelRatio();
   return devPixRatio;
+}
+
+//-----------------------------------------------------------------------------
+
+void  initializeOpenGLContext() {
+  QSurfaceFormat format;
+  format.setDepthBufferSize(16);//16bit bitdepth for depth buffer
+  format.setVersion(3,3);//using OpenGL 3.3 which is compatible with OSX10.9 and newer
+  //format.setSamples(4); // commenting out this line - disable multisample by default
+  format.setProfile(QSurfaceFormat::CompatibilityProfile);//とりあえず過去のソースを残しているうちはこれ
+  //format.setProfile(QSurfaceFormat::CoreProfile);
+  format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+  QSurfaceFormat::setDefaultFormat(format);
+
+  // Enables resource sharing between the OpenGL contexts used by classes like
+  // QOpenGLWidget and QQuickWidget.
+  QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 }
 
 //-----------------------------------------------------------------------------

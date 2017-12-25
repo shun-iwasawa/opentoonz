@@ -17,6 +17,7 @@
 // Qt includes
 #include <QString>
 #include <QPoint>
+#include <QMatrix4x4>
 
 #undef DVAPI
 #undef DVVAR
@@ -600,6 +601,11 @@ public:
     return TAffine();
   }  //!< Gets the viewer's current view affine (ie the transform from
      //!<  starting to current <I> world view <\I>)
+
+  //とりあえず追加してみる
+  virtual QMatrix4x4 getViewQMatrix() const {
+    return QMatrix4x4();
+  } 
 
   //! return the column index of the drawing intersecting point \b p
   //! (window coordinate, pixels, bottom-left origin)

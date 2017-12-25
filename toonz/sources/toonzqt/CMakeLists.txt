@@ -87,6 +87,7 @@ set(MOC_HEADERS
     ../include/toonzqt/combohistogram.h
     ../include/toonzqt/fxiconmanager.h
     ../include/toonzqt/glwidget_for_highdpi.h
+    ../include/toonzqt/openglwidget_for_highdpi.h
     pluginhost.h
 )
 

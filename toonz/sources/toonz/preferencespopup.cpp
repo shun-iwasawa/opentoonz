@@ -704,6 +704,9 @@ void PreferencesPopup::setViewerBgColor(const TPixel32 &color,
                                         bool isDragging) {
   m_pref->setViewerBGColor(color, isDragging);
   TApp::instance()->getCurrentScene()->notifySceneChanged();
+  // emit signal to update Viewer
+  TApp::instance()->getCurrentScene()->notifyPreferenceChanged(
+    "ViewerBgColor");
 }
 
 //-----------------------------------------------------------------------------
@@ -712,6 +715,9 @@ void PreferencesPopup::setPreviewBgColor(const TPixel32 &color,
                                          bool isDragging) {
   m_pref->setPreviewBGColor(color, isDragging);
   TApp::instance()->getCurrentScene()->notifySceneChanged();
+  // emit signal to update Viewer
+  TApp::instance()->getCurrentScene()->notifyPreferenceChanged(
+    "PreviewBgColor");
 }
 
 //-----------------------------------------------------------------------------

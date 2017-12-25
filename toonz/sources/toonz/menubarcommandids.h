@@ -330,4 +330,5 @@
 #define MI_AutoInputCellNumber "MI_AutoInputCellNumber"
 #define MI_TouchGestureControl "MI_TouchGestureControl"
 
+#define MI_OpenGLSceneViewer "MI_OpenGLSceneViewer"
 #endif

@@ -162,6 +162,7 @@ set(MOC_HEADERS
     ObjectTracker.h
     predict3d.h
     processor.h
+	openglsceneviewer.h
 )
 
 set(HEADERS ${MOC_HEADERS})
@@ -332,6 +333,7 @@ set(SOURCES
     metnum.cpp
     ObjectTracker.cpp
     predict3d.cpp
+	openglsceneviewer.cpp
 )
 
 add_translation(toonz ${HEADERS} ${SOURCES})

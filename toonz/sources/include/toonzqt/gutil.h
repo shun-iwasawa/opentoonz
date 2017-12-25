@@ -101,6 +101,9 @@ svgToPixmap(const QString &svgFilePath, const QSize &size = QSize(),
 // for Windows corresponds to this ratio.
 int DVAPI getDevPixRatio();
 
+// called in main()
+void DVAPI initializeOpenGLContext();
+
 //-----------------------------------------------------------------------------
 QIcon DVAPI createQIcon(const char *iconSVGName);
 QIcon DVAPI createQIconPNG(const char *iconPNGName);
