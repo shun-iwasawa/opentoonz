@@ -44,6 +44,7 @@ class TMeshImage;
 class QPainter;
 class QPolygon;
 class QMatrix;
+class QPoint;
 
 namespace Stage {
 class Player;
@@ -273,6 +274,11 @@ public:
   TRasterP getRaster(int index, QMatrix &matrix);
 
   void flushRasterImages();
+
+  // for "modern" opengl rendering
+  void OpenGLFlushRasterImages();
+  //TRaster32P getFlushedRaster(QPoint& pos, TAffine& bboxAff, TRect& bboxRect);
+
   void drawRasterImages(QPainter &p, QPolygon cameraRect);
 
   void enableSingleColumn(bool on) { m_singleColumnEnabled = on; }

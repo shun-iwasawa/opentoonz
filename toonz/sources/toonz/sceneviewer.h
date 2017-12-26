@@ -192,7 +192,7 @@ public:
   int getPreviewMode() const { return m_previewMode; }
 
   void setVisual(const ImagePainter::VisualSettings &settings);
-
+  //ok
   TRect getActualClipRect(const TAffine &aff);
 
   //! Return the view matrix.

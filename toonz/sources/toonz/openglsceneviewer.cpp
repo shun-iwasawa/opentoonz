@@ -1,7 +1,6 @@
 
 // Toonz includes
 #include "tapp.h"
-#include "openglviewerdraw.h"
 
 // TnzTools includes
 #include "tools/toolhandle.h"
@@ -19,9 +18,25 @@
 #include "toonz/tstageobjecttree.h"
 #include "toonz/stage2.h"
 #include "toonz/stagevisitor.h"
+#include "toonz/openglviewerdraw.h"
 
 
 #include "openglsceneviewer.h"
+
+// for debug purpose
+namespace {
+  void printMatrix(const QMatrix4x4& m) {
+    for (int j = 0; j < 4; j++) {
+      for (int i = 0; i < 4; i++) {
+        std::cout << m.row(j)[i] << ", ";
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
+
+
+};
 
 //-----------------------------------------------------------------------------
 
@@ -57,6 +72,32 @@ void OpenGLSceneViewer::invalidateToolStatus() {
   }
   else
     setCursor(Qt::ForbiddenCursor);
+}
+
+//-----------------------------------------------------------------------------
+
+TRect OpenGLSceneViewer::getActualClipRect(const TAffine &aff) {
+  TDimension viewerSize(width(), height());
+  TRect clipRect(viewerSize);
+
+  /*if (is3DView()) { //TODO
+    TPointD p00 = winToWorld(clipRect.getP00());
+    TPointD p01 = winToWorld(clipRect.getP01());
+    TPointD p10 = winToWorld(clipRect.getP10());
+    TPointD p11 = winToWorld(clipRect.getP11());
+    clipRect = TRect(TPoint(std::min(p00.x, p01.x), std::min(p00.y, p10.y)),
+      TPoint(std::max(p11.x, p10.x), std::max(p11.y, p01.y)));
+  }
+  else*/
+  if (m_clipRect.isEmpty())
+    clipRect -= TPoint(viewerSize.lx / 2, viewerSize.ly / 2);
+  else {
+    TRectD app = aff * (m_clipRect.enlarge(3));
+    clipRect =
+      TRect(tceil(app.x0), tceil(app.y0), tfloor(app.x1), tfloor(app.y1));
+  }
+
+  return clipRect;
 }
 
 //-----------------------------------------------------------------------------
@@ -226,6 +267,8 @@ void OpenGLSceneViewer::setupPlacements() {
 //-----------------------------------------------------------------------------
 
 void OpenGLSceneViewer::drawCameraStand() {
+  TApp *app = TApp::instance();
+  ToonzScene *scene = app->getCurrentScene()->getScene();
   //draw disk
   //if (!m_draw3DMode && viewTableToggle.getStatus() && m_drawIsTableVisible &&
   //   m_visualSettings.m_colorMask == 0 && m_drawEditingLevel == false &&
@@ -234,7 +277,8 @@ void OpenGLSceneViewer::drawCameraStand() {
     m_modelMatrix.push(m_modelMatrix.top());
     m_modelMatrix.top() *= m_tablePlacementAff;
     QMatrix4x4 MVPmatrix = m_projectionMatrix * getViewQMatrix() * m_modelMatrix.pop();
-    OpenGLViewerDraw::instance()->drawDisk(MVPmatrix);
+    OpenGLViewerDraw::instance()->setMVPMatrix(MVPmatrix);
+    OpenGLViewerDraw::instance()->drawDisk();
   }
 
   // draw colorcard (with camera BG color)
@@ -244,11 +288,10 @@ void OpenGLSceneViewer::drawCameraStand() {
   {
     m_modelMatrix.push(m_modelMatrix.top());
     m_modelMatrix.top() *= m_cameraPlacementAff;
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     QMatrix4x4 MVPmatrix = m_projectionMatrix * getViewQMatrix() * m_modelMatrix.pop();
-    OpenGLViewerDraw::instance()->drawColorcard(m_visualSettings.m_colorMask, MVPmatrix);
-    glDisable(GL_BLEND);
+    OpenGLViewerDraw::instance()->setMVPMatrix(MVPmatrix);
+    OpenGLViewerDraw::instance()->drawColorcard(scene, m_visualSettings.m_colorMask);
+
   }
 
   // TODO Show white background when level editing mode.
@@ -268,9 +311,12 @@ void OpenGLSceneViewer::drawScene() {
   ToonzScene *scene = app->getCurrentScene()->getScene();
   int frame = app->getCurrentFrame()->getFrame();
   TXsheet *xsh = app->getCurrentXsheet()->getXsheet();
-  TRect clipRect(TDimension(width(),height()));
-  //š TRect clipRect = getActualClipRect(getViewMatrix()); TODO
+  TRect clipRect = getActualClipRect(getViewMatrix());
   clipRect += TPoint(width() * 0.5, height() * 0.5);
+
+  // store VP matrix first. the model matrix will be computed for each raster 
+  QMatrix4x4 VPmatrix = m_projectionMatrix * getViewQMatrix();
+  OpenGLViewerDraw::instance()->setMVPMatrix(VPmatrix);
 
   /*TODO
   ChildStack *childStack = scene->getChildStack();
@@ -385,8 +431,35 @@ void OpenGLSceneViewer::drawScene() {
     }
 
     assert(glGetError() == 0);
-    //painter.flushRasterImages();
 
+    painter.OpenGLFlushRasterImages();
+    /*
+    QPoint pos;
+    TAffine bboxAff;
+    TRect bboxAffine;
+    TRaster32P ras = painter.getFlushedRaster(pos, bboxAff, bboxAffine);
+
+    if (ras.getPointer()) {
+      myGlPushAttrib();
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_ONE,
+        GL_ONE_MINUS_SRC_ALPHA);  // The raster buffer is intended in
+                                  // premultiplied form - thus the GL_ONE on src
+      glDisable(GL_DEPTH_TEST);
+      glDisable(GL_DITHER);
+      glDisable(GL_LOGIC_OP);
+
+      m_modelMatrix.push(QMatrix4x4());//identity matrix
+      m_modelMatrix.top().translate(pos.x(), pos.y());
+      m_modelMatrix.top().scale(ras->getLx(), ras->getLy());
+      QMatrix4x4 MVPmatrix = m_projectionMatrix * getViewQMatrix() * m_modelMatrix.pop();
+
+      OpenGLViewerDraw::instance()->drawSceneRaster(ras);
+
+      ras->unlock();
+      myGlPopAttrib();
+    }
+    */
     /*TODO
     TXshSimpleLevel::m_fillFullColorRaster = fillFullColorRaster;
 

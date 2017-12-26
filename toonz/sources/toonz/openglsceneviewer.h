@@ -62,6 +62,8 @@ private:
   double m_pixelSize = 1.0;
   TPointD m_dpiScale = TPointD(1, 1);
   QString m_toolDisableReason = "";
+  // for partial GL updating
+  TRectD m_clipRect;
 
 public:
 
@@ -119,6 +121,7 @@ protected:
   void setupPlacements(); // similar to SceneViewer::drawBuildVars
   void drawCameraStand();
   void drawScene();
+  TRect getActualClipRect(const TAffine &aff);
 
   void showEvent(QShowEvent *event);
   void hideEvent(QHideEvent *event);

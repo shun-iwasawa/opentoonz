@@ -1,7 +1,4 @@
-#include "openglviewerdraw.h"
-
-//Toonz includes
-#include "tapp.h"
+#include "toonz/openglviewerdraw.h"
 
 //Tnzlib includes
 #include "toonz/stage2.h"
@@ -15,6 +12,7 @@
 //TnzCore includes
 #include "tmsgcore.h"
 #include "trop.h"
+#include "tgl.h"
 
 #include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
@@ -22,6 +20,8 @@
 #include <QVector>
 #include <QVector2D>
 #include <QColor>
+#include <QOpenGLTexture>
+#include <QStack>
 
 //=============================================================================
 // OpenGLViewerDraw
@@ -33,6 +33,14 @@ namespace {
   void execWarning(QString& s) {
     DVGui::MsgBox(DVGui::WARNING, s);
   }
+  
+  QStack<QMap<GLenum, GLboolean>> attribStack;
+  void setGLEnabled(GLenum pname, GLboolean enable) {
+    if (enable)
+      glEnable(pname);
+    else
+      glDisable(pname);
+  }
 };
 
 // called once and create shader programs
@@ -43,6 +51,21 @@ void OpenGLViewerDraw::initialize(){
   _initialized = true;
 
   // simple shader
+  initializeSimpleShader();
+  //texture shader
+  initializeTextureShader();
+
+  //disk
+  createDiskVBO();
+  //viewer raster
+  createViewerRasterVBO();
+
+  m_viewerRasterTex = new QOpenGLTexture(QOpenGLTexture::Target2D);
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::initializeSimpleShader() {
   m_simpleShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
   const char *simple_vsrc =
     "#version 330 core\n"
@@ -61,8 +84,8 @@ void OpenGLViewerDraw::initialize(){
     "  fragmentColor = PrimitiveColor;\n"
     "}\n";
   bool ret = m_simpleShader.vert->compileSourceCode(simple_vsrc);
-  if (!ret) execWarning(QObject::tr("Failed to compile m_simpleShader.vert.","gl"));
-    
+  if (!ret) execWarning(QObject::tr("Failed to compile m_simpleShader.vert.", "gl"));
+
   m_simpleShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
   const char *simple_fsrc =
     "#version 330 core \n"
@@ -88,39 +111,109 @@ void OpenGLViewerDraw::initialize(){
   if (!ret) execWarning(QObject::tr("Failed to link simple shader: %1", "gl").arg(m_simpleShader.program->log()));
   //obtain parameter locations
   m_simpleShader.vertexAttrib = m_simpleShader.program->attributeLocation("vertexPosition");
-  if(m_simpleShader.vertexAttrib == -1)
-    execWarning(QObject::tr("Failed to get attiebute location of vertexPosition", "gl"));
+  if (m_simpleShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of vertexPosition", "gl"));
   m_simpleShader.mvpMatrixUniform = m_simpleShader.program->uniformLocation("MVP");
   if (m_simpleShader.vertexAttrib == -1)
     execWarning(QObject::tr("Failed to get uniform location of MVP", "gl"));
   m_simpleShader.colorUniform = m_simpleShader.program->uniformLocation("PrimitiveColor");
   if (m_simpleShader.colorUniform == -1)
     execWarning(QObject::tr("Failed to get uniform location of PrimitiveColor", "gl"));
-
-  //disk
-  createDiskVBO();
-
-
 }
 
 //-----------------------------------------------------------------------------
 
+void OpenGLViewerDraw::initializeTextureShader() {
+  m_textureShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
+  const char *simple_vsrc =
+    "#version 330 core\n"
+    "// Input vertex data, different for all executions of this shader.\n"
+    "layout(location = 0) in vec3 vertexPosition;\n"
+    "layout(location = 1) in vec2 texCoord;\n"
+    "// Output data ; will be interpolated for each fragment.\n"
+    "out vec2 UV;\n"
+    "// Values that stay constant for the whole mesh.\n"
+    "uniform mat4 MVP;\n"
+    "void main() {\n"
+    "  // Output position of the vertex, in clip space : MVP * position\n"
+    "  gl_Position = MVP * vec4(vertexPosition, 1);\n"
+    "  // UV of the vertex. No special space for this one.\n"
+    "  UV = texCoord;\n"
+    "}\n";
+  bool ret = m_textureShader.vert->compileSourceCode(simple_vsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_textureShader.vert.", "gl"));
+
+  m_textureShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
+  const char *simple_fsrc =
+    "#version 330 core \n"
+    "// Interpolated values from the vertex shaders \n"
+    "in vec2 UV; \n"
+    "// Ouput data \n"
+    "out vec4 color; \n"
+    "// Values that stay constant for the whole mesh. \n"
+    "uniform sampler2D tex; \n"
+    "void main() { \n"
+    "  // Output color = color of the texture at the specified UV \n"
+    "  color = texture(tex, UV); \n"
+    "} \n";
+  ret = m_textureShader.frag->compileSourceCode(simple_fsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_textureShader.frag.", "gl"));
+
+  m_textureShader.program = new QOpenGLShaderProgram();
+  //add shaders
+  ret = m_textureShader.program->addShader(m_textureShader.vert);
+  if (!ret) execWarning(QObject::tr("Failed to add m_textureShader.vert.", "gl"));
+  ret = m_textureShader.program->addShader(m_textureShader.frag);
+  if (!ret) execWarning(QObject::tr("Failed to add m_textureShader.frag.", "gl"));
+  //link shaders
+  ret = m_textureShader.program->link();
+  if (!ret) execWarning(QObject::tr("Failed to link simple shader: %1", "gl").arg(m_textureShader.program->log()));
+  //obtain parameter locations
+  m_textureShader.vertexAttrib = m_textureShader.program->attributeLocation("vertexPosition");
+  if (m_textureShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of vertexPosition", "gl"));
+  m_textureShader.texCoordAttrib = m_textureShader.program->attributeLocation("texCoord");
+  if (m_textureShader.texCoordAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of texCoord", "gl"));
+  m_textureShader.mvpMatrixUniform = m_textureShader.program->uniformLocation("MVP");
+  if (m_textureShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get uniform location of MVP", "gl"));
+  m_textureShader.texUniform = m_textureShader.program->uniformLocation("tex");
+  if (m_textureShader.texUniform == -1)
+    execWarning(QObject::tr("Failed to get uniform location of tex", "gl"));
+}
+//-----------------------------------------------------------------------------
+
 void OpenGLViewerDraw::finalize() {
+  // release simple shader
   if(m_simpleShader.program)
     delete m_simpleShader.program;
   if(m_simpleShader.vert)
     delete m_simpleShader.vert;
   if(m_simpleShader.frag)
     delete m_simpleShader.frag;
+  // release texture shader
+  if (m_textureShader.program)
+    delete m_textureShader.program;
+  if (m_textureShader.vert)
+    delete m_textureShader.vert;
+  if (m_textureShader.frag)
+    delete m_textureShader.frag;
+  // release vbo
   if (m_diskVBO.isCreated())
     m_diskVBO.destroy();
+  // release texture
+  if (m_viewerRasterTex->isCreated())
+    m_viewerRasterTex->destroy();
+  delete m_viewerRasterTex;
+
 }
 
 //-----------------------------------------------------------------------------
 
-void OpenGLViewerDraw::drawDisk(QMatrix4x4& mvp) {
+void OpenGLViewerDraw::drawDisk() {
   m_simpleShader.program->bind();
-  m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, mvp);
+  m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, m_MVPMatrix);
   m_simpleShader.program->enableAttributeArray(m_simpleShader.vertexAttrib);
 
   //draw disk
@@ -215,9 +308,8 @@ void OpenGLViewerDraw::createDiskVBO() {
 
 //-----------------------------------------------------------------------------
 
-void OpenGLViewerDraw::drawColorcard(UCHAR channel, QMatrix4x4& mvp) {
-  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
-  TRectD rect = getCameraRect();
+void OpenGLViewerDraw::drawColorcard(ToonzScene* scene, const UCHAR channel) {
+  TRectD rect = getCameraRect(scene);
 
   TPixel color = (ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg)
     ? TPixel::Black
@@ -255,9 +347,12 @@ void OpenGLViewerDraw::drawColorcard(UCHAR channel, QMatrix4x4& mvp) {
     ,QVector2D(rect.getP01().x,rect.getP01().y)
     ,QVector2D(rect.getP11().x,rect.getP11().y)
     ,QVector2D(rect.getP10().x,rect.getP10().y) };
-  
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   m_simpleShader.program->bind();
-  m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, mvp);
+  m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, m_MVPMatrix);
   m_simpleShader.program->setUniformValue(m_simpleShader.colorUniform, QColor(color.r, color.g, color.b, color.m));
   m_simpleShader.program->enableAttributeArray(m_simpleShader.vertexAttrib);
 
@@ -267,34 +362,122 @@ void OpenGLViewerDraw::drawColorcard(UCHAR channel, QMatrix4x4& mvp) {
   glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
   m_simpleShader.program->disableAttributeArray(m_simpleShader.vertexAttrib);
+  glDisable(GL_BLEND);
 }
 
 //-----------------------------------------------------------------------------
 
-TRectD OpenGLViewerDraw::getCameraRect() {
+TRectD OpenGLViewerDraw::getCameraRect(ToonzScene* scene) {
   if (CleanupPreviewCheck::instance()->isEnabled() ||
     CameraTestCheck::instance()->isEnabled())
-    return TApp::instance()
-    ->getCurrentScene()
-    ->getScene()
+    return scene
     ->getProperties()
     ->getCleanupParameters()
     ->m_camera.getStageRect();
   else
-    return TApp::instance()
-    ->getCurrentScene()
-    ->getScene()
+    return scene
     ->getCurrentCamera()
     ->getStageRect();
 }
 
 //-----------------------------------------------------------------------------
 
+void OpenGLViewerDraw::drawSceneRaster(TRaster32P ras) {
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  if (m_viewerRasterTex->isCreated())
+    m_viewerRasterTex->destroy();
+  m_viewerRasterTex->create();
+  
+  //QImage red(1, 1, QImage::Format_RGBA8888);
+  //red.fill(Qt::red);
+
+  //QImage img(ras->getRawData(), ras->getLx(), ras->getLy(), QImage::Format_RGBA8888);
+
+  assert((glGetError()) == GL_NO_ERROR);
+  //m_viewerRasterTex->setSize(1,1);
+  m_viewerRasterTex->setSize(ras->getLx(), ras->getLy());
+  assert((glGetError()) == GL_NO_ERROR);
+  m_viewerRasterTex->setFormat(QOpenGLTexture::RGBA8_UNorm);
+  m_viewerRasterTex->allocateStorage();
+  assert((glGetError()) == GL_NO_ERROR);
+  //unpack alignment‚ª‚S‚¾‚¯‚ÇA‚¤‚Ü‚­‚¢‚Á‚½‚ç‚µ‚ß‚½‚à‚Ì
+  //m_viewerRasterTex->setData(img);
+  m_viewerRasterTex->setData((QOpenGLTexture::PixelFormat)TGL_FMT, (QOpenGLTexture::PixelType)TGL_TYPE, ras->getRawData());
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_viewerRasterTex->bind();
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_textureShader.program->bind();
+  m_textureShader.program->setUniformValue(m_textureShader.mvpMatrixUniform, m_MVPMatrix);
+  m_textureShader.program->setUniformValue(m_textureShader.texUniform, 0); // use texture unit 0
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_textureShader.program->enableAttributeArray(m_textureShader.vertexAttrib);
+  m_textureShader.program->enableAttributeArray(m_textureShader.texCoordAttrib);
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_viewerRasterVBO.bind();
+  m_textureShader.program->setAttributeBuffer(m_textureShader.vertexAttrib, GL_FLOAT, 0, 2);
+  m_textureShader.program->setAttributeBuffer(m_textureShader.texCoordAttrib, GL_FLOAT, 4 * 2 * sizeof(GLfloat), 2);
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_viewerRasterVBO.release();
+
+  glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+  assert((glGetError()) == GL_NO_ERROR);
+
+  m_textureShader.program->disableAttributeArray(m_textureShader.vertexAttrib);
+  m_textureShader.program->disableAttributeArray(m_textureShader.texCoordAttrib);
+
+  assert((glGetError()) == GL_NO_ERROR);
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::createViewerRasterVBO() {
+
+  GLfloat vertex[] = {0.0f, 0.0f,  1.0f, 0.0f,
+                      1.0f, 1.0f,  0.0f, 1.0f};
+  GLfloat texCoord[] = { 0.0f, 0.0f,  1.0f, 0.0f,
+                      1.0f, 1.0f,  0.0f, 1.0f };
+  
+
+  m_viewerRasterVBO.create();
+  m_viewerRasterVBO.bind();
+  m_viewerRasterVBO.allocate(4 * 4 * sizeof(GLfloat));
+  m_viewerRasterVBO.write(0, vertex, sizeof(vertex));
+  m_viewerRasterVBO.write(sizeof(vertex), texCoord, sizeof(texCoord));
+  m_viewerRasterVBO.release();
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::setMVPMatrix(QMatrix4x4& mvp) {
+  m_MVPMatrix = mvp;
+}
+
+//-----------------------------------------------------------------------------
+
+QMatrix4x4& OpenGLViewerDraw::getMVPMatrix() {
+  return m_MVPMatrix;
+}
+
+//-----------------------------------------------------------------------------
+
 QMatrix4x4& OpenGLViewerDraw::toQMatrix(const TAffine&aff) {
-  return QMatrix4x4((float)aff.a11, (float)aff.a21, 0.0f, 0.0f,
-    (float)aff.a12, (float)aff.a22, 0, 0,
+  return QMatrix4x4((float)aff.a11, (float)aff.a12, 0.0f, (float)aff.a13,
+    (float)aff.a21, (float)aff.a22, 0.0f, (float)aff.a23,
     0.0f, 0.0f, 1.0f, 0.0f,
-    (float)aff.a13, (float)aff.a23, 0.0f, 1.0f);
+    0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -303,6 +486,29 @@ TAffine& OpenGLViewerDraw::toTAffine(const QMatrix4x4&matrix) {
   return TAffine(matrix.column(0).x(), matrix.column(0).y(), matrix.column(0).w()
     , matrix.column(1).x(), matrix.column(1).y(), matrix.column(1).w());
 }
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::myGlPushAttrib() {
+  QMap<GLenum, GLboolean> attribList;
+  attribList[GL_BLEND] = glIsEnabled(GL_BLEND);
+  attribList[GL_DEPTH_TEST] = glIsEnabled(GL_DEPTH_TEST);
+  attribList[GL_DITHER] = glIsEnabled(GL_DITHER);
+  attribList[GL_LOGIC_OP] = glIsEnabled(GL_LOGIC_OP);
+  attribStack.push(attribList);
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::myGlPopAttrib() {
+  QMap<GLenum, GLboolean> attribList = attribStack.pop();
+  QMapIterator<GLenum, GLboolean> i(attribList);
+  while (i.hasNext()) {
+    i.next();
+    setGLEnabled(i.key(), i.value());
+  }
+}
+OpenGLViewerDraw::OpenGLViewerDraw() {}
 
 //-----------------------------------------------------------------------------
 

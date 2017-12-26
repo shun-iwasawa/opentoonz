@@ -49,6 +49,7 @@
 #include "toonz/txshleveltypes.h"
 #include "imagebuilders.h"
 #include "toonz/tframehandle.h"
+#include "toonz/openglviewerdraw.h"
 
 // Qt includes
 #include <QImage>
@@ -656,6 +657,208 @@ void RasterPainter::flushRasterImages() {
   m_nodes.clear();
 }
 
+//-----------------------------------------------------------------------------
+// for "modern" opengl rendering
+//-----------------------------------------------------------------------------
+
+void RasterPainter::OpenGLFlushRasterImages(){
+  if (m_nodes.empty()) return;
+
+  // Build nodes bbox union
+  double delta = sqrt(fabs(m_nodes[0].m_aff.det()));
+  TRectD bbox = m_nodes[0].m_bbox.enlarge(delta);
+
+  int i, nodesCount = m_nodes.size();
+  for (i = 1; i < nodesCount; ++i) {
+    delta = sqrt(fabs(m_nodes[i].m_aff.det()));
+    bbox += m_nodes[i].m_bbox.enlarge(delta);
+  }
+
+  TRect rect(tfloor(bbox.x0), tfloor(bbox.y0), tceil(bbox.x1), tceil(bbox.y1));
+  rect = rect * TRect(0, 0, m_dim.lx - 1, m_dim.ly - 1);
+
+  int lx = rect.getLx(), ly = rect.getLy();
+  TDimension dim(lx, ly);
+
+  // Build a raster buffer of sufficient size to hold said union.
+  // The buffer is per-thread cached in order to improve the rendering speed.
+  if (!threadBuffers.hasLocalData())
+    threadBuffers.setLocalData(new std::vector<char>());
+
+  int size = dim.lx * dim.ly * sizeof(TPixel32);
+
+  std::vector<char> *vbuff = (std::vector<char> *)threadBuffers.localData();
+  if (size > (int)vbuff->size()) vbuff->resize(size);
+
+  TRaster32P ras(dim.lx, dim.ly, dim.lx, (TPixel32 *)&(*vbuff)[0]);
+  TRaster32P ras2;
+
+  if (m_vs.m_colorMask != 0) {
+    ras2 = TRaster32P(ras->getSize());
+    ras->clear();
+  }
+  else
+    ras2 = ras;
+
+  // Clear the buffer - it will hold all the stacked nodes content to be overed
+  // on top of the OpenGL buffer through a glDrawPixel()
+  ras->lock();
+
+  ras->clear();  // ras is typically reused - and we need it transparent first
+
+  TRect r = rect - rect.getP00();
+  TRaster32P viewedRaster = ras->extract(r);
+
+  int current = -1;
+
+  // Retrieve preferences-related data
+  int tc = m_checkFlags ? ToonzCheck::instance()->getChecks() : 0;
+  int index = ToonzCheck::instance()->getColorIndex();
+
+  TPixel32 frontOnionColor, backOnionColor;
+  bool onionInksOnly;
+
+  Preferences::instance()->getOnionData(frontOnionColor, backOnionColor,
+    onionInksOnly);
+
+  // Stack every node on top of the raster buffer
+  for (i = 0; i < nodesCount; ++i) {
+    if (m_nodes[i].m_isCurrentColumn) current = i;
+
+    TAffine aff = TTranslation(-rect.x0, -rect.y0) * m_nodes[i].m_aff;
+    TDimension imageDim = m_nodes[i].m_raster->getSize();
+    TPointD offset(0.5, 0.5);
+    aff *= TTranslation(offset);  // very quick and very dirty fix: in
+                                  // camerastand the images seems shifted of an
+                                  // half pixel...it's a quickput approximation?
+
+    TPixel32 colorscale = TPixel32(0, 0, 0, m_nodes[i].m_alpha);
+    int inksOnly;
+
+    if (m_nodes[i].m_onionMode != Node::eOnionSkinNone) {
+      inksOnly = onionInksOnly;
+
+      if (m_nodes[i].m_onionMode == Node::eOnionSkinFront)
+        colorscale = TPixel32(frontOnionColor.r, frontOnionColor.g,
+          frontOnionColor.b, m_nodes[i].m_alpha);
+      else if (m_nodes[i].m_onionMode == Node::eOnionSkinBack)
+        colorscale = TPixel32(backOnionColor.r, backOnionColor.g,
+          backOnionColor.b, m_nodes[i].m_alpha);
+    }
+    else {
+      if (m_nodes[i].m_filterColor != TPixel32::Black) {
+        colorscale = m_nodes[i].m_filterColor;
+        colorscale.m = m_nodes[i].m_alpha;
+      }
+      inksOnly = tc & ToonzCheck::eInksOnly;
+    }
+
+    if (TRaster32P src32 = m_nodes[i].m_raster)
+      TRop::quickPut(viewedRaster, src32, aff, colorscale,
+        m_nodes[i].m_doPremultiply, m_nodes[i].m_whiteTransp,
+        m_nodes[i].m_isFirstColumn, m_doRasterDarkenBlendedView);
+    else if (TRasterGR8P srcGr8 = m_nodes[i].m_raster)
+      TRop::quickPut(viewedRaster, srcGr8, aff, colorscale);
+    else if (TRasterCM32P srcCm = m_nodes[i].m_raster) {
+      assert(m_nodes[i].m_palette);
+      int oldframe = m_nodes[i].m_palette->getFrame();
+      m_nodes[i].m_palette->setFrame(m_nodes[i].m_frame);
+
+      TPaletteP plt;
+      if ((tc & ToonzCheck::eGap || tc & ToonzCheck::eAutoclose) &&
+        m_nodes[i].m_isCurrentColumn) {
+        srcCm = srcCm->clone();
+        plt = m_nodes[i].m_palette->clone();
+        int styleIndex = plt->addStyle(TPixel::Magenta);
+        if (tc & ToonzCheck::eAutoclose)
+          TAutocloser(srcCm, AutocloseDistance, AutocloseAngle, styleIndex,
+            AutocloseOpacity)
+          .exec();
+        if (tc & ToonzCheck::eGap)
+          AreaFiller(srcCm).rectFill(m_nodes[i].m_savebox, 1, true, true,
+            false);
+      }
+      else
+        plt = m_nodes[i].m_palette;
+
+      if (tc == 0 || tc == ToonzCheck::eBlackBg ||
+        !m_nodes[i].m_isCurrentColumn)
+        TRop::quickPut(viewedRaster, srcCm, plt, aff, colorscale, inksOnly);
+      else {
+        TRop::CmappedQuickputSettings settings;
+
+        settings.m_globalColorScale = colorscale;
+        settings.m_inksOnly = inksOnly;
+        settings.m_transparencyCheck =
+          tc & (ToonzCheck::eTransparency | ToonzCheck::eGap);
+        settings.m_blackBgCheck = tc & ToonzCheck::eBlackBg;
+        /*-- InkCheck, Ink#1Check, PaintCheckはカレントカラムにのみ有効 --*/
+        settings.m_inkIndex =
+          m_nodes[i].m_isCurrentColumn
+          ? (tc & ToonzCheck::eInk ? index
+            : (tc & ToonzCheck::eInk1 ? 1 : -1))
+          : -1;
+        settings.m_paintIndex = m_nodes[i].m_isCurrentColumn
+          ? (tc & ToonzCheck::ePaint ? index : -1)
+          : -1;
+
+        Preferences::instance()->getTranspCheckData(
+          settings.m_transpCheckBg, settings.m_transpCheckInk,
+          settings.m_transpCheckPaint);
+
+        TRop::quickPut(viewedRaster, srcCm, plt, aff, settings);
+      }
+
+      srcCm = TRasterCM32P();
+      plt = TPaletteP();
+
+      m_nodes[i].m_palette->setFrame(oldframe);
+    }
+    else
+      assert(!"Cannot use quickput with this raster combination!");
+  }
+
+  if (m_vs.m_colorMask != 0) {
+    TRop::setChannel(ras, ras, m_vs.m_colorMask, false);
+    TRop::quickPut(ras2, ras, TAffine());
+  }
+  
+
+  OpenGLViewerDraw::instance()->myGlPushAttrib();
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_ONE,
+    GL_ONE_MINUS_SRC_ALPHA);  // The raster buffer is intended in
+                              // premultiplied form - thus the GL_ONE on src
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_DITHER);
+  glDisable(GL_LOGIC_OP);
+
+  QMatrix4x4 VPmatrix = OpenGLViewerDraw::instance()->getMVPMatrix();
+  QMatrix4x4 MVPmatrix(VPmatrix); // leave VPmatrix as backup
+  MVPmatrix.translate(rect.x0, rect.y0);
+  MVPmatrix.scale(ras2->getLx(), ras2->getLy());
+  OpenGLViewerDraw::instance()->setMVPMatrix(MVPmatrix);
+  OpenGLViewerDraw::instance()->drawSceneRaster(ras2);
+  // put back
+  OpenGLViewerDraw::instance()->setMVPMatrix(VPmatrix);
+
+  ras->unlock();
+  OpenGLViewerDraw::instance()->myGlPopAttrib();
+
+  //TODO
+  /*  
+  if (m_vs.m_showBBox && current > -1) {
+    glPushMatrix();
+    glLoadIdentity();
+    tglColor(TPixel(200, 200, 200));
+    tglMultMatrix(m_nodes[current].m_aff);
+    tglDrawRect(m_nodes[current].m_raster->getBounds());
+    glPopMatrix();
+  }
+  */
+
+  m_nodes.clear();
+}
 //-----------------------------------------------------------------------------
 /*! Make frame visualization in QPainter.
 \n	Draw in painter mode just raster image in m_nodes.
