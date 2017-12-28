@@ -232,6 +232,7 @@ public:
 
   TPointD getDpiScale() const override { return m_dpiScale; }
   void zoomQt(bool forward, bool reset);
+  //ok
   TAffine getNormalZoomScale();
 
   bool canSwapCompared() const;
@@ -245,6 +246,7 @@ public:
 
   // panning by dragging the navigator in the levelstrip
   void navigatorPan(const QPoint &delta);
+  //ok
   // a factor for getting pixel-based zoom ratio
   double getDpiFactor();
   // when showing the viewer with full-screen mode,

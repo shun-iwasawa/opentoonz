@@ -252,6 +252,11 @@ void OutlineStrokeProp::draw(const TVectorRenderData &rd) {
   glPushMatrix();
   tglMultMatrix(rd.m_aff);
 
+  ///std::cout << "OutlineStrokeProp::draw rd.m_aff" << std::endl;
+  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
+  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
+
+
   double pixelSize = sqrt(tglGetPixelSize2());
 
 #ifdef _DEBUG
@@ -287,6 +292,51 @@ void OutlineStrokeProp::draw(const TVectorRenderData &rd) {
   }
 
   glPopMatrix();
+}
+
+//-----------------------------------------------------------------------------
+
+std::vector<TOutlinePoint> & OutlineStrokeProp::getOutlinePointArray(const TVectorRenderData &rd) {
+  if (rd.m_clippingRect != TRect() && !rd.m_is3dView &&
+    !convert(rd.m_aff * m_stroke->getBBox()).overlaps(rd.m_clippingRect))
+    return std::vector<TOutlinePoint>();
+
+  double pixelSize = sqrt(tglGetPixelSize2());
+  ///std::cout << "OutlineStrokeProp::getOutlinePointArray rd.m_aff" << std::endl;
+  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
+  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
+
+  //TODO
+  /*
+#ifdef _DEBUG
+  if (m_stroke->isCenterLine() && m_colorStyle->getTagId() != 99)
+#else
+  if (m_stroke->isCenterLine())
+#endif
+  {
+    TCenterLineStrokeStyle *appStyle =
+      new TCenterLineStrokeStyle(m_colorStyle->getAverageColor(), 0, 0);
+    appStyle->drawStroke(rd.m_cf, m_stroke);
+    delete appStyle;
+  }
+  else
+  */{
+    if (!isAlmostZero(pixelSize - m_outlinePixelSize, 1e-5) ||
+      m_strokeChanged ||
+      m_styleVersionNumber != m_colorStyle->getVersionNumber()) {
+      m_strokeChanged = false;
+      m_outlinePixelSize = pixelSize;
+      TOutlineUtil::OutlineParameter param;
+
+      m_outline.getArray().clear();
+      m_colorStyle->computeOutline(m_stroke, m_outline, param);
+
+      m_styleVersionNumber = m_colorStyle->getVersionNumber();
+    }
+
+    //m_colorStyle->drawStroke(rd.m_cf, &m_outline, m_stroke);
+  }
+  return m_outline.getArray();
 }
 
 //=============================================================================

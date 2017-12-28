@@ -203,6 +203,9 @@ public:
 
   const ImagePainter::VisualSettings *m_vs;
 
+  // for modern opengl
+  bool m_isModern = false;
+
 public:
   StageBuilder();
   virtual ~StageBuilder();
@@ -710,6 +713,7 @@ void StageBuilder::visit(PlayerSet &players, Visitor &visitor, bool isPlaying) {
       }
     }
     player.m_isPlaying = isPlaying;
+    player.m_isModern = m_isModern;
     visitor.onImage(player);
   }
   // vale solo per TAB pro
@@ -747,6 +751,7 @@ void Stage::visit(Visitor &visitor, const VisitArgs &args) {
   sb.m_onionSkinMask          = *osm;
   sb.m_currentFrameId         = args.m_currentFrameId;
   sb.m_isGuidedDrawingEnabled = args.m_isGuidedDrawingEnabled;
+  sb.m_isModern = args.m_isModern;
   Player::m_onionSkinFrontSize  = 0;
   Player::m_onionSkinBackSize   = 0;
   Player::m_firstBackOnionSkin  = 0;

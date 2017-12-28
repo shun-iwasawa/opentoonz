@@ -319,6 +319,7 @@ set(SOURCES
     txshmeshcolumn.cpp
     textureutils.cpp
 	openglviewerdraw.cpp 
+	openglviewerdraw_vector.cpp 
 )
 
 if(BUILD_TARGET_WIN)

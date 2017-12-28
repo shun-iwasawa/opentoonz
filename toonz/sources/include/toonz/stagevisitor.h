@@ -135,6 +135,9 @@ struct DVAPI VisitArgs {
   bool m_rasterizePli;
   int m_isGuidedDrawingEnabled;
 
+  // for modern opengl
+  bool m_isModern = false;
+
 public:
   VisitArgs()
       : m_scene(0)
@@ -260,6 +263,9 @@ public:
 
   void onImage(const Stage::Player &data) override;
   void onVectorImage(TVectorImage *vi, const Stage::Player &data);
+  // for "modern" opengl rendering
+  void openGLonVectorImage(TVectorImage *vi, const Stage::Player &data);
+
   void onRasterImage(TRasterImage *ri, const Stage::Player &data);
   void onToonzImage(TToonzImage *ri, const Stage::Player &data);
 
@@ -276,7 +282,7 @@ public:
   void flushRasterImages();
 
   // for "modern" opengl rendering
-  void OpenGLFlushRasterImages();
+  void openGLFlushRasterImages();
   //TRaster32P getFlushedRaster(QPoint& pos, TAffine& bboxAff, TRect& bboxRect);
 
   void drawRasterImages(QPainter &p, QPolygon cameraRect);

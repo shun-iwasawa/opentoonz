@@ -109,6 +109,8 @@ public:
 
   TPixel32 m_filterColor;
 
+  // for modern opengl
+  bool m_isModern = false;
 public:
   Player();
 

@@ -19,6 +19,9 @@
 #include "toonz/stage2.h"
 #include "toonz/stagevisitor.h"
 #include "toonz/openglviewerdraw.h"
+#include "toonz/toonzscene.h"
+#include "toonz/tcamera.h"
+#include "toonz/txshsimplelevel.h"
 
 
 #include "openglsceneviewer.h"
@@ -43,9 +46,8 @@ namespace {
 OpenGLSceneViewer::OpenGLSceneViewer(QWidget *parent)
   : OpenGLWidgetForHighDpi(parent) {
 
-  //とりあえず単位ベクトル
   for (int i = 0; i < 2; i++)
-    m_viewMatrix[i].setToIdentity();
+    m_viewMatrix[i]= OpenGLViewerDraw::toQMatrix(getNormalZoomScale());
   // set the root model matrix
   m_modelMatrix.push(QMatrix4x4());
 }
@@ -317,7 +319,7 @@ void OpenGLSceneViewer::drawScene() {
   // store VP matrix first. the model matrix will be computed for each raster 
   QMatrix4x4 VPmatrix = m_projectionMatrix * getViewQMatrix();
   OpenGLViewerDraw::instance()->setMVPMatrix(VPmatrix);
-
+  OpenGLViewerDraw::instance()->setModelMatrix(m_modelMatrix.top());
   /*TODO
   ChildStack *childStack = scene->getChildStack();
   bool editInPlace = editInPlaceToggle.getStatus() &&
@@ -372,7 +374,7 @@ void OpenGLSceneViewer::drawScene() {
     // camera 2D (normale)
     TDimension viewerSize(width(), height());
 
-    TAffine viewAff = getViewMatrix();
+    TAffine viewAff;// = getViewMatrix();
 
     /*TODO
     if (editInPlace) {
@@ -427,12 +429,13 @@ void OpenGLSceneViewer::drawScene() {
         ->getCell(app->getCurrentFrame()->getFrame(), args.m_col)
         .getFrameId();
       args.m_isGuidedDrawingEnabled = useGuidedDrawing;
+      args.m_isModern = true;
       Stage::visit(painter, args);
     }
 
     assert(glGetError() == 0);
 
-    painter.OpenGLFlushRasterImages();
+    painter.openGLFlushRasterImages();
     /*
     QPoint pos;
     TAffine bboxAff;
@@ -470,6 +473,63 @@ void OpenGLSceneViewer::drawScene() {
     assert(glGetError() == 0);
     */
   }
+}
+
+//-----------------------------------------------------------------------------
+/*! a factor for getting pixel-based zoom ratio
+*/
+double OpenGLSceneViewer::getDpiFactor() {
+  // When the current unit is "pixels", always use a standard dpi
+  if (Preferences::instance()->getPixelsOnly()) {
+    return Stage::inch / Stage::standardDpi;
+  }
+  // When preview mode, use a camera DPI
+  else if (isPreviewEnabled()) {
+    return Stage::inch /
+      TApp::instance()
+      ->getCurrentScene()
+      ->getScene()
+      ->getCurrentCamera()
+      ->getDpi()
+      .x;
+  }
+  // When level editing mode, use an image DPI
+  else if (TApp::instance()->getCurrentFrame()->isEditingLevel()) {
+    TXshSimpleLevel *sl;
+    sl = TApp::instance()->getCurrentLevel()->getSimpleLevel();
+    if (!sl) return 1.;
+    if (sl->getType() == PLI_XSHLEVEL) return 1.;
+    if (sl->getImageDpi() != TPointD())
+      return Stage::inch / sl->getImageDpi().x;
+    if (sl->getDpi() != TPointD()) return Stage::inch / sl->getDpi().x;
+    return 1.;
+  }
+  // When the special case in the scene editing mode:
+  // If the option "ActualPixelViewOnSceneEditingMode" is ON,
+  // use  current level's DPI set in the level settings.
+  else if (Preferences::instance()
+    ->isActualPixelViewOnSceneEditingModeEnabled() &&
+    !CleanupPreviewCheck::instance()->isEnabled() &&
+    !CameraTestCheck::instance()->isEnabled()) {
+    TXshSimpleLevel *sl;
+    sl = TApp::instance()->getCurrentLevel()->getSimpleLevel();
+    if (!sl) return 1.;
+    if (sl->getType() == PLI_XSHLEVEL) return 1.;
+    if (sl->getDpi() == TPointD()) return 1.;
+    // use default value for the argument of getDpi() (=TFrameId::NO_FRAME）
+    // so that the dpi of the first frame in the level will be returned.
+    return Stage::inch / sl->getDpi().x;
+  }
+  // When the scene editing mode without any option, don't think about DPI
+  else {
+    return 1.;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+TAffine OpenGLSceneViewer::getNormalZoomScale() {
+  return TScale(getDpiFactor()).inv();
 }
 
 //=============================================================================

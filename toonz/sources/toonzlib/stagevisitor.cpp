@@ -661,7 +661,7 @@ void RasterPainter::flushRasterImages() {
 // for "modern" opengl rendering
 //-----------------------------------------------------------------------------
 
-void RasterPainter::OpenGLFlushRasterImages(){
+void RasterPainter::openGLFlushRasterImages(){
   if (m_nodes.empty()) return;
 
   // Build nodes bbox union
@@ -824,14 +824,15 @@ void RasterPainter::OpenGLFlushRasterImages(){
   }
   
 
-  OpenGLViewerDraw::instance()->myGlPushAttrib();
+  OpenGLViewerDraw::instance()->myGlPushAttrib(GL_COLOR_BUFFER_BIT);
   glEnable(GL_BLEND);
   glBlendFunc(GL_ONE,
     GL_ONE_MINUS_SRC_ALPHA);  // The raster buffer is intended in
                               // premultiplied form - thus the GL_ONE on src
-  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_DEPTH_TEST); // note that GL_DEPTH_TEST is not in the GL_COLOR_BUFFER_BIT group
   glDisable(GL_DITHER);
-  glDisable(GL_LOGIC_OP);
+  glDisable(GL_COLOR_LOGIC_OP); // GL_COLOR_LOGIC_OP is for RGBA mode
+  //glDisable(GL_LOGIC_OP); // GL_LOGIC_OP is for color index mode
 
   QMatrix4x4 VPmatrix = OpenGLViewerDraw::instance()->getMVPMatrix();
   QMatrix4x4 MVPmatrix(VPmatrix); // leave VPmatrix as backup
@@ -961,8 +962,12 @@ void RasterPainter::onImage(const Stage::Player &player) {
     // Common image draw
     const TImageP &img = player.image();
 
-    if (TVectorImageP vi = img)
-      onVectorImage(vi.getPointer(), player);
+    if (TVectorImageP vi = img) {
+      if(player.m_isModern)
+        openGLonVectorImage(vi.getPointer(), player);
+      else
+        onVectorImage(vi.getPointer(), player);
+    }
     else if (TRasterImageP ri = img)
       onRasterImage(ri.getPointer(), player);
     else if (TToonzImageP ti = img)
@@ -1121,6 +1126,10 @@ void RasterPainter::onVectorImage(TVectorImage *vi,
   else
     tglDraw(rd, vi);
 
+  ///std::cout << "++ RasterPainter::onVectorImage rd.m_aff" << std::endl;
+  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
+  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
+
   if (tc & ToonzCheck::eAutoclose) drawAutocloses(vi, rd);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -1130,6 +1139,172 @@ void RasterPainter::onVectorImage(TVectorImage *vi,
   delete guidedCf;
 }
 
+//-----------------------------------------------------------------------------
+/*! View a vector cell images.
+\n	If onion-skin is active compute \b TOnionFader value.
+Create and boot a \b TVectorRenderData and recall \b tglDraw().
+*/
+// for "modern" opengl rendering
+void RasterPainter::openGLonVectorImage(TVectorImage *vi,
+  const Stage::Player &player) {
+  openGLFlushRasterImages();
+
+  // When loaded, vectorimages needs to have regions recomputed, but doing that
+  // while loading them
+  // is quite slow (think about loading whole scenes!..). They are recomputed
+  // the first time they
+  // are selected and shown on screen...except when playing back, to avoid
+  // slowness!
+
+  // (Daniele) This function should *NOT* be responsible of that.
+  //           It's the *image itself* that should recalculate or initialize
+  //           said data
+  //           if queried about it and turns out it's not available...
+
+  if (!player.m_isPlaying && player.m_isCurrentColumn)
+    vi->recomputeRegionsIfNeeded();
+
+  const Preferences &prefs = *Preferences::instance();
+
+  TColorFunction *cf = 0, *guidedCf = 0;
+  TPalette *vPalette = vi->getPalette();
+  TPixel32 bgColor = TPixel32::White;
+
+  int tc = (m_checkFlags && player.m_isCurrentColumn)
+    ? ToonzCheck::instance()->getChecks()
+    : 0;
+  bool inksOnly = tc & ToonzCheck::eInksOnly;
+
+  int oldFrame = vPalette->getFrame();
+  vPalette->setFrame(player.m_frame);
+
+  if (player.m_onionSkinDistance != c_noOnionSkin) {
+    TPixel32 frontOnionColor, backOnionColor;
+
+    if (player.m_onionSkinDistance != 0) {
+      prefs.getOnionData(frontOnionColor, backOnionColor, inksOnly);
+      bgColor =
+        (player.m_onionSkinDistance < 0) ? backOnionColor : frontOnionColor;
+    }
+
+    double m[4] = { 1.0, 1.0, 1.0, 1.0 }, c[4];
+
+    // Weighted addition to RGB and matte multiplication
+    m[3] = 1.0 -
+      ((player.m_onionSkinDistance == 0)
+        ? 0.1
+        : OnionSkinMask::getOnionSkinFade(player.m_onionSkinDistance));
+    c[0] = (1.0 - m[3]) * bgColor.r, c[1] = (1.0 - m[3]) * bgColor.g,
+      c[2] = (1.0 - m[3]) * bgColor.b;
+    c[3] = 0.0;
+
+    cf = new TGenericColorFunction(m, c);
+  }
+  else if (player.m_filterColor != TPixel::Black) {
+    TPixel32 colorScale = player.m_filterColor;
+    colorScale.m = player.m_opacity;
+    cf = new TColumnColorFilterFunction(colorScale);
+  }
+  else if (player.m_opacity < 255)
+    cf = new TTranspFader(player.m_opacity / 255.0);
+
+  TVectorRenderData rd(m_viewAff * player.m_placement, TRect(), vPalette, cf,
+    true  // alpha enabled
+  );
+
+  rd.m_drawRegions = !inksOnly;
+  rd.m_inkCheckEnabled = tc & ToonzCheck::eInk;
+  rd.m_paintCheckEnabled = tc & ToonzCheck::ePaint;
+  rd.m_blackBgEnabled = tc & ToonzCheck::eBlackBg;
+  rd.m_colorCheckIndex = ToonzCheck::instance()->getColorIndex();
+  rd.m_show0ThickStrokes = prefs.getShow0ThickLines();
+  rd.m_regionAntialias = prefs.getRegionAntialias();
+  rd.m_animatedGuidedDrawing = prefs.getAnimatedGuidedDrawing();
+  if (player.m_onionSkinDistance < 0 &&
+    (player.m_isCurrentColumn || player.m_isCurrentXsheetLevel)) {
+    if (player.m_isGuidedDrawingEnabled == 3         // show guides on all
+      || (player.m_isGuidedDrawingEnabled == 1 &&  // show guides on closest
+        player.m_onionSkinDistance == player.m_firstBackOnionSkin) ||
+        (player.m_isGuidedDrawingEnabled == 2 &&  // show guides on farthest
+          player.m_onionSkinDistance == player.m_onionSkinBackSize) ||
+          (player.m_isEditingLevel &&  // fix for level editing mode sending extra
+                                       // players
+            player.m_isGuidedDrawingEnabled == 2 &&
+            player.m_onionSkinDistance == player.m_lastBackVisibleSkin)) {
+      rd.m_showGuidedDrawing = player.m_isGuidedDrawingEnabled > 0;
+      int currentStrokeCount = 0;
+      int totalStrokes = vi->getStrokeCount();
+      TXshSimpleLevel *sl = player.m_sl;
+
+      if (sl) {
+        TImageP image = sl->getFrame(player.m_currentFrameId, false);
+        TVectorImageP vecImage = image;
+        if (vecImage) currentStrokeCount = vecImage->getStrokeCount();
+        if (currentStrokeCount < totalStrokes)
+          rd.m_indexToHighlight = currentStrokeCount;
+
+        double guidedM[4] = { 1.0, 1.0, 1.0, 1.0 }, guidedC[4];
+        TPixel32 bgColor = TPixel32::Blue;
+        guidedM[3] =
+          1.0 -
+          ((player.m_onionSkinDistance == 0)
+            ? 0.1
+            : OnionSkinMask::getOnionSkinFade(player.m_onionSkinDistance));
+
+        guidedC[0] = (1.0 - guidedM[3]) * bgColor.r,
+          guidedC[1] = (1.0 - guidedM[3]) * bgColor.g,
+          guidedC[2] = (1.0 - guidedM[3]) * bgColor.b;
+        guidedC[3] = 0.0;
+
+        guidedCf = new TGenericColorFunction(guidedM, guidedC);
+        rd.m_guidedCf = guidedCf;
+      }
+    }
+  }
+
+  if (tc & (ToonzCheck::eTransparency | ToonzCheck::eGap)) {
+    TPixel dummy;
+    rd.m_tcheckEnabled = true;
+
+    if (rd.m_blackBgEnabled)
+      prefs.getTranspCheckData(rd.m_tCheckInk, dummy, rd.m_tCheckPaint);
+    else
+      prefs.getTranspCheckData(dummy, rd.m_tCheckInk, rd.m_tCheckPaint);
+  }
+
+  if (m_vs.m_colorMask != 0) {
+    glColorMask((m_vs.m_colorMask & TRop::RChan) ? GL_TRUE : GL_FALSE,
+      (m_vs.m_colorMask & TRop::GChan) ? GL_TRUE : GL_FALSE,
+      (m_vs.m_colorMask & TRop::BChan) ? GL_TRUE : GL_FALSE, GL_TRUE);
+  }
+  TVectorImageP viDelete;
+  if (tc & ToonzCheck::eGap) {
+    viDelete = vi->clone();
+    vi = viDelete.getPointer();
+    vi->selectFill(vi->getBBox(), 0, 1, true, true, false);
+  }
+
+  //TODO
+  /*
+  if (m_maskLevel > 0)
+    tglDrawMask(rd, vi);
+  else
+  */
+  ///std::cout << "-- RasterPainter::openGLonVectorImage rd.m_aff" << std::endl;
+  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
+  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
+
+  OpenGLViewerDraw::instance()->drawVector(rd, vi);
+
+  //TODO
+  //if (tc & ToonzCheck::eAutoclose) drawAutocloses(vi, rd);
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  vPalette->setFrame(oldFrame);
+
+  delete cf;
+  delete guidedCf;
+}
 //-----------------------------------------------------
 
 /*! Create a \b Node and put it in \b m_nodes.

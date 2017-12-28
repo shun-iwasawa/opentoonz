@@ -28,9 +28,15 @@ class QOpenGLShader;
 class QOpenGLShaderProgram;
 class QOpenGLTexture;
 class ToonzScene;
+class TStroke;
+class TRegion;
+class TVectorImage;
+class TVectorRenderData;
 
 class DVAPI OpenGLViewerDraw { //singleton
   QMatrix4x4 m_MVPMatrix;
+  QMatrix4x4 m_projectionMatrix;
+  QMatrix4x4 m_modelMatrix;
 
   struct SimpleShader{
     // shader for simple objects
@@ -54,7 +60,19 @@ class DVAPI OpenGLViewerDraw { //singleton
     int texCoordAttrib = -1;
     int vertexAttrib = -1;
   }m_textureShader;
-  
+
+  struct SmoothShader {
+    // shader for simple objects
+    QOpenGLShader* vert = nullptr;
+    QOpenGLShader* frag = nullptr;
+    QOpenGLShader* geom = nullptr;
+    // shader program for simple objects
+    QOpenGLShaderProgram* program = nullptr;
+    int mvpMatrixUniform = -1;
+    int colorUniform = -1;
+    int vertexAttrib = -1;
+  }m_smoothShader;
+
   //disk vbo
   QOpenGLBuffer m_diskVBO;
   int m_diskVertexOffset[2];
@@ -73,6 +91,7 @@ public:
   void initialize();
   void initializeSimpleShader();
   void initializeTextureShader();
+  void initializeSmoothShader();
   // called once in main() on the end
   void finalize();
 
@@ -88,11 +107,26 @@ public:
   void setMVPMatrix(QMatrix4x4& mvp);
   QMatrix4x4& getMVPMatrix();
 
-  static QMatrix4x4& toQMatrix(const TAffine&aff);
-  static TAffine& toTAffine(const QMatrix4x4&matrix);
+  void setModelMatrix(QMatrix4x4& model);
+  QMatrix4x4& getModelMatrix();
 
-  static void myGlPushAttrib();
+  static QMatrix4x4 toQMatrix(const TAffine&aff);
+  static TAffine toTAffine(const QMatrix4x4&matrix);
+
+  static void myGlPushAttrib(GLenum mode = GL_COLOR_BUFFER_BIT);
   static void myGlPopAttrib();
+
+  //vector render (replacement of tvectorgl.h and tglregions.cpp)
+private:
+  void doDraw(const TVectorImage *vim, const TVectorRenderData &_rd,
+    bool drawEnteredGroup);
+public:
+  void drawVector(const TVectorRenderData &rd, const TVectorImage *vim);
+  void drawMaskedVector(const TVectorRenderData &rd, const TVectorImage *vim);
+  void drawVector(const TVectorRenderData &rd, const TStroke *stroke,
+    bool pushAttribs = true);
+  void drawVector(const TVectorRenderData &rd, TRegion *r,
+    bool pushAttribs = true);
 };
 
 #endif

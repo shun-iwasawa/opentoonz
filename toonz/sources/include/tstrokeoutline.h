@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //-----------------------------------------------------------------------------
 //  tstrokeoutline.h:
@@ -159,6 +159,48 @@ procedurale
  ed inoltre tutti quelli che servono per "addolcire" la linearizzazione a tratti
  dell'outline (per questi TOutlinePoint, stepCount e' 0 (facilita i
 controlli...))
+
+m_outlineの要素（TOutlinePoint）は、
+交互の面上の偶数/奇数の概要の（中心線の描画方向に右/左奇数に等しいです）。
+顔の中心線と偶数/奇数の概要のこれらの点のTPointD幾何学座標（x、y）
+の算出及び「パラメトリック表現用いて行う（」でT「パラメータ[0、1]）：
+2ための2つの異なる式から 'T' の同じ値について得られる
+点p（2K）=（TPointD）m_outlineは[2K]、P（2K + 1）=（TPointD）m_outline [2K + 1]
+（輪郭の奇数/奇数面）
+彼らはまったく無関係です。特に、0.5 *（p（2k）+ p（2k + 1））が一致しない
+「T」の同じ値に対して得られる中心線の点と
+（同じことは、これらsull'outlineの平均よりも中心線で正常/タンジェントに適用）。
+優れた実験的な近似は（同じことは、接線/ノーマルのために行く）
+手続きストローク中にそれらが実質的に等しい検討する」ペロ誘導します。
+このようにして、
+m_outline [2k] .tangent == m_outline [2k + 1] .tangent
+m_outline [2k] .normal == m_outline [2k + 1] .normal
+m_outline [2k] .stepCount == m_outline [2k + 1] .stepCount
+
+m_outlineの各要素（TOutlinePoint）のメンバーは、次のように解釈されます。
+TPointD（x、y）はアウトライン上の点の幾何学的位置を表す。
+「U」（「振幅」パラメータ）及び「V」（「曲線横座標」）のみ
+TTextureStyleストロークタイプに意味があるとテクスチャパラメータを表します。
+正接/法線（手続きストロークの場合にのみ重要）は、i
+m_outline（近似...）とみなすものの同一の「T」を有する（中心線上）点における
+中心線の接線/法線ベクトル。 
+STEPCOUNT（のみ手続き脳卒中の重大）昇順にインデックスポイントのペア
+m_outline [2K]、m_outline [2K + 1]手続きのステップからの（過剰）要求：
+実際には、手続きストロークの場合、m_outlineにはすべてのポイントが含まれています
+手続きこれらTOutlinePointするストローク（、STEPCOUNTと
+「ペアに成長しているの世代：（中心線上に数えm_lengthStep）段階で必要とされます。
+  1）m_outline [0] .stepCount == m_outline [1] .stepCount == 1;
+  2）m_outline [2k] .stepCount == m_outline [2k + 1] .stepCount;
+  3）m_outline [2k + 1]が手続きステップで必要とされるポイントである場合
+（m_lengthStep）e
+  m_outline [2k + 2h]は、ステップで必要とされる次のポイントです
+（M_lengthStep）
+  それから
+  3.1）m_outline [2k + s] .stepCount = 0（s = 2、...、2h-1）;
+  3.2）m_outline [2k + 2h] .stepCount = m_outline [2k + 1] .stepCount + 1;）
+  3.3）m_outline [2k + 2h] .stepCount = m_outline [2k + 2h + 1] .stepCount;
+  ）
+  また、時には線形化を「甘くする」ために役立つものこれらのTOutlinePointsの場合、stepCountは0（コントロールを容易にする...））
 */
 private:
   std::vector<TOutlinePoint> m_outline;

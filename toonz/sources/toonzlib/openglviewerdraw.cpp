@@ -8,6 +8,7 @@
 #include "toonz/sceneproperties.h"
 #include "toonz/cleanupparameters.h"
 #include "toonz/tcamera.h"
+#include "toonz/toonzfolders.h"
 
 //TnzCore includes
 #include "tmsgcore.h"
@@ -30,6 +31,40 @@
 //-----------------------------------------------------------------------------
 
 namespace {
+
+  QList<GLenum> gl_enable_bit_list =
+  { GL_ALPHA_TEST,
+    GL_BLEND,
+    GL_DITHER,
+    GL_COLOR_LOGIC_OP,
+    GL_INDEX_LOGIC_OP,
+    //----GL_COLOR_BUFFER_BIT----
+    GL_AUTO_NORMAL,
+    GL_COLOR_MATERIAL,
+    GL_CULL_FACE,
+    GL_DEPTH_TEST,
+    GL_FOG,
+    //GL_LIGHTi(0 <= i<GL_MAX_LIGHTS)
+    GL_LIGHTING,
+    GL_LINE_SMOOTH,
+    GL_LINE_STIPPLE,
+    //GL_MAP1_x(x ‚Íƒ}ƒbƒv‚ÌŒ^)
+    //GL_MAP2_x(x ‚Íƒ}ƒbƒv‚ÌŒ^)
+    GL_NORMALIZE,
+    GL_POINT_SMOOTH,
+    GL_POLYGON_OFFSET_LINE,
+    GL_POLYGON_OFFSET_FILL,
+    GL_POLYGON_OFFSET_POINT,
+    GL_POLYGON_SMOOTH,
+    GL_POLYGON_STIPPLE,
+    GL_SCISSOR_TEST,
+    GL_STENCIL_TEST,
+    GL_TEXTURE_1D,
+    GL_TEXTURE_2D,
+    GL_TEXTURE_3D
+    //GL_TEXTURE_GEN_x,ŒQ(x ‚Í S, T, R, Q ‚Ì‚¢‚¸‚ê‚©) 
+  };
+
   void execWarning(QString& s) {
     DVGui::MsgBox(DVGui::WARNING, s);
   }
@@ -54,6 +89,8 @@ void OpenGLViewerDraw::initialize(){
   initializeSimpleShader();
   //texture shader
   initializeTextureShader();
+  // smooth shader
+  initializeSmoothShader();
 
   //disk
   createDiskVBO();
@@ -79,8 +116,7 @@ void OpenGLViewerDraw::initializeSimpleShader() {
     "void main() {\n"
     "  // Output position of the vertex, in clip space : MVP * position\n"
     "  gl_Position = MVP * vec4(vertexPosition, 1); \n"
-    "  // The color of each vertex will be interpolated\n"
-    "  // to produce the color of each fragment\n"
+    "  // The color of each vertex \n"
     "  fragmentColor = PrimitiveColor;\n"
     "}\n";
   bool ret = m_simpleShader.vert->compileSourceCode(simple_vsrc);
@@ -181,6 +217,69 @@ void OpenGLViewerDraw::initializeTextureShader() {
   m_textureShader.texUniform = m_textureShader.program->uniformLocation("tex");
   if (m_textureShader.texUniform == -1)
     execWarning(QObject::tr("Failed to get uniform location of tex", "gl"));
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::initializeSmoothShader() {
+  m_smoothShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
+  const char *smooth_vsrc =
+    "#version 330 core"
+    "// Input vertex data, different for all executions of this shader.\n"
+    "layout(location = 0) in vec3 vertexPosition; \n"
+    "// Values that stay constant for the whole mesh.\n"
+    "uniform mat4 MVP; \n"
+    "uniform vec4 PrimitiveColor; \n"
+    "out vec4 vertColor; \n"
+    "void main() \n"
+    "{ \n"
+    "  vertColor = PrimitiveColor; \n"
+    "  gl_Position = MVP * vec4(vertexPosition, 1);\n"
+    "} \n";
+  bool ret = m_smoothShader.vert->compileSourceCode(smooth_vsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.vert.", "gl"));
+
+  m_smoothShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
+  const char *smooth_fsrc =
+    "#version 330 core \n"
+    "// non-interpolated values from the vertex shaders \n"
+    "in vec4 fragColor; \n"
+    "// Output data \n"
+    "out vec4 color; \n"
+    "void main() { \n"
+    "  // Output color = color specified in the vertex shader \n"
+    "  color = fragColor; \n"
+    "} \n";
+  ret = m_smoothShader.frag->compileSourceCode(smooth_fsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.frag.", "gl"));
+
+  m_smoothShader.geom = new QOpenGLShader(QOpenGLShader::Geometry);
+  TFilePath fp = ToonzFolder::getLibraryFolder() + TFilePath("shaders/programs/openglviewerdraw_smoothshader.geom");
+  ret = m_smoothShader.geom->compileSourceFile(fp.getQString());
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.geom.", "gl"));
+
+  m_smoothShader.program = new QOpenGLShaderProgram();
+  //add shaders
+  ret = m_smoothShader.program->addShader(m_smoothShader.vert);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.vert.", "gl"));
+  ret = m_smoothShader.program->addShader(m_smoothShader.frag);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.frag.", "gl"));
+  ret = m_smoothShader.program->addShader(m_smoothShader.geom);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.geom.", "gl"));
+  //link shaders
+  ret = m_smoothShader.program->link();
+  if (!ret) execWarning(QObject::tr("Failed to link smooth shader: %1", "gl").arg(m_smoothShader.program->log()));
+  //obtain parameter locations
+  m_smoothShader.vertexAttrib = m_smoothShader.program->attributeLocation("vertexPosition");
+  if (m_smoothShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of vertexPosition", "gl"));
+  m_smoothShader.mvpMatrixUniform = m_smoothShader.program->uniformLocation("MVP");
+  if (m_smoothShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get uniform location of MVP", "gl"));
+  m_smoothShader.colorUniform = m_smoothShader.program->uniformLocation("PrimitiveColor");
+  if (m_smoothShader.colorUniform == -1)
+    execWarning(QObject::tr("Failed to get uniform location of PrimitiveColor", "gl"));
+  assert(glGetError() == 0);
 }
 //-----------------------------------------------------------------------------
 
@@ -395,45 +494,30 @@ void OpenGLViewerDraw::drawSceneRaster(TRaster32P ras) {
 
   //QImage img(ras->getRawData(), ras->getLx(), ras->getLy(), QImage::Format_RGBA8888);
 
-  assert((glGetError()) == GL_NO_ERROR);
   //m_viewerRasterTex->setSize(1,1);
   m_viewerRasterTex->setSize(ras->getLx(), ras->getLy());
-  assert((glGetError()) == GL_NO_ERROR);
   m_viewerRasterTex->setFormat(QOpenGLTexture::RGBA8_UNorm);
   m_viewerRasterTex->allocateStorage();
-  assert((glGetError()) == GL_NO_ERROR);
   //unpack alignment‚ª‚S‚¾‚¯‚ÇA‚¤‚Ü‚­‚¢‚Á‚½‚ç‚µ‚ß‚½‚à‚Ì
   //m_viewerRasterTex->setData(img);
   m_viewerRasterTex->setData((QOpenGLTexture::PixelFormat)TGL_FMT, (QOpenGLTexture::PixelType)TGL_TYPE, ras->getRawData());
-
-  assert((glGetError()) == GL_NO_ERROR);
-
+    
   m_viewerRasterTex->bind();
-
-  assert((glGetError()) == GL_NO_ERROR);
-
+    
   m_textureShader.program->bind();
   m_textureShader.program->setUniformValue(m_textureShader.mvpMatrixUniform, m_MVPMatrix);
   m_textureShader.program->setUniformValue(m_textureShader.texUniform, 0); // use texture unit 0
 
-  assert((glGetError()) == GL_NO_ERROR);
-
   m_textureShader.program->enableAttributeArray(m_textureShader.vertexAttrib);
   m_textureShader.program->enableAttributeArray(m_textureShader.texCoordAttrib);
-
-  assert((glGetError()) == GL_NO_ERROR);
 
   m_viewerRasterVBO.bind();
   m_textureShader.program->setAttributeBuffer(m_textureShader.vertexAttrib, GL_FLOAT, 0, 2);
   m_textureShader.program->setAttributeBuffer(m_textureShader.texCoordAttrib, GL_FLOAT, 4 * 2 * sizeof(GLfloat), 2);
 
-  assert((glGetError()) == GL_NO_ERROR);
-
   m_viewerRasterVBO.release();
 
   glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-  assert((glGetError()) == GL_NO_ERROR);
 
   m_textureShader.program->disableAttributeArray(m_textureShader.vertexAttrib);
   m_textureShader.program->disableAttributeArray(m_textureShader.texCoordAttrib);
@@ -473,28 +557,41 @@ QMatrix4x4& OpenGLViewerDraw::getMVPMatrix() {
 
 //-----------------------------------------------------------------------------
 
-QMatrix4x4& OpenGLViewerDraw::toQMatrix(const TAffine&aff) {
-  return QMatrix4x4((float)aff.a11, (float)aff.a12, 0.0f, (float)aff.a13,
-    (float)aff.a21, (float)aff.a22, 0.0f, (float)aff.a23,
-    0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 1.0f);
+void OpenGLViewerDraw::setModelMatrix(QMatrix4x4& model) {
+  m_modelMatrix = model;
 }
 
 //-----------------------------------------------------------------------------
 
-TAffine& OpenGLViewerDraw::toTAffine(const QMatrix4x4&matrix) {
-  return TAffine(matrix.column(0).x(), matrix.column(0).y(), matrix.column(0).w()
-    , matrix.column(1).x(), matrix.column(1).y(), matrix.column(1).w());
+QMatrix4x4& OpenGLViewerDraw::getModelMatrix() {
+  return m_modelMatrix;
 }
 
 //-----------------------------------------------------------------------------
 
-void OpenGLViewerDraw::myGlPushAttrib() {
+QMatrix4x4 OpenGLViewerDraw::toQMatrix(const TAffine&aff) {
+  QMatrix mat(aff.a11, aff.a21, aff.a12, aff.a22, aff.a13, aff.a23);
+  QMatrix4x4 qmat(mat);
+  qmat.optimize();
+  return qmat;
+}
+
+//-----------------------------------------------------------------------------
+
+TAffine OpenGLViewerDraw::toTAffine(const QMatrix4x4&matrix) {
+  QMatrix aff = matrix.toAffine();
+  return TAffine(aff.m11(), aff.m21(), aff.dx(), aff.m12(), aff.m22(), aff.dy());
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::myGlPushAttrib(GLenum mode) {
   QMap<GLenum, GLboolean> attribList;
-  attribList[GL_BLEND] = glIsEnabled(GL_BLEND);
-  attribList[GL_DEPTH_TEST] = glIsEnabled(GL_DEPTH_TEST);
-  attribList[GL_DITHER] = glIsEnabled(GL_DITHER);
-  attribList[GL_LOGIC_OP] = glIsEnabled(GL_LOGIC_OP);
+  // mode can be GL_COLOR_BUFFER_BIT or GL_ENABLE_BIT
+  int attribCount = (mode == GL_COLOR_BUFFER_BIT) ? 5 : gl_enable_bit_list.size();
+  for(int a = 0; a < attribCount; a++){
+    attribList[gl_enable_bit_list.at(a)] = glIsEnabled(gl_enable_bit_list.at(a));
+  }
   attribStack.push(attribList);
 }
 

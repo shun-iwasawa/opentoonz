@@ -8,6 +8,7 @@
 #include "tsmartpointer.h"
 #include "tgeometry.h"
 #include "tthreadmessage.h"
+#include "tstrokeoutline.h"
 
 #include <QMutex>
 
@@ -409,6 +410,12 @@ public:
   TThread::Mutex *getMutex() { return &m_mutex; }
 
   virtual void draw(const TVectorRenderData &rd) = 0;
+  // for "modern" openGL (to be pure virtual in the future)
+  virtual std::vector<TOutlinePoint> & getOutlinePointArray(const TVectorRenderData &rd)
+  {
+    return std::vector<TOutlinePoint>();
+  }
+
   virtual void draw(TFlash &flash)               = 0;
 
   virtual const TColorStyle *getColorStyle() const = 0;

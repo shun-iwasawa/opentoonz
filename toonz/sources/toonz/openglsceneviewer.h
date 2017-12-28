@@ -109,7 +109,15 @@ public:
   void resetInputMethod() override {}//TODO
   void setFocus() override {} //TODO
   TRectD getGeometry() const override { return TRectD(); }//TODO
+  
 
+
+
+
+                                                          // a factor for getting pixel-based zoom ratio
+  double getDpiFactor();
+
+  TAffine getNormalZoomScale();
 protected:
 
   void initializeGL() override;
