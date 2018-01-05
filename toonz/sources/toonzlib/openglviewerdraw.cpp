@@ -89,8 +89,8 @@ void OpenGLViewerDraw::initialize(){
   initializeSimpleShader();
   //texture shader
   initializeTextureShader();
-  // smooth shader
-  initializeSmoothShader();
+  // smooth line shader
+  initializeSmoothLineShader();
 
   //disk
   createDiskVBO();
@@ -221,26 +221,23 @@ void OpenGLViewerDraw::initializeTextureShader() {
 
 //-----------------------------------------------------------------------------
 
-void OpenGLViewerDraw::initializeSmoothShader() {
-  m_smoothShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
-  const char *smooth_vsrc =
+void OpenGLViewerDraw::initializeSmoothLineShader() {
+  m_smoothLineShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
+  const char *smoothLine_vsrc =
     "#version 330 core"
     "// Input vertex data, different for all executions of this shader.\n"
     "layout(location = 0) in vec3 vertexPosition; \n"
     "// Values that stay constant for the whole mesh.\n"
     "uniform mat4 MVP; \n"
-    "uniform vec4 PrimitiveColor; \n"
-    "out vec4 vertColor; \n"
     "void main() \n"
     "{ \n"
-    "  vertColor = PrimitiveColor; \n"
     "  gl_Position = MVP * vec4(vertexPosition, 1);\n"
     "} \n";
-  bool ret = m_smoothShader.vert->compileSourceCode(smooth_vsrc);
-  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.vert.", "gl"));
+  bool ret = m_smoothLineShader.vert->compileSourceCode(smoothLine_vsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothLineShader.vert.", "gl"));
 
-  m_smoothShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
-  const char *smooth_fsrc =
+  m_smoothLineShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
+  const char *smoothLine_fsrc =
     "#version 330 core \n"
     "// non-interpolated values from the vertex shaders \n"
     "in vec4 fragColor; \n"
@@ -250,35 +247,38 @@ void OpenGLViewerDraw::initializeSmoothShader() {
     "  // Output color = color specified in the vertex shader \n"
     "  color = fragColor; \n"
     "} \n";
-  ret = m_smoothShader.frag->compileSourceCode(smooth_fsrc);
-  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.frag.", "gl"));
+  ret = m_smoothLineShader.frag->compileSourceCode(smoothLine_fsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothLineShader.frag.", "gl"));
 
-  m_smoothShader.geom = new QOpenGLShader(QOpenGLShader::Geometry);
+  m_smoothLineShader.geom = new QOpenGLShader(QOpenGLShader::Geometry);
   TFilePath fp = ToonzFolder::getLibraryFolder() + TFilePath("shaders/programs/openglviewerdraw_smoothshader.geom");
-  ret = m_smoothShader.geom->compileSourceFile(fp.getQString());
-  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothShader.geom.", "gl"));
+  ret = m_smoothLineShader.geom->compileSourceFile(fp.getQString());
+  if (!ret) execWarning(QObject::tr("Failed to compile m_smoothLineShader.geom.", "gl"));
 
-  m_smoothShader.program = new QOpenGLShaderProgram();
+  m_smoothLineShader.program = new QOpenGLShaderProgram();
   //add shaders
-  ret = m_smoothShader.program->addShader(m_smoothShader.vert);
-  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.vert.", "gl"));
-  ret = m_smoothShader.program->addShader(m_smoothShader.frag);
-  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.frag.", "gl"));
-  ret = m_smoothShader.program->addShader(m_smoothShader.geom);
-  if (!ret) execWarning(QObject::tr("Failed to add m_smoothShader.geom.", "gl"));
+  ret = m_smoothLineShader.program->addShader(m_smoothLineShader.vert);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothLineShader.vert.", "gl"));
+  ret = m_smoothLineShader.program->addShader(m_smoothLineShader.frag);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothLineShader.frag.", "gl"));
+  ret = m_smoothLineShader.program->addShader(m_smoothLineShader.geom);
+  if (!ret) execWarning(QObject::tr("Failed to add m_smoothLineShader.geom.", "gl"));
   //link shaders
-  ret = m_smoothShader.program->link();
-  if (!ret) execWarning(QObject::tr("Failed to link smooth shader: %1", "gl").arg(m_smoothShader.program->log()));
+  ret = m_smoothLineShader.program->link();
+  if (!ret) execWarning(QObject::tr("Failed to link smoothLine shader: %1", "gl").arg(m_smoothLineShader.program->log()));
   //obtain parameter locations
-  m_smoothShader.vertexAttrib = m_smoothShader.program->attributeLocation("vertexPosition");
-  if (m_smoothShader.vertexAttrib == -1)
+  m_smoothLineShader.vertexAttrib = m_smoothLineShader.program->attributeLocation("vertexPosition");
+  if (m_smoothLineShader.vertexAttrib == -1)
     execWarning(QObject::tr("Failed to get attribute location of vertexPosition", "gl"));
-  m_smoothShader.mvpMatrixUniform = m_smoothShader.program->uniformLocation("MVP");
-  if (m_smoothShader.vertexAttrib == -1)
+  m_smoothLineShader.mvpMatrixUniform = m_smoothLineShader.program->uniformLocation("MVP");
+  if (m_smoothLineShader.vertexAttrib == -1)
     execWarning(QObject::tr("Failed to get uniform location of MVP", "gl"));
-  m_smoothShader.colorUniform = m_smoothShader.program->uniformLocation("PrimitiveColor");
-  if (m_smoothShader.colorUniform == -1)
-    execWarning(QObject::tr("Failed to get uniform location of PrimitiveColor", "gl"));
+  m_smoothLineShader.colorUniform = m_smoothLineShader.program->uniformLocation("PrimitiveColor");
+  if (m_smoothLineShader.colorUniform == -1)
+    execWarning(QObject::tr("Failed to get uniform location of PrimitiveColor", "gl"));  m_smoothLineShader.colorUniform = m_smoothLineShader.program->uniformLocation("PrimitiveColor");
+  m_smoothLineShader.vpSizeUniform = m_smoothLineShader.program->uniformLocation("vpSize");
+  if (m_smoothLineShader.vpSizeUniform == -1)
+    execWarning(QObject::tr("Failed to get uniform location of vpSize", "gl"));
   assert(glGetError() == 0);
 }
 //-----------------------------------------------------------------------------
@@ -565,6 +565,12 @@ void OpenGLViewerDraw::setModelMatrix(QMatrix4x4& model) {
 
 QMatrix4x4& OpenGLViewerDraw::getModelMatrix() {
   return m_modelMatrix;
+}
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::setViewportSize(QSize& size) {
+  m_vpSize = size;
 }
 
 //-----------------------------------------------------------------------------

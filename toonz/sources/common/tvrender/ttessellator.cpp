@@ -78,7 +78,36 @@ static void CALLBACK myCombine(GLdouble coords[3], GLdouble *d[4], GLfloat w[4],
   newCoords[2] = coords[2];
   Combine_data.push_back(newCoords);
   *dataOut = newCoords;
+  //std::cout << "called myCombine" << std::endl;
 }
+
+
+static void CALLBACK tessBeginCb(GLenum type, void * out_data) {
+  std::vector<std::pair<GLenum, std::vector<GLdouble>>>* out =
+    (std::vector<std::pair<GLenum, std::vector<GLdouble>>>*)out_data;
+  std::pair<GLenum, std::vector<GLdouble>> prim = std::make_pair(type, std::vector<GLdouble>());
+  out->push_back(prim);
+  //std::cout << "Begin Primitive  Type = "<< type << std::endl;
+}
+
+static void CALLBACK tessEndCb(void * out_data) {
+  //std::vector<std::pair<GLenum, std::vector<GLdouble>>>* out =
+  //  (std::vector<std::pair<GLenum, std::vector<GLdouble>>>*)out_data;
+  //std::cout << "End Primitive  Vert size = "<<out->back().second.size()/2 << std::endl;
+}
+
+
+static void CALLBACK tessVertexCb(void * vertex_data, void * out_data)
+{
+  std::vector<std::pair<GLenum, std::vector<GLdouble>>>* out =
+    (std::vector<std::pair<GLenum, std::vector<GLdouble>>>*)out_data;
+  GLdouble* vert = (GLdouble*)vertex_data;
+  out->back().second.push_back(vert[0]);
+  out->back().second.push_back(vert[1]);
+  //out->back().second.push_back(vert[2]); // z position is always 0
+  //std::cout << vert[0] << ", " << vert[1] << std::endl;
+}
+
 }
 
 //===================================================================
@@ -445,3 +474,120 @@ void TglTessellator::tessellate(const TColorFunction *cf,
 // TglTessellator::GLTess TglTessellator::m_glTess;
 
 //=============================================================================
+
+// for "modern" opengl
+void TglTessellator::getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+  TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<GLdouble>>> &out,
+  std::vector<std::vector<GLdouble>>& boundary) {
+
+  //bool transparencyFlag = color.m < 255;
+
+  //tglColor(color);
+
+  //if (transparencyFlag) {
+  //  tglEnableLineSmooth();
+  //}
+
+  TglTessellator::GLTess glTess;
+
+  //------------------------//
+  {
+    QMutexLocker sl(&CombineDataGuard);
+
+    Combine_data.clear();
+    assert(glTess.m_tess);
+    //std::cout << "start doTessellate" << std::endl;
+    //‚½‚ß‚µ‚É
+    gluTessCallback(glTess.m_tess, GLU_TESS_BEGIN_DATA, (GluCallback)tessBeginCb);
+    gluTessCallback(glTess.m_tess, GLU_TESS_END_DATA, (GluCallback)tessEndCb);
+    gluTessCallback(glTess.m_tess, GLU_TESS_VERTEX_DATA, (GluCallback)tessVertexCb);
+
+    gluTessCallback(glTess.m_tess, GLU_TESS_COMBINE, (GluCallback)myCombine);
+
+    void* out_data = (void*)(&out);
+
+    gluTessBeginPolygon(glTess.m_tess, out_data);
+    gluTessProperty(glTess.m_tess, GLU_TESS_WINDING_RULE,
+      GLU_TESS_WINDING_POSITIVE);
+    
+    for (TRegionOutline::Boundary::iterator poly_it = outline.m_exterior.begin();
+      poly_it != outline.m_exterior.end(); ++poly_it) {
+      gluTessBeginContour(glTess.m_tess);
+      
+      for (TRegionOutline::PointVector::iterator it = poly_it->begin();
+        it != poly_it->end(); ++it)
+        gluTessVertex(glTess.m_tess, &(it->x), &(it->x));
+
+      gluTessEndContour(glTess.m_tess);
+    }
+
+    int subRegionNumber = outline.m_interior.size();
+    if (subRegionNumber > 0) {
+      for (TRegionOutline::Boundary::iterator poly_it =
+        outline.m_interior.begin();
+        poly_it != outline.m_interior.end(); ++poly_it) {
+
+        gluTessBeginContour(glTess.m_tess);
+
+        for (TRegionOutline::PointVector::reverse_iterator rit =
+          poly_it->rbegin();
+          rit != poly_it->rend(); ++rit)
+          gluTessVertex(glTess.m_tess, &(rit->x), &(rit->x));
+
+        gluTessEndContour(glTess.m_tess);
+      }
+    }
+
+    gluTessEndPolygon(glTess.m_tess);
+
+    //std::cout << "end doTessellate" << std::endl;
+    std::list<GLdouble *>::iterator beginIt, endIt;
+    endIt = Combine_data.end();
+    beginIt = Combine_data.begin();
+    for (; beginIt != endIt; ++beginIt) delete[](*beginIt);
+  }
+  //------------------------//
+
+  // antialiased region boundary
+  if (antiAliasing && outline.m_doAntialiasing) {
+    tglEnableLineSmooth();
+
+    for (TRegionOutline::Boundary::iterator poly_it =
+      outline.m_exterior.begin();
+      poly_it != outline.m_exterior.end(); ++poly_it) {
+      std::vector<GLdouble> v;
+      if (poly_it->size() == 0) continue;
+      v.resize(poly_it->size() * 2);
+      int i = 0;
+      for (TRegionOutline::PointVector::iterator it = poly_it->begin();
+        it != poly_it->end(); ++it) {
+        v[i++] = it->x;
+        v[i++] = it->y;
+      }
+      boundary.push_back(v);
+      //glEnableClientState(GL_VERTEX_ARRAY);
+      //glVertexPointer(2, GL_DOUBLE, sizeof(GLdouble) * 2, &v[0]);
+      //glDrawArrays(GL_LINE_LOOP, 0, v.size() / 2);
+      //glDisableClientState(GL_VERTEX_ARRAY);
+    }
+
+    for (TRegionOutline::Boundary::iterator poly_it =
+      outline.m_interior.begin();
+      poly_it != outline.m_interior.end(); ++poly_it) {
+      std::vector<GLdouble> v;
+      v.resize(poly_it->size() * 2);
+      int i = 0;
+      for (TRegionOutline::PointVector::iterator it = poly_it->begin();
+        it != poly_it->end(); ++it) {
+        v[i++] = it->x;
+        v[i++] = it->y;
+      }
+      if (v.empty()) continue;
+      boundary.push_back(v);
+      //glEnableClientState(GL_VERTEX_ARRAY);
+      //glVertexPointer(2, GL_DOUBLE, sizeof(GLdouble) * 2, &v[0]);
+      //glDrawArrays(GL_LINE_LOOP, 0, v.size() / 2);
+      //glDisableClientState(GL_VERTEX_ARRAY);
+    }
+  }
+}

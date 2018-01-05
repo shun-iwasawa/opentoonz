@@ -320,6 +320,7 @@ void OpenGLSceneViewer::drawScene() {
   QMatrix4x4 VPmatrix = m_projectionMatrix * getViewQMatrix();
   OpenGLViewerDraw::instance()->setMVPMatrix(VPmatrix);
   OpenGLViewerDraw::instance()->setModelMatrix(m_modelMatrix.top());
+  OpenGLViewerDraw::instance()->setViewportSize(size());
   /*TODO
   ChildStack *childStack = scene->getChildStack();
   bool editInPlace = editInPlaceToggle.getStatus() &&

@@ -251,12 +251,6 @@ void OutlineStrokeProp::draw(const TVectorRenderData &rd) {
 
   glPushMatrix();
   tglMultMatrix(rd.m_aff);
-
-  ///std::cout << "OutlineStrokeProp::draw rd.m_aff" << std::endl;
-  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
-  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
-
-
   double pixelSize = sqrt(tglGetPixelSize2());
 
 #ifdef _DEBUG
@@ -302,9 +296,6 @@ std::vector<TOutlinePoint> & OutlineStrokeProp::getOutlinePointArray(const TVect
     return std::vector<TOutlinePoint>();
 
   double pixelSize = sqrt(tglGetPixelSize2());
-  ///std::cout << "OutlineStrokeProp::getOutlinePointArray rd.m_aff" << std::endl;
-  ///std::cout << rd.m_aff.a11 << ", " << rd.m_aff.a12 << ", " << rd.m_aff.a13 << std::endl;
-  ///std::cout << rd.m_aff.a21 << ", " << rd.m_aff.a22 << ", " << rd.m_aff.a23 << std::endl << std::endl;
 
   //TODO
   /*

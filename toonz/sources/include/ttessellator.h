@@ -34,6 +34,11 @@ public:
                           TRegionOutline &outline, TPixel32 color) = 0;
   virtual void tessellate(const TColorFunction *cf, const bool antiAliasing,
                           TRegionOutline &outline, TRaster32P texture) = 0;
+  // for "modern" opengl
+  virtual void getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+      TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+    std::vector<std::vector<GLdouble>>& boundary) = 0;
+
 };
 
 //=============================================================================
@@ -76,6 +81,11 @@ public:
                   TRegionOutline &outline, TPixel32 color) override;
   void tessellate(const TColorFunction *cf, const bool antiAliasing,
                   TRegionOutline &outline, TRaster32P texture) override;
+
+  // for "modern" opengl
+  void getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+      TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+    std::vector<std::vector<GLdouble>>& boundary) override;
 };
 
 //=============================================================================

@@ -6,6 +6,7 @@
 #include "tgeometry.h"
 #include "tregionoutline.h"
 #include "tsimplecolorstyles.h"
+#include <GL/GL.h>
 
 #undef DVAPI
 #undef DVVAR
@@ -55,6 +56,10 @@ public:
 
   //! Note: update internal data if isRegionChanged()
   virtual void draw(const TVectorRenderData &rd) = 0;
+  // for "modern" openGL
+  virtual void getTessellatedRegionArray(const TVectorRenderData &rd, 
+    std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+    std::vector<std::vector<GLdouble>>& boundary) {}
 
   virtual void draw(TFlash &){};
 
@@ -88,6 +93,11 @@ public:
   OutlineRegionProp(const TRegion *region, const TOutlineStyleP regionStyle);
 
   void draw(const TVectorRenderData &rd) override;
+  // for "modern" openGL
+  void getTessellatedRegionArray(const TVectorRenderData &rd, 
+    std::vector<std::pair<GLenum, std::vector<GLdouble>>> &out,
+    std::vector<std::vector<GLdouble>>& boundary) override;
+  
   void draw(TFlash &rd) override;
 
   const TColorStyle *getColorStyle() const override;

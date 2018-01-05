@@ -11,6 +11,7 @@
 
 // Qt includes
 #include <QCoreApplication>
+#include <gl/GLU.h>
 
 #undef DVAPI
 #undef DVVAR
@@ -117,6 +118,11 @@ public:
   virtual void drawRegion(const TColorFunction *cf, const bool antiAliasing,
                           TRegionOutline &outline) const = 0;
 
+  // for "modern" opengl
+  virtual void getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+      TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+    std::vector<std::vector<GLdouble>>& boundary) {}
+
   virtual void drawRegion(TFlash &, const TRegion *) const {};
   virtual void drawStroke(const TColorFunction *cf, TStrokeOutline *outline,
                           const TStroke *stroke) const = 0;
@@ -164,6 +170,12 @@ public:
 
   void drawRegion(const TColorFunction *cf, const bool antiAliasing,
                   TRegionOutline &outline) const override;
+
+  // for "modern" opengl
+  void getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+      TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+    std::vector<std::vector<GLdouble>>& boundary) override;
+
   void drawRegion(TFlash &flash, const TRegion *r) const override;
 
   void drawStroke(const TColorFunction *cf, TStrokeOutline *outline,
@@ -172,7 +184,7 @@ public:
   void setFill(TFlash &flash) const override;
 
   int getTagId() const override;
-
+  
 private:
   // Not assignable
   TSolidColorStyle &operator=(const TSolidColorStyle &);

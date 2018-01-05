@@ -99,7 +99,7 @@ public:
 
   TStrokeProp *clone(const TStroke *stroke) const override;
   void draw(const TVectorRenderData &rd) override;
-  // for "modern" openGL (to be pure virtual in the future)
+  // for "modern" openGL
   std::vector<TOutlinePoint> & getOutlinePointArray
    (const TVectorRenderData &rd) override;
   void draw(TFlash &flash) override;

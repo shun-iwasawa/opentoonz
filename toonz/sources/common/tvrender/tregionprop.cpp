@@ -185,6 +185,44 @@ void OutlineRegionProp::draw(const TVectorRenderData &rd) {
 }
 
 //-------------------------------------------------------------------
+// for "modern" openGL
+//-------------------------------------------------------------------
+void OutlineRegionProp::getTessellatedRegionArray(const TVectorRenderData &rd,
+  std::vector<std::pair<GLenum, std::vector<GLdouble>>> & out,
+  std::vector<std::vector<GLdouble>>& boundary) {
+
+  if (rd.m_clippingRect != TRect() && !rd.m_is3dView &&
+    !(rd.m_aff * getRegion()->getBBox()).overlaps(convert(rd.m_clippingRect)))
+    return;
+
+  ///glPushMatrix();
+  ///tglMultMatrix(rd.m_aff);
+  double pixelSize = sqrt(tglGetPixelSize2());
+
+  if (!isAlmostZero(pixelSize - m_pixelSize, 1e-5) || m_regionChanged ||
+    m_styleVersionNumber != m_colorStyle->getVersionNumber()) {
+    m_pixelSize = pixelSize;
+    m_regionChanged = false;
+    computeRegionOutline();
+    TOutlineStyle::RegionOutlineModifier *modifier =
+      m_colorStyle->getRegionOutlineModifier();
+    if (modifier) modifier->modify(m_outline);
+
+    m_styleVersionNumber = m_colorStyle->getVersionNumber();
+  }
+
+  assert(!m_outline.m_exterior.empty());
+
+  //‚±‚ê‚Ì‘ã‚í‚è‚ð‘‚­‚Æ‚±‚ë‚©‚çIII
+  m_colorStyle->getTessellatedRegionArray(rd.m_cf, rd.m_antiAliasing && rd.m_regionAntialias,
+    m_outline, out, boundary);
+  //m_colorStyle->drawRegion(rd.m_cf, rd.m_antiAliasing && rd.m_regionAntialias,
+  //  m_outline);
+
+  ///glPopMatrix();
+}
+
+//-------------------------------------------------------------------
 
 TRegionProp *OutlineRegionProp::clone(const TRegion *region) const {
   OutlineRegionProp *prop = new OutlineRegionProp(region, m_colorStyle);

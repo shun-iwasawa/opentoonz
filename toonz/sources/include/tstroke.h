@@ -11,6 +11,7 @@
 #include "tstrokeoutline.h"
 
 #include <QMutex>
+#include <QPointF>
 
 #undef DVAPI
 #undef DVVAR
@@ -410,7 +411,7 @@ public:
   TThread::Mutex *getMutex() { return &m_mutex; }
 
   virtual void draw(const TVectorRenderData &rd) = 0;
-  // for "modern" openGL (to be pure virtual in the future)
+  // for "modern" openGL 
   virtual std::vector<TOutlinePoint> & getOutlinePointArray(const TVectorRenderData &rd)
   {
     return std::vector<TOutlinePoint>();

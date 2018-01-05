@@ -401,6 +401,15 @@ void TSolidColorStyle::drawRegion(const TColorFunction *cf,
 }
 
 //-----------------------------------------------------------------------------
+// for "modern" opengl
+//-----------------------------------------------------------------------------
+void TSolidColorStyle::getTessellatedRegionArray(const TColorFunction *cf, const bool antiAliasing,
+  TRegionOutline &outline, std::vector<std::pair<GLenum, std::vector<double>>> & out,
+  std::vector<std::vector<GLdouble>>& boundary) {
+  m_tessellator->getTessellatedRegionArray(cf, antiAliasing, outline, out, boundary);
+}
+
+//-----------------------------------------------------------------------------
 
 void TSolidColorStyle::drawRegion(TFlash &flash, const TRegion *r) const {
   flash.setFillColor(getMainColor());

@@ -37,6 +37,7 @@ class DVAPI OpenGLViewerDraw { //singleton
   QMatrix4x4 m_MVPMatrix;
   QMatrix4x4 m_projectionMatrix;
   QMatrix4x4 m_modelMatrix;
+  QSize m_vpSize;
 
   struct SimpleShader{
     // shader for simple objects
@@ -61,7 +62,7 @@ class DVAPI OpenGLViewerDraw { //singleton
     int vertexAttrib = -1;
   }m_textureShader;
 
-  struct SmoothShader {
+  struct SmoothLineShader {
     // shader for simple objects
     QOpenGLShader* vert = nullptr;
     QOpenGLShader* frag = nullptr;
@@ -70,8 +71,9 @@ class DVAPI OpenGLViewerDraw { //singleton
     QOpenGLShaderProgram* program = nullptr;
     int mvpMatrixUniform = -1;
     int colorUniform = -1;
+    int vpSizeUniform = -1;
     int vertexAttrib = -1;
-  }m_smoothShader;
+  }m_smoothLineShader;
 
   //disk vbo
   QOpenGLBuffer m_diskVBO;
@@ -91,7 +93,7 @@ public:
   void initialize();
   void initializeSimpleShader();
   void initializeTextureShader();
-  void initializeSmoothShader();
+  void initializeSmoothLineShader();
   // called once in main() on the end
   void finalize();
 
@@ -110,6 +112,8 @@ public:
   void setModelMatrix(QMatrix4x4& model);
   QMatrix4x4& getModelMatrix();
 
+  void setViewportSize(QSize& size);
+
   static QMatrix4x4 toQMatrix(const TAffine&aff);
   static TAffine toTAffine(const QMatrix4x4&matrix);
 
@@ -120,6 +124,8 @@ public:
 private:
   void doDraw(const TVectorImage *vim, const TVectorRenderData &_rd,
     bool drawEnteredGroup);
+  void doDrawRegion(const TVectorRenderData &rd, TRegion *r,
+    bool pushAttribs);
 public:
   void drawVector(const TVectorRenderData &rd, const TVectorImage *vim);
   void drawMaskedVector(const TVectorRenderData &rd, const TVectorImage *vim);

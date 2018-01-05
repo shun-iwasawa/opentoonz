@@ -5,10 +5,13 @@
 #include "tcolorfunctions.h"
 #include "tstrokeprop.h"
 #include "tpalette.h"
+#include "tregion.h"
+#include "tregionprop.h"
 
 #include <QMutexLocker>
 #include <QOpenGLShaderProgram>
 #include <QColor>
+//#include <gl/GLU.h>
 
 //------------------------------------------------------------------------------------
 
@@ -120,7 +123,8 @@ void OpenGLViewerDraw::drawVector(const TVectorRenderData &rd, const TVectorImag
   myGlPopAttrib();
 
 #ifdef _DEBUG
-  vim->drawAutocloses(rd);
+  //TODO
+  //vim->drawAutocloses(rd);
 #endif
 }
 
@@ -234,13 +238,13 @@ void OpenGLViewerDraw::drawVector(const TVectorRenderData &rd, const TStroke *s,
       ///std::cout << "MVPMatrix" << std::endl;
       ///printMatrix(MVPMatrix);
 
-      m_smoothShader.program->bind();
-      m_smoothShader.program->setUniformValue(m_smoothShader.mvpMatrixUniform, MVPMatrix);
-      m_smoothShader.program->enableAttributeArray(m_smoothShader.vertexAttrib);
-      m_smoothShader.program->setUniformValue(m_smoothShader.colorUniform, toQColor(color));
+      m_simpleShader.program->bind();
+      m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, MVPMatrix);
+      m_simpleShader.program->enableAttributeArray(m_simpleShader.vertexAttrib);
+      m_simpleShader.program->setUniformValue(m_simpleShader.colorUniform, toQColor(color));
 
       static const int stride = sizeof(TOutlinePoint);
-      m_smoothShader.program->setAttributeArray(m_smoothShader.vertexAttrib, GL_DOUBLE, &v[0], 2, stride);
+      m_simpleShader.program->setAttributeArray(m_simpleShader.vertexAttrib, GL_DOUBLE, &v[0], 2, stride);
 
       if (alphaChannel) {
         GLboolean channels[4];
@@ -262,8 +266,24 @@ void OpenGLViewerDraw::drawVector(const TVectorRenderData &rd, const TStroke *s,
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, v.size());
       }
-      m_smoothShader.program->disableAttributeArray(m_smoothShader.vertexAttrib);
+      m_simpleShader.program->disableAttributeArray(m_simpleShader.vertexAttrib);
 
+      // draw antialiased outline
+
+      m_smoothLineShader.program->bind();
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.mvpMatrixUniform, MVPMatrix);
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.vpSizeUniform, m_vpSize);
+      m_smoothLineShader.program->enableAttributeArray(m_smoothLineShader.vertexAttrib);
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.colorUniform, toQColor(color));
+
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      static const int line_stride = 2 * sizeof(TOutlinePoint);
+      m_smoothLineShader.program->setAttributeArray(m_smoothLineShader.vertexAttrib, GL_DOUBLE, &v[0], 2, line_stride);
+      glDrawArrays(GL_LINE_STRIP, 0, v.size() / 2);
+      m_smoothLineShader.program->setAttributeArray(m_smoothLineShader.vertexAttrib, GL_DOUBLE, &v[1], 2, line_stride);
+      glDrawArrays(GL_LINE_STRIP, 0, v.size() / 2);
+      m_smoothLineShader.program->disableAttributeArray(m_smoothLineShader.vertexAttrib);
+      
     }
 
     if (pushAttribs) myGlPopAttrib(), pushedAttribs = false;
@@ -278,10 +298,186 @@ void OpenGLViewerDraw::drawVector(const TVectorRenderData &rd, const TStroke *s,
   assert((glGetError()) == GL_NO_ERROR);
 
 }
+
 //-----------------------------------------------------------------------------
 
 void OpenGLViewerDraw::drawVector(const TVectorRenderData &rd, TRegion *r,
   bool pushAttribs) {
+  bool visible = false;
+  int colorCount = 0;
+  if (!r) return;
 
+  TColorStyleP style = rd.m_palette->getStyle(r->getStyle());
+  colorCount = style->getColorParamCount();
+  if (colorCount == 0)  // for example texture
+    visible = true;
+  else {
+    visible = false;
+    for (int j = 0; j < colorCount && !visible; j++) {
+      TPixel32 color = style->getColorParamValue(j);
+      if (rd.m_cf) color = (*(rd.m_cf))(color);
+      if (color.m != 0) visible = true;
+    }
+  }
+  if (visible)
+    doDrawRegion(rd, r, false);
+  else
+    for (UINT j = 0; j < r->getSubregionCount(); j++)
+      doDrawRegion(rd, r->getSubregion(j), false);
 }
+
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::doDrawRegion(const TVectorRenderData &rd, TRegion *r,
+  bool pushAttribs) {
+  assert((glGetError()) == GL_NO_ERROR);
+  assert(r);
+  if (!r) return;
+  bool alphaChannel = rd.m_alphaChannel;
+
+  int j = 0;
+  bool visible = false;
+  int colorCount = 0;
+
+  TColorStyleP style;
+  if (rd.m_paintCheckEnabled && r->getStyle() == rd.m_colorCheckIndex) {
+    static TSolidColorStyle *redColor = new TSolidColorStyle();
+    redColor->addRef();
+    redColor->setMainColor(TPixel::Red);
+    style = redColor;
+  }
+  else if (rd.m_tcheckEnabled) {
+    static TSolidColorStyle *color = new TSolidColorStyle();
+    color->addRef();
+    color->setMainColor(rd.m_tCheckPaint);
+    style = color;
+  }
+  else
+    style = rd.m_palette->getStyle(r->getStyle());
+
+  colorCount = style->getColorParamCount();
+  if (colorCount == 0) {  // for example texture
+    visible = true;
+  }
+  else {
+    visible = false;
+    for (j = 0; j < colorCount && !visible; j++) {
+      TPixel32 color = style->getColorParamValue(j);
+      if (rd.m_cf) color = (*(rd.m_cf))(color);
+      if (color.m != 0) visible = true;
+    }
+  }
+  if (visible) {
+    TRegionProp *prop = r->getProp(/*rd.m_palette*/);
+    /// questo codice satva dentro tregion::getprop/////
+    int styleId = r->getStyle();
+    if (styleId) {
+      // TColorStyle * style = rd.m_palette->getStyle(styleId);
+      if (!style->isRegionStyle() || style->isEnabled() == false) {
+        prop = 0;
+      }
+      else {
+        // Warning: The same remark of stroke props holds here.
+        if (!prop || style.getPointer() != prop->getColorStyle()) {
+          r->setProp(style->makeRegionProp(r));
+          prop = r->getProp();
+        }
+      }
+    }
+
+    ////// draw
+    if (prop) {
+
+      glEnable(GL_BLEND);
+      // return for the transparent regions
+      TPixel32 color = prop->getColorStyle()->getMainColor();
+      if (color.m == 0) return;
+      
+      if (pushAttribs) myGlPushAttrib(GL_ALL_ATTRIB_BITS);
+      
+
+      std::vector<std::pair<GLenum, std::vector<GLdouble>>> regionArray;
+      std::vector<std::vector<GLdouble>> boundaryArray;
+      prop->getTessellatedRegionArray(rd, regionArray, boundaryArray);
+
+      if (regionArray.empty()) {
+        if (pushAttribs) myGlPopAttrib();
+        return;
+      }
+
+      QMatrix4x4 MVPMatrix = m_MVPMatrix * m_modelMatrix * toQMatrix(rd.m_aff);
+
+      m_simpleShader.program->bind();
+      m_simpleShader.program->setUniformValue(m_simpleShader.mvpMatrixUniform, MVPMatrix);
+      m_simpleShader.program->enableAttributeArray(m_simpleShader.vertexAttrib);
+      m_simpleShader.program->setUniformValue(m_simpleShader.colorUniform, toQColor(color));
+
+      // draw each primitive
+      for (std::pair<GLenum, std::vector<GLdouble>> prim : regionArray) {
+        
+        GLenum type = prim.first;
+        std::vector<GLdouble> vert = prim.second;
+        int vertCount = (int)vert.size()/2;
+        
+        m_simpleShader.program->setAttributeArray(m_simpleShader.vertexAttrib, GL_DOUBLE, &vert.data()[0], 2);
+
+        if (alphaChannel) {
+          GLboolean channels[4];
+          glGetBooleanv(GL_COLOR_WRITEMASK, &channels[0]);
+
+          // Draw RGB channels
+          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          glColorMask(channels[0], channels[1], channels[2], GL_FALSE);
+          glDrawArrays(type, 0, vertCount);
+
+          // Draw Matte channel
+          glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+          glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, channels[3]);
+          glDrawArrays(type, 0, vertCount);
+
+          glColorMask(channels[0], channels[1], channels[2], channels[3]);
+        }
+        else {
+          // patch: in render, the fill areas of custom styles disappeared.
+          if (!rd.m_isOfflineRender || !rd.m_isImagePattern) {
+            GLboolean channels[4];
+            glGetBooleanv(GL_COLOR_WRITEMASK, &channels[0]);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glColorMask(channels[0], channels[1], channels[2], GL_FALSE);
+          }
+          glDrawArrays(type, 0, vertCount);
+        }
+      }
+      m_simpleShader.program->disableAttributeArray(m_simpleShader.vertexAttrib);
+
+      // draw antialiased region boundary (if needed with preferences option)
+      if (boundaryArray.empty()) {
+        if (pushAttribs) myGlPopAttrib();
+        return;
+      }
+      m_smoothLineShader.program->bind();
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.mvpMatrixUniform, MVPMatrix);
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.vpSizeUniform, m_vpSize);
+      m_smoothLineShader.program->enableAttributeArray(m_smoothLineShader.vertexAttrib);
+      m_smoothLineShader.program->setUniformValue(m_smoothLineShader.colorUniform, toQColor(color));
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      for (std::vector<GLdouble> vert : boundaryArray) {
+        m_smoothLineShader.program->setAttributeArray(m_smoothLineShader.vertexAttrib, GL_DOUBLE, &vert.data()[0], 2);
+        glDrawArrays(GL_LINE_STRIP, 0, vert.size() / 2);
+      }
+      m_smoothLineShader.program->disableAttributeArray(m_smoothLineShader.vertexAttrib);
+      
+
+      if (pushAttribs) myGlPopAttrib();
+
+    }
+
+  }
+
+  for (UINT i = 0; i < r->getSubregionCount(); i++)
+    doDrawRegion(rd, r->getSubregion(i), pushAttribs);
+
+  assert((glGetError()) == GL_NO_ERROR);
+}
+
 //-----------------------------------------------------------------------------
