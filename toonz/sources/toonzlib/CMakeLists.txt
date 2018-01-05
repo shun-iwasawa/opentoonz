@@ -320,6 +320,7 @@ set(SOURCES
     textureutils.cpp
 	openglviewerdraw.cpp 
 	openglviewerdraw_vector.cpp 
+	openglviewerdraw_mesh.cpp 
 )
 
 if(BUILD_TARGET_WIN)

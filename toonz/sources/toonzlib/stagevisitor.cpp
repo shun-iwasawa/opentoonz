@@ -202,6 +202,11 @@ void onMeshImage(TMeshImage *mi, const Stage::Player &player,
                  const ImagePainter::VisualSettings &vs,
                  const TAffine &viewAff);
 
+//! Draws the specified mesh image in the "modern" opengl way
+void openGLonMeshImage(TMeshImage *mi, const Stage::Player &player,
+  const ImagePainter::VisualSettings &vs,
+  const TAffine &viewAff);
+
 //! Applies Plastic deformation of the specified player's stage object.
 void onPlasticDeformedImage(TStageObject *playerObj,
                             const Stage::Player &player,
@@ -974,7 +979,10 @@ void RasterPainter::onImage(const Stage::Player &player) {
       onToonzImage(ti.getPointer(), player);
     else if (TMeshImageP mi = img) {
       flushRasterImages();
-      ::onMeshImage(mi.getPointer(), player, m_vs, m_viewAff);
+      if(player.m_isModern)
+        ::openGLonMeshImage(mi.getPointer(), player, m_vs, m_viewAff);
+      else
+        ::onMeshImage(mi.getPointer(), player, m_vs, m_viewAff);
     }
   }
 }
@@ -1776,6 +1784,122 @@ void onMeshImage(TMeshImage *mi, const Stage::Player &player,
   glDisable(GL_BLEND);
 }
 
+//-----------------------------------------------------------------------------
+
+void openGLonMeshImage(TMeshImage *mi, const Stage::Player &player,
+  const ImagePainter::VisualSettings &vs,
+  const TAffine &viewAff) {
+  assert(mi);
+  /*
+  static const double soMinColor[4] = { 0.0, 0.0, 0.0,
+  0.6 };  // Translucent black
+  static const double soMaxColor[4] = { 1.0, 1.0, 1.0,
+  0.6 };  // Translucent white
+  static const double rigMinColor[4] = { 0.0, 1.0, 0.0,
+  0.6 };  // Translucent green
+  static const double rigMaxColor[4] = { 1.0, 0.0, 0.0, 0.6 };  // Translucent red
+  */
+  bool doOnionSkin = (player.m_onionSkinDistance != c_noOnionSkin);
+  bool onionSkinImage = doOnionSkin && (player.m_onionSkinDistance != 0);
+  bool drawMeshes =
+    vs.m_plasticVisualSettings.m_drawMeshesWireframe && !onionSkinImage;
+  bool drawSO = vs.m_plasticVisualSettings.m_drawSO && !onionSkinImage;
+  bool drawRigidity =
+    vs.m_plasticVisualSettings.m_drawRigidity && !onionSkinImage;
+
+  // Currently skipping onion skinned meshes
+  if (onionSkinImage) return;
+
+  // Build dpi
+  TPointD meshSlDpi(player.m_sl->getDpi(player.m_fid, 0));
+  assert(meshSlDpi.x != 0.0 && meshSlDpi.y != 0.0);
+
+  // Build reference change affines
+
+  const TAffine &worldMeshToMeshAff =
+    TScale(meshSlDpi.x / Stage::inch, meshSlDpi.y / Stage::inch);
+  const TAffine &meshToWorldMeshAff =
+    TScale(Stage::inch / meshSlDpi.x, Stage::inch / meshSlDpi.y);
+  const TAffine &worldMeshToWorldAff = player.m_placement;
+
+  const TAffine &meshToWorldAff = worldMeshToWorldAff * meshToWorldMeshAff;
+
+  // Prepare OpenGL
+  ///glEnable(GL_BLEND);
+  ///glEnable(GL_LINE_SMOOTH);
+
+  // Push mesh coordinates
+  ///glPushMatrix();
+  ///tglMultMatrix(viewAff * meshToWorldAff);
+
+  // Fetch deformation
+  PlasticSkeletonDeformation *deformation = 0;
+  double sdFrame;
+
+  if (vs.m_plasticVisualSettings.m_applyPlasticDeformation &&
+    player.m_column >= 0) {
+    TXshColumn *column = player.m_xsh->getColumn(player.m_column);
+
+    if (column != vs.m_plasticVisualSettings.m_showOriginalColumn) {
+      TStageObject *playerObj = player.m_xsh->getStageObject(
+        TStageObjectId::ColumnId(player.m_column));
+
+      deformation = playerObj->getPlasticSkeletonDeformation().getPointer();
+      sdFrame = playerObj->paramsTime(player.m_frame);
+    }
+  }
+
+  if (deformation) {
+    // Retrieve the associated plastic deformers data (this may eventually
+    // update the deforms)
+    const PlasticDeformerDataGroup *dataGroup =
+      PlasticDeformerStorage::instance()->process(
+        sdFrame, mi, deformation, deformation->skeletonId(sdFrame),
+        worldMeshToMeshAff);
+
+    OpenGLViewerDraw::instance()->drawMeshImage(*mi, drawSO, drawRigidity, drawMeshes, viewAff * meshToWorldAff, (double)player.m_opacity / 255.0, dataGroup, true);
+    /*
+    // Draw faces first
+    if (drawSO)
+    tglDrawSO(*mi, (double *)soMinColor, (double *)soMaxColor, dataGroup,
+    true);
+
+    if (drawRigidity)
+    tglDrawRigidity(*mi, (double *)rigMinColor, (double *)rigMaxColor,
+    dataGroup, true);
+
+    // Draw edges next
+    if (drawMeshes) {
+    glColor4d(0.0, 1.0, 0.0, 0.7 * player.m_opacity / 255.0);  // Green
+    tglDrawEdges(*mi, dataGroup);  // The mesh must be deformed
+    }
+    */
+  }
+  else {
+    // Draw un-deformed data
+
+    OpenGLViewerDraw::instance()->drawMeshImage(*mi, drawSO, drawRigidity, drawMeshes, viewAff * meshToWorldAff, (double)player.m_opacity/255.0);
+    /*
+    // Draw faces first
+    if (drawSO) tglDrawSO(*mi, (double *)soMinColor, (double *)soMaxColor);
+
+    if (drawRigidity)
+    tglDrawRigidity(*mi, (double *)rigMinColor, (double *)rigMaxColor);
+
+    // Just draw the mesh image next
+    if (drawMeshes) {
+    glColor4d(0.0, 1.0, 0.0, 0.7 * player.m_opacity / 255.0);  // Green
+    tglDrawEdges(*mi);
+    }
+    */
+  }
+
+  // Cleanup OpenGL
+  ///glPopMatrix();
+
+  ///glDisable(GL_LINE_SMOOTH);
+  ///glDisable(GL_BLEND);
+}
 //-----------------------------------------------------------------------------
 
 //! Applies Plastic deformation of the specified player's stage object.

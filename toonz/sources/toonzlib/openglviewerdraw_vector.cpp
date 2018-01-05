@@ -11,7 +11,6 @@
 #include <QMutexLocker>
 #include <QOpenGLShaderProgram>
 #include <QColor>
-//#include <gl/GLU.h>
 
 //------------------------------------------------------------------------------------
 

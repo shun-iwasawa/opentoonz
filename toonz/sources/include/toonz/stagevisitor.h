@@ -268,7 +268,7 @@ public:
 
   void onRasterImage(TRasterImage *ri, const Stage::Player &data);
   void onToonzImage(TToonzImage *ri, const Stage::Player &data);
-
+  
   void beginMask() override;
   void endMask() override;
   void enableMask() override;

@@ -262,8 +262,7 @@ void OpenGLSceneViewer::setupPlacements() {
   //}
 
   TTool *tool = app->getCurrentTool()->getTool();
-  //TODO:
-  //if (tool && !m_isLocator) tool->setViewer(this);
+  if (tool && !m_isLocator) tool->setViewer(this);
 }
 
 //-----------------------------------------------------------------------------

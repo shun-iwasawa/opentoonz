@@ -32,6 +32,8 @@ class TStroke;
 class TRegion;
 class TVectorImage;
 class TVectorRenderData;
+class TMeshImage;
+struct PlasticDeformerDataGroup;
 
 class DVAPI OpenGLViewerDraw { //singleton
   QMatrix4x4 m_MVPMatrix;
@@ -39,40 +41,34 @@ class DVAPI OpenGLViewerDraw { //singleton
   QMatrix4x4 m_modelMatrix;
   QSize m_vpSize;
 
-  struct SimpleShader{
-    // shader for simple objects
+  struct ShaderBase{
     QOpenGLShader* vert = nullptr;
     QOpenGLShader* frag = nullptr;
-    // shader program for simple objects
     QOpenGLShaderProgram* program = nullptr;
     int mvpMatrixUniform = -1;
-    int colorUniform = -1;
     int vertexAttrib = -1;
+  };
+
+  // shader program for simple objects
+  struct SimpleShader : public ShaderBase{
+    int colorUniform = -1;
   }m_simpleShader;
 
-  struct TextureShader {
-    // shader for raster image
-    QOpenGLShader* vert = nullptr;
-    QOpenGLShader* frag = nullptr;
-    // shader program for raster image
-    QOpenGLShaderProgram* program = nullptr;
-    int mvpMatrixUniform = -1;
+  // shader for shaded objects (having different colors for each vertex)
+  struct BasicShader : public ShaderBase{
+    int colorAttrib = -1;
+  }m_basicShader;
+
+  struct TextureShader : public ShaderBase {
     int texUniform = -1;
     int texCoordAttrib = -1;
-    int vertexAttrib = -1;
   }m_textureShader;
 
-  struct SmoothLineShader {
-    // shader for simple objects
-    QOpenGLShader* vert = nullptr;
-    QOpenGLShader* frag = nullptr;
+  struct SmoothLineShader : public ShaderBase {
     QOpenGLShader* geom = nullptr;
-    // shader program for simple objects
-    QOpenGLShaderProgram* program = nullptr;
-    int mvpMatrixUniform = -1;
     int colorUniform = -1;
     int vpSizeUniform = -1;
-    int vertexAttrib = -1;
+    int lineWidthUniform = -1;
   }m_smoothLineShader;
 
   //disk vbo
@@ -92,6 +88,7 @@ public:
   // called once and create shader programs
   void initialize();
   void initializeSimpleShader();
+  void initializeBasicShader();
   void initializeTextureShader();
   void initializeSmoothLineShader();
   // called once in main() on the end
@@ -133,6 +130,22 @@ public:
     bool pushAttribs = true);
   void drawVector(const TVectorRenderData &rd, TRegion *r,
     bool pushAttribs = true);
+
+  //mesh image render (replacement of meshutils.cpp)
+private:
+  void drawMeshSO(const TMeshImage& mi, const TAffine & aff,
+    const PlasticDeformerDataGroup *deformerDatas, bool deformedDomain);
+  void drawMeshRigidity(const TMeshImage& mi, const TAffine & aff,
+    const PlasticDeformerDataGroup *deformerDatas, bool deformedDomain);
+  void drawMeshEdges(const TMeshImage& mi, const TAffine & aff, double opacity,
+    const PlasticDeformerDataGroup *deformerDatas);
+
+public:
+  void drawMeshImage(const TMeshImage& mi, bool drawSO, bool drawRigidity,
+    bool drawMeshes, const TAffine & aff, double opacity, 
+    const PlasticDeformerDataGroup *deformerDatas = 0,
+    bool deformedDomain = false);
+
 };
 
 #endif

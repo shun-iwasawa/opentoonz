@@ -87,6 +87,8 @@ void OpenGLViewerDraw::initialize(){
 
   // simple shader
   initializeSimpleShader();
+  // basic shader 
+  initializeBasicShader();
   //texture shader
   initializeTextureShader();
   // smooth line shader
@@ -157,6 +159,62 @@ void OpenGLViewerDraw::initializeSimpleShader() {
     execWarning(QObject::tr("Failed to get uniform location of PrimitiveColor", "gl"));
 }
 
+//-----------------------------------------------------------------------------
+
+void OpenGLViewerDraw::initializeBasicShader() {
+  m_basicShader.vert = new QOpenGLShader(QOpenGLShader::Vertex);
+  const char *basic_vsrc =
+    "#version 330 core\n"
+    "// Input vertex data, different for all executions of this shader.\n"
+    "layout(location = 0) in vec3 vertexPosition; \n"
+    "layout(location = 1) in vec4 vertexColor; \n"
+    "// Output data \n"
+    "out vec4 fragmentColor; \n"
+    "// Values that stay constant for the whole mesh.\n"
+    "uniform mat4 MVP; \n"
+    "void main() {\n"
+    "  // Output position of the vertex, in clip space : MVP * position\n"
+    "  gl_Position = MVP * vec4(vertexPosition, 1); \n"
+    "  // The color of each vertex \n"
+    "  fragmentColor = vertexColor;\n"
+    "}\n";
+  bool ret = m_basicShader.vert->compileSourceCode(basic_vsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_basicShader.vert.", "gl"));
+
+  m_basicShader.frag = new QOpenGLShader(QOpenGLShader::Fragment);
+  const char *basic_fsrc =
+    "#version 330 core \n"
+    "// interpolated values from the vertex shaders \n"
+    "in vec4 fragmentColor; \n"
+    "// Output data \n"
+    "out vec4 color; \n"
+    "void main() { \n"
+    "  // Output color = color specified in the vertex shader \n"
+    "  color = fragmentColor; \n"
+    "} \n";
+  ret = m_basicShader.frag->compileSourceCode(basic_fsrc);
+  if (!ret) execWarning(QObject::tr("Failed to compile m_basicShader.frag.", "gl"));
+
+  m_basicShader.program = new QOpenGLShaderProgram();
+  //add shaders
+  ret = m_basicShader.program->addShader(m_basicShader.vert);
+  if (!ret) execWarning(QObject::tr("Failed to add m_basicShader.vert.", "gl"));
+  ret = m_basicShader.program->addShader(m_basicShader.frag);
+  if (!ret) execWarning(QObject::tr("Failed to add m_basicShader.frag.", "gl"));
+  //link shaders
+  ret = m_basicShader.program->link();
+  if (!ret) execWarning(QObject::tr("Failed to link basic shader: %1", "gl").arg(m_basicShader.program->log()));
+  //obtain parameter locations
+  m_basicShader.vertexAttrib = m_basicShader.program->attributeLocation("vertexPosition");
+  if (m_basicShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of vertexPosition", "gl"));
+  m_basicShader.colorAttrib = m_basicShader.program->attributeLocation("vertexColor");
+  if (m_basicShader.colorAttrib == -1)
+    execWarning(QObject::tr("Failed to get attribute location of vertexColor", "gl"));
+  m_basicShader.mvpMatrixUniform = m_basicShader.program->uniformLocation("MVP");
+  if (m_basicShader.vertexAttrib == -1)
+    execWarning(QObject::tr("Failed to get uniform location of MVP", "gl"));
+}
 //-----------------------------------------------------------------------------
 
 void OpenGLViewerDraw::initializeTextureShader() {
@@ -279,6 +337,9 @@ void OpenGLViewerDraw::initializeSmoothLineShader() {
   m_smoothLineShader.vpSizeUniform = m_smoothLineShader.program->uniformLocation("vpSize");
   if (m_smoothLineShader.vpSizeUniform == -1)
     execWarning(QObject::tr("Failed to get uniform location of vpSize", "gl"));
+  m_smoothLineShader.lineWidthUniform = m_smoothLineShader.program->uniformLocation("lineWidth");
+  if (m_smoothLineShader.lineWidthUniform == -1)
+    execWarning(QObject::tr("Failed to get uniform location of lineWidth", "gl"));
   assert(glGetError() == 0);
 }
 //-----------------------------------------------------------------------------

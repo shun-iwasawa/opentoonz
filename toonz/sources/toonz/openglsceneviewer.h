@@ -65,6 +65,7 @@ private:
   // for partial GL updating
   TRectD m_clipRect;
 
+  bool m_isLocator = false;
 public:
 
   OpenGLSceneViewer(QWidget *parent);
