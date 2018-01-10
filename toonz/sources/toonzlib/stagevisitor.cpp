@@ -213,6 +213,12 @@ void onPlasticDeformedImage(TStageObject *playerObj,
                             const ImagePainter::VisualSettings &vs,
                             const TAffine &viewAff);
 
+//! Applies Plastic deformation of the specified player's stage object.
+void openGLonPlasticDeformedImage(TStageObject *playerObj,
+                            const Stage::Player &player,
+                            const ImagePainter::VisualSettings &vs,
+                            const TAffine &viewAff);
+
 }  // namespace
 
 //**********************************************************************************************
@@ -667,7 +673,10 @@ void RasterPainter::flushRasterImages() {
 //-----------------------------------------------------------------------------
 
 void RasterPainter::openGLFlushRasterImages(){
-  if (m_nodes.empty()) return;
+  if (m_nodes.empty()) {
+    std::cout << "RasterPainter::openGLFlushRasterImages  -  m_nodes is empty. return" << std::endl;
+    return;
+  }
 
   // Build nodes bbox union
   double delta = sqrt(fabs(m_nodes[0].m_aff.det()));
@@ -844,6 +853,7 @@ void RasterPainter::openGLFlushRasterImages(){
   MVPmatrix.translate(rect.x0, rect.y0);
   MVPmatrix.scale(ras2->getLx(), ras2->getLy());
   OpenGLViewerDraw::instance()->setMVPMatrix(MVPmatrix);
+  std::cout << "RasterPainter::openGLFlushRasterImages  -  drawSceneRaster" << std::endl;
   OpenGLViewerDraw::instance()->drawSceneRaster(ras2);
   // put back
   OpenGLViewerDraw::instance()->setMVPMatrix(VPmatrix);
@@ -961,15 +971,25 @@ void RasterPainter::onImage(const Stage::Player &player) {
   TStageObject *obj =
       ::plasticDeformedObj(player, m_vs.m_plasticVisualSettings);
   if (obj && QThread::currentThread() == qGuiApp->thread()) {
-    flushRasterImages();
-    ::onPlasticDeformedImage(obj, player, m_vs, m_viewAff);
+    if (player.m_isModern) {
+      std::cout << "openGLFlushRasterImages" << std::endl;
+      openGLFlushRasterImages(); 
+      std::cout << "openGLonPlasticDeformedImage" << std::endl;
+      ::openGLonPlasticDeformedImage(obj, player, m_vs, m_viewAff);
+    }
+    else {
+      flushRasterImages();
+      ::onPlasticDeformedImage(obj, player, m_vs, m_viewAff);
+    }
   } else {
     // Common image draw
     const TImageP &img = player.image();
 
     if (TVectorImageP vi = img) {
-      if(player.m_isModern)
+      if (player.m_isModern) {
+        std::cout << "openGLonVectorImage" << std::endl;
         openGLonVectorImage(vi.getPointer(), player);
+      }
       else
         onVectorImage(vi.getPointer(), player);
     }
@@ -978,11 +998,16 @@ void RasterPainter::onImage(const Stage::Player &player) {
     else if (TToonzImageP ti = img)
       onToonzImage(ti.getPointer(), player);
     else if (TMeshImageP mi = img) {
-      flushRasterImages();
-      if(player.m_isModern)
+      if (player.m_isModern) {
+        std::cout << "openGLFlushRasterImages" << std::endl;
+        openGLFlushRasterImages();
+        std::cout << "openGLonMeshImage" << std::endl;
         ::openGLonMeshImage(mi.getPointer(), player, m_vs, m_viewAff);
-      else
+      }
+      else {
+        flushRasterImages();
         ::onMeshImage(mi.getPointer(), player, m_vs, m_viewAff);
+      }
     }
   }
 }
@@ -1790,15 +1815,7 @@ void openGLonMeshImage(TMeshImage *mi, const Stage::Player &player,
   const ImagePainter::VisualSettings &vs,
   const TAffine &viewAff) {
   assert(mi);
-  /*
-  static const double soMinColor[4] = { 0.0, 0.0, 0.0,
-  0.6 };  // Translucent black
-  static const double soMaxColor[4] = { 1.0, 1.0, 1.0,
-  0.6 };  // Translucent white
-  static const double rigMinColor[4] = { 0.0, 1.0, 0.0,
-  0.6 };  // Translucent green
-  static const double rigMaxColor[4] = { 1.0, 0.0, 0.0, 0.6 };  // Translucent red
-  */
+
   bool doOnionSkin = (player.m_onionSkinDistance != c_noOnionSkin);
   bool onionSkinImage = doOnionSkin && (player.m_onionSkinDistance != 0);
   bool drawMeshes =
@@ -1823,14 +1840,6 @@ void openGLonMeshImage(TMeshImage *mi, const Stage::Player &player,
   const TAffine &worldMeshToWorldAff = player.m_placement;
 
   const TAffine &meshToWorldAff = worldMeshToWorldAff * meshToWorldMeshAff;
-
-  // Prepare OpenGL
-  ///glEnable(GL_BLEND);
-  ///glEnable(GL_LINE_SMOOTH);
-
-  // Push mesh coordinates
-  ///glPushMatrix();
-  ///tglMultMatrix(viewAff * meshToWorldAff);
 
   // Fetch deformation
   PlasticSkeletonDeformation *deformation = 0;
@@ -1858,47 +1867,12 @@ void openGLonMeshImage(TMeshImage *mi, const Stage::Player &player,
         worldMeshToMeshAff);
 
     OpenGLViewerDraw::instance()->drawMeshImage(*mi, drawSO, drawRigidity, drawMeshes, viewAff * meshToWorldAff, (double)player.m_opacity / 255.0, dataGroup, true);
-    /*
-    // Draw faces first
-    if (drawSO)
-    tglDrawSO(*mi, (double *)soMinColor, (double *)soMaxColor, dataGroup,
-    true);
 
-    if (drawRigidity)
-    tglDrawRigidity(*mi, (double *)rigMinColor, (double *)rigMaxColor,
-    dataGroup, true);
-
-    // Draw edges next
-    if (drawMeshes) {
-    glColor4d(0.0, 1.0, 0.0, 0.7 * player.m_opacity / 255.0);  // Green
-    tglDrawEdges(*mi, dataGroup);  // The mesh must be deformed
-    }
-    */
   }
   else {
     // Draw un-deformed data
-
     OpenGLViewerDraw::instance()->drawMeshImage(*mi, drawSO, drawRigidity, drawMeshes, viewAff * meshToWorldAff, (double)player.m_opacity/255.0);
-    /*
-    // Draw faces first
-    if (drawSO) tglDrawSO(*mi, (double *)soMinColor, (double *)soMaxColor);
-
-    if (drawRigidity)
-    tglDrawRigidity(*mi, (double *)rigMinColor, (double *)rigMaxColor);
-
-    // Just draw the mesh image next
-    if (drawMeshes) {
-    glColor4d(0.0, 1.0, 0.0, 0.7 * player.m_opacity / 255.0);  // Green
-    tglDrawEdges(*mi);
-    }
-    */
   }
-
-  // Cleanup OpenGL
-  ///glPopMatrix();
-
-  ///glDisable(GL_LINE_SMOOTH);
-  ///glDisable(GL_BLEND);
 }
 //-----------------------------------------------------------------------------
 
@@ -2042,6 +2016,159 @@ void onPlasticDeformedImage(TStageObject *playerObj,
 
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Applies Plastic deformation of the specified player's stage object.
+void openGLonPlasticDeformedImage(TStageObject *playerObj,
+  const Stage::Player &player,
+  const ImagePainter::VisualSettings &vs,
+  const TAffine &viewAff) {
+  bool doOnionSkin = (player.m_onionSkinDistance != c_noOnionSkin);
+  bool onionSkinImage = doOnionSkin && (player.m_onionSkinDistance != 0);
+
+  // Deal with color scaling due to transparency / onion skin
+  double pixScale[4] = { 1.0, 1.0, 1.0, 1.0 };
+
+  if (doOnionSkin) {
+    if (onionSkinImage) {
+      TPixel32 frontOnionColor, backOnionColor;
+      bool inksOnly;
+
+      Preferences::instance()->getOnionData(frontOnionColor, backOnionColor,
+        inksOnly);
+
+      const TPixel32 &refColor =
+        (player.m_onionSkinDistance < 0) ? backOnionColor : frontOnionColor;
+
+      pixScale[3] =
+        1.0 - OnionSkinMask::getOnionSkinFade(player.m_onionSkinDistance);
+      pixScale[0] =
+        (refColor.r / 255.0) * pixScale[3];  // refColor is not premultiplied
+      pixScale[1] = (refColor.g / 255.0) * pixScale[3];
+      pixScale[2] = (refColor.b / 255.0) * pixScale[3];
+    }
+  }
+  else if (player.m_opacity < 255) {
+    pixScale[3] = player.m_opacity / 255.0;
+    pixScale[0] = pixScale[1] = pixScale[2] = 0.0;
+  }
+
+  // Build the Mesh-related data
+  const TXshCell &cell =
+    player.m_xsh->getCell(player.m_frame, playerObj->getParent().getIndex());
+
+  TXshSimpleLevel *meshLevel = cell.getSimpleLevel();
+  const TFrameId &meshFid = cell.getFrameId();
+
+  const TMeshImageP &mi = meshLevel->getFrame(meshFid, false);
+  if (!mi) return;
+
+  // Build deformation-related data
+  TStageObject *parentObj =
+    player.m_xsh->getStageObject(playerObj->getParent());
+  assert(playerObj);
+
+  const PlasticSkeletonDeformationP &deformation =
+    parentObj->getPlasticSkeletonDeformation().getPointer();
+  assert(deformation);
+
+  double sdFrame = parentObj->paramsTime(player.m_frame);
+
+  // Build dpis
+
+  TPointD meshSlDpi(meshLevel->getDpi(meshFid, 0));
+  assert(meshSlDpi.x != 0.0 && meshSlDpi.y != 0.0);
+
+  TPointD slDpi(player.m_sl ? player.m_sl->getDpi(player.m_fid, 0) : TPointD());
+  if (slDpi.x == 0.0 || slDpi.y == 0.0 ||
+    player.m_sl->getType() == PLI_XSHLEVEL)
+    slDpi.x = slDpi.y = Stage::inch;
+
+  // Build reference transforms
+
+  const TAffine &worldTextureToWorldMeshAff =
+    playerObj->getLocalPlacement(player.m_frame);
+  const TAffine &worldTextureToWorldAff = player.m_placement;
+
+  if (fabs(worldTextureToWorldMeshAff.det()) < 1e-6)
+    return;  // Skip near-singular mesh/texture placements
+
+  const TAffine &worldMeshToWorldTextureAff = worldTextureToWorldMeshAff.inv();
+  const TAffine &worldMeshToWorldAff =
+    worldTextureToWorldAff * worldMeshToWorldTextureAff;
+
+  const TAffine &meshToWorldMeshAff =
+    TScale(Stage::inch / meshSlDpi.x, Stage::inch / meshSlDpi.y);
+  const TAffine &worldMeshToMeshAff =
+    TScale(meshSlDpi.x / Stage::inch, meshSlDpi.y / Stage::inch);
+  const TAffine &worldTextureToTextureAff = TScale(
+    slDpi.x / Stage::inch,
+    slDpi.y /
+    Stage::inch);  // ::getDpiScale().inv() should be used instead...
+
+  const TAffine &meshToWorldAff = worldMeshToWorldAff * meshToWorldMeshAff;
+  const TAffine &meshToTextureAff = worldTextureToTextureAff *
+    worldMeshToWorldTextureAff *
+    meshToWorldMeshAff;
+
+  assert((glGetError()) == GL_NO_ERROR);
+  // Retrieve a drawable texture from the player's simple level
+  const DrawableTextureDataP &texData = player.texture();
+  assert((glGetError()) == GL_NO_ERROR);
+  if (!texData) return;
+
+  // Retrieve the associated plastic deformers data (this may eventually update
+  // the deforms)
+  const PlasticDeformerDataGroup *dataGroup =
+    PlasticDeformerStorage::instance()->process(
+      sdFrame, mi.getPointer(), deformation.getPointer(),
+      deformation->skeletonId(sdFrame), worldMeshToMeshAff);
+  assert(dataGroup);
+  
+  // Set up OpenGL stuff
+  ///glEnable(GL_BLEND);
+  ///glEnable(GL_LINE_SMOOTH);
+
+  // Push mesh coordinates
+  ///glPushMatrix();
+
+  ///tglMultMatrix(viewAff * meshToWorldAff);
+
+  ///glEnable(GL_TEXTURE_2D);
+
+  // Applying modulation by the specified transparency parameter
+
+  ///glColor4d(pixScale[3], pixScale[3], pixScale[3], pixScale[3]);
+  ///tglDraw(*mi, *texData, meshToTextureAff, *dataGroup);
+
+  ///glDisable(GL_TEXTURE_2D);
+
+  OpenGLViewerDraw::instance()->drawPlasticDeformedImage
+  (*mi, *texData, meshToTextureAff, *dataGroup, &pixScale[0], meshToWorldAff);
+
+  //TODO
+  /*
+  if (onionSkinImage) {
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    // Add Onion skin color. Observe that this way we don't consider blending
+    // with the texture's
+    // alpha - to obtain that, there is no simple way...
+
+    double k = (1.0 - pixScale[3]);
+    glColor4d(k * pixScale[0], k * pixScale[1], k * pixScale[2], 0.0);
+    tglDrawFaces(*mi, dataGroup);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+  */
+
+  ///glPopMatrix();
+
+  ///glDisable(GL_LINE_SMOOTH);
+  ///glDisable(GL_BLEND);
 }
 
 }  // namespace

@@ -122,6 +122,7 @@ public:
 fixed 1024 x 1024 resolution.
 */
   DrawableTextureDataP texture() const;
+
 };
 
 }  // namespace Stage

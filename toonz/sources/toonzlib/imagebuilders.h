@@ -92,6 +92,8 @@ public:
 protected:
   bool getInfo(TImageInfo &info, int imFlags, void *extData) override;
   TImageP build(int imFlags, void *extData) override;
+  // modern opengl case
+  TImageP openGLBuild(int imFlags, void *extData) override;
 };
 
 //-----------------------------------------------------------------------------

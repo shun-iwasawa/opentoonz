@@ -37,7 +37,7 @@ private:
   friend class TTexturesStorage;
 
   int m_texId;      //!< The texture Id in MeshTexturizer
-  int m_dlSpaceId;  //!< Object's display lists id
+  //int m_dlSpaceId;  //!< Object's display lists id
   int m_objIdx;     //!< Object index in the container
 
 private:
@@ -105,13 +105,14 @@ lists
 */
   DrawableTextureDataP loadTexture(const std::string &textureId,
                                    const TRaster32P &ras,
-                                   const TRectD &geometry);
+                                   const TRectD &geometry,
+                                   bool isModern = false);
 
   //! Releases the texture associated with the specified texture id.
   void unloadTexture(const std::string &textureId);
 
   //! Returns the texture data associated to the specified string identifier.
-  DrawableTextureDataP getTextureData(const std::string &textureId);
+  DrawableTextureDataP getTextureData(const std::string &textureId, bool isModern = false);
 
 private:
   TTexturesStorage();

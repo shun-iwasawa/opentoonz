@@ -166,6 +166,7 @@ void OpenGLSceneViewer::paintGL() {
   // drawBackground() is replaced by updateBackgroundColor()
   glClearColor(m_bgColor[0], m_bgColor[1], m_bgColor[2], 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
+  std::cout << "OpenGLSceneViewer::paintGL()  glClear() is called" << std::endl;
 
 
   //just like drawBuildVars()
@@ -308,6 +309,7 @@ void OpenGLSceneViewer::drawCameraStand() {
 //-----------------------------------------------------------------------------
 
 void OpenGLSceneViewer::drawScene() {
+  std::cout << "------ start drawScene() ------" << std::endl;
   TApp *app = TApp::instance();
   ToonzScene *scene = app->getCurrentScene()->getScene();
   int frame = app->getCurrentFrame()->getFrame();
@@ -473,6 +475,7 @@ void OpenGLSceneViewer::drawScene() {
     assert(glGetError() == 0);
     */
   }
+  std::cout << "------ end drawScene() ------" << std::endl << std::endl;
 }
 
 //-----------------------------------------------------------------------------

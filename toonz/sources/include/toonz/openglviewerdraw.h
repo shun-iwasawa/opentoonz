@@ -34,13 +34,14 @@ class TVectorImage;
 class TVectorRenderData;
 class TMeshImage;
 struct PlasticDeformerDataGroup;
+struct DrawableTextureData;
 
 class DVAPI OpenGLViewerDraw { //singleton
   QMatrix4x4 m_MVPMatrix;
   QMatrix4x4 m_projectionMatrix;
   QMatrix4x4 m_modelMatrix;
   QSize m_vpSize;
-
+  
   struct ShaderBase{
     QOpenGLShader* vert = nullptr;
     QOpenGLShader* frag = nullptr;
@@ -84,7 +85,7 @@ class DVAPI OpenGLViewerDraw { //singleton
 
 public:
   static OpenGLViewerDraw *instance();
-
+  
   // called once and create shader programs
   void initialize();
   void initializeSimpleShader();
@@ -104,12 +105,13 @@ public:
   void createViewerRasterVBO();
 
   void setMVPMatrix(QMatrix4x4& mvp);
-  QMatrix4x4& getMVPMatrix();
+  QMatrix4x4 getMVPMatrix();
 
   void setModelMatrix(QMatrix4x4& model);
-  QMatrix4x4& getModelMatrix();
+  QMatrix4x4 getModelMatrix();
 
   void setViewportSize(QSize& size);
+  QSize getViewportSize();
 
   static QMatrix4x4 toQMatrix(const TAffine&aff);
   static TAffine toTAffine(const QMatrix4x4&matrix);
@@ -145,6 +147,15 @@ public:
     bool drawMeshes, const TAffine & aff, double opacity, 
     const PlasticDeformerDataGroup *deformerDatas = 0,
     bool deformedDomain = false);
+
+  void drawPlasticDeformedImage(
+    const TMeshImage &image,              //!< Mesh image to be drawn.
+    const DrawableTextureData &texData,   //!< Textures data to use for texturing.
+    const TAffine &meshToTexAffine,       //!< Transform from mesh to texture coordinates.
+    const PlasticDeformerDataGroup &deformerDatas,  //!< Data structure of a deformation of the input image.
+    const double* pixScale,
+    const TAffine & aff
+  );
 
 };
 

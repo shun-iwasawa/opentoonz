@@ -248,7 +248,10 @@ void OpenGLViewerDraw::initializeTextureShader() {
     "uniform sampler2D tex; \n"
     "void main() { \n"
     "  // Output color = color of the texture at the specified UV \n"
-    "  color = texture(tex, UV); \n"
+    "  color = texture(tex, UV); \n"//‚½‚ß‚µcomment out
+    //"  vec4 dummy = texture(tex, UV); \n"//‚½‚ß‚µ
+    //"  if (dummy.x < 0) return; \n"//‚½‚ß‚µ
+    //"  color = vec4(UV.x, UV.y, 0.0, 1.0); \n"//‚½‚ß‚µ
     "} \n";
   ret = m_textureShader.frag->compileSourceCode(simple_fsrc);
   if (!ret) execWarning(QObject::tr("Failed to compile m_textureShader.frag.", "gl"));
@@ -612,7 +615,7 @@ void OpenGLViewerDraw::setMVPMatrix(QMatrix4x4& mvp) {
 
 //-----------------------------------------------------------------------------
 
-QMatrix4x4& OpenGLViewerDraw::getMVPMatrix() {
+QMatrix4x4 OpenGLViewerDraw::getMVPMatrix() {
   return m_MVPMatrix;
 }
 
@@ -624,7 +627,7 @@ void OpenGLViewerDraw::setModelMatrix(QMatrix4x4& model) {
 
 //-----------------------------------------------------------------------------
 
-QMatrix4x4& OpenGLViewerDraw::getModelMatrix() {
+QMatrix4x4 OpenGLViewerDraw::getModelMatrix() {
   return m_modelMatrix;
 }
 
@@ -632,6 +635,12 @@ QMatrix4x4& OpenGLViewerDraw::getModelMatrix() {
 
 void OpenGLViewerDraw::setViewportSize(QSize& size) {
   m_vpSize = size;
+}
+
+//-----------------------------------------------------------------------------
+
+QSize OpenGLViewerDraw::getViewportSize() {
+  return m_vpSize;
 }
 
 //-----------------------------------------------------------------------------

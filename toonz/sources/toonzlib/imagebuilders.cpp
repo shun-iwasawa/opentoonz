@@ -24,6 +24,7 @@
 #include "toonz/levelproperties.h"
 #include "toonz/txshsimplelevel.h"
 #include "toonz/fill.h"
+#include "toonz/openglviewerdraw.h"
 
 // Qt includes
 #include <QImage>
@@ -31,6 +32,8 @@
 #include <QOpenGLContext>
 #include <QOffscreenSurface>
 #include <QOpenGLFramebufferObject>
+
+#include <QMatrix4x4>
 
 #include "imagebuilders.h"
 
@@ -317,6 +320,8 @@ TImageP ImageRasterizer::build(int imFlags, void *extData) {
               fb->toImage().scaled(QSize(d.lx, d.ly), Qt::IgnoreAspectRatio,
                                    Qt::SmoothTransformation);
 
+          img.save("D:/old.png");
+
           int wrap      = ras->getLx() * sizeof(TPixel32);
           uchar *srcPix = img.bits();
           uchar *dstPix = ras->getRawData() + wrap * (d.ly - 1);
@@ -348,6 +353,142 @@ TImageP ImageRasterizer::build(int imFlags, void *extData) {
   return TRasterImageP(ras);
 }
 
+//-------------------------------------------------------------------------
+
+TImageP ImageRasterizer::openGLBuild(int imFlags, void *extData) {
+  assert(!(imFlags &
+    ~(ImageManager::dontPutInCache | ImageManager::forceRebuild)));
+
+  assert((glGetError()) == GL_NO_ERROR);
+  TDimension d(10, 10);
+  TPoint off(0, 0);
+
+  // Fetch image
+  assert(extData);
+  ImageLoader::BuildExtData *data = (ImageLoader::BuildExtData *)extData;
+
+  const std::string &srcImgId = data->m_sl->getImageId(data->m_fid);
+
+  TImageP img = ImageManager::instance()->getImage(srcImgId, imFlags, extData);
+  if (img) {
+    TVectorImageP vi = img;
+    if (vi) {
+      TRectD bbox = vi->getBBox();
+
+      d = TDimension(tceil(bbox.getLx()) + 1, tceil(bbox.getLy()) + 1);
+      off = TPoint((int)bbox.x0, (int)bbox.y0);
+
+      TPalette *vpalette = vi->getPalette();
+      TVectorRenderData rd(TTranslation(-off.x, -off.y), TRect(TPoint(0, 0), d),
+        vpalette, 0, true, true);
+
+      //std::cout << "(before) global context screen = " << (void*)(QOpenGLContext::globalShareContext()->screen()) << std::endl;
+      // this is too slow.
+      {
+        //QOffscreenSurface surface;
+        //surface.setFormat(QSurfaceFormat::defaultFormat());
+        //surface.create();
+        //if (!surface.isValid())
+        //  std::cout << "surface is invalid" << std::endl;
+
+        TRaster32P ras(d);
+
+        ///glPushAttrib(GL_ALL_ATTRIB_BITS);
+        ///glMatrixMode(GL_MODELVIEW), glPushMatrix();
+        ///glMatrixMode(GL_PROJECTION), glPushMatrix();
+        {
+          QOpenGLFramebufferObject fb(d.lx, d.ly);
+
+          fb.bind();
+          assert(glGetError() == 0);
+
+          if (!fb.isValid())
+            std::cout << "framebuffer is invalid" << std::endl;
+
+          glViewport(0, 0, d.lx, d.ly);
+          glClearColor(0, 0, 0, 0);
+          glClear(GL_COLOR_BUFFER_BIT);
+
+          QMatrix4x4 projectionMatrix;
+          projectionMatrix.setToIdentity();
+          projectionMatrix.ortho(0, d.lx, 0, d.ly, -4000, 4000);
+
+          QMatrix4x4 modelMatrix;
+          modelMatrix.setToIdentity();
+          modelMatrix.translate(0.375, 0.375, 0.0);
+
+          QMatrix4x4 preMVPMatrix = OpenGLViewerDraw::instance()->getMVPMatrix();
+          QMatrix4x4 preModelMatrix = OpenGLViewerDraw::instance()->getModelMatrix();
+          QSize preSize = OpenGLViewerDraw::instance()->getViewportSize();
+
+          OpenGLViewerDraw::instance()->setMVPMatrix(projectionMatrix);
+          OpenGLViewerDraw::instance()->setModelMatrix(modelMatrix);
+          OpenGLViewerDraw::instance()->setViewportSize(QSize(d.lx, d.ly));
+
+          assert((glGetError()) == GL_NO_ERROR);
+          
+          OpenGLViewerDraw::instance()->drawVector(rd, vi.getPointer());
+
+          assert((glGetError()) == GL_NO_ERROR);
+
+          glFlush();
+
+          assert((glGetError()) == GL_NO_ERROR);
+
+          QImage img =
+            fb.toImage().scaled(QSize(d.lx, d.ly), Qt::IgnoreAspectRatio,
+              Qt::SmoothTransformation);
+
+          bool ret = img.save("D:/modern.png");
+          int wrap = ras->getLx() * sizeof(TPixel32);
+          uchar *srcPix = img.bits();
+          uchar *dstPix = ras->getRawData() + wrap * (d.ly - 1);
+          for (int y = 0; y < d.ly; y++) {
+            memcpy(dstPix, srcPix, wrap);
+            dstPix -= wrap;
+            srcPix += wrap;
+          }
+          fb.release();
+          
+          QOpenGLFramebufferObject::bindDefault();
+
+          assert((glGetError()) == GL_NO_ERROR);
+          OpenGLViewerDraw::instance()->setMVPMatrix(preMVPMatrix);
+          OpenGLViewerDraw::instance()->setModelMatrix(preModelMatrix);
+          OpenGLViewerDraw::instance()->setViewportSize(preSize);
+          assert((glGetError()) == GL_NO_ERROR);
+        }
+        ///glMatrixMode(GL_MODELVIEW), glPopMatrix();
+        ///glMatrixMode(GL_PROJECTION), glPopMatrix();
+
+        ///glPopAttrib();
+
+        assert((glGetError()) == GL_NO_ERROR);
+        TRasterImageP ri = TRasterImageP(ras);
+        ri->setOffset(off + ras->getCenter());
+
+        assert((glGetError()) == GL_NO_ERROR);
+        //openGLContext.doneCurrent();
+        GLenum errCode;
+        const GLubyte *errString;
+        GLenum errcode = glGetError();
+        if (errcode != GL_NO_ERROR) {
+          const GLubyte *errstring = gluErrorString(errcode);
+          printf("%s\n", errstring);
+        }
+        assert((glGetError()) == GL_NO_ERROR);
+        return ri;
+      }
+    }
+  }
+
+  // Error case: return a dummy image (is it really required?)
+
+  TRaster32P ras(d);
+  ras->fill(TPixel32(127, 0, 127, 127));
+
+  return TRasterImageP(ras);
+}
 //***************************************************************************************
 //    ImageFiller  implementation
 //***************************************************************************************

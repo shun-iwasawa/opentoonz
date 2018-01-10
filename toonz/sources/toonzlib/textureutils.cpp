@@ -86,10 +86,10 @@ TRasterImageP convert32(const TImageP &img) {
 //-----------------------------------------------------------------------------
 
 TRasterImageP getTexture(const TXshSimpleLevel *sl, const TFrameId &fid,
-                         int subsampling) {
+  int subsampling, bool isModern = false) {
   if (sl->getType() != PLI_XSHLEVEL) {
     TImageP texImg =
-        sl->getFrame(fid, ImageManager::dontPutInCache, subsampling);
+      sl->getFrame(fid, ImageManager::dontPutInCache, subsampling);
     return convert32(texImg);
   }
 
@@ -97,8 +97,10 @@ TRasterImageP getTexture(const TXshSimpleLevel *sl, const TFrameId &fid,
   std::string id = sl->getImageId(fid) + "_rasterized";
 
   ImageLoader::BuildExtData extData(sl, fid);
+  assert((glGetError()) == GL_NO_ERROR);
   TRasterImageP ri(ImageManager::instance()->getImage(
-      id, ImageManager::dontPutInCache, &extData));
+    id, ImageManager::dontPutInCache, &extData, isModern));
+  assert((glGetError()) == GL_NO_ERROR);
 
   return ri;
 }
@@ -111,18 +113,20 @@ TRasterImageP getTexture(const TXshSimpleLevel *sl, const TFrameId &fid,
 
 DrawableTextureDataP texture_utils::getTextureData(const TXshSimpleLevel *sl,
                                                    const TFrameId &fid,
-                                                   int subsampling) {
+                                                   int subsampling, bool isModern) {
   const std::string &texId = sl->getImageId(fid);
 
   // Now, we must associate a texture
   DrawableTextureDataP data(
-      TTexturesStorage::instance()->getTextureData(texId));
+      TTexturesStorage::instance()->getTextureData(texId, isModern));
   if (data) return data;
 
   // There was no associated texture. We must bind the texture and repeat
 
+  assert((glGetError()) == GL_NO_ERROR);
   // First, retrieve the image to be used as texture
-  TRasterImageP ri(::getTexture(sl, fid, subsampling));
+  TRasterImageP ri(::getTexture(sl, fid, subsampling, isModern));
+  assert((glGetError()) == GL_NO_ERROR);
   if (!ri) return DrawableTextureDataP();
 
   TRaster32P ras(ri->getRaster());
@@ -132,7 +136,7 @@ DrawableTextureDataP texture_utils::getTextureData(const TXshSimpleLevel *sl,
   geom = TScale(ri->getSubsampling()) *
          TTranslation(convert(ri->getOffset()) - ras->getCenterD()) * geom;
 
-  return TTexturesStorage::instance()->loadTexture(texId, ras, geom);
+  return TTexturesStorage::instance()->loadTexture(texId, ras, geom, isModern);
 }
 
 //-----------------------------------------------------------------------------

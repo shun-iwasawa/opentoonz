@@ -165,7 +165,8 @@ changes.
 only when imFlags
 contains the \c toBeModified bit.
 */
-  TImageP getImage(const std::string &id, int imFlags, void *extData);
+  //TImageP getImage(const std::string &id, int imFlags, void *extData);
+  TImageP getImage(const std::string &id, int imFlags, void *extData, bool isModern = false);
 
   /*!
 Returns the image info associated to the specified identifier.
@@ -277,6 +278,8 @@ protected:
   //! Builds the image as specified by the supplied control flags and external
   //! data.
   virtual TImageP build(int imFlags, void *extData) = 0;
+  // modern opengl case
+  virtual TImageP openGLBuild(int imFlags, void *extData) { return TImageP(); }
 
   //! Returns the image infos as specified by the supplied control flags and
   //! external data.

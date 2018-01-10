@@ -17,6 +17,8 @@
 #include "toonz/imagemanager.h"
 #include "toonz/txshsimplelevel.h"
 
+#include <GL/GL.h>
+
 /* EXPLANATION (by Daniele):
 
   Images / Image Infos retrieval is quite a frequent task throughout Toonz - in
@@ -308,7 +310,7 @@ TImageInfo *ImageManager::getInfo(const std::string &id, int imFlags,
 //-----------------------------------------------------------------------------
 
 TImageP ImageManager::getImage(const std::string &id, int imFlags,
-                               void *extData) {
+                               void *extData, bool isModern) {
   assert(!((imFlags & ImageManager::toBeModified) &&
            (imFlags & ImageManager::dontPutInCache)));
   assert(!((imFlags & ImageManager::toBeModified) &&
@@ -367,7 +369,12 @@ TImageP ImageManager::getImage(const std::string &id, int imFlags,
   // We have to build it now, then.
 
   // Build the image
-  img = builder->build(imFlags, extData);
+  assert((glGetError()) == GL_NO_ERROR);
+  if(isModern)
+    img = builder->openGLBuild(imFlags, extData);
+  else
+    img = builder->build(imFlags, extData);
+  assert((glGetError()) == GL_NO_ERROR);
 
   if (img && _putInCache) {
     builder->m_cached   = true;
