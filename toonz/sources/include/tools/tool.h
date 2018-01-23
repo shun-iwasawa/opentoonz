@@ -87,8 +87,8 @@ public:
 
 public:
   TPoint m_pos;  //!< Mouse position in window coordinates, bottom-left origin.
-  int m_pressure;  //!< Pressure of the tablet pen, or 255 for pure mouse
-                   //! events.
+  double m_pressure;  //!< Pressure of the tablet pen (0.0 - 1.0) , or 1.0 for
+                      //! pure mouse events.
   ModifierMask m_modifiersMask;  //!< Bitmask specifying key modifiers applying
                                  //! on the event.
 
@@ -100,7 +100,7 @@ public:
 
 public:
   TMouseEvent()
-      : m_pressure(255)
+      : m_pressure(1.0)
       , m_modifiersMask(NO_KEY)
       , m_buttons(Qt::NoButton)
       , m_button(Qt::NoButton)

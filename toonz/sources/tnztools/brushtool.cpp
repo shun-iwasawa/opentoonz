@@ -543,11 +543,10 @@ public:
 
 //=========================================================================================================
 
-double computeThickness(int pressure, const TDoublePairProperty &property,
+double computeThickness(double pressure, const TDoublePairProperty &property,
                         bool isPath) {
   if (isPath) return 0.0;
-  double p                    = pressure / 255.0;
-  double t                    = p * p * p;
+  double t                    = pressure * pressure * pressure;
   double thick0               = property.getValue().first;
   double thick1               = property.getValue().second;
   if (thick1 < 0.0001) thick0 = thick1 = 0.0;
@@ -556,11 +555,10 @@ double computeThickness(int pressure, const TDoublePairProperty &property,
 
 //---------------------------------------------------------------------------------------------------------
 
-int computeThickness(int pressure, const TIntPairProperty &property,
+int computeThickness(double pressure, const TIntPairProperty &property,
                      bool isPath) {
   if (isPath) return 0.0;
-  double p   = pressure / 255.0;
-  double t   = p * p * p;
+  double t   = pressure * pressure * pressure;
   int thick0 = property.getValue().first;
   int thick1 = property.getValue().second;
   return tround(thick0 + (thick1 - thick0) * t);
@@ -1179,7 +1177,7 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
 
       /*--- ストロークの最初にMaxサイズの円が描かれてしまう不具合を防止する
        * ---*/
-      if (m_pressure.getValue() && e.m_pressure == 255)
+      if (m_pressure.getValue() && e.m_pressure == 1.0)
         thickness = m_rasThickness.getValue().first;
 
       TPointD halfThick(maxThick * 0.5, maxThick * 0.5);
@@ -1234,7 +1232,7 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
             : m_thickness.getValue().second * 0.5;
 
     /*--- ストロークの最初にMaxサイズの円が描かれてしまう不具合を防止する ---*/
-    if (m_pressure.getValue() && e.m_pressure == 255)
+    if (m_pressure.getValue() && e.m_pressure == 1.0)
       thickness     = m_rasThickness.getValue().first;
     m_currThickness = thickness;
     m_smoothStroke.beginStroke(m_smooth.getValue());
@@ -1698,7 +1696,7 @@ void BrushTool::flushTrackPoint() {
 /*!
  * ドラッグ中にツールが切り替わった場合に備え、onDeactivate時とMouseRelease時にと同じ終了処理を行う
 */
-void BrushTool::finishRasterBrush(const TPointD &pos, int pressureVal) {
+void BrushTool::finishRasterBrush(const TPointD &pos, double pressureVal) {
   TImageP image   = getImage(true);
   TToonzImageP ti = image;
   if (!ti) return;
@@ -1721,7 +1719,7 @@ void BrushTool::finishRasterBrush(const TPointD &pos, int pressureVal) {
             : m_rasThickness.getValue().second;
 
     /*--- ストロークの最初にMaxサイズの円が描かれてしまう不具合を防止する ---*/
-    if (m_pressure.getValue() && pressureVal == 255)
+    if (m_pressure.getValue() && pressureVal == 1.0)
       thickness = m_rasThickness.getValue().first;
 
     /*-- Pencilモードでなく、Hardness=100 の場合のブラシサイズを1段階下げる --*/
@@ -2080,8 +2078,8 @@ void BrushTool::checkGuideSnapping(bool beforeMousePress) {
         snapPoint.x = hGuide;
       }
       beforeMousePress ? m_foundFirstSnap = true : m_foundLastSnap = true;
-      beforeMousePress ? m_firstSnapPoint = snapPoint : m_lastSnapPoint =
-                                                            snapPoint;
+      beforeMousePress ? m_firstSnapPoint                          = snapPoint
+                       : m_lastSnapPoint                           = snapPoint;
     }
   }
 }
@@ -2420,16 +2418,16 @@ void BrushTool::addPreset(QString name) {
     preset.m_max = m_rasThickness.getValue().second;
   }
 
-  preset.m_acc             = m_accuracy.getValue();
-  preset.m_smooth          = m_smooth.getValue();
-  preset.m_hardness        = m_hardness.getValue();
-  preset.m_selective       = m_selective.getValue();
-  preset.m_pencil          = m_pencil.getValue();
-  preset.m_breakAngles     = m_breakAngles.getValue();
-  preset.m_pressure        = m_pressure.getValue();
-  preset.m_cap             = m_capStyle.getIndex();
-  preset.m_join            = m_joinStyle.getIndex();
-  preset.m_miter           = m_miterJoinLimit.getValue();
+  preset.m_acc         = m_accuracy.getValue();
+  preset.m_smooth      = m_smooth.getValue();
+  preset.m_hardness    = m_hardness.getValue();
+  preset.m_selective   = m_selective.getValue();
+  preset.m_pencil      = m_pencil.getValue();
+  preset.m_breakAngles = m_breakAngles.getValue();
+  preset.m_pressure    = m_pressure.getValue();
+  preset.m_cap         = m_capStyle.getIndex();
+  preset.m_join        = m_joinStyle.getIndex();
+  preset.m_miter       = m_miterJoinLimit.getValue();
 
   // Pass the preset to the manager
   m_presetsManager.addPreset(preset);

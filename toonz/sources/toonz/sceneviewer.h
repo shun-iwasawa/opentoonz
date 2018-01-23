@@ -64,7 +64,7 @@ class SceneViewer final : public GLWidgetForHighDpi,
                           public Previewer::Listener {
   Q_OBJECT
 
-  qreal m_pressure;
+  double m_pressure;
   QPoint m_lastMousePos;
   QPoint m_pos;
   Qt::MouseButton m_mouseButton;
@@ -73,6 +73,8 @@ class SceneViewer final : public GLWidgetForHighDpi,
   enum TabletState {
     None = 0,
     Touched,
+    StartStroke,  // this state is to detect the first call
+                  // of TabletMove just after TabletPress
     OnStroke,
     Released
   } m_tabletState = None;
