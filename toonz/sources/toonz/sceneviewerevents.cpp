@@ -670,6 +670,7 @@ void SceneViewer::onPress(const TMouseEvent &event) {
   }
   // separate tablet and mouse events
   if (m_tabletEvent && m_tabletState == Touched) {
+    TApp::instance()->getCurrentTool()->setToolBusy(true);
     m_tabletState = StartStroke;
     tool->leftButtonDown(pos, event);
   } else if (m_mouseButton == Qt::LeftButton) {
