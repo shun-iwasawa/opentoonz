@@ -2080,8 +2080,8 @@ void BrushTool::checkGuideSnapping(bool beforeMousePress) {
         snapPoint.x = hGuide;
       }
       beforeMousePress ? m_foundFirstSnap = true : m_foundLastSnap = true;
-      beforeMousePress ? m_firstSnapPoint = snapPoint : m_lastSnapPoint =
-                                                            snapPoint;
+      beforeMousePress ? m_firstSnapPoint                          = snapPoint
+                       : m_lastSnapPoint                           = snapPoint;
     }
   }
 }
@@ -2420,16 +2420,16 @@ void BrushTool::addPreset(QString name) {
     preset.m_max = m_rasThickness.getValue().second;
   }
 
-  preset.m_acc             = m_accuracy.getValue();
-  preset.m_smooth          = m_smooth.getValue();
-  preset.m_hardness        = m_hardness.getValue();
-  preset.m_selective       = m_selective.getValue();
-  preset.m_pencil          = m_pencil.getValue();
-  preset.m_breakAngles     = m_breakAngles.getValue();
-  preset.m_pressure        = m_pressure.getValue();
-  preset.m_cap             = m_capStyle.getIndex();
-  preset.m_join            = m_joinStyle.getIndex();
-  preset.m_miter           = m_miterJoinLimit.getValue();
+  preset.m_acc         = m_accuracy.getValue();
+  preset.m_smooth      = m_smooth.getValue();
+  preset.m_hardness    = m_hardness.getValue();
+  preset.m_selective   = m_selective.getValue();
+  preset.m_pencil      = m_pencil.getValue();
+  preset.m_breakAngles = m_breakAngles.getValue();
+  preset.m_pressure    = m_pressure.getValue();
+  preset.m_cap         = m_capStyle.getIndex();
+  preset.m_join        = m_joinStyle.getIndex();
+  preset.m_miter       = m_miterJoinLimit.getValue();
 
   // Pass the preset to the manager
   m_presetsManager.addPreset(preset);
