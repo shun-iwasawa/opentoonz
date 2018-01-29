@@ -58,6 +58,7 @@ class TFxHandle;
 class ToolOptionsBox;
 
 class QMenu;
+class QKeyEvent;
 
 // iwsw commented out
 // class Ghibli3DLutUtil;
@@ -386,12 +387,7 @@ return true if the method execution can have changed the current tool
   virtual void leftButtonUp(const TPointD &, const TMouseEvent &) {}
   virtual void leftButtonDoubleClick(const TPointD &, const TMouseEvent &) {}
   virtual void rightButtonDown(const TPointD &, const TMouseEvent &) {}
-
-  //! For keycodes list, \see keycodes.h.
-  virtual bool keyDown(int, TUINT32, const TPoint &) { return false; }
-  virtual bool keyDown(int, std::wstring, TUINT32, const TPoint &) {
-    return false;
-  }
+  virtual bool keyDown(QKeyEvent *) { return false; }
 
   virtual void onInputText(std::wstring, std::wstring, int, int){};
 
