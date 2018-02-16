@@ -9,6 +9,7 @@
 		<control>vignetteAmount</control>
 		<control>vignetteGamma</control>
 		<control>vignetteMidpoint</control>
+		<control>scale</control>
   	</vbox>
   	</page>
 </fxlayout>

@@ -1253,6 +1253,7 @@
   <item>"STD_iwa_BarrelDistortFx.vignetteAmount" "Vignetting Amount"</item>
   <item>"STD_iwa_BarrelDistortFx.vignetteGamma" "Vignetting Gamma"</item>
   <item>"STD_iwa_BarrelDistortFx.vignetteMidpoint" "Vignetting Midpoint"</item>
+  <item>"STD_iwa_BarrelDistortFx.scale" "Scale"</item>
 
  <!------------------------------ Tiled Particles Iwa ------------------------------------------->
 
