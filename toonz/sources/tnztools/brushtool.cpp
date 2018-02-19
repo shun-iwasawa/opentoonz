@@ -340,7 +340,8 @@ static void findMaxCurvPoints(TStroke *stroke, const float &angoloLim,
 
 static void addStroke(TTool::Application *application, const TVectorImageP &vi,
                       TStroke *stroke, bool breakAngles, bool frameCreated,
-                      bool levelCreated) {
+                      bool levelCreated, TXshSimpleLevel *sLevel = NULL,
+                      TFrameId fid = TFrameId::NO_FRAME) {
   QMutexLocker lock(vi->getMutex());
 
   if (application->getCurrentObject()->isSpline()) {
@@ -358,9 +359,14 @@ static void addStroke(TTool::Application *application, const TVectorImageP &vi,
   // Up this value the point can be considered a max curvature point.
 
   findMaxCurvPoints(stroke, angoloLim, curvMaxLim, corners);
-  TXshSimpleLevel *sl = application->getCurrentLevel()->getSimpleLevel();
+  TXshSimpleLevel *sl;
+  if (!sLevel) {
+    sl = application->getCurrentLevel()->getSimpleLevel();
+  } else {
+    sl = sLevel;
+  }
   TFrameId id = application->getCurrentTool()->getTool()->getCurrentFid();
-
+  if (id == TFrameId::NO_FRAME && fid != TFrameId::NO_FRAME) id = fid;
   if (!corners.empty()) {
     if (breakAngles)
       split(stroke, corners, strokes);
@@ -422,10 +428,11 @@ namespace {
 
 void addStrokeToImage(TTool::Application *application, const TVectorImageP &vi,
                       TStroke *stroke, bool breakAngles, bool frameCreated,
-                      bool levelCreated) {
+                      bool levelCreated, TXshSimpleLevel *sLevel = NULL,
+                      TFrameId id = TFrameId::NO_FRAME) {
   QMutexLocker lock(vi->getMutex());
   addStroke(application, vi.getPointer(), stroke, breakAngles, frameCreated,
-            levelCreated);
+            levelCreated, sLevel, id);
   // la notifica viene gia fatta da addStroke!
   // getApplication()->getCurrentTool()->getTool()->notifyImageChanged();
 }
@@ -1647,13 +1654,13 @@ bool BrushTool::doFrameRangeStrokes(TFrameId firstFrameId, TStroke *firstStroke,
       } else
         addStrokeToImage(getApplication(), img, firstImage->getStroke(0),
                          m_breakAngles.getValue(), m_isFrameCreated,
-                         m_isLevelCreated);
+                         m_isLevelCreated, sl, fid);
     } else if (t == 1) {
       if (swapped && !drawFirstStroke) {
       } else
         addStrokeToImage(getApplication(), img, lastImage->getStroke(0),
                          m_breakAngles.getValue(), m_isFrameCreated,
-                         m_isLevelCreated);
+                         m_isLevelCreated, sl, fid);
     } else {
       assert(firstImage->getStrokeCount() == 1);
       assert(lastImage->getStrokeCount() == 1);
@@ -1661,7 +1668,7 @@ bool BrushTool::doFrameRangeStrokes(TFrameId firstFrameId, TStroke *firstStroke,
       assert(vi->getStrokeCount() == 1);
       addStrokeToImage(getApplication(), img, vi->getStroke(0),
                        m_breakAngles.getValue(), m_isFrameCreated,
-                       m_isLevelCreated);
+                       m_isLevelCreated, sl, fid);
     }
   }
   TUndoManager::manager()->endBlock();

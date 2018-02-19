@@ -77,8 +77,8 @@ int modifiers = 0;
 
 void initToonzEvent(TMouseEvent &toonzEvent, QMouseEvent *event,
                     int widgetHeight, double pressure, int devPixRatio) {
-  toonzEvent.m_pos = TPoint(event->pos().x() * devPixRatio,
-                            widgetHeight - 1 - event->pos().y() * devPixRatio);
+  toonzEvent.m_pos = TPointD(event->pos().x() * devPixRatio,
+                             widgetHeight - 1 - event->pos().y() * devPixRatio);
   toonzEvent.m_mousePos = event->pos();
   toonzEvent.m_pressure = 1.0;
 
@@ -95,10 +95,12 @@ void initToonzEvent(TMouseEvent &toonzEvent, QMouseEvent *event,
 
 void initToonzEvent(TMouseEvent &toonzEvent, QTabletEvent *event,
                     int widgetHeight, double pressure, int devPixRatio) {
-  toonzEvent.m_pos = TPoint(event->pos().x() * devPixRatio,
-                            widgetHeight - 1 - event->pos().y() * devPixRatio);
-  toonzEvent.m_mousePos = event->pos();
+  toonzEvent.m_pos = TPointD(
+      event->posF().x() * (float)devPixRatio,
+      (float)widgetHeight - 1.0f - event->posF().y() * (float)devPixRatio);
+  toonzEvent.m_mousePos = event->posF();
   toonzEvent.m_pressure = pressure;
+
   toonzEvent.setModifiers(event->modifiers() & Qt::ShiftModifier,
                           event->modifiers() & Qt::AltModifier,
                           event->modifiers() & Qt::ControlModifier);
@@ -111,8 +113,8 @@ void initToonzEvent(TMouseEvent &toonzEvent, QTabletEvent *event,
 //-----------------------------------------------------------------------------
 
 void initToonzEvent(TMouseEvent &toonzEvent, QKeyEvent *event) {
-  toonzEvent.m_pos      = TPoint();
-  toonzEvent.m_mousePos = QPoint();
+  toonzEvent.m_pos      = TPointD();
+  toonzEvent.m_mousePos = QPointF();
   toonzEvent.m_pressure = 0;
 
   toonzEvent.setModifiers(event->modifiers() & Qt::ShiftModifier,
@@ -434,7 +436,7 @@ void SceneViewer::onMove(const TMouseEvent &event) {
   if (m_freezedStatus != NO_FREEZED) return;
 
   int devPixRatio = getDevPixRatio();
-  QPoint curPos   = event.mousePos() * devPixRatio;
+  QPointF curPos  = event.mousePos() * devPixRatio;
   bool cursorSet  = false;
   m_lastMousePos  = curPos;
 
@@ -503,8 +505,8 @@ void SceneViewer::onMove(const TMouseEvent &event) {
     // if the middle mouse button is pressed while dragging, then do panning
     if (event.buttons() & Qt::MidButton) {
       // panning
-      QPoint p = curPos - m_pos;
-      if (m_pos == QPoint(0, 0) && p.manhattanLength() > 300) return;
+      QPointF p = curPos - m_pos;
+      if (m_pos == QPointF() && p.manhattanLength() > 300) return;
       panQt(curPos - m_pos);
       m_pos = curPos;
       return;
@@ -597,13 +599,19 @@ void SceneViewer::mousePressEvent(QMouseEvent *event) {
 //-----------------------------------------------------------------------------
 
 void SceneViewer::onPress(const TMouseEvent &event) {
+  if (m_mouseButton != Qt::NoButton) {
+    // if some button is pressed while another button being active,
+    // finish the action for the previous button first.
+    TMouseEvent preEvent = event;
+    preEvent.m_button    = m_mouseButton;
+    onRelease(preEvent);
+  }
+
   // evita i press ripetuti
   if (m_buttonClicked) return;
   m_buttonClicked = true;
   m_toolSwitched  = false;
   if (m_freezedStatus != NO_FREEZED) return;
-
-  if (m_mouseButton != Qt::NoButton) return;
 
   m_pos         = event.mousePos() * getDevPixRatio();
   m_mouseButton = event.button();
@@ -743,7 +751,7 @@ void SceneViewer::onRelease(const TMouseEvent &event) {
     goto quit;
   }
 
-  m_pos = QPoint(0, 0);
+  m_pos = QPointF();
   if (!tool || !tool->isEnabled()) goto quit;
 
   tool->setViewer(this);
@@ -1207,8 +1215,8 @@ void SceneViewer::keyPressEvent(QKeyEvent *event) {
     // cambiare subito la forma del cursore, senza aspettare il prossimo move
     TMouseEvent toonzEvent;
     initToonzEvent(toonzEvent, event);
-    toonzEvent.m_pos =
-        TPoint(m_lastMousePos.x(), height() - 1 - m_lastMousePos.y());
+    toonzEvent.m_pos = TPointD(m_lastMousePos.x(),
+                               (double)(height() - 1) - m_lastMousePos.y());
 
     TPointD pos = tool->getMatrix().inv() * winToWorld(m_lastMousePos);
 
@@ -1364,8 +1372,8 @@ void SceneViewer::keyReleaseEvent(QKeyEvent *event) {
     // cambiare subito la forma del cursore, senza aspettare il prossimo move
     TMouseEvent toonzEvent;
     initToonzEvent(toonzEvent, event);
-    toonzEvent.m_pos =
-        TPoint(m_lastMousePos.x(), height() - 1 - m_lastMousePos.y());
+    toonzEvent.m_pos = TPointD(m_lastMousePos.x(),
+                               (double)(height() - 1) - m_lastMousePos.y());
 
     TPointD pos = tool->getMatrix().inv() * winToWorld(m_lastMousePos);
 
