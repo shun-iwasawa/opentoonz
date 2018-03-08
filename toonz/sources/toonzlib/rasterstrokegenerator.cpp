@@ -10,7 +10,7 @@ RasterStrokeGenerator::RasterStrokeGenerator(const TRasterCM32P &raster,
                                              int styleId, const TThickPoint &p,
                                              bool selective, int selectedStyle,
                                              bool keepAntialias,
-                                             bool useStyleOrder)
+                                             bool isPaletteOrder)
     : m_raster(raster)
     , m_boxOfRaster(TRect(raster->getSize()))
     , m_styleId(styleId)
@@ -21,7 +21,7 @@ RasterStrokeGenerator::RasterStrokeGenerator(const TRasterCM32P &raster,
     , m_selectedStyle(selectedStyle)
     , m_keepAntiAlias(keepAntialias)
     , m_doAnArc(false)
-    , m_useStyleOrder(useStyleOrder) {
+    , m_isPaletteOrder(isPaletteOrder) {
   TThickPoint pp = p;
   m_points.push_back(pp);
   if (task == ERASE) m_styleId = m_eraseStyle;
@@ -194,7 +194,7 @@ void RasterStrokeGenerator::placeOver(const TRasterCM32P &out,
           continue;
         }
         if (outPix->isPureInk() && m_selective) {
-          if (!m_useStyleOrder || m_aboveStyleIds.contains(outPix->getInk())) {
+          if (!m_isPaletteOrder || m_aboveStyleIds.contains(outPix->getInk())) {
             *outPix = TPixelCM32(outPix->getInk(), outPix->getPaint(), outTone);
             continue;
           }

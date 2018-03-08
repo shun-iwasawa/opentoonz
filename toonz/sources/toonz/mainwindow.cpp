@@ -1620,7 +1620,8 @@ void MainWindow::defineActions() {
   QAction *newToonzRasterLevelAction = createMenuFileAction(
       MI_NewToonzRasterLevel, tr("&New Toonz Raster Level"), "");
   newToonzRasterLevelAction->setIconText(tr("New Toonz Raster Level"));
-  newToonzRasterLevelAction->setIcon(QIcon(":Resources/new_toonz_raster_level.svg"));
+  newToonzRasterLevelAction->setIcon(
+      QIcon(":Resources/new_toonz_raster_level.svg"));
   QAction *newRasterLevelAction =
       createMenuFileAction(MI_NewRasterLevel, tr("&New Raster Level"), "");
   newRasterLevelAction->setIconText(tr("New Raster Level"));
@@ -2208,6 +2209,8 @@ void MainWindow::defineActions() {
                           tr("Pressure Sensitivity"), "Shift+P");
   createToolOptionsAction("A_ToolOption_SegmentInk", tr("Segment Ink"), "F8");
   createToolOptionsAction("A_ToolOption_Selective", tr("Selective"), "F7");
+  createToolOptionsAction("A_ToolOption_DrawOrder",
+                          tr("Brush Tool - Draw Order"), "");
   createToolOptionsAction("A_ToolOption_Smooth", tr("Smooth"), "");
   createToolOptionsAction("A_ToolOption_Snap", tr("Snap"), "");
   createToolOptionsAction("A_ToolOption_AutoSelectDrawing",
@@ -2392,9 +2395,9 @@ RecentFiles::~RecentFiles() {}
 
 void RecentFiles::addFilePath(QString path, FileType fileType) {
   QList<QString> files =
-      (fileType == Scene) ? m_recentScenes : (fileType == Level)
-                                                 ? m_recentLevels
-                                                 : m_recentFlipbookImages;
+      (fileType == Scene)
+          ? m_recentScenes
+          : (fileType == Level) ? m_recentLevels : m_recentFlipbookImages;
   int i;
   for (i = 0; i < files.size(); i++)
     if (files.at(i) == path) files.removeAt(i);
@@ -2519,9 +2522,9 @@ void RecentFiles::saveRecentFiles() {
 
 QList<QString> RecentFiles::getFilesNameList(FileType fileType) {
   QList<QString> files =
-      (fileType == Scene) ? m_recentScenes : (fileType == Level)
-                                                 ? m_recentLevels
-                                                 : m_recentFlipbookImages;
+      (fileType == Scene)
+          ? m_recentScenes
+          : (fileType == Level) ? m_recentLevels : m_recentFlipbookImages;
   QList<QString> names;
   int i;
   for (i = 0; i < files.size(); i++) {
@@ -2548,9 +2551,9 @@ void RecentFiles::refreshRecentFilesMenu(FileType fileType) {
     menu->setEnabled(false);
   else {
     CommandId clearActionId =
-        (fileType == Scene) ? MI_ClearRecentScene : (fileType == Level)
-                                                        ? MI_ClearRecentLevel
-                                                        : MI_ClearRecentImage;
+        (fileType == Scene)
+            ? MI_ClearRecentScene
+            : (fileType == Level) ? MI_ClearRecentLevel : MI_ClearRecentImage;
     menu->setActions(names);
     menu->addSeparator();
     QAction *clearAction = CommandManager::instance()->getAction(clearActionId);

@@ -25,13 +25,13 @@ QImage rasterToQImage(const TRasterP &ras, bool premultiplied = false) {
 }
 
 //----------------------------------------------------------------------------------
-// selectiveMode : 0=OFF, 1=Always, 2=StyleOrder
+// drawOrderMode : 0=OverAll, 1=UnderAll, 2=PaletteOrder
 void putOnRasterCM(const TRasterCM32P &out, const TRaster32P &in, int styleId,
-                   int selectiveMode, const QSet<int> &aboveStyleIds) {
+                   int drawOrderMode, const QSet<int> &aboveStyleIds) {
   if (!out.getPointer() || !in.getPointer()) return;
   assert(out->getSize() == in->getSize());
   int x, y;
-  if (selectiveMode == 0) {  // OFF
+  if (drawOrderMode == 0) {  // OverAll
     for (y = 0; y < out->getLy(); y++) {
       for (x = 0; x < out->getLx(); x++) {
 #ifdef _DEBUG
@@ -54,7 +54,7 @@ void putOnRasterCM(const TRasterCM32P &out, const TRaster32P &in, int styleId,
         *outPix = TPixelCM32(ink, outPix->getPaint(), tone);
       }
     }
-  } else if (selectiveMode == 1) {  // Always
+  } else if (drawOrderMode == 1) {  // UnderAll
     for (y = 0; y < out->getLy(); y++) {
       for (x = 0; x < out->getLx(); x++) {
 #ifdef _DEBUG
@@ -77,7 +77,7 @@ void putOnRasterCM(const TRasterCM32P &out, const TRaster32P &in, int styleId,
         *outPix = TPixelCM32(ink, outPix->getPaint(), tone);
       }
     }
-  } else {  // Style Order
+  } else {  // PaletteOrder
     for (y = 0; y < out->getLy(); y++) {
       for (x = 0; x < out->getLx(); x++) {
         TPixel32 *inPix = &in->pixels(y)[x];
@@ -365,7 +365,7 @@ void BluredBrush::eraseDrawing(const TRasterP ras, const TRasterP rasBackup,
 void BluredBrush::updateDrawing(const TRasterCM32P rasCM,
                                 const TRasterCM32P rasBackupCM,
                                 const TRect &bbox, int styleId,
-                                int selectiveMode) const {
+                                int drawOrderMode) const {
   if (!rasCM) return;
 
   TRect rasRect    = rasCM->getBounds();
@@ -374,7 +374,7 @@ void BluredBrush::updateDrawing(const TRasterCM32P rasCM,
 
   rasCM->copy(rasBackupCM->extract(targetRect), targetRect.getP00());
   putOnRasterCM(rasCM->extract(targetRect), m_ras->extract(targetRect), styleId,
-                selectiveMode, m_aboveStyleIds);
+                drawOrderMode, m_aboveStyleIds);
 }
 
 //----------------------------------------------------------------------------------

@@ -40,7 +40,7 @@ public:
   TRect getBoundFromPoints(const std::vector<TThickPoint> &points) const;
   // colormapped
   void updateDrawing(const TRasterCM32P rasCM, const TRasterCM32P rasBackupCM,
-                     const TRect &bbox, int styleId, int selectiveMode) const;
+                     const TRect &bbox, int styleId, int drawOrderMode) const;
   void eraseDrawing(const TRasterCM32P rasCM, const TRasterCM32P rasBackupCM,
                     const TRect &bbox, bool selective, int selectedStyleId,
                     const std::wstring &mode) const;
