@@ -37,6 +37,7 @@
 #include <QMainWindow>
 #include <QButtonGroup>
 #include <QMenu>
+#include <QListView>
 
 #include "tooloptionscontrols.h"
 
@@ -581,19 +582,36 @@ void ToolOptionCombo::loadEntries() {
   const TEnumProperty::Items &items = m_property->getItems();
 
   const int count = m_property->getCount();
-  int maxWidth = 0;
+  int maxWidth    = 0;
 
   clear();
+  bool hasIcon = false;
   for (int i = 0; i < count; ++i) {
     QString itemStr = QString::fromStdWString(range[i]);
-    addItem(items[i].icon, items[i].name.isEmpty() ? itemStr : items[i].name, itemStr);
-    int tmpWidth                      = fontMetrics().width(itemStr);
+    if (items[i].iconName.isEmpty())
+      addItem(items[i].UIName, itemStr);
+    else {
+      addItem(createQIcon(items[i].iconName.toUtf8()), items[i].UIName,
+              itemStr);
+      if (!hasIcon) {
+        hasIcon = true;
+        setIconSize(QSize(17, 17));
+        // add margin between items if they are with icons
+        setView(new QListView());
+        view()->setIconSize(QSize(17, 17));
+        setStyleSheet(
+            "QComboBox  QAbstractItemView::item{ \
+                       margin: 5 0 0 0;\
+                      }");
+      }
+    }
+    int tmpWidth                      = fontMetrics().width(items[i].UIName);
     if (tmpWidth > maxWidth) maxWidth = tmpWidth;
   }
 
   // set the maximum width according to the longest item with 25 pixels for
   // arrow button and margin
-  setMaximumWidth(maxWidth + 25);
+  setMaximumWidth(maxWidth + 25 + (hasIcon ? 23 : 0));
 
   updateStatus();
 }
@@ -673,15 +691,12 @@ ToolOptionPopupButton::ToolOptionPopupButton(TTool *tool,
   setFixedHeight(20);
   m_property->addListener(this);
 
-  TEnumProperty::Range range = property->getRange();
-  TEnumProperty::Range::iterator it;
-  for (it = range.begin(); it != range.end(); ++it) {
-    QString iconName = QString::fromStdWString(*it);
-    QAction *action  = addItem(createQIcon(iconName.toUtf8()));
+  const TEnumProperty::Items &items = m_property->getItems();
+  const int count                   = m_property->getCount();
+  for (int i = 0; i < count; ++i) {
+    QAction *action = addItem(createQIcon(items[i].iconName.toUtf8()));
     // make the tooltip text
-    iconName = iconName.replace('_', ' ');
-    iconName = iconName.left(1).toUpper() + iconName.mid(1);
-    action->setToolTip(iconName);
+    action->setToolTip(items[i].UIName);
   }
   setCurrentIndex(0);
   updateStatus();

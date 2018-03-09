@@ -623,8 +623,18 @@ EraserTool::EraserTool(std::string name)
 void EraserTool::updateTranslation() {
   m_toolSize.setQStringName(tr("Size:"));
   m_hardness.setQStringName(tr("Hardness:"));
+
   m_eraseType.setQStringName(tr("Type:"));
+  m_eraseType.setItemUIName(NORMALERASE, tr("Normal"));
+  m_eraseType.setItemUIName(RECTERASE, tr("Rectangular"));
+  m_eraseType.setItemUIName(FREEHANDERASE, tr("Freehand"));
+  m_eraseType.setItemUIName(POLYLINEERASE, tr("Polyline"));
+
   m_colorType.setQStringName(tr("Mode:"));
+  m_colorType.setItemUIName(LINES, tr("Lines"));
+  m_colorType.setItemUIName(AREAS, tr("Areas"));
+  m_colorType.setItemUIName(ALL, tr("Lines & Areas"));
+
   m_currentStyle.setQStringName(tr("Selective"));
   m_invertOption.setQStringName(tr("Invert"));
   m_multi.setQStringName(tr("Frame Range"));

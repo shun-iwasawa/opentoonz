@@ -7,8 +7,6 @@
 
 #include <cstdint>
 
-#include <QIcon>
-
 #undef DVAPI
 #undef DVVAR
 
@@ -315,13 +313,11 @@ public:
   typedef std::vector<std::wstring> Range;
   // Used only for translation and styling in Qt
   struct Item {
-    QString name;
-    QIcon icon;
+    QString UIName;
+    QString iconName;
 
-    Item(const QString &name = QString(),
-         const QIcon &icon = QIcon())
-        : name(name), icon(icon) {
-    }
+    Item(const QString &name = QString(), const QString &icon = QString())
+        : UIName(name), iconName(icon) {}
   };
   typedef std::vector<Item> Items;
 
@@ -354,26 +350,16 @@ public:
     return ret;
   }
 
-  void addValue(std::wstring value) {
+  void addValue(std::wstring value, const QString &iconName = QString()) {
     if (m_index == -1) m_index = 0;
     m_range.push_back(value);
-    m_items.push_back(Item());
+    m_items.push_back(Item(QString::fromStdWString(value), iconName));
   }
 
-  void addItem(std::wstring value, const QString &name = QString(), const QIcon &icon = QIcon()) {
-    if (m_index == -1) m_index = 0;
-    m_range.push_back(value);
-    m_items.push_back(Item(name, icon));
-  }
-
-  void setItemName(int index, const QString &name) {
+  void setItemUIName(std::wstring value, const QString &name) {
+    int index = indexOf(value);
     if (index < 0 || index >= (int)m_items.size()) throw RangeError();
-    m_items[index].name = name;
-  }
-
-  void setItemIcon(int index, const QIcon &icon) {
-    if (index < 0 || index >= (int)m_items.size()) throw RangeError();
-    m_items[index].icon = icon;
+    m_items[index].UIName = name;
   }
 
   void deleteAllValues() {
