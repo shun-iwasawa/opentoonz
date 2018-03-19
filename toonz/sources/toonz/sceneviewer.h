@@ -40,6 +40,9 @@ class LutCalibrator;
 namespace ImageUtils {
 class FullScreenWidget;
 }
+namespace Stage {
+class RasterPainter;
+}
 
 //=====================================================================
 
@@ -165,6 +168,8 @@ class SceneViewer final : public GLWidgetForHighDpi,
   bool m_isBusyOnTabletMove;
 
   QMatrix4x4 m_projectionMatrix;
+
+  Stage::RasterPainter *m_rasterPainter = NULL;
 
 public:
   // iwsw commented out temporarily

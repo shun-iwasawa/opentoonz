@@ -58,6 +58,8 @@
 #include <QMatrix>
 #include <QThread>
 #include <QGuiApplication>
+#include <QOpenGLBuffer>
+#include <QOpenGLFunctions>
 
 #include "toonz/stagevisitor.h"
 
@@ -345,8 +347,7 @@ int Picker::getRow() const {
 
 RasterPainter::RasterPainter(const TDimension &dim, const TAffine &viewAff,
                              const TRect &rect,
-                             const ImagePainter::VisualSettings &vs,
-                             bool checkFlags)
+                             ImagePainter::VisualSettings &vs, bool checkFlags)
     : Visitor(vs)
     , m_dim(dim)
     , m_viewAff(viewAff)
@@ -354,7 +355,26 @@ RasterPainter::RasterPainter(const TDimension &dim, const TAffine &viewAff,
     , m_maskLevel(0)
     , m_singleColumnEnabled(false)
     , m_checkFlags(checkFlags)
-    , m_doRasterDarkenBlendedView(false) {}
+    , m_doRasterDarkenBlendedView(false)
+    , m_pixelBuffer(QOpenGLBuffer::PixelUnpackBuffer) {
+  m_pixelBuffer.create();
+  m_pixelBuffer.bind();
+  m_pixelBuffer.allocate(sizeof(TPixel32) * dim.lx * dim.ly);
+  m_pixelBuffer.release();
+}
+
+//-----------------------------------------------------------------------------
+
+RasterPainter::RasterPainter(ImagePainter::VisualSettings &vs)
+    : Visitor(vs)
+    , m_dim(0, 0)
+    , m_viewAff(TAffine())
+    , m_clipRect()
+    , m_maskLevel(0)
+    , m_singleColumnEnabled(false)
+    , m_checkFlags(true)
+    , m_doRasterDarkenBlendedView(false)
+    , m_pixelBuffer(QOpenGLBuffer::PixelUnpackBuffer) {}
 
 //-----------------------------------------------------------------------------
 
@@ -437,10 +457,6 @@ recall
                 \b TRop::quickPut with argument current frame and new raster.
 */
 
-namespace {
-QThreadStorage<std::vector<char> *> threadBuffers;
-}
-
 void RasterPainter::flushRasterImages() {
   if (m_nodes.empty()) return;
 
@@ -460,17 +476,10 @@ void RasterPainter::flushRasterImages() {
   int lx = rect.getLx(), ly = rect.getLy();
   TDimension dim(lx, ly);
 
-  // Build a raster buffer of sufficient size to hold said union.
-  // The buffer is per-thread cached in order to improve the rendering speed.
-  if (!threadBuffers.hasLocalData())
-    threadBuffers.setLocalData(new std::vector<char>());
+  m_pixelBuffer.bind();
+  GLubyte *pixels = (GLubyte *)m_pixelBuffer.map(QOpenGLBuffer::ReadWrite);
 
-  int size = dim.lx * dim.ly * sizeof(TPixel32);
-
-  std::vector<char> *vbuff = (std::vector<char> *)threadBuffers.localData();
-  if (size > (int)vbuff->size()) vbuff->resize(size);
-
-  TRaster32P ras(dim.lx, dim.ly, dim.lx, (TPixel32 *)&(*vbuff)[0]);
+  TRaster32P ras(dim.lx, dim.ly, dim.lx, (TPixel32 *)pixels);
   TRaster32P ras2;
 
   if (m_vs.m_colorMask != 0) {
@@ -598,6 +607,7 @@ void RasterPainter::flushRasterImages() {
     TRop::setChannel(ras, ras, m_vs.m_colorMask, false);
     TRop::quickPut(ras2, ras, TAffine());
   }
+  m_pixelBuffer.unmap();
 
   // Now, output the raster buffer on top of the OpenGL buffer
   glPushAttrib(GL_COLOR_BUFFER_BIT);  // Preserve blending and stuff
@@ -636,10 +646,12 @@ void RasterPainter::flushRasterImages() {
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  glDrawPixels(ras2->getLx(), ras2->getLy(),            // Perform the over
-               TGL_FMT, TGL_TYPE, ras2->getRawData());  //
+  glDrawPixels(ras2->getLx(), ras2->getLy(),  // Perform the over
+               TGL_FMT, TGL_TYPE, 0);         //
 
+  m_pixelBuffer.release();
   ras->unlock();
+
   glPopMatrix();
 
   glPopAttrib();  // Restore blending status
@@ -1029,6 +1041,29 @@ void RasterPainter::onToonzImage(TToonzImage *ti, const Stage::Player &player) {
   m_nodes.push_back(Node(r, ti->getPalette(), alpha, aff, ti->getSavebox(),
                          bbox, player.m_frame, player.m_isCurrentColumn,
                          onionMode, false, false, false, player.m_filterColor));
+}
+
+//-----------------------------------------------------------------------------
+
+void RasterPainter::onInitialize() {
+  if (m_pixelBuffer.isCreated()) m_pixelBuffer.destroy();
+  m_pixelBuffer.create();
+}
+
+//-----------------------------------------------------------------------------
+
+void RasterPainter::onResize(int w, int h) {
+  m_dim.lx = w;
+  m_dim.ly = h;
+  m_pixelBuffer.bind();
+  m_pixelBuffer.allocate(sizeof(TPixel32) * w * h);
+  m_pixelBuffer.release();
+}
+
+//-----------------------------------------------------------------------------
+
+void RasterPainter::onCleanup() {
+  if (m_pixelBuffer.isCreated()) m_pixelBuffer.destroy();
 }
 
 //**********************************************************************************************

@@ -480,7 +480,8 @@ SceneViewer::SceneViewer(ImageUtils::FullScreenWidget *parent)
     , m_editPreviewSubCamera(false)
     , m_locator(NULL)
     , m_isLocator(false)
-    , m_isBusyOnTabletMove(false) {
+    , m_isBusyOnTabletMove(false)
+    , m_rasterPainter(new Stage::RasterPainter(m_visualSettings)) {
   m_visualSettings.m_sceneProperties =
       TApp::instance()->getCurrentScene()->getScene()->getProperties();
   // Enables multiple key input.
@@ -527,6 +528,7 @@ void SceneViewer::setVisual(const ImagePainter::VisualSettings &settings) {
 
 SceneViewer::~SceneViewer() {
   if (m_fbo) delete m_fbo;
+  if (m_rasterPainter) delete m_rasterPainter;
 }
 
 //-------------------------------------------------------------------------------
@@ -829,6 +831,8 @@ void SceneViewer::initializeGL() {
 
   // glClearColor(1.0,1.0,1.0,1);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  m_rasterPainter->onInitialize();
 }
 
 //-----------------------------------------------------------------------------
@@ -858,6 +862,8 @@ void SceneViewer::resizeGL(int w, int h) {
     if (m_fbo) delete m_fbo;
     m_fbo = new QOpenGLFramebufferObject(w, h);
   }
+
+  m_rasterPainter->onResize(width(), height());
 
   // for updating the navigator in levelstrip
   emit refreshNavi();
@@ -1527,18 +1533,20 @@ void SceneViewer::drawScene() {
 
     m_visualSettings.m_showBBox = viewBBoxToggle.getStatus();
 
-    Stage::RasterPainter painter(viewerSize, viewAff, clipRect,
-                                 m_visualSettings, true);
+    m_rasterPainter->setAff(viewAff);
+    m_rasterPainter->setClipRect(clipRect);
+    // m_rasterPainter.setVisualSettings(m_visualSettings);
+    m_rasterPainter->setCheckFlags(true);
 
     // darken blended view mode for viewing the non-cleanuped and stacked
     // drawings
-    painter.setRasterDarkenBlendedView(
+    m_rasterPainter->setRasterDarkenBlendedView(
         Preferences::instance()
             ->isShowRasterImagesDarkenBlendedInViewerEnabled());
 
     TFrameHandle *frameHandle = TApp::instance()->getCurrentFrame();
     if (app->getCurrentFrame()->isEditingLevel()) {
-      Stage::visit(painter, app->getCurrentLevel()->getLevel(),
+      Stage::visit(*m_rasterPainter, app->getCurrentLevel()->getLevel(),
                    app->getCurrentFrame()->getFid(),
                    app->getCurrentOnionSkin()->getOnionSkinMask(),
                    frameHandle->isPlaying(), useGuidedDrawing);
@@ -1566,11 +1574,11 @@ void SceneViewer::drawScene() {
               ->getCell(app->getCurrentFrame()->getFrame(), args.m_col)
               .getFrameId();
       args.m_isGuidedDrawingEnabled = useGuidedDrawing;
-      Stage::visit(painter, args);
+      Stage::visit(*m_rasterPainter, args);
     }
 
     assert(glGetError() == 0);
-    painter.flushRasterImages();
+    m_rasterPainter->flushRasterImages();
 
     TXshSimpleLevel::m_fillFullColorRaster = fillFullColorRaster;
 
@@ -2562,5 +2570,6 @@ void SceneViewer::onContextAboutToBeDestroyed() {
   if (!m_lutCalibrator) return;
   makeCurrent();
   m_lutCalibrator->cleanup();
+  m_rasterPainter->onCleanup();
   doneCurrent();
 }

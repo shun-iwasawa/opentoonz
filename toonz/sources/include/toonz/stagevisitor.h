@@ -14,6 +14,8 @@
 // TnzLib includes
 #include "toonz/imagepainter.h"
 
+#include <QOpenGLBuffer>
+
 #undef DVAPI
 #undef DVVAR
 #ifdef TOONZLIB_EXPORTS
@@ -252,10 +254,14 @@ private:
   // darken blended view mode for viewing the non-cleanuped and stacked drawings
   bool m_doRasterDarkenBlendedView;
 
+  QOpenGLBuffer m_pixelBuffer;
+
 public:
   RasterPainter(const TDimension &dim, const TAffine &viewAff,
-                const TRect &rect, const ImagePainter::VisualSettings &vs,
+                const TRect &rect, ImagePainter::VisualSettings &vs,
                 bool checkFlags);
+
+  RasterPainter(ImagePainter::VisualSettings &vs);
 
   void onImage(const Stage::Player &data) override;
   void onVectorImage(TVectorImage *vi, const Stage::Player &data);
@@ -279,6 +285,15 @@ public:
   bool isSingleColumnEnabled() const { return m_singleColumnEnabled; }
 
   void setRasterDarkenBlendedView(bool on) { m_doRasterDarkenBlendedView = on; }
+
+  void onInitialize();
+  void onResize(int w, int h);
+  void onCleanup();
+  void setAff(TAffine &aff) { m_viewAff = aff; }
+  void setClipRect(TRect &rect) { m_clipRect = rect; }
+  void setCheckFlags(bool on) { m_checkFlags = on; }
+
+  ~RasterPainter() { onCleanup(); }
 };
 
 //=============================================================================
