@@ -489,6 +489,7 @@ SceneViewer::SceneViewer(ImageUtils::FullScreenWidget *parent)
   setAttribute(Qt::WA_InputMethodEnabled);
   setFocusPolicy(Qt::StrongFocus);
   setAcceptDrops(true);
+  setUpdateBehavior(QOpenGLWidget::PartialUpdate);
   this->setMouseTracking(true);
 // introduced from Qt 5.9
 #if QT_VERSION >= 0x050900
@@ -946,8 +947,12 @@ void SceneViewer::drawBackground() {
                  1.0);
   } else
     glClearColor(0, 0, 0, 1.0);
+  
+  if (m_clipRect.isEmpty())
+    glClear(GL_COLOR_BUFFER_BIT);
+  else
+    std::cout << "skip glClear" << std::endl;
 
-  glClear(GL_COLOR_BUFFER_BIT);
   if (glGetError() == GL_INVALID_FRAMEBUFFER_OPERATION) {
     /* 起動時一回目になぜか GL_FRAMEBUFFER_COMPLETE なのに invalid operation
      * が出る  */
@@ -1355,8 +1360,28 @@ static void drawFpsGraph(int t0, int t1) {
 //-----------------------------------------------------------------------------
 
 //#define FPS_HISTOGRAM
+#include <QElapsedTimer>
+QElapsedTimer timer;
 
 void SceneViewer::paintGL() {
+  static bool start = true;
+  static qint64 sumMSec = 0;
+  static int timerCount = 0;
+  if (start) {
+    timer.start();
+    start = false;
+  }
+  else {
+    sumMSec += timer.elapsed();
+    timerCount++;
+    if (timerCount == 10) {
+      qDebug() << "render 10 frames took" << sumMSec << "milliseconds";
+      timerCount = 0;
+      sumMSec = 0;
+    }
+    timer.restart();
+  }
+
   if (!check_framebuffer_status()) {
     /* QGLWidget の widget 生成/削除のタイミングで(platform によって?)
      * GL_FRAMEBUFFER_UNDEFINED の状態で paintGL() が呼ばれてしまうようだ */
@@ -1468,6 +1493,7 @@ void SceneViewer::drawScene() {
   TXsheet *xsh      = app->getCurrentXsheet()->getXsheet();
   TRect clipRect    = getActualClipRect(getViewMatrix());
   clipRect += TPoint(width() * 0.5, height() * 0.5);
+  std::cout << "clipRect : " << clipRect.getLx() << " x " << clipRect.getLy() << std::endl;
 
   ChildStack *childStack = scene->getChildStack();
   bool editInPlace       = editInPlaceToggle.getStatus() &&
@@ -1623,6 +1649,10 @@ TRect SceneViewer::getActualClipRect(const TAffine &aff) {
   TDimensionD viewerSize(width(), height());
   TRectD clipRect(viewerSize);
 
+  std::cout << "SceneViewer::getActualClipRect m_clipRect = "
+    << m_clipRect.getLx() << " x " << m_clipRect.getLy() << std::endl;
+
+
   if (is3DView()) {
     TPointD p00 = winToWorld(clipRect.getP00());
     TPointD p01 = winToWorld(clipRect.getP01());
@@ -1636,6 +1666,7 @@ TRect SceneViewer::getActualClipRect(const TAffine &aff) {
     TRectD app = aff * (m_clipRect.enlarge(3));
     clipRect =
         TRectD(tceil(app.x0), tceil(app.y0), tfloor(app.x1), tfloor(app.y1));
+    std::cout << "SceneViewer::getActualClipRect  rect = " << clipRect.getLx() << " x " << clipRect.getLy() << std::endl;
   }
 
   return convert(clipRect);
@@ -1686,6 +1717,7 @@ bool SceneViewer::is3DView() const {
 //-----------------------------------------------------------------------------
 
 void SceneViewer::invalidateAll() {
+  std::cout << "invalidateAll" << std::endl;
   m_clipRect.empty();
   update();
   if (m_vRuler) m_vRuler->update();
@@ -1703,6 +1735,7 @@ void SceneViewer::navigatorPan(const QPoint &delta) {
 //-----------------------------------------------------------------------------
 
 void SceneViewer::GLInvalidateAll() {
+  std::cout << "GLInvalidateAll" << std::endl;
   m_clipRect.empty();
   update();
   if (m_vRuler) m_vRuler->update();
@@ -1712,9 +1745,10 @@ void SceneViewer::GLInvalidateAll() {
 //-----------------------------------------------------------------------------
 
 void SceneViewer::GLInvalidateRect(const TRectD &rect) {
+  std::cout << "GLInvalidateRect rect :"<<rect.getLx()<<" x "<<rect.getLy() << std::endl;
   m_clipRect = rect;
   update();
-  m_clipRect.empty();
+  //m_clipRect.empty();
   if (m_vRuler) m_vRuler->update();
   if (m_hRuler) m_hRuler->update();
 }

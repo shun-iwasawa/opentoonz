@@ -746,7 +746,26 @@ void SmoothStroke::getSmoothPoints(std::vector<TThickPoint> &smoothPoints) {
 }
 
 //--------------------------------------------------------------------------------------------------
+#define NOSMOOTH
+#ifdef NOSMOOTH
+void SmoothStroke::generatePoints() {
+  int n = (int)m_rawPoints.size();
+  if (n == 0) {
+    return;
+  }
 
+  // Compare the new smoothed stroke with old one
+  // Enable the output for unchanged parts
+  int outputNum = (int)m_outputPoints.size();
+  for (int i = m_outputIndex; i < outputNum; ++i) {
+    if (m_outputPoints[i] != m_rawPoints[i]) {
+      break;
+    }
+    ++m_outputIndex;
+  }
+  m_outputPoints = m_rawPoints;
+}
+#else
 void SmoothStroke::generatePoints() {
   int n = (int)m_rawPoints.size();
   if (n == 0) {
@@ -784,7 +803,7 @@ void SmoothStroke::generatePoints() {
   }
   m_outputPoints = smoothedPoints;
 }
-
+#endif
 //===================================================================
 //
 // BrushTool

@@ -457,8 +457,12 @@ void RasterPainter::flushRasterImages() {
   TRect rect(tfloor(bbox.x0), tfloor(bbox.y0), tceil(bbox.x1), tceil(bbox.y1));
   rect = rect * TRect(0, 0, m_dim.lx - 1, m_dim.ly - 1);
 
+  rect = m_clipRect;
+
   int lx = rect.getLx(), ly = rect.getLy();
   TDimension dim(lx, ly);
+
+  std::cout << "dim = " << lx << ", " << ly << std::endl;
 
   // Build a raster buffer of sufficient size to hold said union.
   // The buffer is per-thread cached in order to improve the rendering speed.
