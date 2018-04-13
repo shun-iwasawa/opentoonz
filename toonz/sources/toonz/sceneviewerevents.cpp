@@ -404,7 +404,8 @@ void SceneViewer::onEnter() {
 void SceneViewer::mouseMoveEvent(QMouseEvent *event) {
   // if this is called just after tabletEvent, skip the execution
   if (m_tabletEvent) return;
-  if (m_gestureActive) {
+  // and touchscreens but not touchpads...
+  if (m_gestureActive && !QTouchDevice::TouchPad) {
     return;
   }
   // there are three cases to come here :
@@ -572,7 +573,8 @@ void SceneViewer::mousePressEvent(QMouseEvent *event) {
   int source = event->source();
   // if this is called just after tabletEvent, skip the execution
   if (m_tabletEvent) return;
-  if (m_gestureActive) {
+  // and touchscreens but not touchpads...
+  if (m_gestureActive && !QTouchDevice::TouchPad) {
     return;
   }
   // For now OSX has a critical problem that mousePressEvent is called just
@@ -687,7 +689,8 @@ void SceneViewer::mouseReleaseEvent(QMouseEvent *event) {
     m_tabletEvent = false;
     return;
   }
-  if (m_gestureActive) {
+  // for touchscreens but not touchpads...
+  if (m_gestureActive && !QTouchDevice::TouchPad) {
     m_gestureActive = false;
     m_rotating      = false;
     m_zooming       = false;
@@ -854,7 +857,11 @@ void SceneViewer::wheelEvent(QWheelEvent *event) {
       } else if (delta > 0) {
         CommandManager::instance()->execute("MI_PrevDrawing");
       }
-    } else {
+    } 
+    // Mouse wheel zoom interfered with touchpad panning (touch enabled)
+    // Now if touch is enabled, touchpads ignore the mouse wheel zoom
+    else if((m_gestureActive == true && !QTouchDevice::TouchPad) || 
+              m_gestureActive == false) {
       zoomQt(event->pos() * getDevPixRatio(), exp(0.001 * delta));
     }
   }
@@ -944,11 +951,15 @@ void SceneViewer::touchEvent(QTouchEvent *e, int type) {
     m_firstPanPoint = e->touchPoints().at(0).pos();
     m_undoPoint     = m_firstPanPoint;
   }
-  if (e->touchPoints().count() == 1 && m_touchActive) {
+  // touchpads must have 2 finger panning for tools and navigation to be functional
+  // on other devices, 1 finger panning is preferred
+  if ((e->touchPoints().count() == 2 && m_touchActive && QTouchDevice::TouchPad)
+      || (e->touchPoints().count() == 1 && m_touchActive && QTouchDevice::TouchScreen)) {
     QTouchEvent::TouchPoint panPoint = e->touchPoints().at(0);
     if (!m_panning) {
       QPointF deltaPoint = panPoint.pos() - m_firstPanPoint;
-      if (deltaPoint.manhattanLength() > 100) {
+      // minimize accidental and jerky zooming/rotating during 2 finger panning
+      if ((deltaPoint.manhattanLength() > 100) && !m_zooming && !m_rotating) {
         m_panning = true;
       }
     }
