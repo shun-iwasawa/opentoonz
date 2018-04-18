@@ -232,10 +232,15 @@ QTreeWidgetItem *StudioPaletteTreeViewer::createItem(const TFilePath path) {
       item->setIcon(0, m_studioPaletteIcon);
     else
       item->setIcon(0, m_levelPaletteIcon);
-  } else if (studioPalette->isFolder(path))
+    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled |
+                   Qt::ItemIsEnabled | Qt::ItemNeverHasChildren);
+  } else if (studioPalette->isFolder(path)) {
     item->setIcon(0, m_folderIcon);
+    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable |
+                   Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
+                   Qt::ItemIsEnabled);
+  }
   item->setData(1, Qt::UserRole, toQString(path));
-  item->setFlags(item->flags() | Qt::ItemIsEditable);
 
   return item;
 }
@@ -1034,6 +1039,23 @@ void StudioPaletteTreeViewer::dragMoveEvent(QDragMoveEvent *event) {
   if (m_dropItem) m_dropItem->setTextColor(0, Qt::black);
 
   if (item) {
+    // drop will not be executed on the same item
+    const QMimeData *mimeData = event->mimeData();
+    if (mimeData->hasUrls() && mimeData->urls().size() == 1) {
+      TFilePath path =
+          TFilePath(mimeData->urls()[0].toLocalFile().toStdWString());
+      if (path == getItemPath(item)) {
+        m_dropItem = 0;
+        event->ignore();
+        viewport()->update();
+        return;
+      }
+    }
+    // when dragging over other items, drop destination will be the parent
+    // folder of it
+    if (item->flags() & Qt::ItemNeverHasChildren) {
+      item = item->parent();
+    }
     m_dropItem = item;
     event->acceptProposedAction();
   } else {
@@ -1075,15 +1097,33 @@ void StudioPaletteTreeViewer::dropEvent(QDropEvent *event) {
   if (!mimeData->hasUrls() || mimeData->urls().size() == 0) return;
 
   QList<QUrl> urls = mimeData->urls();
+
+  // make the list of palette paths which will be actually moved
+  QList<TFilePath> palettePaths;
+  for (int i = 0; i < urls.size(); i++) {
+    TFilePath path = TFilePath(urls[i].toLocalFile().toStdWString());
+    if (path != newPath && path.getParentDir() != newPath)
+      palettePaths.append(path);
+  }
+  if (palettePaths.isEmpty()) return;
+
+  // open the confirmation dialog in order to prevent unintended move
+  QString pltName;
+  if (palettePaths.size() == 1)
+    pltName = tr("the palette \"%1\"")
+                  .arg(QString::fromStdWString(palettePaths[0].getWideName()));
+  else
+    pltName       = tr("the selected palettes");
+  QString dstName = QString::fromStdWString(newPath.getWideName());
+
+  QString question =
+      tr("Move %1 to \"%2\". Are you sure ?").arg(pltName).arg(dstName);
+  int ret = DVGui::MsgBox(question, tr("Move"), tr("Cancel"));
+  if (ret == 0 || ret == 2) return;
+
   TUndoManager::manager()->beginBlock();
-  int i;
-  for (i = 0; i < urls.size(); i++) {
-    QUrl url       = urls[i];
-    TFilePath path = TFilePath(url.toLocalFile().toStdWString());
-
-    StudioPalette *studioPalette = StudioPalette::instance();
-    if (path == newPath || path.getParentDir() == newPath) continue;
-
+  for (int i = 0; i < palettePaths.size(); i++) {
+    TFilePath path = palettePaths[i];
     if (isInStudioPalette(path)) {
       TFilePath newPalettePath =
           newPath +
@@ -1099,7 +1139,7 @@ void StudioPaletteTreeViewer::dropEvent(QDropEvent *event) {
     }
   }
   TUndoManager::manager()->endBlock();
-  event->setDropAction(Qt::CopyAction);
+  event->setDropAction(Qt::MoveAction);
   event->accept();
 }
 
