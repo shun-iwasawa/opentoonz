@@ -227,18 +227,17 @@ QTreeWidgetItem *StudioPaletteTreeViewer::createItem(const TFilePath path) {
   QString itemName             = toQString(TFilePath(path.getWideName()));
   QTreeWidgetItem *item =
       new QTreeWidgetItem((QTreeWidget *)0, QStringList(itemName));
+  item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable |
+                 Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
   if (studioPalette->isPalette(path)) {
     if (studioPalette->hasGlobalName(path))
       item->setIcon(0, m_studioPaletteIcon);
     else
       item->setIcon(0, m_levelPaletteIcon);
-    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled |
-                   Qt::ItemIsEnabled | Qt::ItemNeverHasChildren);
+    item->setFlags(item->flags() | Qt::ItemNeverHasChildren);
   } else if (studioPalette->isFolder(path)) {
     item->setIcon(0, m_folderIcon);
-    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable |
-                   Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
-                   Qt::ItemIsEnabled);
+    item->setFlags(item->flags() | Qt::ItemIsDropEnabled);
   }
   item->setData(1, Qt::UserRole, toQString(path));
 
@@ -354,6 +353,17 @@ void StudioPaletteTreeViewer::onRefreshTreeShortcutTriggered() {
 */
 
 void StudioPaletteTreeViewer::refreshItem(QTreeWidgetItem *item) {
+  struct Locals {
+    bool isUpper(const TFilePath &fp1, const TFilePath &fp2) {
+      bool fp1IsFolder = StudioPalette::instance()->isFolder(fp1);
+      bool fp2IsFolder = StudioPalette::instance()->isFolder(fp2);
+      if (fp1IsFolder == fp2IsFolder)
+        return fp1 < fp2;
+      else
+        return fp1IsFolder;
+    }
+  } locals;
+
   TFilePath folderPath = getItemPath(item);
   assert(folderPath != TFilePath());
   // correct only tpl files and folders
@@ -379,14 +389,13 @@ void StudioPaletteTreeViewer::refreshItem(QTreeWidgetItem *item) {
     if (path == currentItemPath) {
       itemIndex++;
       pathIndex++;
-    } else if ((!path.isEmpty() && path < currentItemPath) ||
+    } else if ((!path.isEmpty() && locals.isUpper(path, currentItemPath)) ||
                currentItemPath.isEmpty()) {
       currentItem = createItem(path);
-      item->insertChild(itemIndex, currentItem);
-      itemIndex++;
+      item->insertChild(pathIndex, currentItem);
       pathIndex++;
     } else {
-      assert(currentItemPath < path || path.isEmpty());
+      assert(locals.isUpper(currentItemPath, path) || path.isEmpty());
       assert(currentItem);
       item->removeChild(currentItem);
       itemIndex++;

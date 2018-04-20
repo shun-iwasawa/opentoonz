@@ -241,10 +241,13 @@ public:
 
 class MovePaletteUndo final : public TUndo {
   TFilePath m_dstPath, m_srcPath;
+  bool m_isRename;
 
 public:
   MovePaletteUndo(const TFilePath &dstPath, const TFilePath &srcPath)
-      : m_dstPath(dstPath), m_srcPath(srcPath) {}
+      : m_dstPath(dstPath), m_srcPath(srcPath) {
+    m_isRename = (m_srcPath.getParentDir() == m_dstPath.getParentDir());
+  }
 
   void undo() const override {
     StudioPalette::instance()->movePalette(m_srcPath, m_dstPath);
@@ -254,10 +257,15 @@ public:
   }
   int getSize() const override { return sizeof(*this); }
   QString getHistoryString() override {
-    return QObject::tr("Move Studio Palette Folder  : %1 : %2 > %3")
-        .arg(QString::fromStdString(m_srcPath.getName()))
-        .arg(QString::fromStdString(m_srcPath.getParentDir().getName()))
-        .arg(QString::fromStdString(m_dstPath.getParentDir().getName()));
+    if (m_isRename)
+      return QObject::tr("Rename Studio Palette : %1 > %2")
+          .arg(QString::fromStdString(m_srcPath.getName()))
+          .arg(QString::fromStdString(m_dstPath.getName()));
+    else
+      return QObject::tr("Move Studio Palette Folder  : %1 : %2 > %3")
+          .arg(QString::fromStdString(m_srcPath.getName()))
+          .arg(QString::fromStdString(m_srcPath.getParentDir().getName()))
+          .arg(QString::fromStdString(m_dstPath.getParentDir().getName()));
   }
   int getHistoryType() override { return HistoryType::Palette; }
 };
