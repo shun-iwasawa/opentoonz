@@ -10,6 +10,7 @@
 #include "tconvert.h"
 #include "ttoonzimage.h"
 #include "timagecache.h"
+#include "tmsgcore.h"
 
 #include "toonz/studiopalette.h"
 #include "toonz/toonzscene.h"
@@ -250,10 +251,29 @@ public:
   }
 
   void undo() const override {
-    StudioPalette::instance()->movePalette(m_srcPath, m_dstPath);
+    QString errorStr = (m_isRename) ? QObject::tr("Can't undo rename palette")
+                                    : QObject::tr("Can't undo move palette");
+    try {
+      StudioPalette::instance()->movePalette(m_srcPath, m_dstPath);
+    } catch (TException &e) {
+      DVGui::error(errorStr + " : " +
+                   QString(::to_string(e.getMessage()).c_str()));
+    } catch (...) {
+      DVGui::error(errorStr);
+    }
   }
+
   void redo() const override {
-    StudioPalette::instance()->movePalette(m_dstPath, m_srcPath);
+    QString errorStr = (m_isRename) ? QObject::tr("Can't redo rename palette")
+                                    : QObject::tr("Can't redo move palette");
+    try {
+      StudioPalette::instance()->movePalette(m_dstPath, m_srcPath);
+    } catch (TException &e) {
+      DVGui::error(errorStr + ":" +
+                   QString(::to_string(e.getMessage()).c_str()));
+    } catch (...) {
+      DVGui::error(errorStr);
+    }
   }
   int getSize() const override { return sizeof(*this); }
   QString getHistoryString() override {

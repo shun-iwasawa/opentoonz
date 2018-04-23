@@ -256,9 +256,10 @@ TPalette *StudioPalette::getPalette(const TFilePath &path,
 void StudioPalette::movePalette(const TFilePath &dstPath,
                                 const TFilePath &srcPath) {
   try {
-    TSystem::renameFile(dstPath, srcPath);
+    // do not allow overwrite palette
+    TSystem::renameFile(dstPath, srcPath, false);
   } catch (...) {
-    return;
+    throw;
   }
   std::wstring id = readPaletteGlobalName(dstPath);
   table.erase(id);
