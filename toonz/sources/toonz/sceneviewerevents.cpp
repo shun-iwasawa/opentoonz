@@ -100,6 +100,9 @@ void initToonzEvent(TMouseEvent &toonzEvent, QTabletEvent *event,
   toonzEvent.m_buttons  = event->buttons();
   toonzEvent.m_button   = event->button();
   toonzEvent.m_isTablet = true;
+  // this delays autosave during stylus button press until after the next 
+  // brush stroke - this minimizes problems from interruptions to tablet input
+  TApp::instance()->getCurrentTool()->setToolBusy(true);
 }
 
 //-----------------------------------------------------------------------------
