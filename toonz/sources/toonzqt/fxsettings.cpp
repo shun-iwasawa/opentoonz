@@ -824,12 +824,8 @@ void ParamsPageSet::createControls(const TFxP &fx, int index) {
   TFilePath fp = ToonzFolder::getProfileFolder() + "layouts" + "fxs" +
                  (fx->getFxType() + ".xml");
 
-  // Verify XML file exists
-  if (!TFileStatus(fp).doesExist()) {
-	  return;
-  }
-  
   TIStream is(fp);
+  if (!is) return;
 
   if (fx->getParams()->getParamCount()) {
     try {
@@ -915,12 +911,11 @@ void ParamsPageSet::openHelpFile() {
   std::string helpDocLang = currentLanguage.toStdString();
 
   // Assume associated language subdir exists
-  TFilePath helpFp =
-      TEnv::getStuffDir() + TFilePath("doc") + TFilePath(helpDocLang) + TFilePath(m_helpFilePath);
-  
+  TFilePath helpFp = TEnv::getStuffDir() + "doc" + helpDocLang + m_helpFilePath;
+
   // Verify subdir exists; if not, default to standard doc dir
   if (!TFileStatus(helpFp).doesExist()) {
-	  helpFp = TEnv::getStuffDir() + TFilePath("doc") + TFilePath(m_helpFilePath);
+    helpFp = TEnv::getStuffDir() + "doc" + m_helpFilePath;
   }
 
   // commandString +=
