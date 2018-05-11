@@ -100,7 +100,7 @@ void initToonzEvent(TMouseEvent &toonzEvent, QTabletEvent *event,
   toonzEvent.m_buttons  = event->buttons();
   toonzEvent.m_button   = event->button();
   toonzEvent.m_isTablet = true;
-  // this delays autosave during stylus button press until after the next 
+  // this delays autosave during stylus button press until after the next
   // brush stroke - this minimizes problems from interruptions to tablet input
   TApp::instance()->getCurrentTool()->setToolBusy(true);
 }
@@ -408,7 +408,7 @@ void SceneViewer::mouseMoveEvent(QMouseEvent *event) {
   // if this is called just after tabletEvent, skip the execution
   if (m_tabletEvent) return;
   // and touchscreens but not touchpads...
-  if (m_gestureActive && !QTouchDevice::TouchPad) {
+  if (m_gestureActive && m_touchDevice == QTouchDevice::TouchScreen) {
     return;
   }
   // there are three cases to come here :
@@ -577,7 +577,7 @@ void SceneViewer::mousePressEvent(QMouseEvent *event) {
   // if this is called just after tabletEvent, skip the execution
   if (m_tabletEvent) return;
   // and touchscreens but not touchpads...
-  if (m_gestureActive && !QTouchDevice::TouchPad) {
+  if (m_gestureActive && m_touchDevice == QTouchDevice::TouchScreen) {
     return;
   }
   // For now OSX has a critical problem that mousePressEvent is called just
@@ -693,7 +693,7 @@ void SceneViewer::mouseReleaseEvent(QMouseEvent *event) {
     return;
   }
   // for touchscreens but not touchpads...
-  if (m_gestureActive && !QTouchDevice::TouchPad) {
+  if (m_gestureActive && m_touchDevice == QTouchDevice::TouchScreen) {
     m_gestureActive = false;
     m_rotating      = false;
     m_zooming       = false;
@@ -860,11 +860,12 @@ void SceneViewer::wheelEvent(QWheelEvent *event) {
       } else if (delta > 0) {
         CommandManager::instance()->execute("MI_PrevDrawing");
       }
-    } 
+    }
     // Mouse wheel zoom interfered with touchpad panning (touch enabled)
     // Now if touch is enabled, touchpads ignore the mouse wheel zoom
-    else if((m_gestureActive == true && !QTouchDevice::TouchPad) || 
-              m_gestureActive == false) {
+    else if ((m_gestureActive == true &&
+              m_touchDevice == QTouchDevice::TouchScreen) ||
+             m_gestureActive == false) {
       zoomQt(event->pos() * getDevPixRatio(), exp(0.001 * delta));
     }
   }
@@ -954,34 +955,40 @@ void SceneViewer::touchEvent(QTouchEvent *e, int type) {
     m_touchActive   = true;
     m_firstPanPoint = e->touchPoints().at(0).pos();
     m_undoPoint     = m_firstPanPoint;
-  }
-  // touchpads must have 2 finger panning for tools and navigation to be functional
-  // on other devices, 1 finger panning is preferred
-  if ((e->touchPoints().count() == 2 && m_touchActive && QTouchDevice::TouchPad)
-      || (e->touchPoints().count() == 1 && m_touchActive && QTouchDevice::TouchScreen)) {
-    QTouchEvent::TouchPoint panPoint = e->touchPoints().at(0);
-    if (!m_panning) {
-      QPointF deltaPoint = panPoint.pos() - m_firstPanPoint;
-      // minimize accidental and jerky zooming/rotating during 2 finger panning
-      if ((deltaPoint.manhattanLength() > 100) && !m_zooming && !m_rotating) {
-        m_panning = true;
+    // obtain device type
+    m_touchDevice = e->device()->type();
+  } else if (m_touchActive) {
+    // touchpads must have 2 finger panning for tools and navigation to be
+    // functional
+    // on other devices, 1 finger panning is preferred
+    if ((e->touchPoints().count() == 2 &&
+         m_touchDevice == QTouchDevice::TouchPad) ||
+        (e->touchPoints().count() == 1 &&
+         m_touchDevice == QTouchDevice::TouchScreen)) {
+      QTouchEvent::TouchPoint panPoint = e->touchPoints().at(0);
+      if (!m_panning) {
+        QPointF deltaPoint = panPoint.pos() - m_firstPanPoint;
+        // minimize accidental and jerky zooming/rotating during 2 finger
+        // panning
+        if ((deltaPoint.manhattanLength() > 100) && !m_zooming && !m_rotating) {
+          m_panning = true;
+        }
       }
-    }
-    if (m_panning) {
-      QPointF centerDelta = (panPoint.pos() * getDevPixRatio()) -
-                            (panPoint.lastPos() * getDevPixRatio());
-      panQt(centerDelta.toPoint());
-    }
-  }
-  if (e->touchPoints().count() == 3 && m_touchActive) {
-    QPointF newPoint = e->touchPoints().at(0).pos();
-    if (m_undoPoint.x() - newPoint.x() > 100) {
-      CommandManager::instance()->execute("MI_Undo");
-      m_undoPoint = newPoint;
-    }
-    if (m_undoPoint.x() - newPoint.x() < -100) {
-      CommandManager::instance()->execute("MI_Redo");
-      m_undoPoint = newPoint;
+      if (m_panning) {
+        QPointF centerDelta = (panPoint.pos() * getDevPixRatio()) -
+                              (panPoint.lastPos() * getDevPixRatio());
+        panQt(centerDelta.toPoint());
+      }
+    } else if (e->touchPoints().count() == 3) {
+      QPointF newPoint = e->touchPoints().at(0).pos();
+      if (m_undoPoint.x() - newPoint.x() > 100) {
+        CommandManager::instance()->execute("MI_Undo");
+        m_undoPoint = newPoint;
+      }
+      if (m_undoPoint.x() - newPoint.x() < -100) {
+        CommandManager::instance()->execute("MI_Redo");
+        m_undoPoint = newPoint;
+      }
     }
   }
   if (type == QEvent::TouchEnd || type == QEvent::TouchCancel) {
