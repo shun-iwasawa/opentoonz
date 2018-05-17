@@ -852,9 +852,9 @@ BrushTool::BrushTool(std::string name, int targetType)
     m_prop[0].bind(m_pencil);
     m_pencil.setId("PencilMode");
 
-    m_drawOrder.addValue(tr("Over All").toStdWString());
-    m_drawOrder.addValue(tr("Under All").toStdWString());
-    m_drawOrder.addValue(tr("Palette Order").toStdWString());
+    m_drawOrder.addValue(L"Over All");
+    m_drawOrder.addValue(L"Under All");
+    m_drawOrder.addValue(L"Palette Order");
     m_drawOrder.setId("DrawOrder");
   }
 
@@ -883,15 +883,16 @@ BrushTool::BrushTool(std::string name, int targetType)
   m_pressure.setId("PressureSensitivity");
 
   if (targetType & TTool::Vectors) {
-    m_capStyle.addValue(BUTT_WSTR);
-    m_capStyle.addValue(ROUNDC_WSTR);
-    m_capStyle.addValue(PROJECTING_WSTR);
+    m_capStyle.addValue(BUTT_WSTR, QString::fromStdWString(BUTT_WSTR));
+    m_capStyle.addValue(ROUNDC_WSTR, QString::fromStdWString(ROUNDC_WSTR));
+    m_capStyle.addValue(PROJECTING_WSTR,
+                        QString::fromStdWString(PROJECTING_WSTR));
     m_capStyle.setId("Cap");
     m_prop[1].bind(m_capStyle);
 
-    m_joinStyle.addValue(MITER_WSTR);
-    m_joinStyle.addValue(ROUNDJ_WSTR);
-    m_joinStyle.addValue(BEVEL_WSTR);
+    m_joinStyle.addValue(MITER_WSTR, QString::fromStdWString(MITER_WSTR));
+    m_joinStyle.addValue(ROUNDJ_WSTR, QString::fromStdWString(ROUNDJ_WSTR));
+    m_joinStyle.addValue(BEVEL_WSTR, QString::fromStdWString(BEVEL_WSTR));
     m_joinStyle.setId("Join");
     m_prop[1].bind(m_joinStyle);
 
@@ -1061,8 +1062,14 @@ void BrushTool::updateTranslation() {
   m_accuracy.setQStringName(tr("Accuracy:"));
   m_smooth.setQStringName(tr("Smooth:"));
   m_drawOrder.setQStringName(tr("Draw Order:"));
+  if (m_targetType & TTool::ToonzImage) {
+    m_drawOrder.setItemUIName(L"Over All", tr("Over All"));
+    m_drawOrder.setItemUIName(L"Under All", tr("Under All"));
+    m_drawOrder.setItemUIName(L"Palette Order", tr("Palette Order"));
+  }
   // m_filled.setQStringName(tr("Filled"));
   m_preset.setQStringName(tr("Preset:"));
+  m_preset.setItemUIName(CUSTOM_WSTR, tr("<custom>"));
   m_breakAngles.setQStringName(tr("Break"));
   m_pencil.setQStringName(tr("Pencil"));
   m_pressure.setQStringName(tr("Pressure"));
@@ -1072,6 +1079,22 @@ void BrushTool::updateTranslation() {
   m_frameRange.setQStringName(tr("Range:"));
   m_snap.setQStringName(tr("Snap"));
   m_snapSensitivity.setQStringName("");
+  if (m_targetType & TTool::Vectors) {
+    m_frameRange.setItemUIName(L"Off", tr("Off"));
+    m_frameRange.setItemUIName(LINEAR_WSTR, tr("Linear"));
+    m_frameRange.setItemUIName(EASEIN_WSTR, tr("In"));
+    m_frameRange.setItemUIName(EASEOUT_WSTR, tr("Out"));
+    m_frameRange.setItemUIName(EASEINOUT_WSTR, tr("In&Out"));
+    m_snapSensitivity.setItemUIName(LOW_WSTR, tr("Low"));
+    m_snapSensitivity.setItemUIName(MEDIUM_WSTR, tr("Med"));
+    m_snapSensitivity.setItemUIName(HIGH_WSTR, tr("High"));
+    m_capStyle.setItemUIName(BUTT_WSTR, tr("Butt cap"));
+    m_capStyle.setItemUIName(ROUNDC_WSTR, tr("Round cap"));
+    m_capStyle.setItemUIName(PROJECTING_WSTR, tr("Projecting cap"));
+    m_joinStyle.setItemUIName(MITER_WSTR, tr("Miter join"));
+    m_joinStyle.setItemUIName(ROUNDJ_WSTR, tr("Round join"));
+    m_joinStyle.setItemUIName(BEVEL_WSTR, tr("Bevel join"));
+  }
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -1264,11 +1287,14 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
         m_tileSaver->save(m_rasterTrack->getLastRect());
         m_rasterTrack->generateLastPieceOfStroke(m_pencil.getValue());
 
-        m_smoothStroke.beginStroke(m_smooth.getValue());
-        m_smoothStroke.addPoint(thickPoint);
         std::vector<TThickPoint> pts;
-        m_smoothStroke.getSmoothPoints(
-            pts);  // skip first point because it has been outputted
+        if (m_smooth.getValue() == 0) {
+          pts.push_back(thickPoint);
+        } else {
+          m_smoothStroke.beginStroke(m_smooth.getValue());
+          m_smoothStroke.addPoint(thickPoint);
+          m_smoothStroke.getSmoothPoints(pts);
+        }
       } else {
         m_points.clear();
         TThickPoint point(pos + rasCenter, thickness);
@@ -1286,11 +1312,14 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
                                      m_styleId, drawOrder);
         m_lastRect = m_strokeRect;
 
-        m_smoothStroke.beginStroke(m_smooth.getValue());
-        m_smoothStroke.addPoint(point);
         std::vector<TThickPoint> pts;
-        m_smoothStroke.getSmoothPoints(
-            pts);  // skip first point because it has been outputted
+        if (m_smooth.getValue() == 0) {
+          pts.push_back(point);
+        } else {
+          m_smoothStroke.beginStroke(m_smooth.getValue());
+          m_smoothStroke.addPoint(point);
+          m_smoothStroke.getSmoothPoints(pts);
+        }
       }
       /*-- 作業中のFidを登録 --*/
       m_workingFrameId = getFrameId();
@@ -1343,9 +1372,13 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
       if (!m_pencil.getValue()) thickness -= 1.0;
 
       TThickPoint thickPoint(pos + rasCenter, thickness);
-      m_smoothStroke.addPoint(thickPoint);
       std::vector<TThickPoint> pts;
-      m_smoothStroke.getSmoothPoints(pts);
+      if (m_smooth.getValue() == 0) {
+        pts.push_back(thickPoint);
+      } else {
+        m_smoothStroke.addPoint(thickPoint);
+        m_smoothStroke.getSmoothPoints(pts);
+      }
       for (size_t i = 0; i < pts.size(); ++i) {
         const TThickPoint &thickPoint = pts[i];
         isAdded                       = m_rasterTrack->add(thickPoint);
@@ -1377,9 +1410,13 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
       // antialiased brush
       assert(m_workRas.getPointer() && m_backupRas.getPointer());
       TThickPoint thickPoint(pos + rasCenter, thickness);
-      m_smoothStroke.addPoint(thickPoint);
       std::vector<TThickPoint> pts;
-      m_smoothStroke.getSmoothPoints(pts);
+      if (m_smooth.getValue() == 0) {
+        pts.push_back(thickPoint);
+      } else {
+        m_smoothStroke.addPoint(thickPoint);
+        m_smoothStroke.getSmoothPoints(pts);
+      }
       bool rectUpdated = false;
       for (size_t i = 0; i < pts.size(); ++i) {
         TThickPoint old = m_points.back();
@@ -1800,10 +1837,14 @@ void BrushTool::finishRasterBrush(const TPointD &pos, double pressureVal) {
 
     TRectD invalidateRect;
     TThickPoint thickPoint(pos + rasCenter, thickness);
-    m_smoothStroke.addPoint(thickPoint);
-    m_smoothStroke.endStroke();
     std::vector<TThickPoint> pts;
-    m_smoothStroke.getSmoothPoints(pts);
+    if (m_smooth.getValue() == 0) {
+      pts.push_back(thickPoint);
+    } else {
+      m_smoothStroke.addPoint(thickPoint);
+      m_smoothStroke.endStroke();
+      m_smoothStroke.getSmoothPoints(pts);
+    }
     for (size_t i = 0; i < pts.size(); ++i) {
       const TThickPoint &thickPoint = pts[i];
       bool isAdded                  = m_rasterTrack->add(thickPoint);
@@ -1855,10 +1896,14 @@ void BrushTool::finishRasterBrush(const TPointD &pos, double pressureVal) {
       TRectD invalidateRect;
       bool rectUpdated = false;
       TThickPoint thickPoint(pos + rasCenter, thickness);
-      m_smoothStroke.addPoint(thickPoint);
-      m_smoothStroke.endStroke();
       std::vector<TThickPoint> pts;
-      m_smoothStroke.getSmoothPoints(pts);
+      if (m_smooth.getValue() == 0) {
+        pts.push_back(thickPoint);
+      } else {
+        m_smoothStroke.addPoint(thickPoint);
+        m_smoothStroke.endStroke();
+        m_smoothStroke.getSmoothPoints(pts);
+      }
       for (size_t i = 0; i < pts.size() - 1; ++i) {
         TThickPoint old = m_points.back();
         if (norm2(pos - old) < 4) continue;
@@ -2154,8 +2199,8 @@ void BrushTool::checkGuideSnapping(bool beforeMousePress) {
         snapPoint.x = hGuide;
       }
       beforeMousePress ? m_foundFirstSnap = true : m_foundLastSnap = true;
-      beforeMousePress ? m_firstSnapPoint                          = snapPoint
-                       : m_lastSnapPoint                           = snapPoint;
+      beforeMousePress ? m_firstSnapPoint = snapPoint : m_lastSnapPoint =
+                                                            snapPoint;
     }
   }
 }
@@ -2209,6 +2254,9 @@ void BrushTool::draw() {
   }
 
   if (getApplication()->getCurrentObject()->isSpline()) return;
+
+  // If toggled off, don't draw brush outline
+  if (!Preferences::instance()->isCursorOutlineEnabled()) return;
 
   // Draw the brush outline - change color when the Ink / Paint check is
   // activated
