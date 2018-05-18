@@ -411,7 +411,7 @@ void Ffmpeg::getFramesFromMovie(int frame) {
 
 QString Ffmpeg::cleanPathSymbols() {
   return m_path.getQString().remove(QRegExp(
-      QString::fromUtf8("[-`~!@#$%^&*()_E=|:;<>«»,.?/{}\'\"\\[\\]\\\\]")));
+      QString::fromUtf8("[-`~!@#$%^&*()_Â—+=|:;<>Â«Â»,.?/{}\'\"\\[\\]\\\\]")));
 }
 
 int Ffmpeg::getGifFrameCount() {
