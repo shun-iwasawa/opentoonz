@@ -101,68 +101,81 @@
 <context>
     <name>CameraSettingsWidget</name>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="202"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="198"/>
         <source>DPI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="203"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="195"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="199"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="398"/>
         <source>Pixels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="204"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="200"/>
         <source>x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="208"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="204"/>
         <source>Use Current Level Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="211"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="207"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="212"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="208"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="250"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="246"/>
         <source>Force Squared Pixel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="874"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="292"/>
+        <source>A/R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="406"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="824"/>
+        <source>&lt;custom&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="870"/>
         <source>Bad camera preset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="875"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="871"/>
         <source>&apos;%1&apos; doesn&apos;t seem a well formed camera preset. 
 Possibly the preset file has been corrupted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="908"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="904"/>
         <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="909"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="905"/>
         <source>Enter the name for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="914"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="910"/>
         <source>Error : Preset Name is Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="915"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="911"/>
         <source>The preset name must not use &apos;,&apos;(comma).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -268,6 +281,29 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>DVGui::ColorField</name>
+    <message>
+        <location filename="../../toonzqt/colorfield.cpp" line="358"/>
+        <source>R:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/colorfield.cpp" line="361"/>
+        <source>G:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/colorfield.cpp" line="364"/>
+        <source>B:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/colorfield.cpp" line="367"/>
+        <source>A:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DVGui::DvTextEdit</name>
     <message>
         <location filename="../../toonzqt/dvtextedit.cpp" line="153"/>
@@ -329,6 +365,15 @@ Possibly the preset file has been corrupted</source>
     <message>
         <location filename="../../toonzqt/dvdialog.cpp" line="831"/>
         <source>OpenToonz</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DVGui::StyleIndexLineEdit</name>
+    <message>
+        <location filename="../../toonzqt/styleindexlineedit.cpp" line="19"/>
+        <location filename="../../toonzqt/styleindexlineedit.cpp" line="35"/>
+        <source>current</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1320,6 +1365,36 @@ Select FX nodes and related links before copying or cutting the selection you wa
         <source>Logarithmic Scale</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="544"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="546"/>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="546"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="546"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="546"/>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/histogram.cpp" line="547"/>
+        <source>Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoViewer</name>
@@ -1601,24 +1676,19 @@ Select FX nodes and related links before copying or cutting the selection you wa
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="55"/>
-        <source>&lt;custom&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="935"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="931"/>
         <source>Deleting &quot;%1&quot;.
 Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="937"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="933"/>
         <location filename="../../include/toonzqt/paramfield.h" line="183"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/camerasettingswidget.cpp" line="937"/>
+        <location filename="../../toonzqt/camerasettingswidget.cpp" line="933"/>
         <location filename="../../toonzqt/styleselection.cpp" line="1035"/>
         <location filename="../../toonzqt/studiopaletteviewer.cpp" line="494"/>
         <location filename="../../toonzqt/studiopaletteviewer.cpp" line="827"/>
@@ -2540,6 +2610,26 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../toonzqt/styleeditor.cpp" line="2958"/>
+        <source>Wheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/styleeditor.cpp" line="2959"/>
+        <source>HSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/styleeditor.cpp" line="2960"/>
+        <source>Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/styleeditor.cpp" line="2961"/>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../toonzqt/styleeditor.cpp" line="2987"/>
         <source>Toggle orientation of the Color Page.</source>
         <translation type="unfinished"></translation>
@@ -2605,6 +2695,11 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     <message>
         <location filename="../../toonzqt/styleeditor.cpp" line="3285"/>
         <source>No Style Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/styleeditor.cpp" line="3309"/>
+        <source>Palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -500,6 +500,26 @@ Möchten sie die Arbeitsfläche freistellen?</translation>
         <source>Crop</source>
         <translation>Freistellen</translation>
     </message>
+    <message>
+        <source>pixel</source>
+        <translation type="unfinished">pixel</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished">cm</translation>
+    </message>
+    <message>
+        <source>field</source>
+        <translation type="unfinished">Feld</translation>
+    </message>
+    <message>
+        <source>inch</source>
+        <translation type="unfinished">inch</translation>
+    </message>
 </context>
 <context>
     <name>CaptureSettingsPopup</name>
@@ -1929,6 +1949,14 @@ contain the dpi information, then the current camera dpi will be used.
         <source>DPI: </source>
         <translation type="unfinished">DPI:</translation>
     </message>
+    <message>
+        <source>Width: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Height: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExportPanel</name>
@@ -2707,6 +2735,22 @@ Möchten Sie einen erstellen?</translation>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Toonz Vector Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Raster Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan Level</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LevelSettingsPopup</name>
@@ -2800,6 +2844,42 @@ Möchten Sie einen erstellen?</translation>
     </message>
     <message>
         <source>Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image DPI</source>
+        <translation type="unfinished">Bild-DPI</translation>
+    </message>
+    <message>
+        <source>Custom DPI</source>
+        <translation type="unfinished">Eigene DPI</translation>
+    </message>
+    <message>
+        <source>Scan level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mesh level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Palette level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Vector level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Raster level</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7256,6 +7336,42 @@ Also the initial output destination for new scenes will be set to $scenefolder a
         <source>Cursor Style:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Small</source>
+        <translation type="unfinished">Klein</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation type="unfinished">Groß</translation>
+    </message>
+    <message>
+        <source>Crosshair</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left-Handed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic-revised</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesPopup:: FormatProperties</name>
@@ -9170,6 +9286,10 @@ Allow duplicate?</source>
         <source>Check for the latest version on launch.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Nothing to replace: no cells or columns selected.</source>
+        <translation type="unfinished">Es gibt  nichts zum ersetzen: Es wurden weder Cells noch Spalten gewählt.</translation>
+    </message>
 </context>
 <context>
     <name>ReframePopup</name>
@@ -11057,7 +11177,7 @@ Click the arrow button to create a new sub-xsheet</source>
     <name>T</name>
     <message>
         <source>Nothing to replace: no cells or columns selected.</source>
-        <translation type="unfinished">Es gibt  nichts zum ersetzen: Es wurden weder Cells noch Spalten gewählt.</translation>
+        <translation type="obsolete">Es gibt  nichts zum ersetzen: Es wurden weder Cells noch Spalten gewählt.</translation>
     </message>
 </context>
 <context>

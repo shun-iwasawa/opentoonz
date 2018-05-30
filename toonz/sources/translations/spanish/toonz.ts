@@ -505,6 +505,26 @@ Do you want to crop the canvas?</source>
         <source>Crop</source>
         <translation>Recortar</translation>
     </message>
+    <message>
+        <source>pixel</source>
+        <translation type="unfinished">píxeles</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished">cm</translation>
+    </message>
+    <message>
+        <source>field</source>
+        <translation type="unfinished">campos</translation>
+    </message>
+    <message>
+        <source>inch</source>
+        <translation type="unfinished">pulgadas</translation>
+    </message>
 </context>
 <context>
     <name>CaptureSettingsPopup</name>
@@ -1859,6 +1879,14 @@ contuviera información de PPP, entonces se usarán los de la cámara actual.
         <source>End:</source>
         <translation>Final:</translation>
     </message>
+    <message>
+        <source>Width: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Height: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExportPanel</name>
@@ -2581,6 +2609,22 @@ Do you want to create it?</source>
         <source>Save In:</source>
         <translation>Guardar en:</translation>
     </message>
+    <message>
+        <source>Toonz Vector Level</source>
+        <translation type="unfinished">Nivel vectorial de Toonz</translation>
+    </message>
+    <message>
+        <source>Toonz Raster Level</source>
+        <translation type="unfinished">Nivel de imagen de Toonz</translation>
+    </message>
+    <message>
+        <source>Raster Level</source>
+        <translation type="unfinished">Nivel de imagen</translation>
+    </message>
+    <message>
+        <source>Scan Level</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LevelSettingsPopup</name>
@@ -2675,6 +2719,42 @@ Do you want to create it?</source>
     <message>
         <source>Resolution</source>
         <translation>Resolución</translation>
+    </message>
+    <message>
+        <source>Image DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Vector level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Raster level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mesh level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Palette level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound Column</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7187,6 +7267,42 @@ También, se establecerá el destino inicial de salida para las nuevas escenas e
         <source>Cursor Style:</source>
         <translation>Estilo de puntero:</translation>
     </message>
+    <message>
+        <source>Small</source>
+        <translation type="unfinished">Pequeñas</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation type="unfinished">Grandes</translation>
+    </message>
+    <message>
+        <source>Crosshair</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left-Handed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic-revised</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesPopup::FormatProperties</name>
@@ -9062,6 +9178,10 @@ Allow duplicate?</source>
     <message>
         <source>Check for the latest version on launch.</source>
         <translation>Comprobar actualizaciones al iniciar.</translation>
+    </message>
+    <message>
+        <source>Nothing to replace: no cells or columns selected.</source>
+        <translation type="unfinished">Nada que reemplazar: no se han seleccionado acetatos o columnas.</translation>
     </message>
 </context>
 <context>
@@ -10946,7 +11066,7 @@ Clic en el botón con la flecha para crear una nueva sub-planilla</translation>
     <name>T</name>
     <message>
         <source>Nothing to replace: no cells or columns selected.</source>
-        <translation>Nada que reemplazar: no se han seleccionado acetatos o columnas.</translation>
+        <translation type="vanished">Nada que reemplazar: no se han seleccionado acetatos o columnas.</translation>
     </message>
 </context>
 <context>

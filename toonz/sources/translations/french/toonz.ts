@@ -503,6 +503,26 @@ Voulez-vous recadrer la zone de travail?</translation>
         <source>Crop</source>
         <translation>Recadrage</translation>
     </message>
+    <message>
+        <source>pixel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished">mm</translation>
+    </message>
+    <message>
+        <source>cm</source>
+        <translation type="unfinished">cm</translation>
+    </message>
+    <message>
+        <source>field</source>
+        <translation type="unfinished">field</translation>
+    </message>
+    <message>
+        <source>inch</source>
+        <translation type="unfinished">pouce</translation>
+    </message>
 </context>
 <context>
     <name>CaptureSettingsPopup</name>
@@ -1851,6 +1871,14 @@ contain the dpi information, then the current camera dpi will be used.
         <source>End:</source>
         <translation>Fin:</translation>
     </message>
+    <message>
+        <source>Width: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Height: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExportPanel</name>
@@ -2574,6 +2602,22 @@ Voulez-vous le créer?</translation>
         <source>Save In:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Toonz Vector Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Raster Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scan Level</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LevelSettingsPopup</name>
@@ -2667,6 +2711,42 @@ Voulez-vous le créer?</translation>
     </message>
     <message>
         <source>Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image DPI</source>
+        <translation type="unfinished">DPI d&apos;Image</translation>
+    </message>
+    <message>
+        <source>Custom DPI</source>
+        <translation type="unfinished">DPI Personnalisé</translation>
+    </message>
+    <message>
+        <source>Scan level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mesh level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Palette level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound Column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Vector level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toonz Raster level</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7049,6 +7129,42 @@ Also the initial output destination for new scenes will be set to $scenefolder a
         <source>Cursor Style:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Small</source>
+        <translation type="unfinished">Petit</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Crosshair</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left-Handed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Classic-revised</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesPopup::FormatProperties</name>
@@ -8879,6 +8995,10 @@ Allow duplicate?</source>
     </message>
     <message>
         <source>Check for the latest version on launch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nothing to replace: no cells or columns selected.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10746,13 +10866,6 @@ Cliquez sur le bouton fléché pour créer un nouveau sub-xsheet</translation>
     <message>
         <source>Current Scene</source>
         <translation type="vanished">Plan Courant</translation>
-    </message>
-</context>
-<context>
-    <name>T</name>
-    <message>
-        <source>Nothing to replace: no cells or columns selected.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

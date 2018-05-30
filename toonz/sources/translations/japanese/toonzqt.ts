@@ -165,6 +165,14 @@ Possibly the preset file has been corrupted</source>
         <source>x</source>
         <translation></translation>
     </message>
+    <message>
+        <source>A/R</source>
+        <translation>縦横比</translation>
+    </message>
+    <message>
+        <source>&lt;custom&gt;</source>
+        <translation>&lt;カスタム&gt;</translation>
+    </message>
 </context>
 <context>
     <name>ChannelHisto</name>
@@ -298,6 +306,25 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>DVGui::ColorField</name>
+    <message>
+        <source>R:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>G:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>B:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>A:</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>DVGui::DvTextEdit</name>
     <message>
         <source>Bold</source>
@@ -358,6 +385,13 @@ Possibly the preset file has been corrupted</source>
     <message>
         <source>OpenToonz</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>DVGui::StyleIndexLineEdit</name>
+    <message>
+        <source>current</source>
+        <translation>選択色</translation>
     </message>
 </context>
 <context>
@@ -1217,6 +1251,30 @@ Select FX nodes and related links before copying or cutting the selection you wa
         <source>Logarithmic Scale</source>
         <translation>対数スケール</translation>
     </message>
+    <message>
+        <source>Value</source>
+        <translation>明度</translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation>RGB</translation>
+    </message>
+    <message>
+        <source>Red</source>
+        <translation>赤</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation>緑</translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation>青</translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation>アルファ</translation>
+    </message>
 </context>
 <context>
     <name>InfoViewer</name>
@@ -1787,7 +1845,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>&lt;custom&gt;</source>
-        <translation>&lt;カスタム&gt;</translation>
+        <translation type="vanished">&lt;カスタム&gt;</translation>
     </message>
     <message>
         <source>Toonz 7.1</source>
@@ -2386,6 +2444,26 @@ Apply</source>
     <message>
         <source>Style Editor - No Valid Style Selected</source>
         <translation>スタイルエディタ - 有効なスタイルが選択されていません</translation>
+    </message>
+    <message>
+        <source>Wheel</source>
+        <translation>カラーホイール</translation>
+    </message>
+    <message>
+        <source>HSV</source>
+        <translation>HSV</translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation>アルファ</translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation>RGB</translation>
+    </message>
+    <message>
+        <source>Palette</source>
+        <translation>パレット</translation>
     </message>
 </context>
 <context>
