@@ -2409,10 +2409,25 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
+    <name>FlipbookPanel</name>
+    <message>
+        <source>Safe Area (Right Click to Select)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FormatSettingsPopup</name>
     <message>
         <source>File Settings</source>
         <translation>Datei-Einstellungen</translation>
+    </message>
+    <message>
+        <source>Configure Codec</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10568,18 +10583,6 @@ Bitte tragen Sie die Änderungen ein oder setzen sie zurück.</translation>
         <translation>Vorschau neu berechnen（nur aktueller Frame）</translation>
     </message>
     <message>
-        <source>Select </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hide </source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show / Hide</source>
         <translation></translation>
     </message>
@@ -10617,6 +10620,22 @@ Bitte tragen Sie die Änderungen ein oder setzen sie zurück.</translation>
     </message>
     <message>
         <source>All Drawings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10764,6 +10783,38 @@ Bitte tragen Sie die Änderungen ein oder setzen sie zurück.</translation>
     <message>
         <source>Shortcut Presets</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Löschen</translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation type="unfinished">Aufgaben-Liste speichern als</translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Setting Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter Preset Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset Name:</source>
+        <translation type="unfinished">Vorgaben-Name:</translation>
     </message>
 </context>
 <context>
@@ -11363,6 +11414,30 @@ Click the arrow button to create a new sub-xsheet</source>
     </message>
     <message>
         <source>Successful Steps:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TaskUnknown</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

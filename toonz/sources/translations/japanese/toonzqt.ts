@@ -260,6 +260,32 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>ComboHistoRGBLabel</name>
+    <message>
+        <source>R:%1 G:%2 B:%3</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ComboHistogram</name>
+    <message>
+        <source>Picked Color</source>
+        <translation>スポイトで拾った色</translation>
+    </message>
+    <message>
+        <source>Average Color (Ctrl + Drag)</source>
+        <translation>平均の色 [Ctrl+ドラッグ]で範囲を指定</translation>
+    </message>
+    <message>
+        <source>X:</source>
+        <translation>X:</translation>
+    </message>
+    <message>
+        <source>Y:</source>
+        <translation>Y：</translation>
+    </message>
+</context>
+<context>
     <name>DVGui</name>
     <message>
         <source>OK</source>
@@ -999,6 +1025,21 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>FunctionTreeModel</name>
+    <message>
+        <source>Stage</source>
+        <translation>ステージ</translation>
+    </message>
+    <message>
+        <source>FX</source>
+        <translation>エフェクト</translation>
+    </message>
+    <message>
+        <source>Plastic Skeleton</source>
+        <translation>プラスチックのボーン</translation>
+    </message>
+</context>
+<context>
     <name>FunctionTreeView</name>
     <message>
         <source>Save Curve</source>
@@ -1019,6 +1060,10 @@ Possibly the preset file has been corrupted</source>
     <message>
         <source>Show All</source>
         <translation>すべて表示</translation>
+    </message>
+    <message>
+        <source>Table</source>
+        <translation>テーブル</translation>
     </message>
 </context>
 <context>

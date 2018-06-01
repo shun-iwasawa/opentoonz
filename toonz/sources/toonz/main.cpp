@@ -166,16 +166,18 @@ static void initToonzEnv() {
 
   /*-- TOONZROOTのPathの確認 --*/
   // controllo se la xxxroot e' definita e corrisponde ad un folder esistente
-  
-  /*-- ENGLISH: Confirm TOONZROOT Path 
-  	Check if the xxxroot is defined and corresponds to an existing folder
+
+  /*-- ENGLISH: Confirm TOONZROOT Path
+        Check if the xxxroot is defined and corresponds to an existing folder
   --*/
-  
+
   TFilePath stuffDir = TEnv::getStuffDir();
   if (stuffDir == TFilePath())
-      fatalError("Undefined or empty: \"" + toQString(TEnv::getRootVarPath()) + "\"");
+    fatalError("Undefined or empty: \"" + toQString(TEnv::getRootVarPath()) +
+               "\"");
   else if (!TFileStatus(stuffDir).isDirectory())
-      fatalError("Folder \"" + toQString(stuffDir) + "\" not found or not readable");
+    fatalError("Folder \"" + toQString(stuffDir) +
+               "\" not found or not readable");
 
   Tiio::defineStd();
   initImageIo();
@@ -503,8 +505,15 @@ int main(int argc, char *argv[]) {
   toolTranslator.load("tnztools", languagePathString);
   qApp->installTranslator(&toolTranslator);
 
+  // load translation for file writers properties
+  QTranslator imageTranslator;
+  imageTranslator.load("image", languagePathString);
+  qApp->installTranslator(&imageTranslator);
+
   // Aggiorno la traduzione delle properties di tutti i tools
   TTool::updateToolsPropertiesTranslation();
+  // Apply translation to file writers properties
+  Tiio::updateFileWritersPropertiesTranslation();
 
   splash.showMessage(offsetStr + "Loading styles ...", Qt::AlignCenter,
                      Qt::white);

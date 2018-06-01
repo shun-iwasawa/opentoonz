@@ -2284,10 +2284,25 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
+    <name>FlipbookPanel</name>
+    <message>
+        <source>Safe Area (Right Click to Select)</source>
+        <translation>セーフエリア （右クリックで選択）</translation>
+    </message>
+    <message>
+        <source>Minimize</source>
+        <translation>最小化</translation>
+    </message>
+</context>
+<context>
     <name>FormatSettingsPopup</name>
     <message>
         <source>File Settings</source>
         <translation>ファイルの設定</translation>
+    </message>
+    <message>
+        <source>Configure Codec</source>
+        <translation>コーデック設定</translation>
     </message>
 </context>
 <context>
@@ -10444,15 +10459,15 @@ Please commit or revert changes first.</source>
     </message>
     <message>
         <source>Select </source>
-        <translation>選択 </translation>
+        <translation type="vanished">選択 </translation>
     </message>
     <message>
         <source>Show </source>
-        <translation>表示 </translation>
+        <translation type="vanished">表示 </translation>
     </message>
     <message>
         <source>Hide </source>
-        <translation>隠す </translation>
+        <translation type="vanished">隠す </translation>
     </message>
     <message>
         <source>Show / Hide</source>
@@ -10493,6 +10508,22 @@ Please commit or revert changes first.</source>
     <message>
         <source>All Drawings</source>
         <translation>全ての作画</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>%1 を表示</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation>%1 を隠す</translation>
+    </message>
+    <message>
+        <source>Table</source>
+        <translation>テーブル</translation>
+    </message>
+    <message>
+        <source>Select %1</source>
+        <translation>%1 を選択</translation>
     </message>
 </context>
 <context>
@@ -10639,6 +10670,38 @@ Please commit or revert changes first.</source>
     <message>
         <source>Shortcut Presets</source>
         <translation>ショートカットプリセット</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation>別名で保存</translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation>検索：</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation>プリセット：</translation>
+    </message>
+    <message>
+        <source>Saving Shortcuts</source>
+        <translation>ショートカットを保存</translation>
+    </message>
+    <message>
+        <source>Setting Shortcuts</source>
+        <translation>ショートカットを設定</translation>
+    </message>
+    <message>
+        <source>Enter Preset Name</source>
+        <translation>プリセット名を入力して下さい</translation>
+    </message>
+    <message>
+        <source>Preset Name:</source>
+        <translation>プリセット名：</translation>
     </message>
 </context>
 <context>
@@ -11248,6 +11311,30 @@ Click the arrow button to create a new sub-xsheet</source>
     <message>
         <source>&lt;&lt; Add</source>
         <translation>&lt;&lt; 追加</translation>
+    </message>
+    <message>
+        <source>Suspended</source>
+        <translation>中断</translation>
+    </message>
+    <message>
+        <source>Waiting</source>
+        <translation>待機中</translation>
+    </message>
+    <message>
+        <source>Running</source>
+        <translation>実行中</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation>完了</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>失敗</translation>
+    </message>
+    <message>
+        <source>TaskUnknown</source>
+        <translation>不明のタスク</translation>
     </message>
 </context>
 <context>

@@ -2735,11 +2735,29 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
+    <name>FlipbookPanel</name>
+    <message>
+        <location filename="../../toonz/tpanels.cpp" line="965"/>
+        <source>Safe Area (Right Click to Select)</source>
+        <translation type="unfinished">Безопасная зона (Щелкните правой кнопкой мыши, чтобы выбрать)</translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tpanels.cpp" line="982"/>
+        <source>Minimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FormatSettingsPopup</name>
     <message>
         <location filename="../../toonz/formatsettingspopups.cpp" line="50"/>
         <source>File Settings</source>
         <translation>Настройки файла</translation>
+    </message>
+    <message>
+        <location filename="../../toonz/formatsettingspopups.cpp" line="82"/>
+        <source>Configure Codec</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9981,22 +9999,22 @@ Are you sure?</source>
         <translation>Консоль скриптов</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="464"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="395"/>
         <source>Hide Zero Thickness Lines</source>
         <translation>Скрыть линии нулевой толщины</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="469"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="400"/>
         <source>Show Zero Thickness Lines</source>
         <translation>Показать линии нулевой толщины</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="502"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="433"/>
         <source>Hide cursor size outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="507"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="438"/>
         <source>Show cursor size outline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10574,7 +10592,8 @@ The operation cannot be undone: are you sure?</source>
         <translation>ComboViewer</translation>
     </message>
     <message>
-        <location filename="../../toonz/tpanels.cpp" line="1310"/>
+        <location filename="../../toonz/tpanels.cpp" line="1305"/>
+        <location filename="../../toonz/tpanels.cpp" line="1311"/>
         <source>History</source>
         <translation>История</translation>
     </message>
@@ -12376,87 +12395,104 @@ Please commit or revert changes first.</source>
 <context>
     <name>SceneViewerContextMenu</name>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="122"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="52"/>
         <source>Reset Subcamera</source>
         <translation>Суб-камера. Сброс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="149"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="79"/>
         <source>Swap Compared Images</source>
         <translation>Поменять сравниваемые изображения</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="179"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="109"/>
         <source>Vector Guided Drawing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="181"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="111"/>
         <source>Off</source>
         <translation type="unfinished">Отключен</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="187"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="117"/>
         <source>Closest Drawing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="193"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="123"/>
         <source>Farthest Drawing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="199"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="129"/>
         <source>All Drawings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="217"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="147"/>
         <source>Save Previewed Frames</source>
         <translation>Сохранить кадры предпросмотра</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="225"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="155"/>
         <source>Regenerate Preview</source>
         <translation>Регенерировать предпросмотр</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="233"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="163"/>
         <source>Regenerate Frame Preview</source>
         <translation>Регенерировать предпросмотр кадра</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="279"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="209"/>
+        <source>Show %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="210"/>
+        <source>Hide %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="222"/>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="223"/>
+        <source>Select %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Show </source>
-        <translation>Показать</translation>
+        <translation type="vanished">Показать</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="279"/>
         <source>Hide </source>
-        <translation>Скрыть </translation>
+        <translation type="vanished">Скрыть </translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="292"/>
         <source>Select </source>
-        <translation>Выбрать</translation>
+        <translation type="vanished">Выбрать</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="318"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="249"/>
         <source>Show / Hide</source>
         <translation>Показать / скрыть</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="338"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="269"/>
         <source>Select Camera</source>
         <translation>Выбрать камеру</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="339"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="270"/>
         <source>Select Pegbar</source>
         <translation>Выбрать Pegbar</translation>
     </message>
     <message>
-        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="340"/>
+        <location filename="../../toonz/sceneviewercontextmenu.cpp" line="271"/>
         <source>Select Column</source>
         <translation>Выбрать столбец</translation>
     </message>
@@ -12560,9 +12596,19 @@ Please commit or revert changes first.</source>
         <translation>Экспорт текущих хоткеев</translation>
     </message>
     <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="378"/>
+        <source>Delete</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="379"/>
         <source>Delete Current Preset</source>
         <translation>Удалить текущий пресет</translation>
+    </message>
+    <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="381"/>
+        <source>Save As</source>
+        <translation type="unfinished">Сохранить как</translation>
     </message>
     <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="382"/>
@@ -12595,6 +12641,16 @@ Please commit or revert changes first.</source>
         <translation>Не удалось найти подходящую команду.</translation>
     </message>
     <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="403"/>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="431"/>
+        <source>Preset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="499"/>
         <source>This will erase ALL shortcuts. Continue?</source>
         <translation>Это приведет к удалению всех ярлыков. Продолжить?</translation>
@@ -12620,6 +12676,11 @@ Please commit or revert changes first.</source>
         <translation>OpenToonz - Настройка хоткеев</translation>
     </message>
     <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="600"/>
+        <source>Saving Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="630"/>
         <source>Included presets cannot be deleted.</source>
         <translation>Включенные пресеты не могут быть удалены.</translation>
@@ -12635,9 +12696,24 @@ Please commit or revert changes first.</source>
         <translation>?</translation>
     </message>
     <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="699"/>
+        <source>Setting Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="753"/>
         <source>Load from file...</source>
         <translation>Загрузить из файла...</translation>
+    </message>
+    <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="763"/>
+        <source>Enter Preset Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/shortcutpopup.cpp" line="763"/>
+        <source>Preset Name:</source>
+        <translation type="unfinished">Имя пресета:</translation>
     </message>
 </context>
 <context>
@@ -13189,6 +13265,36 @@ Possibly the preset file has been corrupted</source>
 </context>
 <context>
     <name>TaskSheet</name>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="207"/>
+        <source>Suspended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="209"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="211"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="213"/>
+        <source>Completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="215"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/tasksviewer.cpp" line="217"/>
+        <source>TaskUnknown</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../../toonz/tasksviewer.cpp" line="825"/>
         <source>Name:</source>

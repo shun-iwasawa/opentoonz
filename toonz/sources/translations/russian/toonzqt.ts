@@ -37,27 +37,30 @@
 <context>
     <name>AddWordButton</name>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="33"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="115"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="344"/>
         <source>Character</source>
         <translation>Character</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="34"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="115"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="345"/>
         <source>Part</source>
         <translation>Часть</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="35"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="116"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="346"/>
         <source>Suffix</source>
         <translation>Суффикс</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="117"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="114"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="121"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="120"/>
         <source>Add New Word for %1</source>
         <translation>Добавить новое слово для %1</translation>
     </message>
@@ -236,6 +239,37 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>ComboHistoRGBLabel</name>
+    <message>
+        <location filename="../../toonzqt/combohistogram.cpp" line="342"/>
+        <source>R:%1 G:%2 B:%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ComboHistogram</name>
+    <message>
+        <location filename="../../toonzqt/combohistogram.cpp" line="375"/>
+        <source>Picked Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/combohistogram.cpp" line="379"/>
+        <source>Average Color (Ctrl + Drag)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/combohistogram.cpp" line="387"/>
+        <source>X:</source>
+        <translation type="unfinished">X:</translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/combohistogram.cpp" line="391"/>
+        <source>Y:</source>
+        <translation type="unfinished">Y:</translation>
+    </message>
+</context>
+<context>
     <name>DVGui</name>
     <message>
         <location filename="../../toonzqt/dvdialog.cpp" line="1352"/>
@@ -411,12 +445,12 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>EaseInOutSegmentPage</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="381"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="380"/>
         <source>Ease In:</source>
         <translation>Ease In:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="384"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="383"/>
         <source>Ease Out:</source>
         <translation>Ease Out:</translation>
     </message>
@@ -424,12 +458,12 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>EasyInputArea</name>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="246"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="245"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="247"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="246"/>
         <source>%1 is already registered</source>
         <translation>%1 уже зарегистрирован</translation>
     </message>
@@ -437,17 +471,17 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>FileSegmentPage</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="687"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="680"/>
         <source>File Path:</source>
         <translation>Путь к файлу:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="694"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="687"/>
         <source>Column:</source>
         <translation>Столбец:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="697"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="690"/>
         <source>Unit:</source>
         <translation>Ед. изм:</translation>
     </message>
@@ -697,18 +731,18 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>FunctionExpressionSegmentPage</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="489"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="488"/>
         <source>Unit:</source>
         <translation>Ед. изм:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="502"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="501"/>
         <source>Expression:</source>
         <translation>Выражение:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="596"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="646"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="595"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="645"/>
         <source>There is a circular reference in the definition of the interpolation.</source>
         <translation>В определении интерполяции имеется круговой референс.</translation>
     </message>
@@ -849,126 +883,126 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>FunctionSegmentViewer</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="913"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1413"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="906"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1406"/>
         <source>Linear</source>
         <translation>Линейная</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="914"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="907"/>
         <source>Speed In / Speed Out</source>
         <translation>Speed In / Speed Out</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="915"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="908"/>
         <source>Ease In / Ease Out</source>
         <translation>Ease In / Ease Out</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="916"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="909"/>
         <source>Ease In / Ease Out %</source>
         <translation>Ease In / Ease Out %</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="917"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="910"/>
         <source>Exponential</source>
         <translation>Экспоненциальная</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="918"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="911"/>
         <source>Expression</source>
         <translation>Выражение</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="919"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1431"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="912"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1424"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="920"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="913"/>
         <source>Constant</source>
         <translation>Постоянная</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="921"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="914"/>
         <source>Similar Shape</source>
         <translation>Аналогичная форма</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="929"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="922"/>
         <source>Interpolation:</source>
         <translation>Интерполяция:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="942"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="935"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="996"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="989"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="999"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="992"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1002"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="995"/>
         <source>Step</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1169"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1238"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1162"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1231"/>
         <source>&lt; </source>
         <translation>&lt; </translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1177"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1221"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1170"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1214"/>
         <source> &gt;</source>
         <translation> &gt;</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1416"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1409"/>
         <source>Speed</source>
         <translation>Speed</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1419"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1412"/>
         <source>Ease</source>
         <translation>Ease</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1422"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1415"/>
         <source>Ease%</source>
         <translation>Ease%</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1425"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1418"/>
         <source>Expo</source>
         <translation>Expo</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1428"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1421"/>
         <source>Expr</source>
         <translation>Expr</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1434"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1427"/>
         <source>Const</source>
         <translation>Const</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1437"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1430"/>
         <source>Similar</source>
         <translation>Аналогичная</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1440"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="1433"/>
         <source>????</source>
         <translation>????</translation>
     </message>
@@ -1080,30 +1114,53 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>FunctionTreeModel</name>
+    <message>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="828"/>
+        <source>Stage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="829"/>
+        <source>FX</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="992"/>
+        <source>Plastic Skeleton</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FunctionTreeView</name>
     <message>
-        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1576"/>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="282"/>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1579"/>
         <source>Save Curve</source>
         <translation>Сохранить кривую</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1577"/>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1580"/>
         <source>Load Curve</source>
         <translation>Загрузить кривую</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1578"/>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1581"/>
         <source>Export Data</source>
         <translation>Экспорт данных</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1604"/>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1607"/>
         <location filename="../../toonzqt/functionsheet.cpp" line="459"/>
         <source>Show Animated Only</source>
         <translation>Показать только анимированные</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1605"/>
+        <location filename="../../toonzqt/functiontreeviewer.cpp" line="1608"/>
         <location filename="../../toonzqt/functionsheet.cpp" line="460"/>
         <source>Show All</source>
         <translation>Показать все</translation>
@@ -1447,17 +1504,17 @@ Select FX nodes and related links before copying or cutting the selection you wa
 <context>
     <name>NewWordDialog</name>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="49"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="46"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="50"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="47"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="57"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="54"/>
         <source>Enter new word</source>
         <translation>Введите новое слово</translation>
     </message>
@@ -2421,22 +2478,22 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
 <context>
     <name>SimilarShapeSegmentPage</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="795"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="788"/>
         <source>Reference Curve:</source>
         <translation>Референсная кривая:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="801"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="794"/>
         <source>Frame Offset:</source>
         <translation>Смещение кадра:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="858"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="851"/>
         <source>There is a syntax error in the definition of the interpolation.</source>
         <translation>В определении интерполяции имеется синтаксическая ошибка.</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="863"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="856"/>
         <source>There is a circular reference in the definition of the interpolation.</source>
         <translation>В определении интерполяции имеется круговой референс.</translation>
     </message>
@@ -2452,34 +2509,34 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
 <context>
     <name>SpeedInOutSegmentPage</name>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="92"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="91"/>
         <source>First Speed:</source>
         <translation>Первая скорость:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="96"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="106"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="95"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="105"/>
         <source>Handle:</source>
         <translation>Handle:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="99"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="109"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="98"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="108"/>
         <source>/</source>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="102"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="101"/>
         <source>Last Speed:</source>
         <translation>Последняя скорость:</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="159"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="190"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="228"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="260"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="295"/>
-        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="305"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="158"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="189"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="227"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="259"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="294"/>
+        <location filename="../../toonzqt/functionsegmentviewer.cpp" line="304"/>
         <source>---</source>
         <translation>---</translation>
     </message>
@@ -2842,37 +2899,37 @@ Apply</source>
 <context>
     <name>StyleNameEditor</name>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="345"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="348"/>
         <source>Name Editor</source>
         <translation>Редактор имен</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="348"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="351"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="349"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="352"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="350"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="353"/>
         <source>Apply and Next</source>
         <translation>Применить и продолжить</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="380"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="383"/>
         <source>Style Name</source>
         <translation>Имя стиля</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="401"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="404"/>
         <source>Easy Inputs</source>
         <translation>Простые входы</translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="474"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="477"/>
         <source>Name Editor: # %1</source>
         <translation>Редактор имен: # %1</translation>
     </message>
@@ -2933,7 +2990,7 @@ Apply</source>
 <context>
     <name>WordButton</name>
     <message>
-        <location filename="../../toonzqt/stylenameeditor.cpp" line="108"/>
+        <location filename="../../toonzqt/stylenameeditor.cpp" line="105"/>
         <source>Remove %1</source>
         <translation>Удалить %1</translation>
     </message>
