@@ -76,6 +76,7 @@
 #include <QTranslator>
 #include <QFileInfo>
 #include <QSettings>
+#include <QLibraryInfo>
 
 using namespace DVGui;
 #if defined LINETEST
@@ -509,6 +510,11 @@ int main(int argc, char *argv[]) {
   QTranslator imageTranslator;
   imageTranslator.load("image", languagePathString);
   qApp->installTranslator(&imageTranslator);
+
+  QTranslator qtTranslator;
+  qtTranslator.load("qt_" + QLocale::system().name(),
+                    QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+  a.installTranslator(&qtTranslator);
 
   // Aggiorno la traduzione delle properties di tutti i tools
   TTool::updateToolsPropertiesTranslation();
