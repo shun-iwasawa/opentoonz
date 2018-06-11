@@ -1330,7 +1330,7 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
       /*-- 作業中のFidを登録 --*/
       m_workingFrameId = getFrameId();
 
-      (m_isFrameCreated) ? invalidate() : invalidate(invalidateRect.enlarge(2));
+      invalidate(invalidateRect.enlarge(2));
     }
   } else {  // vector happens here
     m_track.clear();
@@ -1351,8 +1351,8 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
     } else
       addTrackPoint(TThickPoint(pos, thickness),
                     getPixelSize() * getPixelSize());
-
-    if (m_isFrameCreated) invalidate();
+    TRectD invalidateRect = m_track.getLastModifiedRegion();
+    invalidate(invalidateRect.enlarge(2));
   }
 
   // updating m_brushPos is needed to refresh viewer properly
@@ -1704,7 +1704,7 @@ void BrushTool::leftButtonUp(const TPointD &pos, const TMouseEvent &e) {
       addStrokeToImage(getApplication(), vi, stroke, m_breakAngles.getValue(),
                        m_isFrameCreated, m_isLevelCreated);
       TRectD bbox = stroke->getBBox().enlarge(2) + m_track.getModifiedRegion();
-      invalidate();
+      invalidate();  // should use bbox?
     }
     assert(stroke);
     m_track.clear();

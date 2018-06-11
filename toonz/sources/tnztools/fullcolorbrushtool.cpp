@@ -337,7 +337,7 @@ void FullColorBrushTool::leftButtonDown(const TPointD &pos,
   invalidateRect += TRectD(m_brushPos - thickOffset, m_brushPos + thickOffset);
   invalidateRect +=
       TRectD(previousBrushPos - thickOffset, previousBrushPos + thickOffset);
-  (m_isFrameCreated) ? invalidate() : invalidate(invalidateRect.enlarge(2.0));
+  invalidate(invalidateRect.enlarge(2.0));
 }
 
 //-------------------------------------------------------------------------------------------------------------
