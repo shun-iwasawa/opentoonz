@@ -1362,9 +1362,10 @@ void BrushTool::leftButtonDown(const TPointD &pos, const TMouseEvent &e) {
 //-------------------------------------------------------------------------------------------------------------
 
 void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
-  m_brushPos = m_mousePos = pos;
-
-  if (!m_enabled || !m_active) return;
+  if (!m_enabled || !m_active) {
+    m_brushPos = m_mousePos = pos;
+    return;
+  }
 
   bool isAdded;
 
@@ -1408,13 +1409,8 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
             points.push_back(brushPoints[m - 3]);
             points.push_back(brushPoints[m - 2]);
           }
-          if (i == 0) {
-            invalidateRect =
-                ToolUtils::getBounds(points, maxThickness) - rasCenter;
-          } else {
-            invalidateRect +=
-                ToolUtils::getBounds(points, maxThickness) - rasCenter;
-          }
+          invalidateRect +=
+              ToolUtils::getBounds(points, maxThickness) - rasCenter;
         }
       }
     } else {
@@ -1428,7 +1424,6 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
         m_smoothStroke.addPoint(thickPoint);
         m_smoothStroke.getSmoothPoints(pts);
       }
-      bool rectUpdated = false;
       for (size_t i = 0; i < pts.size(); ++i) {
         TThickPoint old = m_points.back();
         if (norm2(pos - old) < 4) continue;
@@ -1461,14 +1456,8 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
           m_bluredBrush->addArc(m_points[m - 4], old, mid, 1, 1);
           m_lastRect += bbox;
         }
-        if (!rectUpdated) {
-          invalidateRect =
-              ToolUtils::getBounds(points, maxThickness) - rasCenter;
-          rectUpdated = true;
-        } else {
-          invalidateRect +=
-              ToolUtils::getBounds(points, maxThickness) - rasCenter;
-        }
+        invalidateRect +=
+            ToolUtils::getBounds(points, maxThickness) - rasCenter;
 
         m_bluredBrush->updateDrawing(ti->getRaster(), m_backupRas, bbox,
                                      m_styleId, m_drawOrder.getIndex());
@@ -1476,11 +1465,14 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
       }
     }
 
-    // draw brush tip when drawing smooth stroke
+    // clear & draw brush tip when drawing smooth stroke
     if (m_smooth.getValue() != 0) {
       TPointD halfThick(m_maxThick * 0.5, m_maxThick * 0.5);
       invalidateRect += TRectD(m_brushPos - halfThick, m_brushPos + halfThick);
+      invalidateRect += TRectD(pos - halfThick, pos + halfThick);
     }
+
+    m_brushPos = m_mousePos = pos;
 
     invalidate(invalidateRect.enlarge(2));
   } else {
@@ -1492,10 +1484,8 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
     TRectD invalidateRect;
     TPointD halfThick(m_maxThick * 0.5, m_maxThick * 0.5);
 
-    // In order to clear the previous snap mark
-    if (m_foundLastSnap)
-      invalidateRect +=
-          TRectD(m_lastSnapPoint - halfThick, m_lastSnapPoint + halfThick);
+    // In order to clear the previous brush tip
+    invalidateRect += TRectD(m_brushPos - halfThick, m_brushPos + halfThick);
 
     m_currThickness = thickness;
 
@@ -1526,6 +1516,9 @@ void BrushTool::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
       invalidateRect += m_track.getLastModifiedRegion();
     }
 
+    // In order to draw the current brush tip
+    invalidateRect += TRectD(m_brushPos - halfThick, m_brushPos + halfThick);
+
     if (!invalidateRect.isEmpty()) invalidate(invalidateRect.enlarge(2));
   }
 }
@@ -1536,7 +1529,14 @@ void BrushTool::leftButtonUp(const TPointD &pos, const TMouseEvent &e) {
   bool isValid = m_enabled && m_active;
   m_enabled    = false;
 
-  if (!isValid) return;
+  if (!isValid) {
+    // in case the current frame is moved to empty cell while dragging
+    if (!m_track.isEmpty()) {
+      m_track.clear();
+      invalidate();
+    }
+    return;
+  }
 
   if (m_isPath) {
     double error = 20.0 * getPixelSize();
