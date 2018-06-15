@@ -1928,45 +1928,48 @@ void BrushTool::finishRasterBrush(const TPointD &pos, double pressureVal) {
       m_smoothStroke.endStroke();
       m_smoothStroke.getSmoothPoints(pts);
     }
-    for (size_t i = 0; i < pts.size() - 1; ++i) {
-      TThickPoint old = m_points.back();
-
-      const TThickPoint &point = pts[i];
-      TThickPoint mid((old + point) * 0.5, (point.thick + old.thick) * 0.5);
-      m_points.push_back(mid);
-      m_points.push_back(point);
-
-      TRect bbox;
-      int m = (int)m_points.size();
-      std::vector<TThickPoint> points;
-      if (m == 3) {
-        // ho appena cominciato. devo disegnare un segmento
-        TThickPoint pa = m_points.front();
-        points.push_back(pa);
-        points.push_back(mid);
-        bbox = m_bluredBrush->getBoundFromPoints(points);
-        updateWorkAndBackupRasters(bbox + m_lastRect);
-        m_tileSaver->save(bbox);
-        m_bluredBrush->addArc(pa, (mid + pa) * 0.5, mid, 1, 1);
-        m_lastRect += bbox;
-      } else {
-        points.push_back(m_points[m - 4]);
-        points.push_back(old);
-        points.push_back(mid);
-        bbox = m_bluredBrush->getBoundFromPoints(points);
-        updateWorkAndBackupRasters(bbox + m_lastRect);
-        m_tileSaver->save(bbox);
-        m_bluredBrush->addArc(m_points[m - 4], old, mid, 1, 1);
-        m_lastRect += bbox;
-      }
-
-      invalidateRect += ToolUtils::getBounds(points, maxThickness) - rasCenter;
-
-      m_bluredBrush->updateDrawing(ti->getRaster(), m_backupRas, bbox,
-                                   m_styleId, m_drawOrder.getIndex());
-      m_strokeRect += bbox;
-    }
+    // we need to skip the for-loop here if pts.size() == 0 or else
+    // (pts.size() - 1) becomes ULLONG_MAX since size_t is unsigned
     if (pts.size() > 0) {
+      for (size_t i = 0; i < pts.size() - 1; ++i) {
+        TThickPoint old = m_points.back();
+
+        const TThickPoint &point = pts[i];
+        TThickPoint mid((old + point) * 0.5, (point.thick + old.thick) * 0.5);
+        m_points.push_back(mid);
+        m_points.push_back(point);
+
+        TRect bbox;
+        int m = (int)m_points.size();
+        std::vector<TThickPoint> points;
+        if (m == 3) {
+          // ho appena cominciato. devo disegnare un segmento
+          TThickPoint pa = m_points.front();
+          points.push_back(pa);
+          points.push_back(mid);
+          bbox = m_bluredBrush->getBoundFromPoints(points);
+          updateWorkAndBackupRasters(bbox + m_lastRect);
+          m_tileSaver->save(bbox);
+          m_bluredBrush->addArc(pa, (mid + pa) * 0.5, mid, 1, 1);
+          m_lastRect += bbox;
+        } else {
+          points.push_back(m_points[m - 4]);
+          points.push_back(old);
+          points.push_back(mid);
+          bbox = m_bluredBrush->getBoundFromPoints(points);
+          updateWorkAndBackupRasters(bbox + m_lastRect);
+          m_tileSaver->save(bbox);
+          m_bluredBrush->addArc(m_points[m - 4], old, mid, 1, 1);
+          m_lastRect += bbox;
+        }
+
+        invalidateRect +=
+            ToolUtils::getBounds(points, maxThickness) - rasCenter;
+
+        m_bluredBrush->updateDrawing(ti->getRaster(), m_backupRas, bbox,
+                                     m_styleId, m_drawOrder.getIndex());
+        m_strokeRect += bbox;
+      }
       TThickPoint point = pts.back();
       m_points.push_back(point);
       int m = m_points.size();
@@ -1986,7 +1989,7 @@ void BrushTool::finishRasterBrush(const TPointD &pos, double pressureVal) {
       m_lastRect += bbox;
       m_strokeRect += bbox;
     }
-    invalidate(invalidateRect.enlarge(2));
+    if (!invalidateRect.isEmpty()) invalidate(invalidateRect.enlarge(2));
     m_lastRect.empty();
 
     delete m_bluredBrush;
