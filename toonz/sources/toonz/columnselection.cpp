@@ -68,7 +68,10 @@ void TColumnSelection::copyColumns() { ColumnCmd::copyColumns(m_indices); }
 // pasteColumns will insert columns before the first column in the selection
 void TColumnSelection::pasteColumns() {
   std::set<int> indices;
-  indices.insert(*m_indices.begin());
+  if (isEmpty())  // in case that no columns are selected
+    indices.insert(0);
+  else
+    indices.insert(*m_indices.begin());
   ColumnCmd::pasteColumns(indices);
 }
 
@@ -76,7 +79,11 @@ void TColumnSelection::pasteColumns() {
 // pasteColumnsAbove will insert columns after the last column in the selection
 void TColumnSelection::pasteColumnsAbove() {
   std::set<int> indices;
-  indices.insert(*m_indices.rbegin() + 1);
+  if (isEmpty()) {  // in case that no columns are selected
+    TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
+    indices.insert(xsh->getFirstFreeColumnIndex());
+  } else
+    indices.insert(*m_indices.rbegin() + 1);
   ColumnCmd::pasteColumns(indices);
 }
 
