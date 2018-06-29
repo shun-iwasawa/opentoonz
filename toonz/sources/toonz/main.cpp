@@ -97,9 +97,10 @@ const char *dllRelativePath     = "./toonz6.app/Contents/Frameworks";
 
 TEnv::IntVar EnvSoftwareCurrentFontSize("SoftwareCurrentFontSize", 12);
 
-const char *applicationFullName = "OpenToonz 1.2.1";  // next will be 1.3 (not 1.3.0)
-const char *rootVarName         = "TOONZROOT";
-const char *systemVarPrefix     = "TOONZ";
+const char *applicationFullName =
+    "OpenToonz 1.2.1";  // next will be 1.3 (not 1.3.0)
+const char *rootVarName     = "TOONZROOT";
+const char *systemVarPrefix = "TOONZ";
 
 #ifdef MACOSX
 #include "tthread.h"
@@ -571,7 +572,6 @@ int main(int argc, char *argv[]) {
   QString currentStyle = Preferences::instance()->getCurrentStyleSheetPath();
   a.setStyleSheet(currentStyle);
 
-  TApp::instance()->setMainWindow(&w);
   w.setWindowTitle(applicationFullName);
   if (TEnv::getIsPortable()) {
     splash.showMessage(offsetStr + "Starting OpenToonz Portable ...",
