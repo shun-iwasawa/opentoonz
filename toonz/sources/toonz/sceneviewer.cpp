@@ -724,7 +724,7 @@ void SceneViewer::showEvent(QShowEvent *) {
           SLOT(update()));
 
   connect(app->getCurrentOnionSkin(), SIGNAL(onionSkinMaskChanged()), this,
-          SLOT(update()));
+          SLOT(onOnionSkinMaskChanged()));
 
   connect(app->getCurrentLevel(), SIGNAL(xshLevelChanged()), this,
           SLOT(update()));
