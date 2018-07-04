@@ -97,9 +97,10 @@ const char *dllRelativePath     = "./toonz6.app/Contents/Frameworks";
 
 TEnv::IntVar EnvSoftwareCurrentFontSize("SoftwareCurrentFontSize", 12);
 
-const char *applicationFullName = "OpenToonz 1.2.1";  // next will be 1.3 (not 1.3.0)
-const char *rootVarName         = "TOONZROOT";
-const char *systemVarPrefix     = "TOONZ";
+const char *applicationFullName =
+    "OpenToonz 1.2.1";  // next will be 1.3 (not 1.3.0)
+const char *rootVarName     = "TOONZROOT";
+const char *systemVarPrefix = "TOONZ";
 
 #ifdef MACOSX
 #include "tthread.h"
@@ -520,6 +521,10 @@ int main(int argc, char *argv[]) {
   TTool::updateToolsPropertiesTranslation();
   // Apply translation to file writers properties
   Tiio::updateFileWritersPropertiesTranslation();
+
+  // Force to have left-to-right layout direction in any language environment.
+  // This fucntion has to be called after installTransrator().
+  a.setLayoutDirection(Qt::LeftToRight);
 
   splash.showMessage(offsetStr + "Loading styles ...", Qt::AlignCenter,
                      Qt::white);
