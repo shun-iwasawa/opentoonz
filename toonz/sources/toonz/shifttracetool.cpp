@@ -27,6 +27,7 @@
 
 #include "tgl.h"
 #include <math.h>
+#include <QKeyEvent>
 
 //=============================================================================
 
@@ -136,6 +137,7 @@ public:
     QAction *action = CommandManager::instance()->getAction("MI_EditShift");
     action->setChecked(false);
   }
+  bool isEventAcceptable(QEvent *e) override;
 
   int getCursorId() const override;
 };
@@ -628,6 +630,13 @@ int ShiftTraceTool::getCursorId() const {
     return ToolCursor::PinchCursor;
   else  // Curve Points, TranslateGadget, NoGadget_InBox
     return ToolCursor::MoveCursor;
+}
+
+bool ShiftTraceTool::isEventAcceptable(QEvent *e) {
+  // F1, F2 and F3 keys are used for flipping
+  QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
+  int key             = keyEvent->key();
+  return (Qt::Key_F1 <= key && key <= Qt::Key_F3);
 }
 
 ShiftTraceTool shiftTraceTool;

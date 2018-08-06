@@ -1039,6 +1039,16 @@ bool SceneViewer::event(QEvent *e) {
     else if (tool && tool->isEventAcceptable(e)) {
       e->accept();
     }
+    // if the Shift & Trace mode is active, then override F1, F2 and F3 key
+    // actions by flipping feature
+    else if (CommandManager::instance()
+                 ->getAction(MI_ShiftTrace)
+                 ->isChecked() &&
+             TTool::getTool("T_ShiftTrace", TTool::ToonzImage)
+                 ->isEventAcceptable(e)) {
+      e->accept();
+    }
+
     return true;
   }
   if (e->type() == QEvent::KeyRelease) {
