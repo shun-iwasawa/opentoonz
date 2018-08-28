@@ -916,10 +916,11 @@ void RasterPainter::onVectorImage(TVectorImage *vi,
     vi->selectFill(vi->getBBox(), 0, 1, true, true, false);
   }
 
+  TStroke *guidedStroke = 0;
   if (m_maskLevel > 0)
     tglDrawMask(rd, vi);
   else
-    tglDraw(rd, vi);
+    tglDraw(rd, vi, &guidedStroke);
 
   if (tc & ToonzCheck::eAutoclose) drawAutocloses(vi, rd);
 
@@ -928,6 +929,8 @@ void RasterPainter::onVectorImage(TVectorImage *vi,
 
   delete cf;
   delete guidedCf;
+
+  if (guidedStroke) m_guidedStrokes.push_back(guidedStroke);
 }
 
 //-----------------------------------------------------
