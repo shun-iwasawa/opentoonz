@@ -20,6 +20,7 @@
 #include "toonz/trasterimageutils.h"
 #include "toonz/levelupdater.h"
 #include "toutputproperties.h"
+#include "toonz/boardsettings.h"
 
 // tcg includes
 #include "tcg/tcg_macros.h"
@@ -160,6 +161,8 @@ public:
   std::pair<bool, int> saveFrame(double frame,
                                  const std::pair<TRasterP, TRasterP> &rasters);
   std::string getRenderCacheId();
+
+  void addBoard();
 };
 
 //---------------------------------------------------------
@@ -374,7 +377,8 @@ std::pair<bool, int> MovieRenderer::Imp::saveFrame(
                       m_renderSettings.m_timeStretchFrom;
 
   int fr = (stretchFac != 1) ? tround(frame * stretchFac) : int(frame);
-  TFrameId fid(fr + 1);
+  TFrameId fid(fr + 1 + 24);//ボールドのフレーム数
+  //TFrameId fid(fr + 1);
 
   if (m_levelUpdaterA.get()) {
     assert(m_levelUpdaterB.get() || !rasters.second);
@@ -474,6 +478,8 @@ void MovieRenderer::Imp::doRenderRasterCompleted(const RenderData &renderData) {
       if (m_levelUpdaterB.get())
         m_levelUpdaterB->getLevelWriter()->saveSoundTrack(m_st.getPointer());
     }
+
+    addBoard();
   }
 
   // Output frames must be *cloned*, since the supplied rasters will be
@@ -731,6 +737,36 @@ void MovieRenderer::Imp::onRenderFinished(bool isCanceled) {
   release();  // The movieRenderer is released by the render process. It could
               // eventually be deleted.
 }
+
+//---------------------------------------------------------
+
+void MovieRenderer::Imp::addBoard() {
+  // Get the image size
+  int shrinkX = m_renderSettings.m_shrinkX,
+      shrinkY = m_renderSettings.m_shrinkY;
+  TDimensionD cameraRes(double(m_frameSize.lx) / shrinkX,
+    double(m_frameSize.ly) / shrinkY);
+  TDimension cameraResI(cameraRes.lx, cameraRes.ly);
+
+  BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
+  TRaster32P boardRas = boardSettings->getBoardRaster(cameraResI, shrinkX);
+  
+  if (m_levelUpdaterA.get()) {    
+    // Flush images
+    try {
+      TRasterImageP imgA(boardRas);
+      for (int f = 0; f < 24; f++) {
+        m_levelUpdaterA->update(TFrameId(f+1), imgA);
+      }
+
+    }
+    catch (...) {
+      // Nothing. The images could not be saved for whatever reason.
+      // Failure is reported.
+    }
+  }
+}
+
 
 //======================================================================================
 
