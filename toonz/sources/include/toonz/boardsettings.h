@@ -88,6 +88,9 @@ public:
   int getDuration() {
     return (m_active) ? m_duration : 0;
   }
+
+  bool isActive() { return m_active; }
+  void setActive(bool on) { m_active = on; }
 };
 
 #endif
