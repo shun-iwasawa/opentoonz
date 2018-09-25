@@ -377,8 +377,14 @@ std::pair<bool, int> MovieRenderer::Imp::saveFrame(
                       m_renderSettings.m_timeStretchFrom;
 
   int fr = (stretchFac != 1) ? tround(frame * stretchFac) : int(frame);
-  TFrameId fid(fr + 1 + 24);//ボールドのフレーム数
-  //TFrameId fid(fr + 1);
+
+  int boardDuration = 0;
+  if (m_movieType) {
+    BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
+    boardDuration = boardSettings->getDuration();
+  }
+
+  TFrameId fid(fr + 1 + boardDuration);
 
   if (m_levelUpdaterA.get()) {
     assert(m_levelUpdaterB.get() || !rasters.second);
@@ -741,6 +747,9 @@ void MovieRenderer::Imp::onRenderFinished(bool isCanceled) {
 //---------------------------------------------------------
 
 void MovieRenderer::Imp::addBoard() {
+  BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
+  int duration = boardSettings->getDuration();
+  if (duration == 0) return;
   // Get the image size
   int shrinkX = m_renderSettings.m_shrinkX,
       shrinkY = m_renderSettings.m_shrinkY;
@@ -748,17 +757,17 @@ void MovieRenderer::Imp::addBoard() {
     double(m_frameSize.ly) / shrinkY);
   TDimension cameraResI(cameraRes.lx, cameraRes.ly);
 
-  BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
-  TRaster32P boardRas = boardSettings->getBoardRaster(cameraResI, shrinkX);
+  TRaster32P boardRas = boardSettings->getBoardRaster(cameraResI, shrinkX, m_scene);
   
   if (m_levelUpdaterA.get()) {    
     // Flush images
     try {
-      TRasterImageP imgA(boardRas);
-      for (int f = 0; f < 24; f++) {
-        m_levelUpdaterA->update(TFrameId(f+1), imgA);
+      TRasterImageP img(boardRas);
+      for (int f = 0; f < duration; f++) {
+        m_levelUpdaterA->update(TFrameId(f+1), img);
+        if(m_levelUpdaterB.get())
+          m_levelUpdaterB->update(TFrameId(f + 1), img);
       }
-
     }
     catch (...) {
       // Nothing. The images could not be saved for whatever reason.

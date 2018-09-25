@@ -9,6 +9,7 @@
 #include <QList>
 #include <QRectF>
 #include <QColor>
+#include <QPainter>
 
 #undef DVAPI
 #undef DVVAR
@@ -20,13 +21,30 @@
 #define DVVAR DV_IMPORT_VAR
 #endif
 
+class ToonzScene;
+
 class DVAPI BoardItem {
 public:
   enum Type {
-    //ここから！！
+    FreeText = 0,     //自由テキスト (m_textに内容)
+    ProjectName,      //プロジェクト名
+    SceneName,        //シーンファイル名
+    Duration_Frame,   //長さ（フレーム数）
+    Duration_SecFrame,//長さ（秒＋コマ）
+    Duration_HHMMSSFF,//長さ（HH:MM:SS:FF）
+    CurrentDate,      //現在の日（年 / 月 / 日）
+    CurrentDateTime,  //現在の日時（年 / 月 / 日 / 時 / 分 / 秒）
+    UserName,         //ユーザ名
+    ScenePath_Aliased,//シーンファイルパス（エイリアス付）
+    ScenePath_Full,   //シーンファイルパス（フルパス）
+    MoviePath_Aliased,//ムービーファイルパス（エイリアス付）
+    MoviePath_Full,   //ムービーファイルパス（フルパス）
+    Image             //画像 (m_imgPathにパス)
   };
 
 private:
+  QString m_name;
+  Type m_type;
 
   // 画面全体に対する％表記
   QRectF m_rect;
@@ -38,16 +56,25 @@ private:
   QColor m_color;
 
   // フォント
+  QFont m_font;
+
+  QString m_text;
+  
+  QString getContentText(ToonzScene*);
 
 public:
-  BoardItem(){}
+  BoardItem();
+
+  QRectF getItemRect(QSize imgSize); //画像上のRectを返す
+  void drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* scene);
+
 };
 
 class DVAPI BoardSettings {
   //有効無効
-  bool m_active;
+  bool m_active = true;
   //フレーム長
-  int m_duration;
+  int m_duration = 24;
   //背景画像
   TFilePath m_bgPath;
   //各パーツ
@@ -56,8 +83,11 @@ class DVAPI BoardSettings {
 public:
   BoardSettings();
 
-  TRaster32P getBoardRaster(TDimension& dim, int shrink);
+  TRaster32P getBoardRaster(TDimension& dim, int shrink, ToonzScene* scene);
 
+  int getDuration() {
+    return (m_active) ? m_duration : 0;
+  }
 };
 
 #endif

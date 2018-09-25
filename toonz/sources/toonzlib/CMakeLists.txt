@@ -156,7 +156,7 @@ set(MOC_HEADERS
     texturemanager.h
     imagebuilders.h
 	../include/orientation.h
-    ../include/boardsettings.h
+    ../include/toonz/boardsettings.h
 )
 
 set(HEADERS ${MOC_HEADERS})
