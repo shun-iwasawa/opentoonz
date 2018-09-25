@@ -8,6 +8,7 @@
 #include "tapp.h"
 #include "camerasettingspopup.h"
 #include "pane.h"
+#include "boardsettingspopup.h"
 
 // TnzQt includes
 #include "toonzqt/menubarcommand.h"
@@ -1622,6 +1623,8 @@ void OutputSettingsPopup::onAddBoardChecked(int state){
 
 void OutputSettingsPopup::onBoardSettingsBtnClicked(){
   std::cout << "board settings button clicked" << std::endl;
+  BoardSettingsPopup popup;
+  popup.exec();
 }
 
 //-----------------------------------------------------------------------------

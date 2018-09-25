@@ -158,6 +158,7 @@ set(MOC_HEADERS
 	reframepopup.h
 	autoinputcellnumberpopup.h
 	colormodelbehaviorpopup.h
+	boardsettingspopup.h
 # Tracker file
     dummyprocessor.h
     metnum.h
