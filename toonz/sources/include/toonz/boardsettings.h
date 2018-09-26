@@ -68,6 +68,22 @@ public:
   QRectF getItemRect(QSize imgSize); //âÊëúè„ÇÃRectÇï‘Ç∑
   void drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* scene);
 
+  QString getName() { return m_name; }
+  void setname(QString name) { m_name = name; }
+
+  Type getType() { return m_type; }
+  void setType(Type type) { m_type = type; }
+
+  int getMaximumFontSize() { return m_maximumFontSize; }
+  void setMaximumFontSize(int size) { m_maximumFontSize = size; }
+
+  QColor getColor() { return m_color; }
+  void setColor(QColor color) { m_color = color; }
+
+  QFont& font() { return m_font; }
+
+  QString getFreeText() { return m_text; }
+  void setFreeText(QString text) { m_text = text; }
 };
 
 class DVAPI BoardSettings {
@@ -83,6 +99,8 @@ class DVAPI BoardSettings {
 public:
   BoardSettings();
 
+  QImage getBoardImage(TDimension& dim, int shrink, ToonzScene* scene);
+
   TRaster32P getBoardRaster(TDimension& dim, int shrink, ToonzScene* scene);
 
   int getDuration() {
@@ -91,6 +109,14 @@ public:
 
   bool isActive() { return m_active; }
   void setActive(bool on) { m_active = on; }
+
+  int getItemCount() { return m_items.count(); }
+  BoardItem& getItem(int index) { return m_items[index]; }
+
+  void setDuration(int f) { m_duration = f; }
+
+  TFilePath getBgPath() { return m_bgPath; }
+  void setBgPath(TFilePath path) { m_bgPath = path; }
 };
 
 #endif

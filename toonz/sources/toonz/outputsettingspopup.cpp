@@ -1623,7 +1623,7 @@ void OutputSettingsPopup::onAddBoardChecked(int state){
 
 void OutputSettingsPopup::onBoardSettingsBtnClicked(){
   std::cout << "board settings button clicked" << std::endl;
-  BoardSettingsPopup popup;
+  BoardSettingsPopup popup(this);
   popup.exec();
 }
 

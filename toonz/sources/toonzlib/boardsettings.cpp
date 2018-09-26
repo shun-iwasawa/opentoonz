@@ -14,6 +14,8 @@
 
 BoardItem::BoardItem() {
 
+  m_name = "hogehoge";
+
   m_type = CurrentDateTime;
 
   m_rect = QRectF(0.1, 0.1, 0.8, 0.8);
@@ -23,7 +25,7 @@ BoardItem::BoardItem() {
   //int m_maximumFontSize;
 
   // 文字の色
-  //QColor m_color;
+  m_color = Qt::blue;
 
   // フォント
   m_font = QFont("Alial");
@@ -159,7 +161,7 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
   font.setPixelSize(fontSize);
 
   p.setFont(font);
-  p.setPen(Qt::red);
+  p.setPen(m_color);
 
   p.drawText(itemRect, Qt::AlignLeft | Qt::AlignTop, contentText);
 
@@ -173,14 +175,14 @@ BoardSettings::BoardSettings() {
   m_items.push_back(BoardItem());
 }
 
-TRaster32P BoardSettings::getBoardRaster(TDimension& dim, int shrink, ToonzScene* scene) {
+QImage BoardSettings::getBoardImage(TDimension& dim, int shrink, ToonzScene* scene) {
   QImage img(dim.lx, dim.ly, QImage::Format_ARGB32);
 
   QPainter painter(&img);
 
   painter.fillRect(img.rect(), Qt::white);
   //draw background
-  if(!m_bgPath.isEmpty())
+  if (!m_bgPath.isEmpty())
     painter.drawImage(img.rect(), QImage(m_bgPath.getQString()));
 
   //draw each item
@@ -188,6 +190,12 @@ TRaster32P BoardSettings::getBoardRaster(TDimension& dim, int shrink, ToonzScene
     m_items[i].drawItem(painter, img.rect().size(), shrink, scene);
 
   painter.end();
+
+  return img;
+}
+
+TRaster32P BoardSettings::getBoardRaster(TDimension& dim, int shrink, ToonzScene* scene) {
+  QImage img = getBoardImage(dim, shrink, scene);
 
   // convert QImage to TRaster 
   TRaster32P boardRas(dim);
