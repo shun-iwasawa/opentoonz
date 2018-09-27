@@ -39,7 +39,8 @@ public:
     ScenePath_Full,   //シーンファイルパス（フルパス）
     MoviePath_Aliased,//ムービーファイルパス（エイリアス付）
     MoviePath_Full,   //ムービーファイルパス（フルパス）
-    Image             //画像 (m_imgPathにパス)
+    Image,            //画像 (m_imgPathにパス)
+    TypeCount
   };
 
 private:
@@ -59,6 +60,7 @@ private:
   QFont m_font;
 
   QString m_text;
+  TFilePath m_imgPath;
   
   QString getContentText(ToonzScene*);
 
@@ -84,6 +86,9 @@ public:
 
   QString getFreeText() { return m_text; }
   void setFreeText(QString text) { m_text = text; }
+
+  TFilePath getImgPath() { return m_imgPath; }
+  void setImgPath(TFilePath path) { m_imgPath = path; }
 };
 
 class DVAPI BoardSettings {

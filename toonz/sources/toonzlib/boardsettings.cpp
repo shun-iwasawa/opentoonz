@@ -22,7 +22,7 @@ BoardItem::BoardItem() {
   //m_rect = QRectF(0.2, 0.2, 0.6, 0.4);
 
   // 文字の最大サイズ
-  //int m_maximumFontSize;
+  m_maximumFontSize = 300;
 
   // 文字の色
   m_color = Qt::blue;

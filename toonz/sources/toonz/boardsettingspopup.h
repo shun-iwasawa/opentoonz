@@ -5,6 +5,7 @@
 
 #include "toonzqt/dvdialog.h"
 #include <QWidget>
+#include <QStackedWidget>
 
 class TOutputProperties;
 class QLineEdit;
@@ -16,7 +17,7 @@ class BoardItem;
 
 namespace DVGui {
   class FileField;
-  class StyleSample;
+  class ColorField;
   class IntLineEdit;
 }
 
@@ -40,18 +41,19 @@ protected:
 
 //=============================================================================
 
-class ItemInfoView : public QWidget {
+class ItemInfoView : public QStackedWidget {
   Q_OBJECT
 
   BoardItem* m_currentItem = nullptr;
 
-  QLineEdit * m_nameEdit, * m_maxFontSizeEdit;
+  QLineEdit * m_nameEdit;
+  DVGui::IntLineEdit *m_maxFontSizeEdit;
   QComboBox * m_typeCombo;
   QTextEdit * m_textEdit;
   DVGui::FileField * m_imgPathField;
   QFontComboBox* m_fontCombo;
   QPushButton* m_boldButton, *m_italicButton;
-  DVGui::StyleSample * m_fontColorSample;
+  DVGui::ColorField * m_fontColorField;
 
   QWidget* m_fontPropBox;//これをまとめてONOFFする
   
@@ -59,7 +61,7 @@ public:
   ItemInfoView(QWidget* parent = nullptr);
 
   //アイテムが切り替わったとき、表示を更新
-
+  void setCurrentItem(int index);
 };
 
 //=============================================================================
@@ -71,6 +73,10 @@ class ItemListView : public QWidget {
 public:
   ItemListView(QWidget* parent = nullptr);
   void initialize();
+
+signals:
+  void currentItemSwitched(int);
+
 };
 
 //=============================================================================
@@ -91,6 +97,8 @@ public:
   BoardSettingsPopup(QWidget *parent = nullptr);
 protected:
   void showEvent(QShowEvent*) { initialize(); }
+protected slots:
+  void onCurrentItemSwitched(int);
 };
 
 
