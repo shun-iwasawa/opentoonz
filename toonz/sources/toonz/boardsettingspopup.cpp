@@ -1,0 +1,829 @@
+#include "boardsettingspopup.h"
+
+
+// Tnz6 includes
+#include "tapp.h"
+
+// TnzQt includes
+#include "toonzqt/filefield.h"
+#include "toonzqt/colorfield.h"
+#include "toonzqt/intfield.h"
+
+// TnzLib includes
+#include "toutputproperties.h"
+#include "toonz/tscenehandle.h"
+#include "toonz/toonzscene.h"
+#include "toonz/sceneproperties.h"
+#include "toonz/tcamera.h"
+#include "toonz/boardsettings.h"
+
+// TnzBase includes
+#include "trasterfx.h"
+
+#include <QLineEdit>
+#include <QLabel>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QComboBox>
+#include <QFontComboBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QPainter>
+#include <QRectF>
+#include <QListWidget>
+#include <QMap> 
+#include <QPixmap> 
+#include <QImageReader>
+#include <QMouseEvent>
+
+
+BoardItem* BoardSettingsPopup::currentBoardItem = nullptr;
+
+namespace {
+  QMap<BoardItem::Type, QString> stringByItemType;
+
+  BoardItem* currentBoardItem() {
+    return BoardSettingsPopup::currentBoardItem;
+  }
+  void setCurrentBoardItem(BoardItem* item) {
+    BoardSettingsPopup::currentBoardItem = item;
+  }
+
+  void editListWidgetItem(QListWidgetItem* listItem, BoardItem* item) {
+    QString itemText = item->getName() + "\n(" + stringByItemType.value(item->getType(), "Unknown type") + ")";
+    listItem->setText(itemText);
+
+    if (item->getType() == BoardItem::Image) {
+      QPixmap iconPm = QPixmap::fromImage(QImage(item->getImgPath().getQString()).scaled(QSize(20, 20)));
+      listItem->setIcon(QIcon(iconPm));
+    }
+    else {
+      QPixmap iconPm(20, 20);
+      iconPm.fill(item->getColor());
+      listItem->setIcon(QIcon(iconPm));
+    }
+  }
+}
+
+//=============================================================================
+
+BoardView::BoardView(QWidget* parent) : QWidget(parent) {
+  setMouseTracking(true);
+}
+
+void BoardView::paintEvent(QPaintEvent *event) {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  QPainter p(this);
+
+  p.fillRect(rect(), Qt::black);
+
+  // TODO: durationが０のときは1以上にするようにメッセージを出す
+
+
+  if (!m_valid) {
+    int shrinkX = outProp->getRenderSettings().m_shrinkX,
+      shrinkY = outProp->getRenderSettings().m_shrinkY;
+    TDimension frameSize = scene->getCurrentCamera()->getRes();
+    TDimension cameraRes(frameSize.lx / shrinkX, frameSize.ly / shrinkY);
+
+    m_boardImg = boardSettings->getBoardImage(cameraRes, shrinkX, scene);
+    m_valid = true;
+  }
+
+  p.drawImage(m_boardImgRect, m_boardImg);
+
+  p.translate(m_boardImgRect.topLeft());
+
+  p.setBrush(Qt::NoBrush);
+  for (int i = 0; i < boardSettings->getItemCount(); i++) {
+    BoardItem* item = &(boardSettings->getItem(i));
+    //std::cout << "item = " << (void*)item << "  current = " << (void*)currentBoardItem() << std::endl;
+    if (item == currentBoardItem()) {
+      p.setPen(QPen(QColor(255, 100, 0), 2));
+    }
+    else {
+      p.setPen(QPen(QColor(64, 64, 255), 1, Qt::DashLine));
+    }
+    p.drawRect(item->getItemRect(m_boardImgRect.size().toSize()));
+  }
+}
+
+void BoardView::resizeEvent(QResizeEvent* event) {
+  QSize boardRes;
+  if (m_valid) {
+    boardRes = m_boardImg.size();
+  }
+  else {
+    ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+    TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+    int shrinkX = outProp->getRenderSettings().m_shrinkX,
+      shrinkY = outProp->getRenderSettings().m_shrinkY;
+    TDimension frameSize = scene->getCurrentCamera()->getRes();
+    boardRes = QSize(frameSize.lx / shrinkX, frameSize.ly / shrinkY);
+  }
+
+  float ratio = std::min((float)width() / (float)boardRes.width(),
+    (float)height() / (float)boardRes.height());
+  QSizeF imgSize = QSizeF(boardRes) * ratio;
+  QPointF imgTopLeft(((float)width() - imgSize.width()) * 0.5,
+    ((float)height() - imgSize.height()) * 0.5);
+
+  m_boardImgRect = QRectF(imgTopLeft, imgSize);
+}
+
+void BoardView::mouseMoveEvent(QMouseEvent *event) {
+  // mouse move - change drag item
+  if (!(event->buttons() & Qt::LeftButton)) {
+
+    if (!currentBoardItem()) {
+      m_dragItem = None;
+      setCursor(Qt::ArrowCursor);
+      return;
+    }
+
+    QPointF posOnImg = QPointF(event->pos()) - m_boardImgRect.topLeft();
+
+    QRectF itemRect = currentBoardItem()->getItemRect(m_boardImgRect.size().toSize());
+
+    qreal distance = 10.0;
+
+    if ((itemRect.topLeft() - posOnImg).manhattanLength() < distance) {
+      m_dragItem = TopLeftCorner;
+      setCursor(Qt::SizeFDiagCursor);
+    }
+    else if ((itemRect.topRight() - posOnImg).manhattanLength() < distance) {
+      m_dragItem = TopRightCorner;
+      setCursor(Qt::SizeBDiagCursor);
+    }
+    else if ((itemRect.bottomRight() - posOnImg).manhattanLength() < distance) {
+      m_dragItem = BottomRightCorner;
+      setCursor(Qt::SizeFDiagCursor);
+    }
+    else if ((itemRect.bottomLeft() - posOnImg).manhattanLength() < distance) {
+      m_dragItem = BottomLeftCorner;
+      setCursor(Qt::SizeBDiagCursor);
+    }
+    else if (std::abs(itemRect.top() - posOnImg.y()) < distance &&
+      itemRect.left() < posOnImg.x() && itemRect.right() > posOnImg.x()) {
+      m_dragItem = TopEdge;
+      setCursor(Qt::SizeVerCursor);
+    }
+    else if (std::abs(itemRect.right() - posOnImg.x()) < distance &&
+      itemRect.top() < posOnImg.y() && itemRect.bottom() > posOnImg.y()) {
+      m_dragItem = RightEdge;
+      setCursor(Qt::SizeHorCursor);
+    }
+    else if (std::abs(itemRect.bottom() - posOnImg.y()) < distance &&
+      itemRect.left() < posOnImg.x() && itemRect.right() > posOnImg.x()) {
+      m_dragItem = BottomEdge;
+      setCursor(Qt::SizeVerCursor);
+    }
+    else if (std::abs(itemRect.left() - posOnImg.x()) < distance &&
+      itemRect.top() < posOnImg.y() && itemRect.bottom() > posOnImg.y()) {
+      m_dragItem = LeftEdge;
+      setCursor(Qt::SizeHorCursor);
+    }
+    else if (itemRect.contains(posOnImg)) {
+      m_dragItem = Translate;
+      setCursor(Qt::SizeAllCursor);
+    }
+    else {
+      m_dragItem = None;
+      setCursor(Qt::ArrowCursor);
+    }
+
+    return;
+  }
+
+  // left mouse drag
+  //std::cout << "left dragging" << std::endl;
+
+  if (m_dragItem == None) return;
+
+  if (m_dragStartItemRect.isNull()) return;
+
+  QPointF posOnImg = QPointF(event->pos()) - m_boardImgRect.topLeft();
+  QPointF ratioPos = QPointF(posOnImg.x() / m_boardImgRect.width(), posOnImg.y() / m_boardImgRect.height());
+
+  // with alt : center resize 
+  bool altPressed = event->modifiers() & Qt::AltModifier;
+
+  QRectF newRect = m_dragStartItemRect;
+  QPointF d = ratioPos - m_dragStartPos;
+  switch (m_dragItem) {
+  case Translate:
+    newRect.translate(ratioPos - m_dragStartPos);
+    break;
+
+  case TopLeftCorner:
+    newRect.setTopLeft(newRect.topLeft() + d);
+    if (altPressed)
+      newRect.setBottomRight(newRect.bottomRight() - d);
+  break;
+
+  case TopRightCorner:
+    newRect.setTopRight(newRect.topRight() + d);
+    if (altPressed)
+      newRect.setBottomLeft(newRect.bottomLeft() - d);
+  break;
+
+  case BottomRightCorner:
+    newRect.setBottomRight(newRect.bottomRight() + d);
+    if (altPressed)
+      newRect.setTopLeft(newRect.topLeft() - d);
+  break;
+
+  case BottomLeftCorner:
+    newRect.setBottomLeft(newRect.bottomLeft() + d);
+    if (altPressed)
+      newRect.setTopRight(newRect.topRight() - d);
+  break;
+
+  case TopEdge:
+    newRect.setTop(newRect.top() + d.y());
+    if (altPressed)
+      newRect.setBottom(newRect.bottom() - d.y());
+  break;
+
+  case RightEdge:
+    newRect.setRight(newRect.right() + d.x());
+    if (altPressed)
+      newRect.setLeft(newRect.left() - d.x());
+    break;
+
+  case BottomEdge:
+    newRect.setBottom(newRect.bottom() + d.y());
+    if (altPressed)
+      newRect.setTop(newRect.top() - d.y());
+    break;
+
+  case LeftEdge:
+    newRect.setLeft(newRect.left() + d.x());
+    if (altPressed)
+      newRect.setRight(newRect.right() - d.x());
+    break;
+  default:
+    break;
+  }
+
+  currentBoardItem()->setRatioRect(newRect.normalized());
+  invalidate();
+  update();
+}
+
+void BoardView::mousePressEvent(QMouseEvent *event) {
+  // only the left button counts
+  if (event->button() != Qt::LeftButton) return;
+  // store the current item rect and mouse pos, relative to the image size
+  m_dragStartItemRect = currentBoardItem()->getRatioRect();
+  QPointF posOnImg = QPointF(event->pos()) - m_boardImgRect.topLeft();
+  m_dragStartPos = QPointF(posOnImg.x() / m_boardImgRect.width(), posOnImg.y() / m_boardImgRect.height());
+}
+
+void BoardView::mouseReleaseEvent(QMouseEvent *event) {
+  m_dragStartItemRect = QRectF();
+  m_dragStartPos = QPointF();
+}
+
+//=============================================================================
+
+
+ItemInfoView::ItemInfoView(QWidget* parent)
+  : QStackedWidget(parent)
+{
+  m_nameEdit = new QLineEdit(this);
+  m_maxFontSizeEdit = new DVGui::IntLineEdit(this, 1, 1);
+  m_typeCombo = new QComboBox(this);
+  m_textEdit = new QTextEdit(this);
+  m_imgPathField = new DVGui::FileField(this);
+  m_fontCombo = new QFontComboBox(this);
+  m_boldButton = new QPushButton("B", this);
+  m_italicButton = new QPushButton("I", this);
+  m_fontColorField = new DVGui::ColorField(this, true, TPixel32(0,0,0,255), 25, false, 54);
+
+  m_fontPropBox = new QWidget(this);//これをまとめてONOFFする
+
+  for (int i = 0; i < BoardItem::TypeCount; i++) {
+    m_typeCombo->addItem(stringByItemType[(BoardItem::Type)i]);
+  }
+
+  m_textEdit->setAcceptRichText(false);
+
+  m_boldButton->setFixedSize(QSize(25, 25));
+  m_boldButton->setCheckable(true);
+  m_italicButton->setFixedSize(QSize(25, 25));
+  m_italicButton->setCheckable(true);
+
+  QStringList filters;
+  for(QByteArray & format: QImageReader::supportedImageFormats())
+    filters += format;
+  m_imgPathField->setFilters(filters);
+  m_imgPathField->setFileMode(QFileDialog::ExistingFile);
+
+
+  //----- layout
+
+  QGridLayout* mainLay = new QGridLayout();
+  mainLay->setMargin(5);
+  mainLay->setHorizontalSpacing(3);
+  mainLay->setVerticalSpacing(10); 
+  {
+    mainLay->addWidget(new QLabel(tr("Name:"), this), 0, 0, Qt::AlignRight | Qt::AlignVCenter);
+    mainLay->addWidget(m_nameEdit, 0, 1);
+
+    mainLay->addWidget(new QLabel(tr("Type:"), this), 1, 0, Qt::AlignRight | Qt::AlignVCenter);
+    mainLay->addWidget(m_typeCombo, 1, 1);
+
+    QVBoxLayout* extraInfoLay = new QVBoxLayout();
+    extraInfoLay->setMargin(0);
+    extraInfoLay->setSpacing(0);
+    {
+      extraInfoLay->addWidget(m_textEdit, 1);
+      extraInfoLay->addWidget(m_imgPathField, 0);
+      extraInfoLay->addSpacing(5);
+
+      QGridLayout*fontPropLay = new QGridLayout();
+      fontPropLay->setMargin(0);
+      fontPropLay->setHorizontalSpacing(3);
+      fontPropLay->setVerticalSpacing(10);
+      {
+        fontPropLay->addWidget(new QLabel(tr("Font:"), this), 0, 0, Qt::AlignRight | Qt::AlignVCenter);
+        fontPropLay->addWidget(m_fontCombo, 0, 1, 1, 4);
+
+        fontPropLay->addWidget(new QLabel(tr("Max Size:"), this), 1, 0, Qt::AlignRight | Qt::AlignVCenter);
+        fontPropLay->addWidget(m_maxFontSizeEdit, 1, 1);
+        
+        fontPropLay->addWidget(m_boldButton, 1, 2);
+        fontPropLay->addWidget(m_italicButton, 1, 3);
+
+        fontPropLay->addWidget(m_fontColorField, 2, 0, 1, 5);
+      }
+      fontPropLay->setColumnStretch(0, 0);
+      fontPropLay->setColumnStretch(1, 0);
+      fontPropLay->setColumnStretch(2, 0);
+      fontPropLay->setColumnStretch(3, 0);
+      fontPropLay->setColumnStretch(4, 1);
+      m_fontPropBox->setLayout(fontPropLay);
+      extraInfoLay->addWidget(m_fontPropBox, 0);
+    }
+    mainLay->addLayout(extraInfoLay, 2, 0, 1, 2);
+  }
+  mainLay->setColumnStretch(0, 0);
+  mainLay->setColumnStretch(1, 1);
+  mainLay->setRowStretch(0, 0);
+  mainLay->setRowStretch(1, 0);
+  mainLay->setRowStretch(2, 1);
+  
+  QWidget* mainWidget = new QWidget(this);
+  mainWidget->setLayout(mainLay);
+  addWidget(mainWidget);
+
+  addWidget(new QLabel(tr("No item selected."), this));
+
+  bool ret = true;
+  ret = ret && connect(m_nameEdit, SIGNAL(editingFinished()), this, SLOT(onNameEdited()));
+  ret = ret && connect(m_maxFontSizeEdit, SIGNAL(editingFinished()), this, SLOT(onMaxFontSizeEdited()));
+  ret = ret && connect(m_typeCombo, SIGNAL(activated(int)), this, SLOT(onTypeComboActivated(int)));
+  ret = ret && connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(onFreeTextChanged()));
+  ret = ret && connect(m_imgPathField, SIGNAL(pathChanged()), this, SLOT(onImgPathChanged()));
+  ret = ret && connect(m_fontCombo, SIGNAL(currentFontChanged(const QFont &)), this, SLOT(onFontComboChanged(const QFont &)));
+  ret = ret && connect(m_boldButton, SIGNAL(clicked(bool)), this, SLOT(onBoldButtonClicked(bool)));
+  ret = ret && connect(m_italicButton, SIGNAL(clicked(bool)), this, SLOT(onItalicButtonClicked(bool)));
+  ret = ret && connect(m_fontColorField, SIGNAL(colorChanged(const TPixel32 &, bool)), this, SLOT(onFontColorChanged(const TPixel32 &, bool)));
+  assert(ret);
+}
+
+//アイテムが切り替わったとき、表示を更新
+void ItemInfoView::setCurrentItem(int index) {
+  if (index == -1) {
+    if (!currentBoardItem()) return;
+    setCurrentBoardItem(nullptr);
+    setCurrentIndex(1); // set to "no item seleceted" page.
+    return;
+  }
+
+  setCurrentIndex(0); // set to normal page.
+
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  if(index >= boardSettings->getItemCount()) return;
+
+  BoardItem* newItem = &(boardSettings->getItem(index));
+  if (currentBoardItem() == newItem) return;
+
+  setCurrentBoardItem(newItem);
+
+  // 同期
+  m_nameEdit->setText(newItem->getName());
+  m_maxFontSizeEdit->setValue(newItem->getMaximumFontSize());
+  m_typeCombo->setCurrentIndex((int)newItem->getType());
+  m_textEdit->setText(newItem->getFreeText());
+  m_imgPathField->setPath(newItem->getImgPath().getQString());
+  m_fontCombo->setCurrentFont(newItem->font());
+  m_boldButton->setChecked(newItem->font().bold());
+  m_italicButton->setChecked(newItem->font().italic());
+  QColor col = newItem->getColor();
+  m_fontColorField->setColor(TPixel32(col.red(), col.green(), col.blue(), col.alpha()));
+
+  switch (newItem->getType()) {
+  case BoardItem::FreeText:
+    m_textEdit->show();
+    m_imgPathField->hide();
+    m_fontPropBox->show();
+    break;
+  case BoardItem::Image:
+    m_textEdit->hide();
+    m_imgPathField->show();
+    m_fontPropBox->hide();
+    break;
+  default:
+    m_textEdit->hide();
+    m_imgPathField->hide();
+    m_fontPropBox->show();
+    break;
+  }
+}
+
+
+void ItemInfoView::onNameEdited() {
+  assert(currentBoardItem());
+
+  QString newName = m_nameEdit->text();
+  
+  if (newName.isEmpty()) {
+    newName = tr("Item");
+    m_nameEdit->setText(newName);
+  }
+
+  if (currentBoardItem()->getName() == newName) return;
+
+  currentBoardItem()->setName(newName);
+
+  emit itemPropertyChanged(true);
+}
+
+void ItemInfoView::onMaxFontSizeEdited() {
+  assert(currentBoardItem());
+
+  int maxFontSize = m_maxFontSizeEdit->getValue();
+
+  if (currentBoardItem()->getMaximumFontSize() == maxFontSize) return;
+
+  currentBoardItem()->setMaximumFontSize(maxFontSize);
+
+  emit itemPropertyChanged(false);
+}
+
+void ItemInfoView::onTypeComboActivated(int) {
+  assert(currentBoardItem());
+
+  BoardItem::Type newType = (BoardItem::Type)m_typeCombo->currentIndex();
+
+  if (currentBoardItem()->getType() == newType) return;
+
+  currentBoardItem()->setType(newType);
+
+  switch (newType) {
+  case BoardItem::FreeText:
+    m_textEdit->show();
+    m_imgPathField->hide();
+    m_fontPropBox->show();
+    break;
+  case BoardItem::Image:
+    m_textEdit->hide();
+    m_imgPathField->show();
+    m_fontPropBox->hide();
+    break;
+  default:
+    m_textEdit->hide();
+    m_imgPathField->hide();
+    m_fontPropBox->show();
+    break;
+  }
+
+  emit itemPropertyChanged(true);
+}
+
+void ItemInfoView::onFreeTextChanged() {
+  assert(currentBoardItem());
+
+  currentBoardItem()->setFreeText(m_textEdit->toPlainText());
+
+  emit itemPropertyChanged(false);
+}
+
+void ItemInfoView::onImgPathChanged() {
+  assert(currentBoardItem());
+
+  currentBoardItem()->setImgPath(TFilePath(m_imgPathField->getPath()));
+
+  emit itemPropertyChanged(true);
+}
+
+void ItemInfoView::onFontComboChanged(const QFont & newFont) {
+  assert(currentBoardItem());
+
+  currentBoardItem()->font().setFamily(newFont.family());
+
+  emit itemPropertyChanged(false);
+}
+
+void ItemInfoView::onBoldButtonClicked(bool on) {
+  assert(currentBoardItem());
+
+  currentBoardItem()->font().setBold(on);
+
+  emit itemPropertyChanged(false);
+}
+
+void ItemInfoView::onItalicButtonClicked(bool on) {
+  assert(currentBoardItem());
+
+  currentBoardItem()->font().setItalic(on);
+
+  emit itemPropertyChanged(false);
+}
+
+void ItemInfoView::onFontColorChanged(const TPixel32 & color, bool isDragging) {
+  assert(currentBoardItem());
+
+  if (isDragging) return;
+
+  QColor newColor((int)color.r, (int)color.g, (int)color.b, (int)color.m);
+  if (currentBoardItem()->getColor() == newColor) return;
+  currentBoardItem()->setColor(newColor);
+
+  emit itemPropertyChanged(true);
+}
+
+//=============================================================================
+
+
+ItemListView::ItemListView(QWidget* parent)
+: QWidget(parent)
+{
+  QPushButton* newItemBtn = new QPushButton(QIcon(":Resources/plus.svg"), tr("Add"), this);
+  m_deleteItemBtn = new QPushButton(QIcon(":Resources/delete_on.svg"), tr("Remove"), this);
+  m_moveUpBtn = new QPushButton(QIcon(":Resources/up.svg"), tr("Move Up"), this);
+  m_moveDownBtn = new QPushButton(QIcon(":Resources/down.svg"), tr("Move Down"), this);
+
+  m_list = new QListWidget(this);
+
+  QSize iconSize(20, 20);
+
+  newItemBtn->setIconSize(iconSize);
+  m_deleteItemBtn->setIconSize(iconSize);
+  m_moveUpBtn->setIconSize(iconSize);
+  m_moveDownBtn->setIconSize(iconSize);
+  
+
+  m_list->setIconSize(QSize(20, 20));
+  m_list->setAlternatingRowColors(true);
+  m_list->setMaximumWidth(225);
+
+  QHBoxLayout* mainLay = new QHBoxLayout();
+  mainLay->setMargin(5);
+  mainLay->setSpacing(5);
+  {
+    QVBoxLayout* buttonsLay = new QVBoxLayout();
+    buttonsLay->setMargin(0);
+    buttonsLay->setSpacing(3);
+    {
+      buttonsLay->addWidget(newItemBtn, 0);
+      buttonsLay->addWidget(m_deleteItemBtn, 0);
+      buttonsLay->addWidget(m_moveUpBtn, 0);
+      buttonsLay->addWidget(m_moveDownBtn, 0);
+      buttonsLay->addStretch(1);
+    }
+    mainLay->addLayout(buttonsLay, 0);
+    
+    mainLay->addWidget(m_list, 1);
+  }
+  setLayout(mainLay);
+
+  bool ret = true;
+  ret = ret && connect(m_list, SIGNAL(currentRowChanged(int)), this, SIGNAL(currentItemSwitched(int)));
+  ret = ret && connect(m_list, SIGNAL(currentRowChanged(int)), this, SLOT(onCurrentItemSwitched(int)));
+  ret = ret && connect(newItemBtn, SIGNAL(clicked(bool)), this, SLOT(onNewItemButtonClicked()));
+  ret = ret && connect(m_deleteItemBtn, SIGNAL(clicked(bool)), this, SLOT(onDeleteItemButtonClicked()));
+  assert(ret);
+}
+
+void ItemListView::initialize() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  if (boardSettings->getItemCount() == 0) return;
+
+  for (int i = 0; i < boardSettings->getItemCount(); i++) {
+    BoardItem* item = &(boardSettings->getItem(i));
+    QListWidgetItem* listItem = new QListWidgetItem(m_list);
+
+    editListWidgetItem(listItem, item);
+  }
+
+  m_list->setCurrentRow(0, QItemSelectionModel::ClearAndSelect); // this will update information view
+}
+
+// infoViewの内容が編集されたとき、同期する
+void ItemListView::updateCurrentItem() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  int currentItemIndex = m_list->currentRow();
+
+  if (currentItemIndex < 0 || currentItemIndex >= boardSettings->getItemCount()) return;
+
+  BoardItem * item = &(boardSettings->getItem(currentItemIndex));
+  editListWidgetItem(m_list->item(currentItemIndex), item);
+}
+
+void ItemListView::onCurrentItemSwitched(int currentRow) {
+  if (currentRow == -1) {
+    m_moveUpBtn->setEnabled(false);
+    m_moveDownBtn->setEnabled(false);
+  }
+  else {
+    m_moveUpBtn->setEnabled(currentRow != 0);
+    m_moveDownBtn->setEnabled(currentRow != m_list->count()-1);
+  }
+}
+
+void ItemListView::onNewItemButtonClicked() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  boardSettings->addNewItem();
+
+  QListWidgetItem* listItem = new QListWidgetItem();
+  BoardItem* item = &(boardSettings->getItem(0));
+
+  editListWidgetItem(listItem, item);
+
+  m_list->insertItem(0, listItem);
+  m_list->setCurrentRow(0, QItemSelectionModel::ClearAndSelect);
+
+  m_deleteItemBtn->setEnabled(true);
+
+  emit itemAddedOrDeleted();
+}
+
+void ItemListView::onDeleteItemButtonClicked() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  int currentRow = m_list->currentRow();
+
+  assert(currentRow != -1);
+
+  boardSettings->removeItem(currentRow);
+
+  if (m_list->count() == 1) {
+    m_deleteItemBtn->setEnabled(false);
+    m_list->setCurrentRow(-1, QItemSelectionModel::ClearAndSelect);
+  }
+  else if (currentRow == m_list->count() - 1)
+    m_list->setCurrentRow(m_list->count() - 2, QItemSelectionModel::ClearAndSelect);
+  
+  delete m_list->takeItem(currentRow);
+
+  emit itemAddedOrDeleted();
+}
+
+//=============================================================================
+
+BoardSettingsPopup::BoardSettingsPopup(QWidget *parent) 
+  : DVGui::Dialog(parent, true, false, tr("Clapperboard Settings"))
+{
+  initializeItemTypeString();
+
+  m_boardView = new BoardView(this);
+  m_itemInfoView = new ItemInfoView(this);
+  m_itemListView = new ItemListView(this);
+
+  m_durationEdit = new DVGui::IntLineEdit(this, 1, 0);
+  m_backgroundPathField = new DVGui::FileField(this);
+  
+  QPushButton* closeButton = new QPushButton(tr("Close"), this);
+  
+
+  m_backgroundPathField->setFileMode(QFileDialog::ExistingFile);
+  
+  //--- layout
+
+  QHBoxLayout* mainLay = new QHBoxLayout();
+  mainLay->setMargin(0);
+  mainLay->setSpacing(10);
+  {
+    QVBoxLayout* leftLay = new QVBoxLayout();
+    leftLay->setMargin(0);
+    leftLay->setSpacing(0);
+    {
+      QHBoxLayout* leftTopLay = new QHBoxLayout();
+      leftTopLay->setMargin(5);
+      leftTopLay->setSpacing(3);
+      {
+        leftTopLay->addWidget(new QLabel(tr("Duration (frames):"), this), 0);
+        leftTopLay->addWidget(m_durationEdit, 0);
+        
+        leftTopLay->addSpacing(10);
+
+        leftTopLay->addWidget(new QLabel(tr("Background:"), this), 0);
+        leftTopLay->addWidget(m_backgroundPathField, 1);
+      }
+      leftLay->addLayout(leftTopLay, 0);
+
+      leftLay->addWidget(m_boardView, 1);
+    }
+    mainLay->addLayout(leftLay, 1);
+
+    QVBoxLayout* rightLay = new QVBoxLayout();
+    rightLay->setMargin(0);
+    rightLay->setSpacing(15);
+    {
+      rightLay->addWidget(m_itemInfoView, 0);
+      rightLay->addWidget(m_itemListView, 1);
+    }
+    mainLay->addLayout(rightLay, 0);
+  }
+  m_topLayout->addLayout(mainLay, 1);
+
+  addButtonBarWidget(closeButton);
+
+  bool ret = true;
+  ret = ret && connect(m_itemListView, SIGNAL(currentItemSwitched(int)), this, SLOT(onCurrentItemSwitched(int)));
+  ret = ret && connect(m_itemListView, SIGNAL(itemAddedOrDeleted()), this, SLOT(onItemAddedOrDeleted()));
+  ret = ret && connect(m_itemInfoView, SIGNAL(itemPropertyChanged(bool)), this, SLOT(onItemPropertyChanged(bool)));
+  assert(ret);
+}
+
+void BoardSettingsPopup::initialize() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+  
+  m_durationEdit->setValue(boardSettings->getDuration());
+  m_backgroundPathField->setPath(boardSettings->getBgPath().getQString());
+  
+  m_itemListView->initialize();
+}
+
+
+void BoardSettingsPopup::initializeItemTypeString() {
+  if (!stringByItemType.isEmpty()) return;
+
+  stringByItemType[BoardItem::FreeText] = tr("Text");      //自由テキスト (m_textに内容)
+  stringByItemType[BoardItem::ProjectName] = tr("Project name");      //プロジェクト名
+  stringByItemType[BoardItem::SceneName] = tr("Scene name");        //シーンファイル名
+  stringByItemType[BoardItem::Duration_Frame] = tr("Duration : Frame");   //長さ（フレーム数）
+  stringByItemType[BoardItem::Duration_SecFrame] = tr("Duration : Sec + Frame");//長さ（秒＋コマ）
+  stringByItemType[BoardItem::Duration_HHMMSSFF] = tr("Duration : HH:MM:SS:FF");//長さ（HH:MM:SS:FF）
+  stringByItemType[BoardItem::CurrentDate] = tr("Current date");      //現在の日（年 / 月 / 日）
+  stringByItemType[BoardItem::CurrentDateTime] = tr("Current date and time");  //現在の日時（年 / 月 / 日 / 時 / 分 / 秒）
+  stringByItemType[BoardItem::UserName] = tr("User name");         //ユーザ名
+  stringByItemType[BoardItem::ScenePath_Aliased] = tr("Scene location : Aliased path");//シーンファイルパス（エイリアス付）
+  stringByItemType[BoardItem::ScenePath_Full] = tr("Scene location : Full path");   //シーンファイルパス（フルパス）
+  stringByItemType[BoardItem::MoviePath_Aliased] = tr("Output location : Aliased path");//ムービーファイルパス（エイリアス付）
+  stringByItemType[BoardItem::MoviePath_Full] = tr("Output location : Full path");   //ムービーファイルパス（フルパス）
+  stringByItemType[BoardItem::Image] = tr("Image");             //画像 (m_imgPathにパス)
+
+}
+
+// ItemListViewの現在のアイテムが変更されたとき
+void BoardSettingsPopup::onCurrentItemSwitched(int index) {
+  // Infoの内容を更新する
+  m_itemInfoView->setCurrentItem(index);
+
+  m_boardView->update();
+}
+
+void BoardSettingsPopup::onItemAddedOrDeleted() {
+  m_boardView->invalidate();
+  m_boardView->update();
+}
+
+// infoViewの内容が編集されたとき
+void BoardSettingsPopup::onItemPropertyChanged(bool updateListView) {
+  m_boardView->invalidate();
+  m_boardView->update();
+
+  if (updateListView)
+    m_itemListView->updateCurrentItem();
+}

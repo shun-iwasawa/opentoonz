@@ -67,11 +67,14 @@ private:
 public:
   BoardItem();
 
+  QRectF getRatioRect() { return m_rect; }
+  void setRatioRect(QRectF rect) { m_rect = rect; }
+
   QRectF getItemRect(QSize imgSize); //âÊëúè„ÇÃRectÇï‘Ç∑
   void drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* scene);
 
   QString getName() { return m_name; }
-  void setname(QString name) { m_name = name; }
+  void setName(QString name) { m_name = name; }
 
   Type getType() { return m_type; }
   void setType(Type type) { m_type = type; }
@@ -122,6 +125,9 @@ public:
 
   TFilePath getBgPath() { return m_bgPath; }
   void setBgPath(TFilePath path) { m_bgPath = path; }
+
+  void addNewItem(int insertAt = 0);
+  void removeItem(int index);
 };
 
 #endif

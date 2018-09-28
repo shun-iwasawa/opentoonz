@@ -332,6 +332,7 @@ set(SOURCES
 	reframepopup.cpp
 	autoinputcellnumberpopup.cpp
 	colormodelbehaviorpopup.cpp
+	boardsettingspopup.cpp
 # Tracker file
     dummyprocessor.cpp
     metnum.cpp

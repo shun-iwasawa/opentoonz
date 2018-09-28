@@ -114,7 +114,14 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
   QRectF itemRect = getItemRect(imgSize);
 
   if (m_type == Image) {
+    QImage img(m_imgPath.getQString());
+    float ratio = std::min((float)itemRect.width() / (float)img.width(), (float)itemRect.height() / (float)img.height());
+    QSizeF imgSize((float)img.width() * ratio, (float)img.height() * ratio);
+    QPointF imgTopLeft = itemRect.topLeft() + QPointF((itemRect.width() - imgSize.width())*0.5f, (itemRect.height() - imgSize.height())*0.5f);
+
     //画像描く
+    p.drawImage(QRectF(imgTopLeft, imgSize), img);
+
     return;
   }
 
@@ -139,7 +146,7 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
     isInRect = false;
   while (1) {
     fontSize += (isInRect) ? 1 : -1;
-    std::cout << "font size = " << fontSize << std::endl;
+    //std::cout << "font size = " << fontSize << std::endl;
     if (fontSize <= 0) // cannot draw 
       return;
     tmpFont.setPixelSize(fontSize);
@@ -155,7 +162,7 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
   }
 
   //----
-  // ここで最大フォントサイズでクランプする
+  fontSize = std::min(fontSize, m_maximumFontSize/shrink);
 
   QFont font(m_font);
   font.setPixelSize(fontSize);
@@ -163,7 +170,10 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
   p.setFont(font);
   p.setPen(m_color);
 
-  p.drawText(itemRect, Qt::AlignLeft | Qt::AlignTop, contentText);
+  if (m_type == FreeText)
+    p.drawText(itemRect, Qt::AlignLeft | Qt::AlignTop, contentText);
+  else
+    p.drawText(itemRect, Qt::AlignCenter, contentText);
 
 }
 
@@ -180,7 +190,7 @@ QImage BoardSettings::getBoardImage(TDimension& dim, int shrink, ToonzScene* sce
 
   QPainter painter(&img);
 
-  painter.fillRect(img.rect(), Qt::white);
+  painter.fillRect(img.rect(), Qt::gray);
   //draw background
   if (!m_bgPath.isEmpty())
     painter.drawImage(img.rect(), QImage(m_bgPath.getQString()));
@@ -211,4 +221,13 @@ TRaster32P BoardSettings::getBoardRaster(TDimension& dim, int shrink, ToonzScene
     }
   }
   return boardRas;
+}
+
+void BoardSettings::addNewItem(int insertAt) {
+  m_items.insert(insertAt, BoardItem());
+}
+
+void BoardSettings::removeItem(int index) {
+  if (index < 0 || index >= m_items.size()) return;
+  m_items.removeAt(index);
 }
