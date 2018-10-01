@@ -380,8 +380,8 @@ std::pair<bool, int> MovieRenderer::Imp::saveFrame(
 
   int boardDuration = 0;
   if (m_movieType) {
-    BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
-    boardDuration = boardSettings->getDuration();
+    BoardSettings* bs = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
+    boardDuration = (bs->isActive()) ? bs->getDuration() : 0;
   }
 
   TFrameId fid(fr + 1 + boardDuration);
@@ -748,6 +748,7 @@ void MovieRenderer::Imp::onRenderFinished(bool isCanceled) {
 
 void MovieRenderer::Imp::addBoard() {
   BoardSettings* boardSettings = m_scene->getProperties()->getOutputProperties()->getBoardSettings();
+  if (!boardSettings->isActive()) return;
   int duration = boardSettings->getDuration();
   if (duration == 0) return;
   // Get the image size

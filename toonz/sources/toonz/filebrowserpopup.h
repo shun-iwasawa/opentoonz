@@ -177,7 +177,7 @@ protected:
 //! asks the user for a \a single file path to save something to.
 class GenericSaveFilePopup final : public FileBrowserPopup {
 public:
-  GenericSaveFilePopup(const QString &title);
+  GenericSaveFilePopup(const QString &title, bool globalSelection = true);
 
   /*!
 This function shows the popup and blocks until a suitable

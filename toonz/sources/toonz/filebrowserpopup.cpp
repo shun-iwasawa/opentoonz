@@ -439,8 +439,9 @@ TFilePath GenericLoadFilePopup::getPath() {
 //    GenericSaveFilePopup  implementation
 //***********************************************************************************
 
-GenericSaveFilePopup::GenericSaveFilePopup(const QString &title)
+GenericSaveFilePopup::GenericSaveFilePopup(const QString &title, bool globalSelection)
     : FileBrowserPopup(title) {
+  m_browser->enableGlobalSelection(globalSelection);
   connect(m_nameField, SIGNAL(returnPressedNow()), m_okButton,
           SLOT(animateClick()));
 }

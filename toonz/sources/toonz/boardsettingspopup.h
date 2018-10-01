@@ -133,7 +133,6 @@ class BoardSettingsPopup : public DVGui::Dialog {
   ItemListView* m_itemListView;
 
   DVGui::IntLineEdit* m_durationEdit;
-  DVGui::FileField * m_backgroundPathField;
   
   void initialize();
   void initializeItemTypeString(); // call once on the first launch
@@ -148,6 +147,9 @@ protected slots:
   void onCurrentItemSwitched(int);
   void onItemAddedOrDeleted();
   void onItemPropertyChanged(bool updateListView);
+  void onDurationEdited();
+  void onLoadPreset();
+  void onSavePreset();
 };
 
 

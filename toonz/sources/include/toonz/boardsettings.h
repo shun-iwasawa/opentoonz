@@ -6,6 +6,9 @@
 #include "traster.h"
 #include "tfilepath.h"
 
+// TnzCore includes
+#include "tstream.h"
+
 #include <QList>
 #include <QRectF>
 #include <QColor>
@@ -92,15 +95,16 @@ public:
 
   TFilePath getImgPath() { return m_imgPath; }
   void setImgPath(TFilePath path) { m_imgPath = path; }
+
+  void saveData(TOStream &os);
+  void loadData(TIStream &is);
 };
 
 class DVAPI BoardSettings {
   //有効無効
-  bool m_active = true;
+  bool m_active = false;
   //フレーム長
-  int m_duration = 24;
-  //背景画像
-  TFilePath m_bgPath;
+  int m_duration = 0;
   //各パーツ
   QList<BoardItem> m_items;
 
@@ -111,9 +115,7 @@ public:
 
   TRaster32P getBoardRaster(TDimension& dim, int shrink, ToonzScene* scene);
 
-  int getDuration() {
-    return (m_active) ? m_duration : 0;
-  }
+  int getDuration() { return m_duration; }
 
   bool isActive() { return m_active; }
   void setActive(bool on) { m_active = on; }
@@ -122,12 +124,12 @@ public:
   BoardItem& getItem(int index) { return m_items[index]; }
 
   void setDuration(int f) { m_duration = f; }
-
-  TFilePath getBgPath() { return m_bgPath; }
-  void setBgPath(TFilePath path) { m_bgPath = path; }
-
+  
   void addNewItem(int insertAt = 0);
   void removeItem(int index);
+
+  void saveData(TOStream &os, bool forPreset = false);
+  void loadData(TIStream &is);
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 // Tnz6 includes
 #include "tapp.h"
+#include "filebrowserpopup.h"
 
 // TnzQt includes
 #include "toonzqt/filefield.h"
@@ -16,9 +17,13 @@
 #include "toonz/sceneproperties.h"
 #include "toonz/tcamera.h"
 #include "toonz/boardsettings.h"
+#include "toonz/toonzfolders.h"
 
 // TnzBase includes
 #include "trasterfx.h"
+
+// TnzCore includes
+#include "tsystem.h"
 
 #include <QLineEdit>
 #include <QLabel>
@@ -83,7 +88,19 @@ void BoardView::paintEvent(QPaintEvent *event) {
   p.fillRect(rect(), Qt::black);
 
   // TODO: durationが０のときは1以上にするようにメッセージを出す
+  if (boardSettings->getDuration() == 0) {
+    p.setPen(Qt::white);
+    QFont font = p.font();
+    font.setPixelSize(30);
+    p.setFont(font);
+    p.drawText(rect().adjusted(5,5,-5,-5), Qt::AlignCenter | Qt::TextWordWrap, tr("Please set the duration more than 0 frame first, or the clapperboard settings will not be saved in the scene at all!"));
 
+    p.setPen(QPen(Qt::red, 2));
+    p.drawLine(5, 5, 150, 5);
+    p.drawLine(5, 10, 150, 10);
+
+    return;
+  }
 
   if (!m_valid) {
     int shrinkX = outProp->getRenderSettings().m_shrinkX,
@@ -213,59 +230,75 @@ void BoardView::mouseMoveEvent(QMouseEvent *event) {
   // with alt : center resize 
   bool altPressed = event->modifiers() & Qt::AltModifier;
 
+  bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+
+  auto adjVal = [&](double p) {
+    double step = 0.05;
+    if (!shiftPressed) return p;
+    return std::round(p / step)*step;
+  };
+  auto adjPos = [&](QPointF p) { 
+    if (!shiftPressed) return p;
+    return QPointF(adjVal(p.x()), adjVal(p.y()));
+  };
+  
   QRectF newRect = m_dragStartItemRect;
   QPointF d = ratioPos - m_dragStartPos;
   switch (m_dragItem) {
   case Translate:
     newRect.translate(ratioPos - m_dragStartPos);
+    if (shiftPressed) {
+      newRect.setTopLeft(adjPos(newRect.topLeft()));
+      newRect.setBottomRight(adjPos(newRect.bottomRight()));
+    }
     break;
 
   case TopLeftCorner:
-    newRect.setTopLeft(newRect.topLeft() + d);
+    newRect.setTopLeft(adjPos(newRect.topLeft() + d));
     if (altPressed)
-      newRect.setBottomRight(newRect.bottomRight() - d);
+      newRect.setBottomRight(adjPos(newRect.bottomRight() - d));
   break;
 
   case TopRightCorner:
-    newRect.setTopRight(newRect.topRight() + d);
+    newRect.setTopRight(adjPos(newRect.topRight() + d));
     if (altPressed)
-      newRect.setBottomLeft(newRect.bottomLeft() - d);
+      newRect.setBottomLeft(adjPos(newRect.bottomLeft() - d));
   break;
 
   case BottomRightCorner:
-    newRect.setBottomRight(newRect.bottomRight() + d);
+    newRect.setBottomRight(adjPos(newRect.bottomRight() + d));
     if (altPressed)
-      newRect.setTopLeft(newRect.topLeft() - d);
+      newRect.setTopLeft(adjPos(newRect.topLeft() - d));
   break;
 
   case BottomLeftCorner:
-    newRect.setBottomLeft(newRect.bottomLeft() + d);
+    newRect.setBottomLeft(adjPos(newRect.bottomLeft() + d));
     if (altPressed)
-      newRect.setTopRight(newRect.topRight() - d);
+      newRect.setTopRight(adjPos(newRect.topRight() - d));
   break;
 
   case TopEdge:
-    newRect.setTop(newRect.top() + d.y());
+    newRect.setTop(adjVal(newRect.top() + d.y()));
     if (altPressed)
-      newRect.setBottom(newRect.bottom() - d.y());
+      newRect.setBottom(adjVal(newRect.bottom() - d.y()));
   break;
 
   case RightEdge:
-    newRect.setRight(newRect.right() + d.x());
+    newRect.setRight(adjVal(newRect.right() + d.x()));
     if (altPressed)
-      newRect.setLeft(newRect.left() - d.x());
+      newRect.setLeft(adjVal(newRect.left() - d.x()));
     break;
 
   case BottomEdge:
-    newRect.setBottom(newRect.bottom() + d.y());
+    newRect.setBottom(adjVal(newRect.bottom() + d.y()));
     if (altPressed)
-      newRect.setTop(newRect.top() - d.y());
+      newRect.setTop(adjVal(newRect.top() - d.y()));
     break;
 
   case LeftEdge:
-    newRect.setLeft(newRect.left() + d.x());
+    newRect.setLeft(adjVal(newRect.left() + d.x()));
     if (altPressed)
-      newRect.setRight(newRect.right() - d.x());
+      newRect.setRight(adjVal(newRect.right() - d.x()));
     break;
   default:
     break;
@@ -313,6 +346,7 @@ ItemInfoView::ItemInfoView(QWidget* parent)
   }
 
   m_textEdit->setAcceptRichText(false);
+  m_textEdit->setStyleSheet("background:white;\ncolor:black;\nborder:1 solid black;");
 
   m_boldButton->setFixedSize(QSize(25, 25));
   m_boldButton->setCheckable(true);
@@ -709,8 +743,10 @@ void ItemListView::onDeleteItemButtonClicked() {
 //=============================================================================
 
 BoardSettingsPopup::BoardSettingsPopup(QWidget *parent) 
-  : DVGui::Dialog(parent, true, false, tr("Clapperboard Settings"))
+  : DVGui::Dialog(parent, true, false, "ClapperboardSettings")
 {
+  setWindowTitle(tr("Clapperboard Settings"));
+
   initializeItemTypeString();
 
   m_boardView = new BoardView(this);
@@ -718,13 +754,12 @@ BoardSettingsPopup::BoardSettingsPopup(QWidget *parent)
   m_itemListView = new ItemListView(this);
 
   m_durationEdit = new DVGui::IntLineEdit(this, 1, 0);
-  m_backgroundPathField = new DVGui::FileField(this);
   
-  QPushButton* closeButton = new QPushButton(tr("Close"), this);
-  
+  QPushButton* loadPresetBtn = new QPushButton(tr("Load Preset"), this);
+  QPushButton* savePresetBtn = new QPushButton(tr("Save as Preset"), this);
 
-  m_backgroundPathField->setFileMode(QFileDialog::ExistingFile);
-  
+  QPushButton* closeButton = new QPushButton(tr("Close"), this);
+
   //--- layout
 
   QHBoxLayout* mainLay = new QHBoxLayout();
@@ -744,8 +779,11 @@ BoardSettingsPopup::BoardSettingsPopup(QWidget *parent)
         
         leftTopLay->addSpacing(10);
 
-        leftTopLay->addWidget(new QLabel(tr("Background:"), this), 0);
-        leftTopLay->addWidget(m_backgroundPathField, 1);
+        leftTopLay->addWidget(loadPresetBtn, 0);
+        leftTopLay->addWidget(savePresetBtn, 0);
+
+        leftTopLay->addStretch(1);
+
       }
       leftLay->addLayout(leftTopLay, 0);
 
@@ -770,6 +808,11 @@ BoardSettingsPopup::BoardSettingsPopup(QWidget *parent)
   ret = ret && connect(m_itemListView, SIGNAL(currentItemSwitched(int)), this, SLOT(onCurrentItemSwitched(int)));
   ret = ret && connect(m_itemListView, SIGNAL(itemAddedOrDeleted()), this, SLOT(onItemAddedOrDeleted()));
   ret = ret && connect(m_itemInfoView, SIGNAL(itemPropertyChanged(bool)), this, SLOT(onItemPropertyChanged(bool)));
+  ret = ret && connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(onDurationEdited()));
+  ret = ret && connect(closeButton, SIGNAL(pressed()), this, SLOT(close()));
+  ret = ret && connect(loadPresetBtn, SIGNAL(pressed()), this, SLOT(onLoadPreset()));
+  ret = ret && connect(savePresetBtn, SIGNAL(pressed()), this, SLOT(onSavePreset()));
+  
   assert(ret);
 }
 
@@ -780,7 +823,6 @@ void BoardSettingsPopup::initialize() {
   BoardSettings* boardSettings = outProp->getBoardSettings();
   
   m_durationEdit->setValue(boardSettings->getDuration());
-  m_backgroundPathField->setPath(boardSettings->getBgPath().getQString());
   
   m_itemListView->initialize();
 }
@@ -826,4 +868,62 @@ void BoardSettingsPopup::onItemPropertyChanged(bool updateListView) {
 
   if (updateListView)
     m_itemListView->updateCurrentItem();
+}
+
+void BoardSettingsPopup::onDurationEdited() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return;
+  TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+  BoardSettings* boardSettings = outProp->getBoardSettings();
+
+  boardSettings->setDuration(m_durationEdit->getValue());
+
+  m_boardView->update();
+}
+
+void BoardSettingsPopup::onLoadPreset() {
+
+}
+
+void BoardSettingsPopup::onSavePreset() {
+  GenericSaveFilePopup popup(tr("Save Clapperboard Settings As Preset"), false);
+  popup.setFolder(ToonzFolder::getLibraryFolder());
+  popup.setFilterTypes(QStringList("board"));
+
+  TFilePath fp = popup.getPath();
+  if (fp.isEmpty()) return;
+
+  if (fp.getType() != "board")
+    fp = fp.withType("board");
+
+  try {
+
+    TFileStatus fs(fp);
+    if (fs.doesExist() && !fs.isWritable()) {
+      throw TSystemException(fp,
+        "The scene cannot be saved: it is a read only file.");
+    }
+
+    TOStream os(fp, false);
+    if (!os.checkStatus())
+      throw TException("Could not open board file");
+
+    ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+    if (!scene) return;
+    TOutputProperties * outProp = scene->getProperties()->getOutputProperties();
+    BoardSettings* boardSettings = outProp->getBoardSettings();
+
+    boardSettings->saveData(os, true);
+
+    bool status = os.checkStatus();
+    if (!status) throw TException("Could not complete the save preset");
+
+  }
+  catch (const TSystemException &se) {
+    DVGui::warning(QString::fromStdWString(se.getMessage()));
+  }
+  catch (...) {
+    DVGui::error(QObject::tr("Couldn't save %1").arg(fp.getQString()));
+  }
+  
 }

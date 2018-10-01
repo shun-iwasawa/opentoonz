@@ -4,33 +4,51 @@
 #include "toonz/toonzscene.h"
 #include "toonz/tproject.h"
 #include "toonz/sceneproperties.h"
+#include "toonz/toonzfolders.h"
 #include "toutputproperties.h"
 #include "tsystem.h"
+
 
 #include <QImage>
 #include <QDate>
 #include <QDateTime>
 #include <QFontMetricsF>
+#include <QMap>
+
+namespace {
+  QMap<BoardItem::Type, std::wstring> strs = {
+  { BoardItem::FreeText,  L"FreeText" },
+  { BoardItem::ProjectName,  L"ProjectName" },
+  { BoardItem::SceneName,  L"SceneName" },
+  { BoardItem::Duration_Frame,  L"Duration_Frame" },
+  { BoardItem::Duration_SecFrame,  L"Duration_SecFrame" },
+  { BoardItem::Duration_HHMMSSFF,  L"Duration_HHMMSSFF" },
+  { BoardItem::CurrentDate,  L"CurrentDate" },
+  { BoardItem::CurrentDateTime,  L"CurrentDateTime" },
+  { BoardItem::UserName,  L"UserName" },
+  { BoardItem::ScenePath_Aliased,  L"ScenePath_Aliased" },
+  { BoardItem::ScenePath_Full,  L"ScenePath_Full" },
+  { BoardItem::MoviePath_Aliased,  L"MoviePath_Aliased" },
+  { BoardItem::MoviePath_Full,  L"MoviePath_Full" },
+  { BoardItem::Image,  L"Image" } };
+
+  std::wstring type2String(BoardItem::Type type){
+    return strs.value(type, L"");
+  }
+  BoardItem::Type string2Type(std::wstring str) {
+    return strs.key(str, BoardItem::TypeCount);
+  }
+
+};
 
 BoardItem::BoardItem() {
-
-  m_name = "hogehoge";
-
-  m_type = CurrentDateTime;
-
+  m_name = "Item";
+  m_type = ProjectName;
   m_rect = QRectF(0.1, 0.1, 0.8, 0.8);
-  //m_rect = QRectF(0.2, 0.2, 0.6, 0.4);
-
   // 文字の最大サイズ
   m_maximumFontSize = 300;
-
   // 文字の色
-  m_color = Qt::blue;
-
-  // フォント
-  m_font = QFont("Alial");
-
-  //QString m_text;
+  m_color = Qt::black;
 }
 
 QString BoardItem::getContentText(ToonzScene* scene) {
@@ -177,10 +195,88 @@ void BoardItem::drawItem(QPainter& p, QSize imgSize, int shrink, ToonzScene* sce
 
 }
 
+void BoardItem::saveData(TOStream &os) {
+  os.child("type") << type2String(m_type);
+  os.child("name") << m_name;
+  os.child("rect") << m_rect.x() << m_rect.y() << m_rect.width() << m_rect.height();
+
+  if (m_type == Image) {
+    // if the path is in library folder, then save the realtive path
+    TFilePath libFp = ToonzFolder::getLibraryFolder();
+    if (libFp.isAncestorOf(m_imgPath))
+      os.child("imgPath") << 1 << m_imgPath - libFp;
+    else 
+      os.child("imgPath") << 0 << m_imgPath;
+  }
+  else {
+    if(m_type == FreeText)
+      os.child("text") << m_text;
+
+    os.child("maximumFontSize") << m_maximumFontSize;
+    os.child("color") << m_color.red() << m_color.green() << m_color.blue() << m_color.alpha();
+    os.child("font") << m_font.family() << (int)(m_font.bold() ? 1 : 0) << (int)(m_font.italic() ? 1 : 0);
+  }
+}
+
+void BoardItem::loadData(TIStream &is) {
+  std::string tagName;
+  while (is.matchTag(tagName)) {
+      if (tagName == "type") {
+        std::wstring typeStr;
+        is >> typeStr;
+        m_type = string2Type(typeStr);
+      }
+      else if (tagName == "name") {
+        std::wstring str;
+        is >> str;
+        m_name = QString::fromStdWString(str);
+      }
+      else if (tagName == "rect") {
+        double x, y, width, height;
+        is >> x >> y >> width >> height;
+        m_rect = QRectF(x, y, width, height);
+      }
+      else if (tagName == "imgPath") {
+        int isInLibrary;
+        TFilePath fp;
+        is >> isInLibrary >> fp;
+        if (isInLibrary == 1)
+          m_imgPath = ToonzFolder::getLibraryFolder() + fp;
+        else
+          m_imgPath = fp;
+      }
+      else if (tagName == "text") {
+        std::wstring str;
+        is >> str;
+        m_text = QString::fromStdWString(str);
+      }
+      else if (tagName == "maximumFontSize") {
+        is >> m_maximumFontSize;
+      }
+      else if (tagName == "color") {
+        int r, g, b, a;
+        is >> r >> g >> b >> a;
+        m_color = QColor(r, g, b, a);
+      }
+      else if (tagName == "font") {
+        QString family;
+        int isBold, isItalic;
+        is >> family >> isBold >> isItalic;
+        m_font.setFamily(family);
+        m_font.setBold(isBold == 1);
+        m_font.setItalic(isItalic == 1);
+      }
+      else
+        throw TException("unexpected tag: " + tagName);
+      is.closeChild();
+  }
+}
+
+
 //======================================================================================
 
 BoardSettings::BoardSettings() {
-  m_bgPath = TFilePath("D:\\OpenToonz 1.2 stuff\\library\\boards\\board1.png");
+  //m_bgPath = TFilePath("D:\\OpenToonz 1.2 stuff\\library\\boards\\board1.png");
 
   m_items.push_back(BoardItem());
 }
@@ -190,10 +286,10 @@ QImage BoardSettings::getBoardImage(TDimension& dim, int shrink, ToonzScene* sce
 
   QPainter painter(&img);
 
-  painter.fillRect(img.rect(), Qt::gray);
+  painter.fillRect(img.rect(), Qt::white);
   //draw background
-  if (!m_bgPath.isEmpty())
-    painter.drawImage(img.rect(), QImage(m_bgPath.getQString()));
+  //if (!m_bgPath.isEmpty())
+  //  painter.drawImage(img.rect(), QImage(m_bgPath.getQString()));
 
   //draw each item
   for (int i = m_items.size() - 1; i >= 0; i--)
@@ -230,4 +326,50 @@ void BoardSettings::addNewItem(int insertAt) {
 void BoardSettings::removeItem(int index) {
   if (index < 0 || index >= m_items.size()) return;
   m_items.removeAt(index);
+}
+
+void BoardSettings::saveData(TOStream &os, bool forPreset) {
+  if(!forPreset)
+    os.child("active") << (int)((m_active) ? 1 : 0);
+  os.child("duration") << m_duration;
+  if (!m_items.isEmpty()) {
+    os.openChild("boardItems");
+    for (int i = 0; i < getItemCount(); i++){
+      os.openChild("item");
+      m_items[i].saveData(os);
+      os.closeChild();
+    }
+    os.closeChild();
+  }
+}
+
+void BoardSettings::loadData(TIStream &is) {
+  std::string tagName;
+  while (is.matchTag(tagName)) {
+    if (tagName == "active") {
+      int val;
+      is >> val;
+      setActive(val == 1);
+    }
+    else if (tagName == "duration") {
+      is >> m_duration;
+    }
+    else if (tagName == "boardItems") {
+      m_items.clear();
+      while (is.matchTag(tagName)) {
+        if (tagName == "item") {
+          BoardItem item;
+          item.loadData(is);
+          m_items.append(item);
+        }
+        else
+          throw TException("unexpected tag: " + tagName);
+        is.closeChild();
+      }
+    }
+    else
+      throw TException("unexpected tag: " + tagName);
+    is.closeChild();
+  }
+
 }
