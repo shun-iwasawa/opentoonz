@@ -54,12 +54,12 @@ public:
   BoardView(QWidget* parent = nullptr);
   void invalidate() { m_valid = false; }
 protected:
-  void paintEvent(QPaintEvent *event);
-  void resizeEvent(QResizeEvent* event);
+  void paintEvent(QPaintEvent *event) override;
+  void resizeEvent(QResizeEvent* event) override;
 
-  void mouseMoveEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 };
 
 //=============================================================================
@@ -142,7 +142,8 @@ public:
 
   BoardSettingsPopup(QWidget *parent = nullptr);
 protected:
-  void showEvent(QShowEvent*) { initialize(); }
+  void showEvent(QShowEvent*) override { initialize(); }
+  void hideEvent(QHideEvent*) override;
 protected slots:
   void onCurrentItemSwitched(int);
   void onItemAddedOrDeleted();

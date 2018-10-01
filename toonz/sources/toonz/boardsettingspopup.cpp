@@ -644,7 +644,6 @@ ItemListView::ItemListView(QWidget* parent)
   setLayout(mainLay);
 
   bool ret = true;
-  ret = ret && connect(m_list, SIGNAL(currentRowChanged(int)), this, SIGNAL(currentItemSwitched(int)));
   ret = ret && connect(m_list, SIGNAL(currentRowChanged(int)), this, SLOT(onCurrentItemSwitched(int)));
   ret = ret && connect(newItemBtn, SIGNAL(clicked(bool)), this, SLOT(onNewItemButtonClicked()));
   ret = ret && connect(m_deleteItemBtn, SIGNAL(clicked(bool)), this, SLOT(onDeleteItemButtonClicked()));
@@ -693,6 +692,7 @@ void ItemListView::onCurrentItemSwitched(int currentRow) {
     m_moveUpBtn->setEnabled(currentRow != 0);
     m_moveDownBtn->setEnabled(currentRow != m_list->count()-1);
   }
+  emit currentItemSwitched(currentRow);
 }
 
 void ItemListView::onNewItemButtonClicked() {
@@ -846,6 +846,10 @@ void BoardSettingsPopup::initializeItemTypeString() {
   stringByItemType[BoardItem::MoviePath_Full] = tr("Output location : Full path");   //ムービーファイルパス（フルパス）
   stringByItemType[BoardItem::Image] = tr("Image");             //画像 (m_imgPathにパス)
 
+}
+
+void BoardSettingsPopup::hideEvent(QHideEvent* event) {
+  setCurrentBoardItem(nullptr);
 }
 
 // ItemListViewの現在のアイテムが変更されたとき
