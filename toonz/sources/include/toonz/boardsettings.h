@@ -67,6 +67,7 @@ private:
 
   QString m_text;
   TFilePath m_imgPath;
+  Qt::AspectRatioMode m_imgARMode = Qt::KeepAspectRatio;
 
   QString getContentText(ToonzScene*);
 
@@ -99,6 +100,9 @@ public:
 
   TFilePath getImgPath() { return m_imgPath; }
   void setImgPath(TFilePath path) { m_imgPath = path; }
+
+  Qt::AspectRatioMode getImgARMode() { return m_imgARMode; }
+  void setImgARMode(Qt::AspectRatioMode mode) { m_imgARMode = mode; }
 
   void saveData(TOStream& os);
   void loadData(TIStream& is);

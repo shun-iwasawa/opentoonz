@@ -182,6 +182,9 @@
       <imgPath>
         1 "clapperboards\\images\\board1.png"
       </imgPath>
+      <imgARMode>
+        0 
+      </imgARMode>
       </item>
     </boardItems>
   </clapperboardSettingsPreset>

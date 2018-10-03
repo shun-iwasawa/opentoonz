@@ -23,6 +23,7 @@
 
 // TnzCore includes
 #include "tsystem.h"
+#include "tlevel_io.h"
 
 #include <QLineEdit>
 #include <QLabel>
@@ -58,8 +59,10 @@ void editListWidgetItem(QListWidgetItem* listItem, BoardItem* item) {
   listItem->setText(itemText);
 
   if (item->getType() == BoardItem::Image) {
-    QPixmap iconPm = QPixmap::fromImage(
-        QImage(item->getImgPath().getQString()).scaled(QSize(20, 20)));
+    ToonzScene* scene        = TApp::instance()->getCurrentScene()->getScene();
+    TFilePath decodedImgPath = scene->decodeFilePath(item->getImgPath());
+    QPixmap iconPm           = QPixmap::fromImage(
+        QImage(decodedImgPath.getQString()).scaled(QSize(20, 20)));
     listItem->setIcon(QIcon(iconPm));
   } else {
     QPixmap iconPm(20, 20);
@@ -327,8 +330,10 @@ ItemInfoView::ItemInfoView(QWidget* parent) : QStackedWidget(parent) {
       new QPushButton(QIcon(":Resources/italic_on.png"), tr("Italic"), this);
   m_fontColorField =
       new DVGui::ColorField(this, true, TPixel32(0, 0, 0, 255), 25, false, 54);
+  m_imgARModeCombo = new QComboBox(this);
 
   m_fontPropBox = new QWidget(this);
+  m_imgPropBox  = new QWidget(this);
 
   for (int i = 0; i < BoardItem::TypeCount; i++) {
     m_typeCombo->addItem(stringByItemType[(BoardItem::Type)i]);
@@ -351,6 +356,9 @@ ItemInfoView::ItemInfoView(QWidget* parent) : QStackedWidget(parent) {
   m_imgPathField->setFilters(filters);
   m_imgPathField->setFileMode(QFileDialog::ExistingFile);
 
+  m_imgARModeCombo->addItem(tr("Ignore"), Qt::IgnoreAspectRatio);
+  m_imgARModeCombo->addItem(tr("Keep"), Qt::KeepAspectRatio);
+
   //----- layout
 
   QGridLayout* mainLay = new QGridLayout();
@@ -371,7 +379,26 @@ ItemInfoView::ItemInfoView(QWidget* parent) : QStackedWidget(parent) {
     extraInfoLay->setSpacing(0);
     {
       extraInfoLay->addWidget(m_textEdit, 1);
-      extraInfoLay->addWidget(m_imgPathField, 0);
+
+      QGridLayout* imgPropLay = new QGridLayout();
+      imgPropLay->setMargin(0);
+      imgPropLay->setHorizontalSpacing(3);
+      imgPropLay->setVerticalSpacing(10);
+      {
+        imgPropLay->addWidget(new QLabel(tr("Path:"), this), 0, 0,
+                              Qt::AlignRight | Qt::AlignVCenter);
+        imgPropLay->addWidget(m_imgPathField, 0, 1, 1, 2);
+
+        imgPropLay->addWidget(new QLabel(tr("Aspect Ratio:"), this), 1, 0,
+                              Qt::AlignRight | Qt::AlignVCenter);
+        imgPropLay->addWidget(m_imgARModeCombo, 1, 1);
+      }
+      imgPropLay->setColumnStretch(0, 0);
+      imgPropLay->setColumnStretch(1, 0);
+      imgPropLay->setColumnStretch(2, 1);
+      m_imgPropBox->setLayout(imgPropLay);
+      extraInfoLay->addWidget(m_imgPropBox, 0);
+
       extraInfoLay->addSpacing(5);
 
       QGridLayout* fontPropLay = new QGridLayout();
@@ -434,6 +461,8 @@ ItemInfoView::ItemInfoView(QWidget* parent) : QStackedWidget(parent) {
   ret = ret &&
         connect(m_fontColorField, SIGNAL(colorChanged(const TPixel32&, bool)),
                 this, SLOT(onFontColorChanged(const TPixel32&, bool)));
+  ret = ret && connect(m_imgARModeCombo, SIGNAL(activated(int)), this,
+                       SLOT(onImgARModeComboActivated()));
   assert(ret);
 }
 
@@ -472,21 +501,23 @@ void ItemInfoView::setCurrentItem(int index) {
   QColor col = newItem->getColor();
   m_fontColorField->setColor(
       TPixel32(col.red(), col.green(), col.blue(), col.alpha()));
+  int ARModeIndex = m_imgARModeCombo->findData(newItem->getImgARMode());
+  if (ARModeIndex >= 0) m_imgARModeCombo->setCurrentIndex(ARModeIndex);
 
   switch (newItem->getType()) {
   case BoardItem::FreeText:
     m_textEdit->show();
-    m_imgPathField->hide();
+    m_imgPropBox->hide();
     m_fontPropBox->show();
     break;
   case BoardItem::Image:
     m_textEdit->hide();
-    m_imgPathField->show();
+    m_imgPropBox->show();
     m_fontPropBox->hide();
     break;
   default:
     m_textEdit->hide();
-    m_imgPathField->hide();
+    m_imgPropBox->hide();
     m_fontPropBox->show();
     break;
   }
@@ -533,17 +564,17 @@ void ItemInfoView::onTypeComboActivated(int) {
   switch (newType) {
   case BoardItem::FreeText:
     m_textEdit->show();
-    m_imgPathField->hide();
+    m_imgPropBox->hide();
     m_fontPropBox->show();
     break;
   case BoardItem::Image:
     m_textEdit->hide();
-    m_imgPathField->show();
+    m_imgPropBox->show();
     m_fontPropBox->hide();
     break;
   default:
     m_textEdit->hide();
-    m_imgPathField->hide();
+    m_imgPropBox->hide();
     m_fontPropBox->show();
     break;
   }
@@ -561,8 +592,19 @@ void ItemInfoView::onFreeTextChanged() {
 
 void ItemInfoView::onImgPathChanged() {
   assert(currentBoardItem());
-
-  currentBoardItem()->setImgPath(TFilePath(m_imgPathField->getPath()));
+  TFilePath fp(m_imgPathField->getPath());
+  if (fp.isLevelName()) {
+    ToonzScene* scene = TApp::instance()->getCurrentScene()->getScene();
+    TLevelReaderP lr(scene->decodeFilePath(fp));
+    TLevelP level;
+    if (lr) level = lr->loadInfo();
+    if (level.getPointer() && level->getTable()->size() > 0) {
+      TFrameId firstFrame = level->begin()->first;
+      fp                  = fp.withFrame(firstFrame);
+      m_imgPathField->setPath(fp.getQString());
+    }
+  }
+  currentBoardItem()->setImgPath(fp);
 
   emit itemPropertyChanged(true);
 }
@@ -601,6 +643,15 @@ void ItemInfoView::onFontColorChanged(const TPixel32& color, bool isDragging) {
   currentBoardItem()->setColor(newColor);
 
   emit itemPropertyChanged(true);
+}
+
+void ItemInfoView::onImgARModeComboActivated() {
+  assert(currentBoardItem());
+
+  currentBoardItem()->setImgARMode(
+      (Qt::AspectRatioMode)m_imgARModeCombo->currentData().toInt());
+
+  emit itemPropertyChanged(false);
 }
 
 //=============================================================================

@@ -75,8 +75,9 @@ class ItemInfoView : public QStackedWidget {
   QFontComboBox* m_fontCombo;
   QPushButton *m_boldButton, *m_italicButton;
   DVGui::ColorField* m_fontColorField;
+  QComboBox* m_imgARModeCombo;
 
-  QWidget* m_fontPropBox;
+  QWidget *m_fontPropBox, *m_imgPropBox;
 
 public:
   ItemInfoView(QWidget* parent = nullptr);
@@ -92,6 +93,7 @@ protected slots:
   void onBoldButtonClicked(bool);
   void onItalicButtonClicked(bool);
   void onFontColorChanged(const TPixel32&, bool);
+  void onImgARModeComboActivated();
 
 signals:
   // if updateListView is true then update the list view as well

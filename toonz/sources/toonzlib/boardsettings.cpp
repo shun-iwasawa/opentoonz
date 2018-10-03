@@ -120,16 +120,21 @@ void BoardItem::drawItem(QPainter &p, QSize imgSize, int shrink,
   QRectF itemRect = getItemRect(imgSize);
 
   if (m_type == Image) {
-    QImage img(m_imgPath.getQString());
-    float ratio = std::min((float)itemRect.width() / (float)img.width(),
-                           (float)itemRect.height() / (float)img.height());
-    QSizeF imgSize((float)img.width() * ratio, (float)img.height() * ratio);
-    QPointF imgTopLeft = itemRect.topLeft() +
-                         QPointF((itemRect.width() - imgSize.width()) * 0.5f,
-                                 (itemRect.height() - imgSize.height()) * 0.5f);
+    if (m_imgPath.isEmpty()) return;
+    TFilePath decodedPath = scene->decodeFilePath(m_imgPath);
+    QImage img(decodedPath.getQString());
+    if (m_imgARMode == Qt::KeepAspectRatio) {
+      float ratio = std::min((float)itemRect.width() / (float)img.width(),
+                             (float)itemRect.height() / (float)img.height());
+      QSizeF imgSize((float)img.width() * ratio, (float)img.height() * ratio);
+      QPointF imgTopLeft =
+          itemRect.topLeft() +
+          QPointF((itemRect.width() - imgSize.width()) * 0.5f,
+                  (itemRect.height() - imgSize.height()) * 0.5f);
 
-    p.drawImage(QRectF(imgTopLeft, imgSize), img);
-
+      p.drawImage(QRectF(imgTopLeft, imgSize), img);
+    } else if (m_imgARMode == Qt::IgnoreAspectRatio)
+      p.drawImage(itemRect, img);
     return;
   }
 
@@ -201,6 +206,7 @@ void BoardItem::saveData(TOStream &os) {
       os.child("imgPath") << 1 << m_imgPath - libFp;
     else
       os.child("imgPath") << 0 << m_imgPath;
+    os.child("imgARMode") << (int)m_imgARMode;
   } else {
     if (m_type == FreeText) os.child("text") << m_text;
 
@@ -235,6 +241,10 @@ void BoardItem::loadData(TIStream &is) {
         m_imgPath = ToonzFolder::getLibraryFolder() + fp;
       else
         m_imgPath = fp;
+    } else if (tagName == "imgARMode") {
+      int mode;
+      is >> mode;
+      m_imgARMode = (Qt::AspectRatioMode)mode;
     } else if (tagName == "text") {
       std::wstring str;
       is >> str;
