@@ -1067,7 +1067,7 @@ void BoardSettingsPopup::onSavePreset() {
 SaveBoardPresetFilePopup::SaveBoardPresetFilePopup()
     : GenericSaveFilePopup(tr("Save Clapperboard Settings As Preset")) {
   m_browser->enableGlobalSelection(false);
-  setFilterTypes(QStringList("board"));
+  setFilterTypes(QStringList("clapperboard"));
 }
 
 void SaveBoardPresetFilePopup::showEvent(QShowEvent* e) {
@@ -1080,7 +1080,7 @@ void SaveBoardPresetFilePopup::showEvent(QShowEvent* e) {
 LoadBoardPresetFilePopup::LoadBoardPresetFilePopup()
     : GenericLoadFilePopup(tr("Load Clapperboard Settings Preset")) {
   m_browser->enableGlobalSelection(false);
-  setFilterTypes(QStringList("board"));
+  setFilterTypes(QStringList("clapperboard"));
 }
 
 void LoadBoardPresetFilePopup::showEvent(QShowEvent* e) {
