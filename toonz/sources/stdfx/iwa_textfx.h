@@ -3,22 +3,16 @@
 #ifndef IWA_TEXTFX_H
 #define IWA_TEXTFX_H
 
-#include "stdfx.h"
-#include "tfxparam.h"
 #include "tparamset.h"
+#include "textawarebasefx.h"
 
 //******************************************************************
 //	Iwa_Text Fx  class
 //******************************************************************
 
-class Iwa_TextFx final : public TStandardZeraryFx {
+class Iwa_TextFx final : public TextAwareBaseFx {
   FX_PLUGIN_DECLARATION(Iwa_TextFx)
-
-  QString m_noteLevelStr;
-
 protected:
-  TIntEnumParamP m_targetType;
-  TIntParamP m_columnIndex;
   TStringParamP m_text;
 
   TIntEnumParamP m_hAlign;
@@ -36,11 +30,7 @@ protected:
   void putTextImage(const RASTER srcRas, TPoint &pos, QImage &img);
 
 public:
-  enum SourceType { NEARBY_COLUMN, SPECIFIED_COLUMN, INPUT_TEXT };
-
   Iwa_TextFx();
-
-  bool isZerary() const override { return true; }
 
   bool canHandle(const TRenderSettings &info, double frame) override {
     return true;
@@ -53,10 +43,5 @@ public:
 
   std::string getAlias(double frame,
                        const TRenderSettings &info) const override;
-
-  void setNoteLevelStr(QString str) { m_noteLevelStr = str; }
-
-  SourceType getSourceType() { return (SourceType)(m_targetType->getValue()); }
-  int getNoteColumnIndex() { return m_columnIndex->getValue() - 1; }
 };
 #endif

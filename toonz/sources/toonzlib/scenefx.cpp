@@ -32,7 +32,7 @@
 #include "toonz/txshsoundtextlevel.h"
 
 #include "../stdfx/motionawarebasefx.h"
-#include "../stdfx/iwa_textfx.h"
+#include "../stdfx/textawarebasefx.h"
 
 #include "toonz/scenefx.h"
 
@@ -963,10 +963,12 @@ PlacedFx FxBuilder::makePF(TZeraryColumnFx *zcfx) {
   }
 
   if (pf.m_fx->getFxType() == "STD_iwa_TextFx") {
-    Iwa_TextFx *textFx = dynamic_cast<Iwa_TextFx *>(pf.m_fx.getPointer());
-    if (textFx && textFx->getSourceType() != Iwa_TextFx::INPUT_TEXT) {
+    TextAwareBaseFx *textFx =
+        dynamic_cast<TextAwareBaseFx *>(pf.m_fx.getPointer());
+    if (textFx && textFx->getSourceType() != TextAwareBaseFx::INPUT_TEXT) {
       int noteColumnIndex = textFx->getNoteColumnIndex();
-      bool getNeighbor = (textFx->getSourceType() == Iwa_TextFx::NEARBY_COLUMN);
+      bool getNeighbor =
+          (textFx->getSourceType() == TextAwareBaseFx::NEARBY_COLUMN);
       textFx->setNoteLevelStr(getNoteText(m_xsh, m_frame, pf.m_columnIndex,
                                           noteColumnIndex, getNeighbor));
     }

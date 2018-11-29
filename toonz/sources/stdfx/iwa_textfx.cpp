@@ -8,9 +8,7 @@
 //------------------------------------------------------------------
 
 Iwa_TextFx::Iwa_TextFx()
-    : m_targetType(new TIntEnumParam(NEARBY_COLUMN, "Nearby Note Column"))
-    , m_columnIndex(0)
-    , m_text(L"Lorem ipsum")
+    : m_text(L"Lorem ipsum")
     , m_hAlign(new TIntEnumParam(Qt::AlignLeft, "Left"))
     , m_center(TPointD(0.0, 0.0))
     , m_width(200.0)
@@ -19,8 +17,6 @@ Iwa_TextFx::Iwa_TextFx()
     , m_textColor(TPixel32::Black)
     , m_boxColor(TPixel32::Transparent)
     , m_showBorder(false) {
-  m_targetType->addItem(SPECIFIED_COLUMN, "Specified Note Column");
-  m_targetType->addItem(INPUT_TEXT, "Input Text");
   m_targetType->setValue(INPUT_TEXT);
 
   m_hAlign->addItem(Qt::AlignRight, "Right");
