@@ -1196,6 +1196,7 @@ QMenu *FileBrowser::getContextMenu(QWidget *parent, int index) {
     }
     if (j == files.size()) {
       menu->addAction(cm->getAction(MI_ConvertFiles));
+      menu->addAction(cm->getAction(MI_SeparateColors));
       // iwsw commented out temporarily
       // menu->addAction(cm->getAction(MI_ToonShadedImageToTLV));
     }
