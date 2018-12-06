@@ -536,6 +536,7 @@ SeparateColorsPopup::SeparateColorsPopup()
                     "SeparateColors")
     , m_isConverting(false) {
   setModal(false);
+  setMinimumSize(900, 670);
 
   QSplitter* mainSplitter = new QSplitter(this);
 
