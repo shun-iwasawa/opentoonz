@@ -139,7 +139,7 @@ class SeparateColorsPopup : public DVGui::Dialog {
   QLabel* m_previewFrameLabel;
   QVector<QPair<TFilePath, TFrameId>> m_srcFrames;
 
-  QPushButton* m_pickBtn;
+  QPushButton *m_pickBtn, *m_showMatteBtn;
   SeparateSwatch* m_separateSwatch;
 
   ProgressDialog* m_progressDialog;
@@ -150,10 +150,11 @@ class SeparateColorsPopup : public DVGui::Dialog {
                   FrameTaskNotifier* frameNotifier, bool do4Colors);
 
   void doCompute(TRaster32P raster, TDimensionI& dim, TRaster32P ras_m,
-                 TRaster32P ras_c1, TRaster32P ras_c2);
+                 TRaster32P ras_c1, TRaster32P ras_c2, bool isPreview = false);
 
   void doCompute(TRaster32P raster, TDimensionI& dim, TRaster32P ras_m,
-                 TRaster32P ras_c1, TRaster32P ras_c2, TRaster32P ras_c3);
+                 TRaster32P ras_c1, TRaster32P ras_c2, TRaster32P ras_c3,
+                 bool isPreview = false);
 
   void doPreview(TRaster32P& orgRas, TRaster32P& mainRas, TRaster32P& sub1Ras,
                  TRaster32P& sub2Ras, TRaster32P& sub3Ras);

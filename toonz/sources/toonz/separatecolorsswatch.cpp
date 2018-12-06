@@ -263,19 +263,14 @@ void SeparateSwatchArea::wheelEvent(QWheelEvent *event) {
 
 //-------------------------------------------------------------------------------
 void SeparateSwatchArea::setTranspColor(TPixel32 &lineColor) {
-  if (lineColor == TPixel32::White) {
-    m_transparentColor = TPixel32(64, 64, 64);
-    return;
-  }
-
   TPixelD lineColorD = toPixelD(lineColor);
   double h, l, s;
   rgb2hls(lineColorD.r, lineColorD.g, lineColorD.b, &h, &l, &s);
   // if the specified color is reddish, use blue color for transparent area
-  if ((h <= 30.0 || 330.0 <= h) && s >= 0.2)
-    m_transparentColor = TPixel32(128, 128, 255);
+  if (l < 0.8)
+    m_transparentColor = TPixel32::White;
   else
-    m_transparentColor = TPixel32(255, 128, 128);
+    m_transparentColor = TPixel32(64, 64, 64);
 }
 
 //-------------------------------------------------------------------------------

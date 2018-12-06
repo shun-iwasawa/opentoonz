@@ -508,6 +508,9 @@ void expandMask(int x, int y, uchar4* mask_host, int lx, int ly, int gen) {
   if (foundSub2 && mask_host[i].z == 0) mask_host[i].z = gen + 2;
   if (foundSub3 && mask_host[i].w == 0) mask_host[i].w = gen + 2;
 }
+
+TPixel32 BlueMaskColor(128, 128, 255);
+TPixel32 RedMaskColor(255, 128, 128);
 };
 
 //-------------------------------------------------------------------
@@ -588,6 +591,11 @@ SeparateColorsPopup::SeparateColorsPopup()
       CommandManager::instance()->getAction("T_RGBPicker")->icon(),
       tr("Pick Color"), this);
 
+  QPixmap iconPm(13, 13);
+  iconPm.fill(
+      QColor((int)RedMaskColor.r, (int)RedMaskColor.g, (int)RedMaskColor.b));
+  m_showMatteBtn = new QPushButton(QIcon(iconPm), tr("Show Mask"), this);
+
   m_separateSwatch = new SeparateSwatch(this, 200, 150);
 
   //----
@@ -630,6 +638,9 @@ SeparateColorsPopup::SeparateColorsPopup()
 
   m_pickBtn->setMaximumWidth(130);
 
+  m_showMatteBtn->setCheckable(true);
+  m_showMatteBtn->setChecked(true);
+
   //----
   {
     QVBoxLayout* leftLay = new QVBoxLayout();
@@ -645,7 +656,11 @@ SeparateColorsPopup::SeparateColorsPopup()
         previewLay->addWidget(m_previewFrameField, 1);
         previewLay->addWidget(m_previewFrameLabel, 0);
 
-        previewLay->addSpacing(30);
+        previewLay->addSpacing(10);
+
+        previewLay->addWidget(m_showMatteBtn, 0);
+
+        previewLay->addSpacing(20);
 
         previewLay->addWidget(m_pickBtn);
       }
@@ -834,6 +849,9 @@ SeparateColorsPopup::SeparateColorsPopup()
   ret = ret && connect(m_pickBtn, SIGNAL(clicked()), pickScreenAction,
                        SLOT(trigger()));
 
+  ret = ret && connect(m_matteGroupBox, SIGNAL(toggled(bool)), m_showMatteBtn,
+                       SLOT(setEnabled(bool)));
+
   // auto preview update
   ret =
       ret && connect(m_autoBtn, SIGNAL(toggled(bool)), this, SLOT(onToggle()));
@@ -864,6 +882,8 @@ SeparateColorsPopup::SeparateColorsPopup()
   ret = ret &&
         connect(m_subColor3Field, SIGNAL(colorChanged(const TPixel32&, bool)),
                 this, SLOT(onColorChange(const TPixel32&, bool)));
+  ret = ret &&
+        connect(m_showMatteBtn, SIGNAL(toggled(bool)), this, SLOT(onToggle()));
 
   assert(ret);
 
@@ -1136,13 +1156,7 @@ void SeparateColorsPopup::doPreview(TRaster32P& orgRas, TRaster32P& mainRas,
   bool do4Colors = m_outSub3CB->isChecked();
 
   // specify the transparent colors
-  if (m_matteGroupBox->isChecked())
-    m_separateSwatch->setTranspColors(mainColor, subColor1, subColor2,
-                                      subColor3);
-  else {
-    TPixel32 white(255, 255, 255);
-    m_separateSwatch->setTranspColors(white, white, white, white);
-  }
+  m_separateSwatch->setTranspColors(mainColor, subColor1, subColor2, subColor3);
 
   int frame    = m_previewFrameField->getValue() - 1;
   TFilePath fp = m_srcFrames[frame].first;
@@ -1160,10 +1174,10 @@ void SeparateColorsPopup::doPreview(TRaster32P& orgRas, TRaster32P& mainRas,
   sub2Ras = TRaster32P(dim);
 
   if (!do4Colors) {
-    doCompute(orgRas, dim, mainRas, sub1Ras, sub2Ras);
+    doCompute(orgRas, dim, mainRas, sub1Ras, sub2Ras, true);
   } else {
     sub3Ras = TRaster32P(dim);
-    doCompute(orgRas, dim, mainRas, sub1Ras, sub2Ras, sub3Ras);
+    doCompute(orgRas, dim, mainRas, sub1Ras, sub2Ras, sub3Ras, true);
   }
 }
 
@@ -1171,7 +1185,7 @@ void SeparateColorsPopup::doPreview(TRaster32P& orgRas, TRaster32P& mainRas,
 
 void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
                                     TRaster32P ras_m, TRaster32P ras_c1,
-                                    TRaster32P ras_c2) {
+                                    TRaster32P ras_c2, bool isPreview) {
   TPixel paperColor = m_paperColorField->getColor();
   TPixel mainColor  = m_mainColorField->getColor();
   TPixel subColor1  = m_subColor1Field->getColor();
@@ -1259,9 +1273,25 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
 
   auto getChannelValue = [](unsigned char pencil_chanVal,
                             float ratio) -> unsigned char {
-    return (unsigned char)(255.0f * (1.0f - ratio) +
-                           (float)pencil_chanVal * ratio);
+    return (unsigned char)(std::round((float)pencil_chanVal * ratio));
   };
+
+  bool showMask      = m_showMatteBtn->isChecked();
+  auto getMatteColor = [&](TPixel32 lineColor) -> TPixel32 {
+    if (!isPreview || !showMask) return TPixel32::Transparent;
+    TPixelD lineColorD = toPixelD(lineColor);
+    double h, l, s;
+    rgb2hls(lineColorD.r, lineColorD.g, lineColorD.b, &h, &l, &s);
+    // if the specified color is reddish, use blue color for transparent area
+    if ((h <= 30.0 || 330.0 <= h) && s >= 0.2)
+      return BlueMaskColor;
+    else
+      return RedMaskColor;
+  };
+
+  TPixel32 matteColor_m  = getMatteColor(mainColor);
+  TPixel32 matteColor_s1 = getMatteColor(subColor1);
+  TPixel32 matteColor_s2 = getMatteColor(subColor2);
 
   // compute result
   QVector3D* ratio_p = out_host;
@@ -1274,43 +1304,49 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
       // main
       if (!doMatte || (*matte_p).x > 0) {
         float ratio_m = (*ratio_p).x();
-        pix_m->r      = getChannelValue(mainColor.r, ratio_m);
-        pix_m->g      = getChannelValue(mainColor.g, ratio_m);
-        pix_m->b      = getChannelValue(mainColor.b, ratio_m);
-        pix_m->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_m *=
+              (float)(matteRadius + 1 - (int)(*matte_p).x) / (float)matteRadius;
+        ratio_m = std::min(1.0f, ratio_m);
+
+        pix_m->r = getChannelValue(mainColor.r, ratio_m);
+        pix_m->g = getChannelValue(mainColor.g, ratio_m);
+        pix_m->b = getChannelValue(mainColor.b, ratio_m);
+        pix_m->m = getChannelValue(TPixel32::maxChannelValue, ratio_m);
       } else {
-        pix_m->r = 0;
-        pix_m->g = 0;
-        pix_m->b = 0;
-        pix_m->m = 0;
+        *pix_m = matteColor_m;
       }
 
       // sub1
       if (!doMatte || (*matte_p).y > 0) {
         float ratio_s1 = (*ratio_p).y();
-        pix_c1->r      = getChannelValue(subColor1.r, ratio_s1);
-        pix_c1->g      = getChannelValue(subColor1.g, ratio_s1);
-        pix_c1->b      = getChannelValue(subColor1.b, ratio_s1);
-        pix_c1->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_s1 *=
+              (float)(matteRadius + 1 - (int)(*matte_p).y) / (float)matteRadius;
+        ratio_s1 = std::min(1.0f, ratio_s1);
+
+        pix_c1->r = getChannelValue(subColor1.r, ratio_s1);
+        pix_c1->g = getChannelValue(subColor1.g, ratio_s1);
+        pix_c1->b = getChannelValue(subColor1.b, ratio_s1);
+        pix_c1->m = getChannelValue(TPixel32::maxChannelValue, ratio_s1);
       } else {
-        pix_c1->r = 0;
-        pix_c1->g = 0;
-        pix_c1->b = 0;
-        pix_c1->m = 0;
+        *pix_c1 = matteColor_s1;
       }
 
       // sub2
       if (!doMatte || (*matte_p).z > 0) {
         float ratio_s2 = (*ratio_p).z();
-        pix_c2->r      = getChannelValue(subColor2.r, ratio_s2);
-        pix_c2->g      = getChannelValue(subColor2.g, ratio_s2);
-        pix_c2->b      = getChannelValue(subColor2.b, ratio_s2);
-        pix_c2->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_s2 *=
+              (float)(matteRadius + 1 - (int)(*matte_p).z) / (float)matteRadius;
+        ratio_s2 = std::min(1.0f, ratio_s2);
+
+        pix_c2->r = getChannelValue(subColor2.r, ratio_s2);
+        pix_c2->g = getChannelValue(subColor2.g, ratio_s2);
+        pix_c2->b = getChannelValue(subColor2.b, ratio_s2);
+        pix_c2->m = getChannelValue(TPixel32::maxChannelValue, ratio_s2);
       } else {
-        pix_c2->r = 0;
-        pix_c2->g = 0;
-        pix_c2->b = 0;
-        pix_c2->m = 0;
+        *pix_c2 = matteColor_s2;
       }
 
       if (doMatte) matte_p++;
@@ -1326,7 +1362,8 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
 
 void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
                                     TRaster32P ras_m, TRaster32P ras_c1,
-                                    TRaster32P ras_c2, TRaster32P ras_c3) {
+                                    TRaster32P ras_c2, TRaster32P ras_c3,
+                                    bool isPreview) {
   TPixel paperColor = m_paperColorField->getColor();
   TPixel mainColor  = m_mainColorField->getColor();
   TPixel subColor1  = m_subColor1Field->getColor();
@@ -1437,9 +1474,26 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
 
   auto getChannelValue = [](unsigned char pencil_chanVal,
                             float ratio) -> unsigned char {
-    return (unsigned char)(255.0f * (1.0f - ratio) +
-                           (float)pencil_chanVal * ratio);
+    return (unsigned char)(std::round((float)pencil_chanVal * ratio));
   };
+
+  bool showMask      = m_showMatteBtn->isChecked();
+  auto getMatteColor = [&](TPixel32 lineColor) -> TPixel32 {
+    if (!isPreview || !showMask) return TPixel32::Transparent;
+    TPixelD lineColorD = toPixelD(lineColor);
+    double h, l, s;
+    rgb2hls(lineColorD.r, lineColorD.g, lineColorD.b, &h, &l, &s);
+    // if the specified color is reddish, use blue color for transparent area
+    if ((h <= 30.0 || 330.0 <= h) && s >= 0.2)
+      return BlueMaskColor;
+    else
+      return RedMaskColor;
+  };
+
+  TPixel32 matteColor_m  = getMatteColor(mainColor);
+  TPixel32 matteColor_s1 = getMatteColor(subColor1);
+  TPixel32 matteColor_s2 = getMatteColor(subColor2);
+  TPixel32 matteColor_s3 = getMatteColor(subColor3);
 
   // compute result
   QVector4D* ratio_p = out_host;
@@ -1454,57 +1508,65 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
       // main
       if (!doMatte || (*matte_p).x > 0) {
         float ratio_m = (*ratio_p).x();
-        pix_m->r      = getChannelValue(mainColor.r, ratio_m);
-        pix_m->g      = getChannelValue(mainColor.g, ratio_m);
-        pix_m->b      = getChannelValue(mainColor.b, ratio_m);
-        pix_m->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_m *=
+              (float)(matteRadius + 1 - (int)(*matte_p).x) / (float)matteRadius;
+        ratio_m = std::min(1.0f, ratio_m);
+
+        pix_m->r = getChannelValue(mainColor.r, ratio_m);
+        pix_m->g = getChannelValue(mainColor.g, ratio_m);
+        pix_m->b = getChannelValue(mainColor.b, ratio_m);
+        pix_m->m = getChannelValue(TPixel32::maxChannelValue, ratio_m);
       } else {
-        pix_m->r = 0;
-        pix_m->g = 0;
-        pix_m->b = 0;
-        pix_m->m = 0;
+        *pix_m = matteColor_m;
       }
 
       // sub1
       if (!doMatte || (*matte_p).y > 0) {
         float ratio_s1 = (*ratio_p).y();
-        pix_c1->r      = getChannelValue(subColor1.r, ratio_s1);
-        pix_c1->g      = getChannelValue(subColor1.g, ratio_s1);
-        pix_c1->b      = getChannelValue(subColor1.b, ratio_s1);
-        pix_c1->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_s1 *=
+              (float)(matteRadius + 1 - (int)(*matte_p).y) / (float)matteRadius;
+        ratio_s1 = std::min(1.0f, ratio_s1);
+
+        pix_c1->r = getChannelValue(subColor1.r, ratio_s1);
+        pix_c1->g = getChannelValue(subColor1.g, ratio_s1);
+        pix_c1->b = getChannelValue(subColor1.b, ratio_s1);
+        pix_c1->m = getChannelValue(TPixel32::maxChannelValue, ratio_s1);
       } else {
-        pix_c1->r = 0;
-        pix_c1->g = 0;
-        pix_c1->b = 0;
-        pix_c1->m = 0;
+        *pix_c1 = matteColor_s1;
       }
 
       // sub2
       if (!doMatte || (*matte_p).z > 0) {
         float ratio_s2 = (*ratio_p).z();
-        pix_c2->r      = getChannelValue(subColor2.r, ratio_s2);
-        pix_c2->g      = getChannelValue(subColor2.g, ratio_s2);
-        pix_c2->b      = getChannelValue(subColor2.b, ratio_s2);
-        pix_c2->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_s2 *=
+              (float)(matteRadius + 1 - (int)(*matte_p).z) / (float)matteRadius;
+        ratio_s2 = std::min(1.0f, ratio_s2);
+
+        pix_c2->r = getChannelValue(subColor2.r, ratio_s2);
+        pix_c2->g = getChannelValue(subColor2.g, ratio_s2);
+        pix_c2->b = getChannelValue(subColor2.b, ratio_s2);
+        pix_c2->m = getChannelValue(TPixel32::maxChannelValue, ratio_s2);
       } else {
-        pix_c2->r = 0;
-        pix_c2->g = 0;
-        pix_c2->b = 0;
-        pix_c2->m = 0;
+        *pix_c2 = matteColor_s2;
       }
 
       // sub3
       if (!doMatte || (*matte_p).w > 0) {
         float ratio_s3 = (*ratio_p).w();
-        pix_c3->r      = getChannelValue(subColor3.r, ratio_s3);
-        pix_c3->g      = getChannelValue(subColor3.g, ratio_s3);
-        pix_c3->b      = getChannelValue(subColor3.b, ratio_s3);
-        pix_c3->m      = TPixel32::maxChannelValue;
+        if (doMatte)
+          ratio_s3 *=
+              (float)(matteRadius + 1 - (int)(*matte_p).w) / (float)matteRadius;
+        ratio_s3 = std::min(1.0f, ratio_s3);
+
+        pix_c3->r = getChannelValue(subColor3.r, ratio_s3);
+        pix_c3->g = getChannelValue(subColor3.g, ratio_s3);
+        pix_c3->b = getChannelValue(subColor3.b, ratio_s3);
+        pix_c3->m = getChannelValue(TPixel32::maxChannelValue, ratio_s3);
       } else {
-        pix_c3->r = 0;
-        pix_c3->g = 0;
-        pix_c3->b = 0;
-        pix_c3->m = 0;
+        *pix_c2 = matteColor_s3;
       }
 
       if (doMatte) matte_p++;
