@@ -139,7 +139,7 @@ class SeparateColorsPopup : public DVGui::Dialog {
   QLabel* m_previewFrameLabel;
   QVector<QPair<TFilePath, TFrameId>> m_srcFrames;
 
-  QPushButton *m_pickBtn, *m_showMatteBtn;
+  QPushButton *m_pickBtn, *m_showMatteBtn, *m_showAlphaBtn;
   SeparateSwatch* m_separateSwatch;
 
   ProgressDialog* m_progressDialog;

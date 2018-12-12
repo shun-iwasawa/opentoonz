@@ -27,7 +27,7 @@ public:
   SeparateSwatchArea(SeparateSwatch* parent, SWATCH_TYPE type);
   void updateRaster(bool dragging = false);
   void updateSeparated(bool dragging = false);
-  void setTranspColor(TPixel32& lineColor);
+  void setTranspColor(TPixel32& lineColor, bool showAlpha = false);
 
 protected:
   void paintEvent(QPaintEvent* event);
@@ -71,7 +71,7 @@ public:
   bool isEnabled();
   void enable(bool state);
   void setTranspColors(TPixel32& mainCol, TPixel32& sub1Col, TPixel32& sub2Col,
-                       TPixel32& sub3Col);
+                       TPixel32& sub3Col, bool showAlpha = false);
 
 protected:
   void resizeEvent(QResizeEvent* event);

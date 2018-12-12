@@ -262,7 +262,12 @@ void SeparateSwatchArea::wheelEvent(QWheelEvent *event) {
 }
 
 //-------------------------------------------------------------------------------
-void SeparateSwatchArea::setTranspColor(TPixel32 &lineColor) {
+void SeparateSwatchArea::setTranspColor(TPixel32 &lineColor, bool showAlpha) {
+  if (showAlpha) {
+    m_transparentColor = TPixel32::Black;
+    return;
+  }
+
   TPixelD lineColorD = toPixelD(lineColor);
   double h, l, s;
   rgb2hls(lineColorD.r, lineColorD.g, lineColorD.b, &h, &l, &s);
@@ -451,11 +456,12 @@ void SeparateSwatch::updateSeparated() {
 //--------------------------------------------------------------------
 
 void SeparateSwatch::setTranspColors(TPixel32 &mainCol, TPixel32 &sub1Col,
-                                     TPixel32 &sub2Col, TPixel32 &sub3Col) {
-  m_mainSwatch->setTranspColor(mainCol);
-  m_sub1Swatch->setTranspColor(sub1Col);
-  m_sub2Swatch->setTranspColor(sub2Col);
-  m_sub3Swatch->setTranspColor(sub3Col);
+                                     TPixel32 &sub2Col, TPixel32 &sub3Col,
+                                     bool showAlpha) {
+  m_mainSwatch->setTranspColor(mainCol, showAlpha);
+  m_sub1Swatch->setTranspColor(sub1Col, showAlpha);
+  m_sub2Swatch->setTranspColor(sub2Col, showAlpha);
+  m_sub3Swatch->setTranspColor(sub3Col, showAlpha);
 }
 
 //--------------------------------------------------------------------

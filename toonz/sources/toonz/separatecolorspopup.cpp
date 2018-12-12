@@ -34,6 +34,7 @@
 #include <QMessageBox>
 #include <QThreadPool>
 #include <QVector2D>
+#include <QPainter>
 
 TEnv::StringVar SeparateColorsPopup_PaperColor("SeparateColorsPopup_PaperColor",
                                                "#FFFFFF");
@@ -596,6 +597,15 @@ SeparateColorsPopup::SeparateColorsPopup()
       QColor((int)RedMaskColor.r, (int)RedMaskColor.g, (int)RedMaskColor.b));
   m_showMatteBtn = new QPushButton(QIcon(iconPm), tr("Show Mask"), this);
 
+  {
+    iconPm.fill(Qt::black);
+    QPainter icon_p(&iconPm);
+    icon_p.setPen(Qt::NoPen);
+    icon_p.setBrush(Qt::white);
+    icon_p.drawEllipse(3, 3, 7, 7);
+    m_showAlphaBtn = new QPushButton(QIcon(iconPm), tr("Show Alpha"), this);
+  }
+
   m_separateSwatch = new SeparateSwatch(this, 200, 150);
 
   //----
@@ -641,6 +651,9 @@ SeparateColorsPopup::SeparateColorsPopup()
   m_showMatteBtn->setCheckable(true);
   m_showMatteBtn->setChecked(true);
 
+  m_showAlphaBtn->setCheckable(true);
+  m_showAlphaBtn->setChecked(false);
+
   //----
   {
     QVBoxLayout* leftLay = new QVBoxLayout();
@@ -659,6 +672,7 @@ SeparateColorsPopup::SeparateColorsPopup()
         previewLay->addSpacing(10);
 
         previewLay->addWidget(m_showMatteBtn, 0);
+        previewLay->addWidget(m_showAlphaBtn, 0);
 
         previewLay->addSpacing(20);
 
@@ -884,6 +898,8 @@ SeparateColorsPopup::SeparateColorsPopup()
                 this, SLOT(onColorChange(const TPixel32&, bool)));
   ret = ret &&
         connect(m_showMatteBtn, SIGNAL(toggled(bool)), this, SLOT(onToggle()));
+  ret = ret &&
+        connect(m_showAlphaBtn, SIGNAL(toggled(bool)), this, SLOT(onToggle()));
 
   assert(ret);
 
@@ -1156,7 +1172,9 @@ void SeparateColorsPopup::doPreview(TRaster32P& orgRas, TRaster32P& mainRas,
   bool do4Colors = m_outSub3CB->isChecked();
 
   // specify the transparent colors
-  m_separateSwatch->setTranspColors(mainColor, subColor1, subColor2, subColor3);
+  bool showAlpha = m_showAlphaBtn->isChecked();
+  m_separateSwatch->setTranspColors(mainColor, subColor1, subColor2, subColor3,
+                                    showAlpha);
 
   int frame    = m_previewFrameField->getValue() - 1;
   TFilePath fp = m_srcFrames[frame].first;
@@ -1292,6 +1310,13 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
   TPixel32 matteColor_m  = getMatteColor(mainColor);
   TPixel32 matteColor_s1 = getMatteColor(subColor1);
   TPixel32 matteColor_s2 = getMatteColor(subColor2);
+
+  // show alpha channel
+  if (isPreview && m_showAlphaBtn->isChecked()) {
+    mainColor = TPixel::White;
+    subColor1 = TPixel::White;
+    subColor2 = TPixel::White;
+  }
 
   // compute result
   QVector3D* ratio_p = out_host;
@@ -1494,6 +1519,14 @@ void SeparateColorsPopup::doCompute(TRaster32P raster, TDimensionI& dim,
   TPixel32 matteColor_s1 = getMatteColor(subColor1);
   TPixel32 matteColor_s2 = getMatteColor(subColor2);
   TPixel32 matteColor_s3 = getMatteColor(subColor3);
+
+  // show alpha channel
+  if (isPreview && m_showAlphaBtn->isChecked()) {
+    mainColor = TPixel::White;
+    subColor1 = TPixel::White;
+    subColor2 = TPixel::White;
+    subColor3 = TPixel::White;
+  }
 
   // compute result
   QVector4D* ratio_p = out_host;
