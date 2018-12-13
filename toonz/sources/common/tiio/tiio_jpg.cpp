@@ -256,6 +256,9 @@ public:
     }
     jpeg_write_scanlines(&m_cinfo, m_buffer, 1);
   }
+
+  // jpeg format does not support alpha channel
+  bool writeAlphaSupported() const override { return false; }
 };
 
 //----
