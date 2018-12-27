@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Hardness:</source>
-        <translation>硬さ：</translation>
+        <translation type="vanished">硬さ：</translation>
     </message>
     <message>
         <source>Accuracy:</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Pencil</source>
-        <translation>鉛筆モード</translation>
+        <translation type="vanished">鉛筆モード</translation>
     </message>
     <message>
         <source>Pressure</source>
@@ -224,19 +224,19 @@
     </message>
     <message>
         <source>Draw Order:</source>
-        <translation>線の重ね順:</translation>
+        <translation type="vanished">線の重ね順:</translation>
     </message>
     <message>
         <source>Over All</source>
-        <translation>上に描く</translation>
+        <translation type="vanished">上に描く</translation>
     </message>
     <message>
         <source>Under All</source>
-        <translation>下に描く</translation>
+        <translation type="vanished">下に描く</translation>
     </message>
     <message>
         <source>Palette Order</source>
-        <translation>パレット順</translation>
+        <translation type="vanished">パレット順</translation>
     </message>
 </context>
 <context>
@@ -1341,6 +1341,33 @@ Do you want to proceed?</source>
         <source>Link</source>
         <translation>縦横比を固定</translation>
     </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished">位置</translation>
+    </message>
+</context>
+<context>
+    <name>ShiftTraceToolOptionBox</name>
+    <message>
+        <source>Reset Previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Following</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous Drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Following Drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SkeletonTool</name>
@@ -1419,6 +1446,53 @@ Do you want to proceed?</source>
 moved to the end of the first page of the palette.</source>
         <translation>このオプションを有効にしてカラーモデルから色を拾っていくと、サンプルされた
 スタイルがパレットの1ページ目の末尾に順番に移動します。</translation>
+    </message>
+</context>
+<context>
+    <name>ToonzRasterBrushTool</name>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished">サイズ</translation>
+    </message>
+    <message>
+        <source>Hardness:</source>
+        <translation type="unfinished">硬さ：</translation>
+    </message>
+    <message>
+        <source>Smooth:</source>
+        <translation type="unfinished">平滑化：</translation>
+    </message>
+    <message>
+        <source>Draw Order:</source>
+        <translation type="unfinished">線の重ね順:</translation>
+    </message>
+    <message>
+        <source>Over All</source>
+        <translation type="unfinished">上に描く</translation>
+    </message>
+    <message>
+        <source>Under All</source>
+        <translation type="unfinished">下に描く</translation>
+    </message>
+    <message>
+        <source>Palette Order</source>
+        <translation type="unfinished">パレット順</translation>
+    </message>
+    <message>
+        <source>Preset:</source>
+        <translation type="unfinished">プリセット：</translation>
+    </message>
+    <message>
+        <source>&lt;custom&gt;</source>
+        <translation type="unfinished">&lt;カスタム&gt;</translation>
+    </message>
+    <message>
+        <source>Pencil</source>
+        <translation type="unfinished">鉛筆モード</translation>
+    </message>
+    <message>
+        <source>Pressure</source>
+        <translation type="unfinished">圧力感知</translation>
     </message>
 </context>
 <context>

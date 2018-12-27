@@ -256,7 +256,7 @@ Possibly the preset file has been corrupted</source>
     </message>
     <message>
         <source>&amp;Open Subxsheet</source>
-        <translation>サブシートを開く (&amp;O)</translation>
+        <translation type="vanished">サブシートを開く (&amp;O)</translation>
     </message>
 </context>
 <context>
@@ -697,6 +697,17 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>FontParamField</name>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FrameNavigator</name>
     <message>
         <source>Previous Frame</source>
@@ -1086,7 +1097,7 @@ Possibly the preset file has been corrupted</source>
     </message>
     <message>
         <source>&amp;Open Subxsheet</source>
-        <translation>サブシートを開く (&amp;O)</translation>
+        <translation type="vanished">サブシートを開く (&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Uncache Fx</source>
@@ -1206,6 +1217,13 @@ Possibly the preset file has been corrupted</source>
     </message>
 </context>
 <context>
+    <name>FxSchematicOutputNode</name>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Output</translation>
+    </message>
+</context>
+<context>
     <name>FxSchematicPort</name>
     <message>
         <source>&amp;Disconnect from Xsheet</source>
@@ -1235,6 +1253,13 @@ Select FX nodes and related links before copying or cutting the selection you wa
 Select FX nodes and related links before copying or cutting the selection you want to paste.</source>
         <translation>接続されていない複数のエフェクトノードを「貼り付けて置換」できません。
 コピーまたは切り取りを行う前に、FXノードと関連するリンクを選択してください。</translation>
+    </message>
+</context>
+<context>
+    <name>FxSchematicXSheetNode</name>
+    <message>
+        <source>XSheet</source>
+        <translation type="unfinished">XSheet</translation>
     </message>
 </context>
 <context>
@@ -2192,6 +2217,10 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     <message>
         <source>&amp;Swtich output port display mode</source>
         <translation>ポートの表示を切り替える (&amp;S)</translation>
+    </message>
+    <message>
+        <source>&amp;Toggle node icons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
