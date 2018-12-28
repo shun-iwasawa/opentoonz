@@ -1328,7 +1328,7 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>FxSchematicOutputNode</name>
     <message>
-        <location filename="../../toonzqt/fxschematicnode.cpp" line="2207"/>
+        <location filename="../../toonzqt/fxschematicnode.cpp" line="2210"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1349,19 +1349,19 @@ Possibly the preset file has been corrupted</source>
 <context>
     <name>FxSchematicScene</name>
     <message>
-        <location filename="../../toonzqt/fxschematicscene.cpp" line="1646"/>
+        <location filename="../../toonzqt/fxschematicscene.cpp" line="1749"/>
         <source>Cannot Paste Insert a selection of unconnected FX nodes.
 Select FX nodes and related links before copying or cutting the selection you want to paste.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/fxschematicscene.cpp" line="1656"/>
+        <location filename="../../toonzqt/fxschematicscene.cpp" line="1759"/>
         <source>Cannot Paste Add a selection of unconnected FX nodes.
 Select FX nodes and related links before copying or cutting the selection you want to paste.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/fxschematicscene.cpp" line="1666"/>
+        <location filename="../../toonzqt/fxschematicscene.cpp" line="1769"/>
         <source>Cannot Paste Replace a selection of unconnected FX nodes.
 Select FX nodes and related links before copying or cutting the selection you want to paste.</source>
         <translation type="unfinished"></translation>
@@ -1370,7 +1370,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
 <context>
     <name>FxSchematicXSheetNode</name>
     <message>
-        <location filename="../../toonzqt/fxschematicnode.cpp" line="2275"/>
+        <location filename="../../toonzqt/fxschematicnode.cpp" line="2278"/>
         <source>XSheet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1896,28 +1896,28 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="991"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="993"/>
         <source>Save Motion Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="993"/>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1028"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="995"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1030"/>
         <source>Motion Path files (*.mpath)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1016"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1018"/>
         <source>It is not possible to save the motion path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1026"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1028"/>
         <source>Load Motion Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1056"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1058"/>
         <source>It is not possible to load the motion path.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2570,17 +2570,17 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
 <context>
     <name>StageSchematicScene</name>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1131"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1133"/>
         <source>&amp;New Pegbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1135"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1137"/>
         <source>&amp;New Motion Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonzqt/stageschematicscene.cpp" line="1139"/>
+        <location filename="../../toonzqt/stageschematicscene.cpp" line="1141"/>
         <source>&amp;New Camera</source>
         <translation type="unfinished"></translation>
     </message>

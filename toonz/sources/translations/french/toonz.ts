@@ -9351,6 +9351,18 @@ to use the duplicate command in the xsheet / timeline.</source>
         <source>The qualifier %1 is not a valid key name. Skipping.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Clear All Onion Skin Markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear All Fixed Onion Skin Markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear All Relative Onion Skin Markers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ReframePopup</name>

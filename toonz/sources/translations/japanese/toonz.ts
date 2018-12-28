@@ -7603,7 +7603,7 @@ Also the initial output destination for new scenes will be set to $scenefolder a
     <message>
         <source>Matte color is used for background when overwriting raster levels with transparent pixels
 in non alpha-enabled image format.</source>
-        <translation type="unfinished">マット色は、透明なピクセルを含む画像を、アルファチャンネル非対応のファイル形式で
+        <translation>マット色は、透明なピクセルを含む画像を、アルファチャンネル非対応のファイル形式で
 上書き保存するときの背景に用いられます。</translation>
     </message>
     <message>
@@ -9547,6 +9547,18 @@ to use the duplicate command in the xsheet / timeline.</source>
     <message>
         <source>The qualifier %1 is not a valid key name. Skipping.</source>
         <translation>修飾子 %1 は有効なキー名ではありません。スキップします。</translation>
+    </message>
+    <message>
+        <source>Clear All Onion Skin Markers</source>
+        <translation>全てのオニオンスキンをクリア</translation>
+    </message>
+    <message>
+        <source>Clear All Fixed Onion Skin Markers</source>
+        <translation>全ての固定オニオンスキンをクリア</translation>
+    </message>
+    <message>
+        <source>Clear All Relative Onion Skin Markers</source>
+        <translation>全ての連結オニオンスキンをクリア</translation>
     </message>
 </context>
 <context>

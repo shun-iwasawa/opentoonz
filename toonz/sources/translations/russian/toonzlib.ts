@@ -255,57 +255,57 @@
         <translation>Создать выход Fx</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="1688"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="1689"/>
         <source>Connect to Xsheet  : </source>
         <translation>Подключить к Xsheet  : </translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="1748"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="1749"/>
         <source>Disconnect from Xsheet  : </source>
         <translation>Отключить от Xsheet  : </translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="2019"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="2020"/>
         <source>Delete Link</source>
         <translation>Удалить связь</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="2304"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="2305"/>
         <source>Delete Fx Node : %1</source>
         <translation>Удалить Fx-узел : %1</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="2722"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="2724"/>
         <source>Paste Fx  :  </source>
         <translation>Вставить Fx :</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3088"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3090"/>
         <source>Disconnect Fx</source>
         <translation>Отключить Fx</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3345"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3347"/>
         <source>Connect Fx : %1 - %2</source>
         <translation>Подключить Fx : %1 - %2</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3527"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3529"/>
         <source>Rename Fx : %1 &gt; %2</source>
         <translation>Переименовать Fx : %1 - %2</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3579"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3581"/>
         <source>Group Fx</source>
         <translation>Сгруппировать Fx</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3683"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3685"/>
         <source>Ungroup Fx</source>
         <translation>Разгруппировать Fx</translation>
     </message>
     <message>
-        <location filename="../../toonzlib/fxcommand.cpp" line="3785"/>
+        <location filename="../../toonzlib/fxcommand.cpp" line="3787"/>
         <source>Rename Group  : %1 &gt; %2</source>
         <translation>Переименовать группу  : %1 &gt; %2</translation>
     </message>
