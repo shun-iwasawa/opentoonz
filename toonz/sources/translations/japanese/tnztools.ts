@@ -1343,30 +1343,30 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>拡大率</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished">位置</translation>
+        <translation>位置</translation>
     </message>
 </context>
 <context>
     <name>ShiftTraceToolOptionBox</name>
     <message>
         <source>Reset Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>前のコマの変形をリセット</translation>
     </message>
     <message>
         <source>Reset Following</source>
-        <translation type="unfinished"></translation>
+        <translation>後のコマの変形をリセット</translation>
     </message>
     <message>
         <source>Previous Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>前のコマ</translation>
     </message>
     <message>
         <source>Following Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>後のコマ</translation>
     </message>
 </context>
 <context>
@@ -1452,47 +1452,47 @@ moved to the end of the first page of the palette.</source>
     <name>ToonzRasterBrushTool</name>
     <message>
         <source>Size</source>
-        <translation type="unfinished">サイズ</translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <source>Hardness:</source>
-        <translation type="unfinished">硬さ：</translation>
+        <translation>硬さ：</translation>
     </message>
     <message>
         <source>Smooth:</source>
-        <translation type="unfinished">平滑化：</translation>
+        <translation>平滑化：</translation>
     </message>
     <message>
         <source>Draw Order:</source>
-        <translation type="unfinished">線の重ね順:</translation>
+        <translation>線の重ね順:</translation>
     </message>
     <message>
         <source>Over All</source>
-        <translation type="unfinished">上に描く</translation>
+        <translation>上に描く</translation>
     </message>
     <message>
         <source>Under All</source>
-        <translation type="unfinished">下に描く</translation>
+        <translation>下に描く</translation>
     </message>
     <message>
         <source>Palette Order</source>
-        <translation type="unfinished">パレット順</translation>
+        <translation>パレット順</translation>
     </message>
     <message>
         <source>Preset:</source>
-        <translation type="unfinished">プリセット：</translation>
+        <translation>プリセット：</translation>
     </message>
     <message>
         <source>&lt;custom&gt;</source>
-        <translation type="unfinished">&lt;カスタム&gt;</translation>
+        <translation>&lt;カスタム&gt;</translation>
     </message>
     <message>
         <source>Pencil</source>
-        <translation type="unfinished">鉛筆モード</translation>
+        <translation>鉛筆モード</translation>
     </message>
     <message>
         <source>Pressure</source>
-        <translation type="unfinished">圧力感知</translation>
+        <translation>圧力感知</translation>
     </message>
 </context>
 <context>

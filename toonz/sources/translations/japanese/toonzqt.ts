@@ -700,11 +700,11 @@ Possibly the preset file has been corrupted</source>
     <name>FontParamField</name>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイル：</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ：</translation>
     </message>
 </context>
 <context>
@@ -1220,7 +1220,7 @@ Possibly the preset file has been corrupted</source>
     <name>FxSchematicOutputNode</name>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation>出力</translation>
     </message>
 </context>
 <context>
@@ -1259,7 +1259,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     <name>FxSchematicXSheetNode</name>
     <message>
         <source>XSheet</source>
-        <translation type="unfinished">XSheet</translation>
+        <translation>タイムシート</translation>
     </message>
 </context>
 <context>
@@ -2220,7 +2220,7 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     </message>
     <message>
         <source>&amp;Toggle node icons</source>
-        <translation type="unfinished"></translation>
+        <translation>アイコン表示切り替え （&amp;T）</translation>
     </message>
 </context>
 <context>

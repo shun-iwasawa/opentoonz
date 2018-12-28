@@ -370,86 +370,86 @@ Stop it or wait for its completion before removing it.</source>
     <name>BoardSettingsPopup</name>
     <message>
         <source>Clapperboard Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>カットボールド設定</translation>
     </message>
     <message>
         <source>Load Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>プリセットを読み込む</translation>
     </message>
     <message>
         <source>Save as Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>プリセットとして保存</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <source>Duration (frames):</source>
-        <translation type="unfinished"></translation>
+        <translation>時間（フレーム）：</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>テキスト</translation>
     </message>
     <message>
         <source>Project name</source>
-        <translation type="unfinished"></translation>
+        <translation>プロジェクト名</translation>
     </message>
     <message>
         <source>Scene name</source>
-        <translation type="unfinished"></translation>
+        <translation>シーン名</translation>
     </message>
     <message>
         <source>Duration : Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>カットの尺：フレーム</translation>
     </message>
     <message>
         <source>Duration : Sec + Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>カットの尺：秒＋コマ</translation>
     </message>
     <message>
         <source>Duration : HH:MM:SS:FF</source>
-        <translation type="unfinished"></translation>
+        <translation>カットの尺：時:分:秒:コマ</translation>
     </message>
     <message>
         <source>Current date</source>
-        <translation type="unfinished"></translation>
+        <translation>日付</translation>
     </message>
     <message>
         <source>Current date and time</source>
-        <translation type="unfinished"></translation>
+        <translation>日付と時刻</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <source>Scene location : Aliased path</source>
-        <translation type="unfinished"></translation>
+        <translation>シーンファイルのパス：エイリアス</translation>
     </message>
     <message>
         <source>Scene location : Full path</source>
-        <translation type="unfinished"></translation>
+        <translation>シーンファイルのパス：フルパス</translation>
     </message>
     <message>
         <source>Output location : Aliased path</source>
-        <translation type="unfinished"></translation>
+        <translation>出力ファイルのパス：エイリアス</translation>
     </message>
     <message>
         <source>Output location : Full path</source>
-        <translation type="unfinished"></translation>
+        <translation>出力ファイルのパス：フルパス</translation>
     </message>
     <message>
         <source>Image</source>
-        <translation type="unfinished"></translation>
+        <translation>画像</translation>
     </message>
 </context>
 <context>
     <name>BoardView</name>
     <message>
         <source>Please set the duration more than 0 frame first, or the clapperboard settings will not be saved in the scene at all!</source>
-        <translation type="unfinished"></translation>
+        <translation>カットボールドを有効にするには、まず時間（フレーム）を１以上に設定してください。0が設定されている場合カットボールド設定はシーンファイルに保存されません！</translation>
     </message>
 </context>
 <context>
@@ -2315,21 +2315,24 @@ contain the dpi information, then the current camera dpi will be used.
     <message>
         <source>Click to Reset Shift &amp; Trace Markers to Neighbor Frames
 Hold F2 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] ライトテーブルマーカーを隣接するフレームにリセット
+[ビューア上でF2キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Hide This Frame from Shift &amp; Trace
 Hold F1 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] このフレームをライトテーブルから除く
+[ビューア上でF1キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Hide This Frame from Shift &amp; Trace
 Hold F3 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] このフレームをライトテーブルから除く
+[ビューア上でF3キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Move Shift &amp; Trace Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] ライトテーブルマーカーを移動</translation>
     </message>
 </context>
 <context>
@@ -2600,70 +2603,70 @@ Do you want to overwrite it?</source>
     <name>ItemInfoView</name>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>太字</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>斜体</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>無視する</translation>
     </message>
     <message>
         <source>Keep</source>
-        <translation type="unfinished"></translation>
+        <translation>維持する</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>名前：</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation type="unfinished">タイプ：</translation>
+        <translation>タイプ：</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation type="unfinished">パス：</translation>
+        <translation>パス：</translation>
     </message>
     <message>
         <source>Aspect Ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>縦横比：</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished"></translation>
+        <translation>フォント：</translation>
     </message>
     <message>
         <source>Max Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大サイズ：</translation>
     </message>
     <message>
         <source>No item selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>項目が選択されていません。</translation>
     </message>
     <message>
         <source>Item</source>
-        <translation type="unfinished"></translation>
+        <translation>項目</translation>
     </message>
 </context>
 <context>
     <name>ItemListView</name>
     <message>
         <source>Add</source>
-        <translation type="unfinished">追加</translation>
+        <translation>追加</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>削除</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished"></translation>
+        <translation>上に移動</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished"></translation>
+        <translation>下に移動</translation>
     </message>
 </context>
 <context>
@@ -3172,7 +3175,7 @@ Please use the frame numbers for reference.</source>
     <name>LoadBoardPresetFilePopup</name>
     <message>
         <source>Load Clapperboard Settings Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>カットボールド設定のプリセットを読み込む</translation>
     </message>
 </context>
 <context>
@@ -5351,47 +5354,47 @@ Please use the frame numbers for reference.</source>
     </message>
     <message>
         <source>&amp;Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムライン （&amp;T）</translation>
     </message>
     <message>
         <source>Linear Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>線形</translation>
     </message>
     <message>
         <source>Speed In / Speed Out Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>スピードイン/スピードアウト</translation>
     </message>
     <message>
         <source>Ease In / Ease Out Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>スローイン/スローアウト</translation>
     </message>
     <message>
         <source>Ease In / Ease Out (%) Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>スローイン/スローアウト （%）</translation>
     </message>
     <message>
         <source>Exponential Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>指数関数</translation>
     </message>
     <message>
         <source>Expression Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプレッション</translation>
     </message>
     <message>
         <source>File Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル</translation>
     </message>
     <message>
         <source>Constant Interpolation</source>
-        <translation type="unfinished"></translation>
+        <translation>定数</translation>
     </message>
     <message>
         <source>Separate Colors...</source>
-        <translation type="unfinished"></translation>
+        <translation>色線を分ける...</translation>
     </message>
     <message>
         <source>Flip Viewer Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>ビューアを水平方向に反転</translation>
     </message>
 </context>
 <context>
@@ -5974,11 +5977,11 @@ What do you want to do?</source>
     </message>
     <message>
         <source>Add Clapperboard</source>
-        <translation type="unfinished"></translation>
+        <translation>カットボールドを追加する</translation>
     </message>
     <message>
         <source>Edit Clapperboard...</source>
-        <translation type="unfinished"></translation>
+        <translation>カットボールドを編集...</translation>
     </message>
     <message>
         <source>Save current output settings.
@@ -5989,7 +5992,14 @@ The parameters to be saved are:
 - File options
 - Resample Balance
 - Channel width</source>
-        <translation type="unfinished"></translation>
+        <translation>現在の出力設定を保存します。
+プリセットには以下の値が保存されます：
+- カメラ設定
+- 保存先となるプロジェクトフォルダ
+- ファイル拡張子
+- ファイル形式オプション
+- 画像補間方式
+- チャンネル幅</translation>
     </message>
 </context>
 <context>
@@ -7556,52 +7566,53 @@ Also the initial output destination for new scenes will be set to $scenefolder a
     </message>
     <message>
         <source>Saving</source>
-        <translation type="unfinished"></translation>
+        <translation>保存</translation>
     </message>
     <message>
         <source>Use Onion Skin Colors for Reference Drawings of Shift and Trace</source>
-        <translation type="unfinished"></translation>
+        <translation>ライトテーブルの前後フレームにもオニオンスキンの色を用いる</translation>
     </message>
     <message>
         <source>Tablet Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>タブレット</translation>
     </message>
     <message>
         <source>Enable Windows Ink Support* (EXPERIMENTAL)</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows Inkを用いる* （試験運用中の機能です）</translation>
     </message>
     <message>
         <source>Constant</source>
-        <translation type="unfinished"></translation>
+        <translation>定数</translation>
     </message>
     <message>
         <source>Exponential</source>
-        <translation type="unfinished"></translation>
+        <translation>指数関数</translation>
     </message>
     <message>
         <source>Expression </source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプレッション</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished">ファイル</translation>
+        <translation>ファイル</translation>
     </message>
     <message>
         <source>Style *:</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイル *：</translation>
     </message>
     <message>
         <source>Matte color is used for background when overwriting raster levels with transparent pixels
 in non alpha-enabled image format.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">マット色は、透明なピクセルを含む画像を、アルファチャンネル非対応のファイル形式で
+上書き保存するときの背景に用いられます。</translation>
     </message>
     <message>
         <source>Matte color: </source>
-        <translation type="unfinished"></translation>
+        <translation>マット色： </translation>
     </message>
     <message>
         <source>Current Column Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>現在の列の文字色：</translation>
     </message>
 </context>
 <context>
@@ -9488,52 +9499,54 @@ Allow duplicate?</source>
     </message>
     <message>
         <source>Couldn&apos;t load %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 を読み込めませんでした</translation>
     </message>
     <message>
         <source>Apply Antialias</source>
-        <translation type="unfinished">アンチエイリアスを適用</translation>
+        <translation>アンチエイリアスを適用</translation>
     </message>
     <message>
         <source>The Reload command is not supported for the current selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>「再読み込み」コマンドは、現在の選択範囲に対応していません。</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <source>No Palette loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットが読み込まれていません。</translation>
     </message>
     <message>
         <source>A separation task is in progress! wait until it stops or cancel it</source>
-        <translation type="unfinished"></translation>
+        <translation>色線を分けるタスクの処理中です! 完了まで待つか、またはキャンセルして下さい</translation>
     </message>
     <message>
         <source>Duplicate Frame in XSheet</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムシート内で動画を複製</translation>
     </message>
     <message>
         <source>Please enable &quot;Sync Level Strip Drawing Number Changes with the XSheet&quot; preference option
 to use the duplicate command in the xsheet / timeline.</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムシート/タイムライン上で動画を複製コマンドを使用するには、
+環境設定 ＞ タイムシート ＞ 「レベルビューア上の動画番号の変更を、タイムシートに同期する」
+オプションを有効にしてください。</translation>
     </message>
     <message>
         <source>Please select only one layer to duplicate a frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>このコマンドは１つのコマだけ選択して使用して下さい。</translation>
     </message>
     <message>
         <source>Please select only one frame to duplicate.</source>
-        <translation type="unfinished"></translation>
+        <translation>このコマンドは１つのコマだけ選択して使用して下さい。</translation>
     </message>
     <message>
         <source>Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムライン</translation>
     </message>
     <message>
         <source>The qualifier %1 is not a valid key name. Skipping.</source>
-        <translation type="unfinished"></translation>
+        <translation>修飾子 %1 は有効なキー名ではありません。スキップします。</translation>
     </message>
 </context>
 <context>
@@ -10530,7 +10543,7 @@ Please commit or revert changes first.</source>
     <name>SaveBoardPresetFilePopup</name>
     <message>
         <source>Save Clapperboard Settings As Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のカットボールド設定をプリセットに保存</translation>
     </message>
 </context>
 <context>
@@ -10943,166 +10956,166 @@ Please commit or revert changes first.</source>
     <name>SeparateColorsPopup</name>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">自動</translation>
+        <translation>自動更新</translation>
     </message>
     <message>
         <source>Preview</source>
-        <translation type="unfinished">プレビュー</translation>
+        <translation>プレビュー</translation>
     </message>
     <message>
         <source>Separate</source>
-        <translation type="unfinished"></translation>
+        <translation>色分けを実行</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <source>Sub Color 3:</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 3 の色：</translation>
     </message>
     <message>
         <source>Alpha Matting</source>
-        <translation type="unfinished"></translation>
+        <translation>アルファマット</translation>
     </message>
     <message>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>実線</translation>
     </message>
     <message>
         <source>Sub1</source>
-        <translation type="unfinished"></translation>
+        <translation>色線1</translation>
     </message>
     <message>
         <source>Sub2</source>
-        <translation type="unfinished"></translation>
+        <translation>色線2</translation>
     </message>
     <message>
         <source>Sub3</source>
-        <translation type="unfinished"></translation>
+        <translation>色線3</translation>
     </message>
     <message>
         <source>Pick Color</source>
-        <translation type="unfinished"></translation>
+        <translation>色を拾う</translation>
     </message>
     <message>
         <source>Show Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>マスク領域</translation>
     </message>
     <message>
         <source>Show Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>アルファチャンネル</translation>
     </message>
     <message>
         <source>Preview Frame:</source>
-        <translation type="unfinished"></translation>
+        <translation>プレビューするフレーム：</translation>
     </message>
     <message>
         <source>Paper Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>紙の色：</translation>
     </message>
     <message>
         <source>Main Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>実線の色：</translation>
     </message>
     <message>
         <source>Sub Color 1:</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 1 の色：</translation>
     </message>
     <message>
         <source>Sub Color 2:</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 2 の色：</translation>
     </message>
     <message>
         <source>Sub Adjust:</source>
-        <translation type="unfinished"></translation>
+        <translation>色線の強さ：</translation>
     </message>
     <message>
         <source>Border Smooth:</source>
-        <translation type="unfinished"></translation>
+        <translation>境界をなじませる：</translation>
     </message>
     <message>
         <source>Mask Threshold:</source>
-        <translation type="unfinished"></translation>
+        <translation>しきい値：</translation>
     </message>
     <message>
         <source>Mask Radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>マスクの半径：</translation>
     </message>
     <message>
         <source>Start:</source>
-        <translation type="unfinished"></translation>
+        <translation>開始フレーム：</translation>
     </message>
     <message>
         <source>End:</source>
-        <translation type="unfinished"></translation>
+        <translation>終了フレーム：</translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation type="unfinished">形式：</translation>
+        <translation>ファイル形式：</translation>
     </message>
     <message>
         <source>Save in:</source>
-        <translation type="unfinished"></translation>
+        <translation>保存先：</translation>
     </message>
     <message>
         <source>File Suffix:</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル接尾子：</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Separate by colors ... </source>
-        <translation type="unfinished"></translation>
+        <translation>色線を分ける ... </translation>
     </message>
     <message>
         <source>Separate 1 Level</source>
-        <translation type="unfinished"></translation>
+        <translation>レベル内の色線を分ける</translation>
     </message>
     <message>
         <source>Separate %1 Levels</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 個のレベルの色線を分ける</translation>
     </message>
     <message>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <source>Failed to access the destination folder!</source>
-        <translation type="unfinished"></translation>
+        <translation>保存先フォルダのアクセスに失敗しました！</translation>
     </message>
     <message>
         <source>Separating %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 の色分けを実行中</translation>
     </message>
     <message>
         <source>Converting level %1 of %2: %3</source>
-        <translation type="unfinished">%1 / %2 レベルを変換中： %3</translation>
+        <translation>%1 / %2 レベルを変換中： %3</translation>
     </message>
 </context>
 <context>
     <name>SeparateSwatch</name>
     <message>
         <source>Sub Color 3</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 3</translation>
     </message>
     <message>
         <source>Original</source>
-        <translation type="unfinished"></translation>
+        <translation>元画像</translation>
     </message>
     <message>
         <source>Main Color</source>
-        <translation type="unfinished"></translation>
+        <translation>実線</translation>
     </message>
     <message>
         <source>Sub Color 1</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 1</translation>
     </message>
     <message>
         <source>Sub Color 2</source>
-        <translation type="unfinished"></translation>
+        <translation>色線 2</translation>
     </message>
 </context>
 <context>
@@ -12488,7 +12501,7 @@ Please refer to the user guide for details.</source>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>不透明度：</translation>
     </message>
 </context>
 <context>
@@ -12511,19 +12524,19 @@ Please refer to the user guide for details.</source>
     </message>
     <message>
         <source>Toggle Xsheet/Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>タイムシート/タイムライン切り替え</translation>
     </message>
     <message>
         <source>Add New Memo</source>
-        <translation type="unfinished"></translation>
+        <translation>新規メモを追加</translation>
     </message>
     <message>
         <source>Previous Memo</source>
-        <translation type="unfinished"></translation>
+        <translation>前のメモ</translation>
     </message>
     <message>
         <source>Next Memo</source>
-        <translation type="unfinished"></translation>
+        <translation>次のメモ</translation>
     </message>
 </context>
 <context>
@@ -12602,28 +12615,31 @@ Please refer to the user guide for details.</source>
     <message>
         <source>Click to Reset Shift &amp; Trace Markers to Neighbor Frames
 Hold F2 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] ライトテーブルマーカーを隣接するフレームにリセット
+[ビューア上でF2キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Hide This Frame from Shift &amp; Trace
 Hold F1 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] このフレームをライトテーブルから除く
+[ビューア上でF1キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Hide This Frame from Shift &amp; Trace
 Hold F3 Key on the Viewer to Show This Frame Only</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] このフレームをライトテーブルから除く
+[ビューア上でF3キー] このフレームのみ表示する</translation>
     </message>
     <message>
         <source>Click to Move Shift &amp; Trace Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>[クリック] ライトテーブルマーカーを移動</translation>
     </message>
 </context>
 <context>
     <name>XsheetGUI::SoundColumnPopup</name>
     <message>
         <source>Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>音量：</translation>
     </message>
 </context>
 <context>
