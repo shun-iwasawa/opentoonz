@@ -31,6 +31,7 @@ class QCameraViewfinder;
 namespace DVGui {
 class FileField;
 class IntField;
+class IntLineEdit;
 }
 
 class CameraCaptureLevelControl;
@@ -83,6 +84,8 @@ public:
   QRect sourceRect() const { return m_sourceRect; }
   void updateVideoRect();
 
+  QTransform transform() { return m_S2V_Transform; }
+
 private:
   QWidget* m_widget;
   QImage::Format m_imageFormat;
@@ -90,6 +93,8 @@ private:
   QSize m_imageSize;
   QRect m_sourceRect;
   QVideoFrame m_currentFrame;
+
+  QTransform m_S2V_Transform;  // surface to video transform
 
 signals:
   void frameCaptured(QImage& image);
@@ -101,12 +106,31 @@ signals:
 
 class MyVideoWidget : public QWidget {
   Q_OBJECT
+
   QImage m_image;
   QImage m_previousImage;
   int m_countDownTime;
   bool m_showOnionSkin;
   int m_onionOpacity;
   bool m_upsideDown;
+
+  QRect m_subCameraRect;
+  QRect m_preSubCameraRect;
+  QPoint m_dragStartPos;
+
+  enum SUBHANDLE {
+    HandleNone,
+    HandleFrame,
+    HandleTopLeft,
+    HandleTopRight,
+    HandleBottomLeft,
+    HandleBottomRight,
+    HandleLeft,
+    HandleTop,
+    HandleRight,
+    HandleBottom
+  } m_activeSubHandle = HandleNone;
+  void drawSubCamera(QPainter&);
 
 public:
   MyVideoWidget(QWidget* parent = 0);
@@ -122,22 +146,34 @@ public:
 
   void setShowOnionSkin(bool on) { m_showOnionSkin = on; }
   void setOnionOpacity(int value) { m_onionOpacity = value; }
-  void setPreviousImage(QImage& prevImage) { m_previousImage = prevImage; }
+  void setPreviousImage(QImage prevImage) { m_previousImage = prevImage; }
 
   void showCountDownTime(int time) {
     m_countDownTime = time;
     repaint();
   }
 
+  void setSubCameraSize(QSize size);
+  QRect subCameraRect() { return m_subCameraRect; }
+
 protected:
-  void paintEvent(QPaintEvent* event);
-  void resizeEvent(QResizeEvent* event);
+  void paintEvent(QPaintEvent* event) override;
+  void resizeEvent(QResizeEvent* event) override;
+
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
   MyVideoSurface* m_surface;
 
 protected slots:
   void onUpsideDownChecked(bool on) { m_upsideDown = on; }
+
+signals:
+  void startCamera();
+  void stopCamera();
+  void subCameraResized(bool isDragging);
 };
 
 //=============================================================================
@@ -272,6 +308,10 @@ class PencilTestPopup : public DVGui::Dialog {
 
   QToolButton* m_previousLevelButton;
 
+  QPushButton* m_subcameraButton;
+  DVGui::IntLineEdit *m_subWidthFld, *m_subHeightFld;
+  QSize m_allowedCameraSize;
+
 #ifdef MACOSX
   QCameraViewfinder* m_dummyViewFinder;
 #endif
@@ -280,7 +320,7 @@ class PencilTestPopup : public DVGui::Dialog {
   bool m_captureCue;
 
   void processImage(QImage& procImage);
-  bool importImage(QImage& image);
+  bool importImage(QImage image);
 
   void setToNextNewLevel();
   void updateLevelNameAndFrame(std::wstring levelName);
@@ -320,6 +360,10 @@ protected slots:
 
   void onSaveInPathEdited();
   void onSceneSwitched();
+
+  void onSubCameraToggled(bool);
+  void onSubCameraResized(bool isDragging);
+  void onSubCameraSizeEdited();
 
 public slots:
   void openSaveInFolderPopup();
