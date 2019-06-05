@@ -104,7 +104,7 @@ void CustomStyleManager::StyleLoaderTask::run() {
 
     TRaster32P ras;
 
-    QImage *image;
+    QImage *image = nullptr;
 
     if (vimg) {
       assert(level->getPalette());
@@ -169,10 +169,9 @@ void CustomStyleManager::StyleLoaderTask::run() {
 
         TRop::addBackground(rout, TPixel::White);
         ras = rout;
-
-        image = new QImage(chipSize.lx, chipSize.ly, QImage::Format_RGB32);
-        convertRaster32ToImage(ras, image);
       }
+      image = new QImage(chipSize.lx, chipSize.ly, QImage::Format_RGB32);
+      convertRaster32ToImage(ras, image);
     } else
       assert(!"unsupported type for custom styles!");
 
