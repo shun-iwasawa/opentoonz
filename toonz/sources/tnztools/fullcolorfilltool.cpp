@@ -19,8 +19,8 @@
 
 using namespace ToolUtils;
 
-TEnv::IntVar FullColorMinFillDepth("InknpaintFullColorMinFillDepth", 0);
-TEnv::IntVar FullColorMaxFillDepth("InknpaintFullColorMaxFillDepth", 10);
+TEnv::IntVar FullColorMinFillDepth("InknpaintFullColorMinFillDepth", 4);
+TEnv::IntVar FullColorMaxFillDepth("InknpaintFullColorMaxFillDepth", 12);
 
 namespace {
 
@@ -106,9 +106,6 @@ void doFill(const TImageP &img, const TPointD &pos, FillParameters &params,
       return;
     }
 
-    // !autoPaintLines will temporary disable autopaint line feature
-    // if (plt && hasAutoInks(plt) && autopaintLines) params.m_palette = plt;
-
     fullColorFill(ras, params, &tileSaver);
 
     if (tileSaver.getTileSet()->getTileCount() != 0) {
@@ -124,12 +121,6 @@ void doFill(const TImageP &img, const TPointD &pos, FillParameters &params,
                                 Preferences::instance()->getFillOnlySavebox()));
     }
 
-    // al posto di updateFrame:
-
-    // TXshLevel *xl = app->getCurrentLevel()->getLevel();
-    // if (!xl) return;
-
-    // TXshSimpleLevel *sl = xl->getSimpleLevel();
     sl->getProperties()->setDirtyFlag(true);
 
     ras->unlock();
@@ -147,7 +138,7 @@ void doFill(const TImageP &img, const TPointD &pos, FillParameters &params,
 //-----------------------------------------------------------------------------
 
 FullColorFillTool::FullColorFillTool()
-    : TTool("T_Fill"), m_fillDepth("Fill Depth", 0, 15, 0, 15) {
+    : TTool("T_Fill"), m_fillDepth("Fill Depth", 0, 15, 4, 12) {
   bind(TTool::RasterImage);
   m_prop.bind(m_fillDepth);
 }

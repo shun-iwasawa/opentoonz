@@ -170,7 +170,7 @@ void fillRow(const TRasterCM32P &r, const TPoint &p, int &xa, int &xb,
 //-----------------------------------------------------------------------------
 
 void findSegment(const TRaster32P &r, const TPoint &p, int &xa, int &xb,
-                 const TPixel32 &color) {
+                 const TPixel32 &color, const int fillDepth = 254) {
   int matte, oldmatte;
   TPixel32 *pix, *pix0, *limit, *tmp_limit;
 
@@ -185,7 +185,7 @@ void findSegment(const TRaster32P &r, const TPoint &p, int &xa, int &xb,
   for (; pix <= limit; pix++) {
     if (*pix == color) break;
     matte = pix->m;
-    if (matte < oldmatte || matte == 255) break;
+    if (matte < oldmatte || matte > fillDepth) break;
     oldmatte = matte;
   }
   if (matte == 0) {
@@ -206,7 +206,7 @@ void findSegment(const TRaster32P &r, const TPoint &p, int &xa, int &xb,
   for (; pix >= limit; pix--) {
     if (*pix == color) break;
     matte = pix->m;
-    if (matte < oldmatte || matte == 255) break;
+    if (matte < oldmatte || matte > fillDepth) break;
     oldmatte = matte;
   }
   if (matte == 0) {
@@ -244,7 +244,7 @@ void fullColorFindSegment(const TRaster32P &r, const TPoint &p, int &xa,
                           const TPixel32 &clickedPosColor,
                           const int fillDepth) {
   if (clickedPosColor.m == 0) {
-    findSegment(r, p, xa, xb, color);
+    findSegment(r, p, xa, xb, color, fillDepth);
     return;
   }
 
