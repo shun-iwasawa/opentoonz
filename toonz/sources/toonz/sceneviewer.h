@@ -98,11 +98,11 @@ class SceneViewer final : public GLWidgetForHighDpi,
   bool m_isMouseEntered, m_forceGlFlush;
   bool m_isFlippedX = false, m_isFlippedY = false;
   /*!  FreezedStatus:
-*  \li NO_FREEZED freezed is not active;
-*  \li NORMAL_FREEZED freezed is active: show grab image;
-*  \li UPDATE_FREEZED freezed is active: draw last unfreezed image and grab
-* view;
-*/
+   *  \li NO_FREEZED freezed is not active;
+   *  \li NORMAL_FREEZED freezed is active: show grab image;
+   *  \li UPDATE_FREEZED freezed is active: draw last unfreezed image and grab
+   * view;
+   */
   enum FreezedStatus {
     NO_FREEZED     = 0,
     NORMAL_FREEZED = 1,
@@ -179,6 +179,8 @@ class SceneViewer final : public GLWidgetForHighDpi,
   TRectD m_guidedDrawingBBox;
 
   double m_rotationAngle[2];
+
+  bool m_contextReplaced = false;
 
 public:
   enum ReferenceMode {

@@ -20,7 +20,7 @@ inline bool execWarning(const QString& s) {
   DVGui::MsgBox(DVGui::WARNING, s);
   return false;
 }
-};
+};  // namespace
 
 #ifdef WIN32
 
@@ -161,13 +161,14 @@ QStringList getMonitorNames() {
 
   return nameList;
 }
-};
+};  // namespace
 #endif
 
 //-----------------------------------------------------------------------------
 
 void LutCalibrator::initialize() {
   initializeOpenGLFunctions();
+  m_isInitialized = true;
 
   if (!LutManager::instance()->isValid()) return;
 
@@ -560,7 +561,7 @@ void LutManager::convert(float& r, float& g, float& b) {
       for (int bb = 0; bb < 2; bb++) {
         float* val = &m_lut.data[locals::getCoord(
             index[0][rr], index[1][gg], index[2][bb], m_lut.meshSize)];
-        for (int chan                    = 0; chan < 3; chan++, val++)
+        for (int chan = 0; chan < 3; chan++, val++)
           vertex_color[rr][gg][bb][chan] = *val;
       }
   float result[3];
