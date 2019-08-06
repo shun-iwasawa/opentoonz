@@ -442,7 +442,9 @@ void ImageViewer::initializeGL() {
   // glClearColor(1.0,1.0,1.0,1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  if (m_contextReplaced) {
+  if (m_firstInitialized)
+    m_firstInitialized = false;
+  else {
     resizeGL(width(), height());
     update();
   }
@@ -1248,7 +1250,6 @@ void ImageViewer::keyPressEvent(QKeyEvent *event) {
 //-----------------------------------------------------------------------------
 
 void ImageViewer::onContextAboutToBeDestroyed() {
-  m_contextReplaced = true;
   if (!m_lutCalibrator) return;
   makeCurrent();
   m_lutCalibrator->cleanup();

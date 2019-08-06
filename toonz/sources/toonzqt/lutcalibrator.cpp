@@ -192,6 +192,7 @@ void LutCalibrator::initialize() {
 //-----------------------------------------------------------------------------
 
 void LutCalibrator::cleanup() {
+  m_isInitialized = false;
   if (!isValid()) return;
   // release shader
   if (m_shader.program) {
@@ -214,8 +215,7 @@ void LutCalibrator::cleanup() {
     delete m_lutTex;
     m_lutTex = NULL;
   }
-  m_isInitialized = false;
-  m_isValid       = false;
+  m_isValid = false;
 }
 
 //-----------------------------------------------------------------------------

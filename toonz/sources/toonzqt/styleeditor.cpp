@@ -588,7 +588,9 @@ void HexagonalColorWheel::initializeGL() {
 
   // Without the following lines, the wheel in a floating style editor
   // dissapears on switching the room due to context switching.
-  if (m_contextReplaced) {
+  if (m_firstInitialized)
+    m_firstInitialized = false;
+  else {
     resizeGL(width(), height());
     update();
   }
@@ -862,7 +864,6 @@ void HexagonalColorWheel::clickRightTriangle(const QPoint &pos) {
 //-----------------------------------------------------------------------------
 
 void HexagonalColorWheel::onContextAboutToBeDestroyed() {
-  m_contextReplaced = true;
   if (!m_lutCalibrator) return;
   makeCurrent();
   m_lutCalibrator->cleanup();

@@ -152,7 +152,7 @@ class DVAPI HexagonalColorWheel final : public GLWidgetForHighDpi {
   QOpenGLFramebufferObject *m_fbo = NULL;
   LutCalibrator *m_lutCalibrator  = NULL;
 
-  bool m_contextReplaced = false;
+  bool m_firstInitialized = true;
 
 private:
   void drawCurrentColorMark();
