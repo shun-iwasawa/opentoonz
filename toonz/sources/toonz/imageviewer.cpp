@@ -1208,6 +1208,8 @@ TAffine ImageViewer::getImgToWidgetAffine(const TRectD &geom) const {
 void ImageViewer::adaptView(const TRect &imgRect, const TRect &viewRect) {
   QRect viewerRect(rect());
 
+  if (viewerRect.isEmpty()) return;
+
   double imageScale = std::min(viewerRect.width() / (double)viewRect.getLx(),
                                viewerRect.height() / (double)viewRect.getLy());
 
