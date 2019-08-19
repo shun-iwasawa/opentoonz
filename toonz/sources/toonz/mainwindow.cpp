@@ -1433,6 +1433,13 @@ QAction *MainWindow::createViewerAction(const char *id, const QString &name,
 
 //-----------------------------------------------------------------------------
 
+QAction *MainWindow::createVisualizationButtonAction(const char *id,
+                                                     const QString &name) {
+  return createAction(id, name, "", VisualizationButtonCommandType);
+}
+
+//-----------------------------------------------------------------------------
+
 QAction *MainWindow::createMiscAction(const char *id, const QString &name,
                                       const char *defaultShortcut) {
   QAction *action = new DVAction(name, this);
@@ -2112,6 +2119,21 @@ void MainWindow::defineActions() {
   CommandManager::instance()->setToggleTexts(V_ShowHideFullScreen,
                                              tr("Full Screen Mode"),
                                              tr("Exit Full Screen Mode"));
+
+  // Following actions are for adding "Visualization" menu items to the command
+  // bar. They are separated from the original actions in order to avoid
+  // assigning shortcut keys. They must be triggered only from pressing buttons
+  // in the command bar. Assinging shortcut keys and registering as MenuItem
+  // will break a logic of ShortcutZoomer. So here we register separate items
+  // and bypass the command.
+  createVisualizationButtonAction(VB_ViewReset, tr("Reset View"));
+  createVisualizationButtonAction(VB_ZoomFit, tr("Fit to Window"));
+  createVisualizationButtonAction(VB_ZoomReset, tr("Reset Zoom"));
+  createVisualizationButtonAction(VB_RotateReset, tr("Reset Rotation"));
+  createVisualizationButtonAction(VB_PositionReset, tr("Reset Position"));
+  createVisualizationButtonAction(VB_ActualPixelSize, tr("Actual Pixel Size"));
+  createVisualizationButtonAction(VB_FlipX, tr("Flip Viewer Horizontally"));
+  createVisualizationButtonAction(VB_FlipY, tr("Flip Viewer Vertically"));
 
   QAction *refreshAct =
       createMiscAction(MI_RefreshTree, tr("Refresh Folder Tree"), "");

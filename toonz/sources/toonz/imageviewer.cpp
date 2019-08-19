@@ -119,13 +119,18 @@ class FlipZoomer final : public ImageUtils::ShortcutZoomer {
 public:
   FlipZoomer(ImageViewer *parent) : ShortcutZoomer(parent) {}
 
-  bool zoom(bool zoomin, bool resetZoom) override {
-    static_cast<ImageViewer *>(getWidget())->zoomQt(zoomin, resetZoom);
+  bool zoom(bool zoomin, bool resetView) override {
+    static_cast<ImageViewer *>(getWidget())->zoomQt(zoomin, resetView);
     return true;
   }
 
   bool fit() override {
     static_cast<ImageViewer *>(getWidget())->fitView();
+    return true;
+  }
+
+  bool resetZoom() override {
+    static_cast<ImageViewer *>(getWidget())->resetZoom();
     return true;
   }
 
@@ -390,6 +395,10 @@ void ImageViewer::setImage(TImageP image) {
   if (m_image && m_firstImage) {
     m_firstImage = false;
     fitView();
+    // when the viewer size is large enough, limit the zoom ratio to 100% so
+    // that the image is shown in actual pixel size without jaggies due to
+    // resampling.
+    if (fabs(m_viewAff.det()) > 1.0) resetView();
   }
 
   if (m_isHistogramEnable && m_histogramPopup->isVisible())
@@ -678,6 +687,14 @@ void ImageViewer::zoomQt(bool forward, bool reset) {
         reset ? 1 : ImageUtils::getQuantizedZoomFactor(oldZoomScale, forward);
     setViewAff(TScale(zoomScale / oldZoomScale) * m_viewAff);
   }
+  update();
+}
+
+//-----------------------------------------------------------------------------
+
+void ImageViewer::resetZoom() {
+  double oldZoomScale = sqrt(m_viewAff.det());
+  setViewAff(TScale(1.0 / oldZoomScale) * m_viewAff);
   update();
 }
 
