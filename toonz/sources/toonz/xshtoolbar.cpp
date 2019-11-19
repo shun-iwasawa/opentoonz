@@ -46,7 +46,7 @@ void XSheetToolbar::showToolbar(bool show) {
 
 void XSheetToolbar::toggleXSheetToolbar() {
   bool toolbarEnabled = Preferences::instance()->isShowXSheetToolbarEnabled();
-  Preferences::instance()->enableShowXSheetToolbar(!toolbarEnabled);
+  Preferences::instance()->setValue(showXSheetToolbar, !toolbarEnabled);
   TApp::instance()->getCurrentScene()->notifyPreferenceChanged("XSheetToolbar");
 }
 

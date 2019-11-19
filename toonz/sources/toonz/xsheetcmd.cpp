@@ -218,8 +218,7 @@ public:
   void execute() override {
     bool currentTimeIndEnabled =
         Preferences::instance()->isCurrentTimelineIndicatorEnabled();
-    Preferences::instance()->enableCurrentTimelineIndicator(
-        !currentTimeIndEnabled);
+    Preferences::instance()->setValue(currentTimelineEnabled, !currentTimeIndEnabled);
   }
 } toggleCurrentTimeIndicatorComman;
 
@@ -2148,7 +2147,7 @@ public:
       return;
     }
 
-    pref->enableXsheetCameraColumn(!pref->isXsheetCameraColumnVisible());
+    pref->setValue(showXsheetCameraColumn, !pref->isXsheetCameraColumnVisible());
     TApp::instance()->getCurrentXsheet()->notifyXsheetChanged();
   }
 

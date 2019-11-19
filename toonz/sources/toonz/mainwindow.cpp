@@ -1249,7 +1249,7 @@ void MainWindow::onUpdateCheckerDone(bool error) {
         Qt::Checked);
     int ret = dialog->exec();
     if (dialog->getChecked() == Qt::Unchecked)
-      Preferences::instance()->enableLatestVersionCheck(false);
+      Preferences::instance()->setValue(latestVersionCheckEnabled, false);
     dialog->deleteLater();
     if (ret == 1) {
       // Write the new last date to file
@@ -2335,27 +2335,27 @@ void MainWindow::togglePickStyleLines() {
 
 void MainWindow::onNewVectorLevelButtonPressed() {
   int defaultLevelType = Preferences::instance()->getDefLevelType();
-  Preferences::instance()->setDefLevelType(PLI_XSHLEVEL);
+  Preferences::instance()->setValue(DefLevelType, PLI_XSHLEVEL);
   CommandManager::instance()->execute("MI_NewLevel");
-  Preferences::instance()->setDefLevelType(defaultLevelType);
+  Preferences::instance()->setValue(DefLevelType, defaultLevelType);
 }
 
 //-----------------------------------------------------------------------------
 
 void MainWindow::onNewToonzRasterLevelButtonPressed() {
   int defaultLevelType = Preferences::instance()->getDefLevelType();
-  Preferences::instance()->setDefLevelType(TZP_XSHLEVEL);
+  Preferences::instance()->setValue(DefLevelType, TZP_XSHLEVEL);
   CommandManager::instance()->execute("MI_NewLevel");
-  Preferences::instance()->setDefLevelType(defaultLevelType);
+  Preferences::instance()->setValue(DefLevelType, defaultLevelType);
 }
 
 //-----------------------------------------------------------------------------
 
 void MainWindow::onNewRasterLevelButtonPressed() {
   int defaultLevelType = Preferences::instance()->getDefLevelType();
-  Preferences::instance()->setDefLevelType(OVL_XSHLEVEL);
+  Preferences::instance()->setValue(DefLevelType, OVL_XSHLEVEL);
   CommandManager::instance()->execute("MI_NewLevel");
-  Preferences::instance()->setDefLevelType(defaultLevelType);
+  Preferences::instance()->setValue(DefLevelType, defaultLevelType);
 }
 
 //-----------------------------------------------------------------------------

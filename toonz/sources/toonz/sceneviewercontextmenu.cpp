@@ -377,22 +377,22 @@ void SceneViewerContextMenu::onSetCurrent() {
 
 //-----------------------------------------------------------------------------
 void SceneViewerContextMenu::setGuidedDrawingOff() {
-  Preferences::instance()->setGuidedDrawing(0);
+  Preferences::instance()->setValue(guidedDrawingType, 0);
 }
 
 //-----------------------------------------------------------------------------
 void SceneViewerContextMenu::setGuidedDrawingClosest() {
-  Preferences::instance()->setGuidedDrawing(1);
+  Preferences::instance()->setValue(guidedDrawingType, 1);
 }
 
 //-----------------------------------------------------------------------------
 void SceneViewerContextMenu::setGuidedDrawingFarthest() {
-  Preferences::instance()->setGuidedDrawing(2);
+  Preferences::instance()->setValue(guidedDrawingType, 2);
 }
 
 //-----------------------------------------------------------------------------
 void SceneViewerContextMenu::setGuidedDrawingAll() {
-  Preferences::instance()->setGuidedDrawing(3);
+  Preferences::instance()->setValue(guidedDrawingType, 3);
 }
 
 //-----------------------------------------------------------------------------
@@ -414,7 +414,7 @@ public:
   }
 
   static void enableZeroThick(bool enable = true) {
-    Preferences::instance()->setShow0ThickLines(enable);
+    Preferences::instance()->setValue(show0ThickLines, enable);
     TApp::instance()->getCurrentScene()->notifySceneChanged();
   }
 } ZeroThickToggle;
@@ -453,7 +453,7 @@ public:
   }
 
   static void enableCursorOutline(bool enable = true) {
-    Preferences::instance()->enableCursorOutline(enable);
+    Preferences::instance()->setValue(cursorOutlineEnabled, enable);
   }
 } CursorOutlineToggle;
 
