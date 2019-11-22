@@ -92,4 +92,4 @@ public:
 
 //============================================================
 
-}  // namespace XsheetGUI;
+}  // namespace XsheetGUI

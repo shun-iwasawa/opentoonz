@@ -36,9 +36,11 @@ typedef QPair<QString, QVariant> ComboBoxItem;
 
 class SizeField final : public QWidget {
   Q_OBJECT
-  DVGui::IntLineEdit* m_fieldX, *m_fieldY;
+  DVGui::IntLineEdit *m_fieldX, *m_fieldY;
+
 public:
-  SizeField(QSize& min, QSize& max, QSize& value = QSize(), QWidget* parent = nullptr);
+  SizeField(QSize& min, QSize& max, QSize& value = QSize(),
+            QWidget* parent = nullptr);
   QSize getValue() const;
   void setValue(const QSize&);
 signals:
@@ -63,24 +65,28 @@ private:
   class FormatProperties;
 
 private:
-  Preferences *m_pref;
-  FormatProperties *m_formatProperties;
+  Preferences* m_pref;
+  FormatProperties* m_formatProperties;
 
   DVGui::CheckBox *m_projectRootDocuments, *m_projectRootDesktop,
-    *m_projectRootCustom;
-  QPushButton *m_editLevelFormat;
-  QComboBox *m_levelFormatNames;
+      *m_projectRootCustom;
+  QPushButton* m_editLevelFormat;
+  QComboBox* m_levelFormatNames;
 
 private:
-  void rebuildFormatsList();  
+  void rebuildFormatsList();
   QList<ComboBoxItem> buildFontStyleList() const;
 
-  QWidget* createUI(PreferencesItemId id, const QList<ComboBoxItem>& comboItems = QList<ComboBoxItem>());
+  QWidget* createUI(
+      PreferencesItemId id,
+      const QList<ComboBoxItem>& comboItems = QList<ComboBoxItem>());
   QGridLayout* insertGroupBoxUI(PreferencesItemId id, QGridLayout* layout);
-  void insertUI(PreferencesItemId id, QGridLayout* layout, const QList<ComboBoxItem>& comboItems = QList<ComboBoxItem>());
-  void insertDualUIs(PreferencesItemId leftId, PreferencesItemId rightId, QGridLayout* layout, 
-    const QList<ComboBoxItem>& leftComboItems = QList<ComboBoxItem>(),
-    const QList<ComboBoxItem>& rightComboItems = QList<ComboBoxItem>());
+  void insertUI(PreferencesItemId id, QGridLayout* layout,
+                const QList<ComboBoxItem>& comboItems = QList<ComboBoxItem>());
+  void insertDualUIs(
+      PreferencesItemId leftId, PreferencesItemId rightId, QGridLayout* layout,
+      const QList<ComboBoxItem>& leftComboItems  = QList<ComboBoxItem>(),
+      const QList<ComboBoxItem>& rightComboItems = QList<ComboBoxItem>());
   void insertFootNote(QGridLayout* layout);
   QString getUIString(PreferencesItemId id);
   QList<ComboBoxItem> getComboItemList(PreferencesItemId id) const;
@@ -138,13 +144,13 @@ private:
 
 private slots:
   void onChange();
-  void onColorFieldChanged(const TPixel32 &, bool);
- 
+  void onColorFieldChanged(const TPixel32&, bool);
+
   void onAutoSaveExternallyChanged();
   void onAutoSavePeriodExternallyChanged();
   void onProjectRootChanged();
   void onPixelUnitExternallySelected(bool on);
-  void onInterfaceFontChanged(const QString &text);
+  void onInterfaceFontChanged(const QString& text);
   void onLutPathChanged();
 
   void onAddLevelFormat();
@@ -156,7 +162,6 @@ private slots:
 #ifdef LINETEST
   void onLineTestFpsCapture(int);
 #endif
-
 };
 
 //**********************************************************************************
@@ -167,17 +172,17 @@ class PreferencesPopup::FormatProperties final : public DVGui::Dialog {
   Q_OBJECT
 
 public:
-  FormatProperties(PreferencesPopup *parent);
+  FormatProperties(PreferencesPopup* parent);
 
-  void setLevelFormat(const Preferences::LevelFormat &lf);
+  void setLevelFormat(const Preferences::LevelFormat& lf);
   Preferences::LevelFormat levelFormat() const;
 
 private:
-  QComboBox *m_dpiPolicy;
+  QComboBox* m_dpiPolicy;
 
   DVGui::LineEdit *m_name, *m_regExp;
 
-  DVGui::DoubleLineEdit *m_dpi;
+  DVGui::DoubleLineEdit* m_dpi;
 
   DVGui::IntLineEdit *m_priority, *m_subsampling, *m_antialias;
 

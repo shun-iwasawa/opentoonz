@@ -60,7 +60,7 @@ enum PreferencesItemId {
   IgnoreImageDpi,
   initialLoadTlvCachingBehavior,
   columnIconLoadingPolicy,
-  levelFormats,// need to be handle separately
+  levelFormats,  // need to be handle separately
 
   //----------
   // Saving
@@ -163,7 +163,8 @@ enum PreferencesItemId {
 
   //----------
   // Touch / Tablet Settings
-  // TounchGestureControl // Touch Gesture is a checkable command and not in preferences.ini
+  // TounchGestureControl // Touch Gesture is a checkable command and not in
+  // preferences.ini
   winInkEnabled,
 
   //----------
@@ -172,7 +173,7 @@ enum PreferencesItemId {
   shortcutPreset,
   // Viewer context menu
   guidedDrawingType,
-  //OSX shared memory settings
+  // OSX shared memory settings
   shmmax,
   shmseg,
   shmall,

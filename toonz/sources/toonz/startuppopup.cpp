@@ -924,7 +924,11 @@ void StartupPopup::onCameraUnitChanged(int index) {
   Preferences *pref = Preferences::instance();
   QStringList type;
   // preference value should not be translated
-  type << "pixel" << "cm" << "mm" << "inch" << "field";
+  type << "pixel"
+       << "cm"
+       << "mm"
+       << "inch"
+       << "field";
 
   double width  = m_widthFld->getValue();
   double height = m_heightFld->getValue();
@@ -979,7 +983,8 @@ void StartupPopup::onAutoSaveOnChanged(int index) {
 //-----------------------------------------------------------------------------
 
 void StartupPopup::onAutoSaveTimeChanged() {
-  Preferences::instance()->setValue(autosavePeriod, m_autoSaveTimeFld->getValue());
+  Preferences::instance()->setValue(autosavePeriod,
+                                    m_autoSaveTimeFld->getValue());
 }
 
 //-----------------------------------------------------------------------------

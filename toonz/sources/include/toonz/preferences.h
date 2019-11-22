@@ -53,22 +53,19 @@ public:
   QString idString;
   QMetaType::Type type;
   QVariant value;
-  QVariant min = 0;
-  QVariant max = -1;
+  QVariant min              = 0;
+  QVariant max              = -1;
   OnEditedFunc onEditedFunc = nullptr;
 
-  PreferencesItem(QString _idString,
-    QMetaType::Type _type,
-    QVariant _value,
-    QVariant _min = 0,
-    QVariant _max = -1,
-    OnEditedFunc _onEditedFunc = nullptr)
-    : idString(_idString)
-    , type(_type)
-    , value(_value)
-    , min(_min)
-    , max(_max)
-    , onEditedFunc(_onEditedFunc) {}
+  PreferencesItem(QString _idString, QMetaType::Type _type, QVariant _value,
+                  QVariant _min = 0, QVariant _max = -1,
+                  OnEditedFunc _onEditedFunc = nullptr)
+      : idString(_idString)
+      , type(_type)
+      , value(_value)
+      , min(_min)
+      , max(_max)
+      , onEditedFunc(_onEditedFunc) {}
   PreferencesItem() {}
 };
 
@@ -125,9 +122,8 @@ public:
   void setPixelsOnly();
   void setUnits();
   void setCameraUnits();
-  // Saving 
+  // Saving
   void setRasterBackgroundColor();
-
 
 public:
   static Preferences *instance();
@@ -135,16 +131,12 @@ public:
   QMap<PreferencesItemId, PreferencesItem> m_items;
   void initializeOptions();
   void definePreferenceItems();
-  void define(PreferencesItemId id,
-              QString idString,
-              QMetaType::Type type,
-              QVariant defaultValue,
-              QVariant min = 0,
-              QVariant max = -1);
+  void define(PreferencesItemId id, QString idString, QMetaType::Type type,
+              QVariant defaultValue, QVariant min = 0, QVariant max = -1);
 
   void setCallBack(const PreferencesItemId id, OnEditedFunc func);
 
-  PreferencesItem& getItem(const PreferencesItemId id);
+  PreferencesItem &getItem(const PreferencesItemId id);
   bool getBoolValue(const PreferencesItemId id) const;
   int getIntValue(const PreferencesItemId id) const;
   double getDoubleValue(const PreferencesItemId id) const;
@@ -152,42 +144,62 @@ public:
   TPixel getColorValue(const PreferencesItemId id) const;
   TDimension getSizeValue(const PreferencesItemId id) const;
 
+  void setValue(const PreferencesItemId id, QVariant value,
+                bool saveToFile = true);
 
-  void setValue(const PreferencesItemId id, QVariant value, bool saveToFile = true);
-  
   // General settings  tab
-  bool isDefaultViewerEnabled() const { return getBoolValue(defaultViewerEnabled); }
-  bool isRasterOptimizedMemory() const { return getBoolValue(rasterOptimizedMemory); }
+  bool isDefaultViewerEnabled() const {
+    return getBoolValue(defaultViewerEnabled);
+  }
+  bool isRasterOptimizedMemory() const {
+    return getBoolValue(rasterOptimizedMemory);
+  }
   bool isAutosaveEnabled() const { return getBoolValue(autosaveEnabled); }
-  int getAutosavePeriod() const { return getIntValue(autosavePeriod); }  // minutes
-  bool isAutosaveSceneEnabled() const { return getBoolValue(autosaveSceneEnabled); }
-  bool isAutosaveOtherFilesEnabled() const { return getBoolValue(autosaveOtherFilesEnabled); }
+  int getAutosavePeriod() const {
+    return getIntValue(autosavePeriod);
+  }  // minutes
+  bool isAutosaveSceneEnabled() const {
+    return getBoolValue(autosaveSceneEnabled);
+  }
+  bool isAutosaveOtherFilesEnabled() const {
+    return getBoolValue(autosaveOtherFilesEnabled);
+  }
   bool isStartupPopupEnabled() { return getBoolValue(startupPopupEnabled); }
   int getUndoMemorySize() const { return getIntValue(undoMemorySize); }
   int getDefaultTaskChunkSize() const { return getIntValue(taskchunksize); }
-  bool isReplaceAfterSaveLevelAsEnabled() const { return getBoolValue(replaceAfterSaveLevelAs); }
+  bool isReplaceAfterSaveLevelAsEnabled() const {
+    return getBoolValue(replaceAfterSaveLevelAs);
+  }
   bool isBackupEnabled() const { return getBoolValue(backupEnabled); }
   int getBackupKeepCount() { return getIntValue(backupKeepCount); }
-  bool isSceneNumberingEnabled() const { return getBoolValue(sceneNumberingEnabled); }
-  bool isWatchFileSystemEnabled() { return getBoolValue(watchFileSystemEnabled); }
+  bool isSceneNumberingEnabled() const {
+    return getBoolValue(sceneNumberingEnabled);
+  }
+  bool isWatchFileSystemEnabled() {
+    return getBoolValue(watchFileSystemEnabled);
+  }
   int getProjectRoot() { return getIntValue(projectRoot); }
   QString getCustomProjectRoot() { return getStringValue(customProjectRoot); }
-  PathAliasPriority getPathAliasPriority() const { return PathAliasPriority(getIntValue(pathAliasPriority)); }
+  PathAliasPriority getPathAliasPriority() const {
+    return PathAliasPriority(getIntValue(pathAliasPriority));
+  }
 
   // Interface  tab
   QStringList getStyleSheetList() const { return m_styleSheetList; }
-  void storeOldUnits();//OK
-  void resetOldUnits();//OK
+  void storeOldUnits();  // OK
+  void resetOldUnits();  // OK
   QStringList getLanguageList() const { return m_languageList; }
   QMap<int, QString> getRoomMap() const { return m_roomMaps; }
 
-  QString getCurrentStyleSheetPath() const;//OK
+  QString getCurrentStyleSheetPath() const;  // OK
   bool getPixelsOnly() const { return getBoolValue(pixelsOnly); }
   QString getOldUnits() const { return getStringValue(oldUnits); }
   QString getOldCameraUnits() const { return getStringValue(oldCameraUnits); }
   QString getUnits() const { return getStringValue(linearUnits); }
   QString getCameraUnits() const { return getStringValue(cameraUnits); }
-  QString getCurrentRoomChoice() const { return getStringValue(CurrentRoomChoice); }
+  QString getCurrentRoomChoice() const {
+    return getStringValue(CurrentRoomChoice);
+  }
   FunctionEditorToggle getFunctionEditorToggle() {
     return FunctionEditorToggle(getIntValue(functionEditorToggle));
   }
@@ -214,18 +226,22 @@ public:
   QString getCurrentLanguage() const;
   QString getInterfaceFont() { return getStringValue(interfaceFont); }
   QString getInterfaceFontStyle() { return getStringValue(interfaceFontStyle); }
-  bool isColorCalibrationEnabled() const { return getBoolValue(colorCalibrationEnabled); }
+  bool isColorCalibrationEnabled() const {
+    return getBoolValue(colorCalibrationEnabled);
+  }
   void setColorCalibrationLutPath(QString monitorName, QString path);
   QString getColorCalibrationLutPath(QString &monitorName) const;
 
   // Visualization  tab
   bool getShow0ThickLines() const { return getBoolValue(show0ThickLines); }
   bool getRegionAntialias() const { return getBoolValue(regionAntialias); }
-  
+
   // Loading  tab
   int getDefaultImportPolicy() { return getIntValue(importPolicy); }
   bool isAutoExposeEnabled() const { return getBoolValue(autoExposeEnabled); }
-  bool isSubsceneFolderEnabled() const { return getBoolValue(subsceneFolderEnabled); }
+  bool isSubsceneFolderEnabled() const {
+    return getBoolValue(subsceneFolderEnabled);
+  }
   bool isRemoveSceneNumberFromLoadedLevelNameEnabled() const {
     return getBoolValue(removeSceneNumberFromLoadedLevelName);
   }
@@ -240,25 +256,27 @@ public:
   int addLevelFormat(const LevelFormat &format);  //!< Inserts a new level
                                                   //! format.  \return  The
                                                   //! associated format index.
-  void removeLevelFormat(int formatIdx);  //!< Removes a level format.
+  void removeLevelFormat(int formatIdx);          //!< Removes a level format.
   const LevelFormat &levelFormat(
-    int formatIdx) const;  //!< Retrieves a level format.
+      int formatIdx) const;  //!< Retrieves a level format.
   int levelFormatsCount()
-    const;  //!< Returns the number of stored level formats.
-            /*! \return     Either the index of a matching format, or \p -1 if none
-            was found.                                                        */
+      const;  //!< Returns the number of stored level formats.
+  /*! \return     Either the index of a matching format, or \p -1 if none
+  was found.                                                        */
   int matchLevelFormat(const TFilePath &fp)
-    const;  //!< Returns the \a nonnegative index of the first level format
-            //!  matching the specified file path, <I>or \p -1 if none</I>.
+      const;  //!< Returns the \a nonnegative index of the first level format
+              //!  matching the specified file path, <I>or \p -1 if none</I>.
 
   // Saving tab
-  TPixel getRasterBackgroundColor() const { return getColorValue(rasterBackgroundColor); }
+  TPixel getRasterBackgroundColor() const {
+    return getColorValue(rasterBackgroundColor);
+  }
 
   // Import Export Tab
   QString getFfmpegPath() const { return getStringValue(ffmpegPath); }
   int getFfmpegTimeout() { return getIntValue(ffmpegTimeout); }
   QString getFastRenderPath() const { return getStringValue(fastRenderPath); }
-  
+
   // Drawing  tab
   QString getScanLevelType() const { return getStringValue(scanLevelType); }
   int getDefLevelType() const { return getIntValue(DefLevelType); }
@@ -283,7 +301,9 @@ public:
   bool getDownArrowLevelStripNewFrame() {
     return getBoolValue(downArrowInLevelStripCreatesNewFrame);
   }
-  bool getKeepFillOnVectorSimplify() { return getBoolValue(keepFillOnVectorSimplify); }
+  bool getKeepFillOnVectorSimplify() {
+    return getBoolValue(keepFillOnVectorSimplify);
+  }
   bool getUseHigherDpiOnVectorSimplify() {
     return getBoolValue(useHigherDpiOnVectorSimplify);
   }
@@ -297,13 +317,23 @@ public:
     return getBoolValue(multiLayerStylePickerEnabled);
   }
   QString getCursorBrushType() const { return getStringValue(cursorBrushType); }
-  QString getCursorBrushStyle() const { return getStringValue(cursorBrushStyle); }
-  bool isCursorOutlineEnabled() const { return getBoolValue(cursorOutlineEnabled); }
-  int getLevelBasedToolsDisplay() const { return getIntValue(levelBasedToolsDisplay); }
-  
+  QString getCursorBrushStyle() const {
+    return getStringValue(cursorBrushStyle);
+  }
+  bool isCursorOutlineEnabled() const {
+    return getBoolValue(cursorOutlineEnabled);
+  }
+  int getLevelBasedToolsDisplay() const {
+    return getIntValue(levelBasedToolsDisplay);
+  }
+
   // Xsheet  tab
-  QString getXsheetLayoutPreference() const { return getStringValue(xsheetLayoutPreference); }
-  QString getLoadedXsheetLayout() const { return getStringValue(xsheetLayoutPreference); }
+  QString getXsheetLayoutPreference() const {
+    return getStringValue(xsheetLayoutPreference);
+  }
+  QString getLoadedXsheetLayout() const {
+    return getStringValue(xsheetLayoutPreference);
+  }
   int getXsheetStep() const {
     return getIntValue(xsheetStep);
   }  //!< Returns the step used for the <I>next/prev step</I> commands.
@@ -317,7 +347,9 @@ public:
   bool isShowKeyframesOnXsheetCellAreaEnabled() const {
     return getBoolValue(showKeyframesOnXsheetCellArea);
   }
-  bool isXsheetCameraColumnEnabled() const { return getBoolValue(showXsheetCameraColumn); }
+  bool isXsheetCameraColumnEnabled() const {
+    return getBoolValue(showXsheetCameraColumn);
+  }
   bool isUseArrowKeyToShiftCellSelectionEnabled() const {
     return getBoolValue(useArrowKeyToShiftCellSelection);
   }
@@ -327,9 +359,15 @@ public:
   bool isShortcutCommandsWhileRenamingCellEnabled() const {
     return getBoolValue(shortcutCommandsWhileRenamingCellEnabled);
   }
-  bool isShowXSheetToolbarEnabled() const { return getBoolValue(showXSheetToolbar); }
-  bool isExpandFunctionHeaderEnabled() const { return getBoolValue(expandFunctionHeader); }
-  bool isShowColumnNumbersEnabled() const { return getBoolValue(showColumnNumbers); }
+  bool isShowXSheetToolbarEnabled() const {
+    return getBoolValue(showXSheetToolbar);
+  }
+  bool isExpandFunctionHeaderEnabled() const {
+    return getBoolValue(expandFunctionHeader);
+  }
+  bool isShowColumnNumbersEnabled() const {
+    return getBoolValue(showColumnNumbers);
+  }
   bool isSyncLevelRenumberWithXsheetEnabled() const {
     return getBoolValue(syncLevelRenumberWithXsheet);
   }
@@ -361,30 +399,39 @@ public:
 
   // Onion Skin  tab
   bool isOnionSkinEnabled() const { return getBoolValue(onionSkinEnabled); }
-  int getOnionPaperThickness() const { return getIntValue(onionPaperThickness); }
+  int getOnionPaperThickness() const {
+    return getIntValue(onionPaperThickness);
+  }
 
   void getOnionData(TPixel &frontColor, TPixel &backColor,
-    bool &inksOnly) const {
-    frontColor = getColorValue(frontOnionColor), backColor = getColorValue(backOnionColor),
-      inksOnly = getBoolValue(onionInksOnly);
+                    bool &inksOnly) const {
+    frontColor = getColorValue(frontOnionColor),
+    backColor  = getColorValue(backOnionColor),
+    inksOnly   = getBoolValue(onionInksOnly);
   }
-  bool getOnionSkinDuringPlayback() { return getBoolValue(onionSkinDuringPlayback); }
+  bool getOnionSkinDuringPlayback() {
+    return getBoolValue(onionSkinDuringPlayback);
+  }
   bool areOnionColorsUsedForShiftAndTraceGhosts() const {
     return getBoolValue(useOnionColorsForShiftAndTraceGhosts);
   }
-  bool getAnimatedGuidedDrawing() const { return getBoolValue(animatedGuidedDrawing); }
+  bool getAnimatedGuidedDrawing() const {
+    return getBoolValue(animatedGuidedDrawing);
+  }
 
   // Colors  tab
   TPixel getViewerBgColor() const { return getColorValue(viewerBGColor); }
   TPixel getPreviewBgColor() const { return getColorValue(previewBGColor); }
-  TPixel getLevelEditorBoxColor() const { return getColorValue(levelEditorBoxColor); }
+  TPixel getLevelEditorBoxColor() const {
+    return getColorValue(levelEditorBoxColor);
+  }
   void getChessboardColors(TPixel32 &col1, TPixel32 &col2) const {
     col1 = getColorValue(chessboardColor1);
     col2 = getColorValue(chessboardColor2);
   }
   void getTranspCheckData(TPixel &bg, TPixel &ink, TPixel &paint) const {
-    bg = getColorValue(transpCheckInkOnBlack);
-    ink = getColorValue(transpCheckInkOnWhite);
+    bg    = getColorValue(transpCheckInkOnBlack);
+    ink   = getColorValue(transpCheckInkOnWhite);
     paint = getColorValue(transpCheckPaint);
   }
 
@@ -399,7 +446,7 @@ public:
 
   // Tablet tab
   bool isWinInkEnabled() const { return getBoolValue(winInkEnabled); }
-  
+
   // Others (not appeared in the popup)
   // Shortcut popup settings
   QString getShortcutPreset() { return getStringValue(shortcutPreset); }
@@ -419,13 +466,16 @@ public:
     return getIntValue(shmmni);
   }  //! \sa The \p sysctl unix command.
 #endif
-  
+
   void setPrecompute(bool enabled);
   bool getPrecompute() { return m_precompute; }
   bool isAutoCreateEnabled() const { return getIntValue(AutocreationType) > 0; }
-  bool isAnimationSheetEnabled() const { return getIntValue(AutocreationType) == 2; }
+  bool isAnimationSheetEnabled() const {
+    return getIntValue(AutocreationType) == 2;
+  }
   bool isXsheetCameraColumnVisible() const {
-    return getBoolValue(showXsheetCameraColumn) && getBoolValue(showKeyframesOnXsheetCellArea);
+    return getBoolValue(showXsheetCameraColumn) &&
+           getBoolValue(showKeyframesOnXsheetCellArea);
   }
   int getTextureSize() const { return m_textureSize; }
   bool useDrawPixel() { return m_textureSize == 0; }
@@ -449,7 +499,7 @@ private:
   int m_textureSize = 0;
 
   std::string m_layerNameEncoding = "SJIS";  // Fixed to SJIS for now. You can
-    
+
 private:
   Preferences();
   ~Preferences();

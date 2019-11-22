@@ -2728,7 +2728,7 @@ bool IoCmd::takeCareSceneFolderItemsOnSaveSceneAs(
     Preferences::PathAliasPriority oldPriority =
         Preferences::instance()->getPathAliasPriority();
     Preferences::instance()->setValue(pathAliasPriority,
-        Preferences::ProjectFolderOnly);
+                                      Preferences::ProjectFolderOnly);
     for (int i = 0; i < sceneFolderLevels.size(); i++) {
       TXshLevel *level = sceneFolderLevels.at(i);
 
