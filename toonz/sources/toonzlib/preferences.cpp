@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QStringList>
 #include <QAction>
+#include <QColor>
 
 // boost includes
 #include <boost/bind.hpp>
@@ -665,7 +666,6 @@ void Preferences::setCallBack(const PreferencesItemId id, OnEditedFunc func) {
 
 PreferencesItem &Preferences::getItem(const PreferencesItemId id) {
   assert(m_items.contains(id));
-  if (!m_items.contains(id)) return PreferencesItem();
   return m_items[id];
 }
 

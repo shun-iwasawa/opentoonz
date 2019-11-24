@@ -39,7 +39,7 @@ class SizeField final : public QWidget {
   DVGui::IntLineEdit *m_fieldX, *m_fieldY;
 
 public:
-  SizeField(QSize& min, QSize& max, QSize& value = QSize(),
+  SizeField(QSize min, QSize max, QSize value = QSize(),
             QWidget* parent = nullptr);
   QSize getValue() const;
   void setValue(const QSize&);

@@ -17,7 +17,6 @@
 // Qt includes
 #include <QString>
 #include <QObject>
-#include <QColor>
 #include <QMap>
 #include <QRegExp>
 #include <QVariant>

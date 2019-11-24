@@ -68,7 +68,7 @@ inline void setupLayout(QGridLayout* lay, int margin = 15) {
   lay->setColumnStretch(2, 1);
 }
 
-QGridLayout* insertGroupBox(QString& label, QGridLayout* layout) {
+QGridLayout* insertGroupBox(const QString label, QGridLayout* layout) {
   QGroupBox* box   = new QGroupBox(label);
   QGridLayout* lay = new QGridLayout();
   setupLayout(lay, 5);
@@ -84,7 +84,7 @@ inline TPixel colorToTPixel(const QColor& color) {
 
 //-----------------------------------------------------------------------------
 
-SizeField::SizeField(QSize& min, QSize& max, QSize& value, QWidget* parent)
+SizeField::SizeField(QSize min, QSize max, QSize value, QWidget* parent)
     : QWidget(parent) {
   m_fieldX =
       new DVGui::IntLineEdit(this, value.width(), min.width(), max.width());
