@@ -343,6 +343,7 @@ void ParamsPage::setPageField(TIStream &is, const TFxP &fx, bool isVertical) {
         m_mainLayout->setColumnStretch(0, 0);
         m_mainLayout->setColumnStretch(1, 1);
         setPageField(is, fx, true);
+
         tmpWidget->setLayout(m_mainLayout);
         // turn back the layout
         m_mainLayout = keepMainLay;
