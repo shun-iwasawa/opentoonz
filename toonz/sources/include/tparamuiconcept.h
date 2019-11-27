@@ -69,6 +69,8 @@ public:
 
     RAINBOW_WIDTH,
 
+    VERTICAL_POS,  // A horizontal line at given height
+                   // { [TDoubleParamP] }
     TYPESCOUNT
   };
 

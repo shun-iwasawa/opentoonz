@@ -1541,21 +1541,21 @@ class RayLitFxGadget final : public FxGadget {
   TPointD m_targetPos, m_anotherPos;
 
 public:
-  RayLitFxGadget(FxGadgetController *controller,
-                 const TPointParamP &centerPoint);
+  RayLitFxGadget(FxGadgetController* controller,
+    const TPointParamP& centerPoint);
 
   void draw(bool picking) override;
 
-  void leftButtonDown(const TPointD &pos, const TMouseEvent &) override;
-  void leftButtonDrag(const TPointD &pos, const TMouseEvent &) override;
-  void leftButtonUp(const TPointD &pos, const TMouseEvent &) override;
+  void leftButtonDown(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonDrag(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonUp(const TPointD& pos, const TMouseEvent&) override;
 };
 
 //---------------------------------------------------------------------------
 
-RayLitFxGadget::RayLitFxGadget(FxGadgetController *controller,
-                               const TPointParamP &centerPoint)
-    : FxGadget(controller, 3), m_center(centerPoint) {
+RayLitFxGadget::RayLitFxGadget(FxGadgetController* controller,
+  const TPointParamP& centerPoint)
+  : FxGadget(controller, 3), m_center(centerPoint) {
   addParam(centerPoint->getX());
   addParam(centerPoint->getY());
 }
@@ -1572,7 +1572,7 @@ void RayLitFxGadget::draw(bool picking) {
 
   auto drawArrow = [&]() {
     double arrowLength = getPixelSize() * 20;
-    double arrowTip    = getPixelSize() * 5;
+    double arrowTip = getPixelSize() * 5;
 
     glBegin(GL_LINES);
     glVertex2d(-arrowLength, 0.0);
@@ -1593,9 +1593,9 @@ void RayLitFxGadget::draw(bool picking) {
   };
 
   setPixelSize();
-  double lineHalf     = getPixelSize() * 100;
+  double lineHalf = getPixelSize() * 100;
   double lineInterval = getPixelSize() * 50;
-  double r            = getPixelSize() * 3;
+  double r = getPixelSize() * 3;
 
   glPushMatrix();
 
@@ -1650,7 +1650,7 @@ void RayLitFxGadget::draw(bool picking) {
   if (m_handle == Body) {
     glPushMatrix();
     TPointD centerOffset = center - m_targetPos;
-    handleVec            = normalize(m_targetPos) * lineHalf;
+    handleVec = normalize(m_targetPos) * lineHalf;
     glTranslated(centerOffset.x, centerOffset.y, 0);
     glBegin(GL_LINES);
     glVertex2d(handleVec.x, handleVec.y);
@@ -1663,16 +1663,16 @@ void RayLitFxGadget::draw(bool picking) {
 
 //---------------------------------------------------------------------------
 
-void RayLitFxGadget::leftButtonDown(const TPointD &pos, const TMouseEvent &) {
+void RayLitFxGadget::leftButtonDown(const TPointD& pos, const TMouseEvent&) {
   m_handle = (HANDLE)m_selected;
   if (m_handle == None) return;
   m_clickedPos = pos;
-  m_targetPos  = getValue(m_center);
+  m_targetPos = getValue(m_center);
 }
 
 //---------------------------------------------------------------------------
 
-void RayLitFxGadget::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
+void RayLitFxGadget::leftButtonDrag(const TPointD& pos, const TMouseEvent& e) {
   if (m_handle == None) return;
   TPointD d = pos - m_clickedPos;
 
@@ -1682,20 +1682,20 @@ void RayLitFxGadget::leftButtonDrag(const TPointD &pos, const TMouseEvent &e) {
   }
 
   double angle =
-      std::atan2(pos.y, pos.x) - std::atan2(m_clickedPos.y, m_clickedPos.x);
+    std::atan2(pos.y, pos.x) - std::atan2(m_clickedPos.y, m_clickedPos.x);
   double scale = norm(pos) / norm(m_clickedPos);
 
   QTransform transform;
   QPointF p = transform.rotateRadians(angle)
-                  .scale(scale, scale)
-                  .map(QPointF(m_targetPos.x, m_targetPos.y));
+    .scale(scale, scale)
+    .map(QPointF(m_targetPos.x, m_targetPos.y));
 
   setValue(m_center, TPointD(p.x(), p.y()));
 }
 
 //---------------------------------------------------------------------------
 
-void RayLitFxGadget::leftButtonUp(const TPointD &pos, const TMouseEvent &) {
+void RayLitFxGadget::leftButtonUp(const TPointD& pos, const TMouseEvent&) {
   m_handle = None;
 }
 
@@ -1709,21 +1709,21 @@ class RainbowWidthFxGadget final : public FxGadget {
   enum HANDLE { Outside = 0, Inside, None } m_handle = None;
 
 public:
-  RainbowWidthFxGadget(FxGadgetController *controller,
-                       const TDoubleParamP &widthScale,
-                       const TDoubleParamP &radius, const TPointParamP &center)
-      : FxGadget(controller, 2)
-      , m_widthScale(widthScale)
-      , m_radius(radius)
-      , m_center(center) {
+  RainbowWidthFxGadget(FxGadgetController* controller,
+    const TDoubleParamP& widthScale,
+    const TDoubleParamP& radius, const TPointParamP& center)
+    : FxGadget(controller, 2)
+    , m_widthScale(widthScale)
+    , m_radius(radius)
+    , m_center(center) {
     addParam(widthScale);
   }
 
   void draw(bool picking) override;
 
-  void leftButtonDown(const TPointD &pos, const TMouseEvent &) override;
-  void leftButtonDrag(const TPointD &pos, const TMouseEvent &) override;
-  void leftButtonUp(const TPointD &pos, const TMouseEvent &) override;
+  void leftButtonDown(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonDrag(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonUp(const TPointD& pos, const TMouseEvent&) override;
 };
 
 //---------------------------------------------------------------------------
@@ -1734,10 +1734,10 @@ void RainbowWidthFxGadget::draw(bool picking) {
     glColor3dv(m_selectedColor);
   else
     glColor3d(0, 0, 1);
-  double radius     = getValue(m_radius);
-  TPointD center    = getValue(m_center);
+  double radius = getValue(m_radius);
+  TPointD center = getValue(m_center);
   double widthScale = getValue(m_widthScale);
-  double w          = widthScale * radius / 41.3;
+  double w = widthScale * radius / 41.3;
 
   glPushName(getId() + Outside);
   glLineStipple(1, 0x1C47);
@@ -1766,20 +1766,20 @@ void RainbowWidthFxGadget::draw(bool picking) {
 
 //---------------------------------------------------------------------------
 
-void RainbowWidthFxGadget::leftButtonDown(const TPointD &pos,
-                                          const TMouseEvent &) {
+void RainbowWidthFxGadget::leftButtonDown(const TPointD& pos,
+  const TMouseEvent&) {
   m_handle = (HANDLE)m_selected;
 }
 
 //---------------------------------------------------------------------------
 
-void RainbowWidthFxGadget::leftButtonDrag(const TPointD &pos,
-                                          const TMouseEvent &) {
+void RainbowWidthFxGadget::leftButtonDrag(const TPointD& pos,
+  const TMouseEvent&) {
   if (m_handle == None) return;
 
   double radius = getValue(m_radius);
-  double wpos   = norm(pos - getValue(m_center));
-  double width  = (m_handle == Outside) ? wpos - radius : radius - wpos;
+  double wpos = norm(pos - getValue(m_center));
+  double width = (m_handle == Outside) ? wpos - radius : radius - wpos;
 
   double scale = (width * 41.3) / (radius * 1.0);
 
@@ -1791,8 +1791,87 @@ void RainbowWidthFxGadget::leftButtonDrag(const TPointD &pos,
 
 //---------------------------------------------------------------------------
 
-void RainbowWidthFxGadget::leftButtonUp(const TPointD &pos,
-                                        const TMouseEvent &) {}
+void RainbowWidthFxGadget::leftButtonUp(const TPointD& pos,
+  const TMouseEvent&) {}
+
+//=============================================================================
+
+class VerticalPosFxGadget final : public FxGadget {
+  TPointD m_pos;
+  TDoubleParamP m_yParam;
+  TIntEnumParamP m_mode;
+
+public:
+  VerticalPosFxGadget(FxGadgetController* controller,
+    const TDoubleParamP& param, const TIntEnumParamP& mode)
+    : FxGadget(controller), m_yParam(param), m_mode(mode) {
+    addParam(m_yParam);
+  }
+
+  void draw(bool picking) override;
+
+  bool isVisible();
+  void leftButtonDown(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonDrag(const TPointD& pos, const TMouseEvent&) override;
+  void leftButtonUp(const TPointD& pos, const TMouseEvent&) override;
+};
+
+//---------------------------------------------------------------------------
+// Dirty resolution to hide gadget when selecting unrelated modes
+
+bool VerticalPosFxGadget::isVisible() {
+  if (!m_mode) return true;
+  // condition for Distance Level parameter of Iwa_FloorBumpFx
+  if (m_yParam->getName() == "distanceLevel" && m_mode->getValue() != 5)
+    return false;
+  return true;
+}
+
+//---------------------------------------------------------------------------
+
+void VerticalPosFxGadget::draw(bool picking) {
+  if (!isVisible()) return;
+  setPixelSize();
+  if (isSelected())
+    glColor3dv(m_selectedColor);
+  else
+    glColor3d(0, 0, 1);
+  glPushName(getId());
+  double vPos = getValue(m_yParam);
+  double unit = getPixelSize();
+  glPushMatrix();
+  glTranslated(0, vPos, 0);
+  double r = unit * 3;
+  double d = unit * 300;
+  glBegin(GL_LINES);
+  glVertex2d(0, r);
+  glVertex2d(0, -r);
+  glVertex2d(-d, 0);
+  glVertex2d(d, 0);
+  glEnd();
+  drawTooltip(TPointD(7, 7) * unit, getLabel());
+
+  glPopMatrix();
+  glPopName();
+}
+
+//---------------------------------------------------------------------------
+
+void VerticalPosFxGadget::leftButtonDown(const TPointD& pos,
+  const TMouseEvent&) {}
+
+//---------------------------------------------------------------------------
+
+void VerticalPosFxGadget::leftButtonDrag(const TPointD& pos,
+  const TMouseEvent&) {
+  if (m_yParam) setValue(m_yParam, pos.y);
+}
+
+//---------------------------------------------------------------------------
+
+void VerticalPosFxGadget::leftButtonUp(const TPointD& pos,
+  const TMouseEvent&) {}
+
 
 //*************************************************************************************
 //    FxGadgetController  implementation
@@ -1992,6 +2071,16 @@ FxGadget *FxGadgetController::allocateGadget(const TParamUIConcept &uiConcept) {
                                  uiConcept.m_params[1], uiConcept.m_params[2]);
     break;
   }
+
+  case TParamUIConcept::VERTICAL_POS: {
+    assert(uiConcept.m_params.size() >= 1 && uiConcept.m_params.size() <= 2);
+    TIntEnumParamP mode((uiConcept.m_params.size() >= 2)
+                            ? (TIntEnumParamP)uiConcept.m_params[1]
+                            : TIntEnumParamP());
+    gadget = new VerticalPosFxGadget(this, uiConcept.m_params[0], mode);
+    break;
+  }
+
   default:
     break;
   }

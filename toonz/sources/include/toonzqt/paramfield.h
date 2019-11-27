@@ -532,7 +532,6 @@ class EnumParamField final : public ModeChangerParamField {
 
   TIntEnumParamP m_currentParam, m_actualParam;
   QComboBox *m_om;
-
 public:
   EnumParamField(QWidget *parent, QString name, const TIntEnumParamP &param);
 
@@ -541,6 +540,8 @@ public:
   void update(int frame) override;
 
   QSize getPreferedSize() override { return QSize(150, 20); }
+
+  int getValue() const;
 
 protected slots:
   void onChange(const QString &str);

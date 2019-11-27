@@ -83,6 +83,7 @@ set(HEADERS
     iwa_fractalnoisefx.h
     iwa_rainbow_intensity.h
     iwa_rainbowfx.h
+    iwa_floorbumpfx.h
 )
 
 if(OpenCV_FOUND)
@@ -275,6 +276,7 @@ set(SOURCES
     iwa_glarefx.cpp
     iwa_fractalnoisefx.cpp
     iwa_rainbowfx.cpp
+    iwa_floorbumpfx.cpp
 )
 
 if(OpenCV_FOUND)
