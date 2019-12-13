@@ -25,6 +25,8 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QApplication>
+#include <QDesktopServices>
+#include <QUrl>
 using namespace XdtsIo;
 namespace {
 static QByteArray identifierStr("exchangeDigitalTimeSheet Save Data");
@@ -508,7 +510,18 @@ void ExportXDTSCommand::execute() {
   jsonByteArrayData.prepend(identifierStr + '\n');
   saveFile.write(jsonByteArrayData);
 
-  QString str =
-      QObject::tr("The %1 file has been generated").arg(toQString(fp));
-  DVGui::warning(str);
+  QString str = QObject::tr("The file %1 has been exported successfully.")
+                    .arg(QString::fromStdString(fp.getLevelName()));
+
+  std::vector<QString> buttons = {QObject::tr("OK"),
+                                  QObject::tr("Open containing folder")};
+  int ret = DVGui::MsgBox(DVGui::INFORMATION, str, buttons);
+
+  if (ret == 2) {
+    TFilePath folderPath = fp.getParentDir();
+    if (TSystem::isUNC(folderPath))
+      QDesktopServices::openUrl(QUrl(folderPath.getQString()));
+    else
+      QDesktopServices::openUrl(QUrl::fromLocalFile(folderPath.getQString()));
+  }
 }
