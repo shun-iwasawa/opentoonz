@@ -492,7 +492,9 @@ void ToolUtils::TToolUndo::insertLevelAndFrameIfNeeded() const {
   TTool::Application *app = TTool::getApplication();
   if (m_renumberedLevel) {
     TXsheet *xsh = app->getCurrentScene()->getScene()->getTopXsheet();
-    ToolUtils::doUpdateXSheet(m_level.getPointer(), m_oldFids, m_newFids, xsh);
+    std::vector<TXshChildLevel *> childLevels;
+    ToolUtils::doUpdateXSheet(m_level.getPointer(), m_oldFids, m_newFids, xsh,
+                              childLevels);
     m_level->renumber(m_newFids);
     app->getCurrentXsheet()->notifyXsheetChanged();
   }
@@ -556,7 +558,9 @@ void ToolUtils::TToolUndo::removeLevelAndFrameIfNeeded() const {
   }
   if (m_renumberedLevel) {
     TXsheet *xsh = app->getCurrentScene()->getScene()->getTopXsheet();
-    ToolUtils::doUpdateXSheet(m_level.getPointer(), m_newFids, m_oldFids, xsh);
+    std::vector<TXshChildLevel *> childLevels;
+    ToolUtils::doUpdateXSheet(m_level.getPointer(), m_newFids, m_oldFids, xsh,
+                              childLevels);
     m_level->renumber(m_oldFids);
     app->getCurrentXsheet()->notifyXsheetChanged();
   }
@@ -1853,7 +1857,8 @@ bool ToolUtils::renumberForInsertFId(TXshSimpleLevel *sl, const TFrameId &fid,
     }
   }
 
-  doUpdateXSheet(sl, oldFrames, fids, xsh);
+  std::vector<TXshChildLevel *> childLevels;
+  doUpdateXSheet(sl, oldFrames, fids, xsh, childLevels);
   sl->renumber(fids);
 
   return true;

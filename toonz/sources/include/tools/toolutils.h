@@ -510,8 +510,7 @@ TRasterPT<PIXEL> rotate90(const TRasterPT<PIXEL> &ras, bool toRight) {
 
 bool DVAPI doUpdateXSheet(TXshSimpleLevel *sl, std::vector<TFrameId> oldFids,
                           std::vector<TFrameId> newFids, TXsheet *xsh,
-                          std::vector<TXshChildLevel *> &childLevels =
-                              std::vector<TXshChildLevel *>());
+                          std::vector<TXshChildLevel *> &childLevels);
 
 bool DVAPI renumberForInsertFId(TXshSimpleLevel *sl, const TFrameId &fid,
                                 const TFrameId &maxFid, TXsheet *xsh);
