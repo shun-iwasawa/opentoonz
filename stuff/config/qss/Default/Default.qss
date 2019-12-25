@@ -836,7 +836,7 @@ QCheckBox:disabled {
   color: #808080;
 }
 .CheckBox::indicator,
-QMenu::indicator,
+QMenu::indicator:non-exclusive,
 QCheckBox::indicator,
 .GroupBox::indicator,
 QGroupBox::indicator {
@@ -850,13 +850,13 @@ QGroupBox::indicator {
   /* fix for QMenu */
 }
 .CheckBox::indicator:hover,
-QMenu::indicator:hover,
+QMenu::indicator:non-exclusive:hover,
 .CheckBox::indicator:checked:hover,
 .CheckBox::indicator:indeterminate:hover,
 QCheckBox::indicator:hover,
 .GroupBox::indicator:hover,
-QMenu::indicator:checked:hover,
-QMenu::indicator:indeterminate:hover,
+QMenu::indicator:non-exclusive:checked:hover,
+QMenu::indicator:non-exclusive:indeterminate:hover,
 QCheckBox::indicator:checked:hover,
 QCheckBox::indicator:indeterminate:hover,
 .GroupBox::indicator:checked:hover,
@@ -868,7 +868,7 @@ QGroupBox::indicator:indeterminate:hover {
   border-color: #5385a6;
 }
 .CheckBox::indicator:checked,
-QMenu::indicator:checked,
+QMenu::indicator:non-exclusive:checked,
 QCheckBox::indicator:checked,
 .GroupBox::indicator:checked,
 QGroupBox::indicator:checked {
@@ -877,7 +877,7 @@ QGroupBox::indicator:checked {
   image: url('imgs/white/checkmark.svg');
 }
 .CheckBox::indicator:checked:disabled,
-QMenu::indicator:checked:disabled,
+QMenu::indicator:non-exclusive:checked:disabled,
 QCheckBox::indicator:checked:disabled,
 .GroupBox::indicator:checked:disabled,
 QGroupBox::indicator:checked:disabled {
@@ -886,7 +886,7 @@ QGroupBox::indicator:checked:disabled {
   image: url('imgs/white/checkmark_disabled.svg');
 }
 .CheckBox::indicator:indeterminate,
-QMenu::indicator:indeterminate,
+QMenu::indicator:non-exclusive:indeterminate,
 QCheckBox::indicator:indeterminate,
 .GroupBox::indicator:indeterminate,
 QGroupBox::indicator:indeterminate {
@@ -895,7 +895,7 @@ QGroupBox::indicator:indeterminate {
   image: url('imgs/white/checkpartially.svg');
 }
 .CheckBox::indicator:indeterminate:disabled,
-QMenu::indicator:indeterminate:disabled,
+QMenu::indicator:non-exclusive:indeterminate:disabled,
 QCheckBox::indicator:indeterminate:disabled,
 .GroupBox::indicator:indeterminate:disabled,
 QGroupBox::indicator:indeterminate:disabled {
@@ -904,7 +904,7 @@ QGroupBox::indicator:indeterminate:disabled {
   image: url('imgs/white/checkpartially_disabled.svg');
 }
 .CheckBox::indicator:disabled,
-QMenu::indicator:disabled,
+QMenu::indicator:non-exclusive:disabled,
 QCheckBox::indicator:disabled,
 .GroupBox::indicator:disabled,
 QGroupBox::indicator:disabled {
@@ -915,12 +915,14 @@ QGroupBox::indicator:disabled {
    Radio Button
 ----------------------------------------------------------------------------- */
 .RadioButton::indicator:unchecked,
+QMenu::indicator:exclusive:unchecked,
 QRadioButton::indicator:unchecked,
 #CameraSettingsRadioButton_Small::indicator:unchecked {
   image: url('imgs/white/radiobutton_unchecked.svg');
   image-position: center center;
 }
 .RadioButton::indicator:checked,
+QMenu::indicator:exclusive:checked,
 QRadioButton::indicator:checked,
 #CameraSettingsRadioButton_Small::indicator:checked {
   image: url('imgs/white/radiobutton_checked.svg');
