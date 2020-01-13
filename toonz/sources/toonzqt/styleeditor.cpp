@@ -552,6 +552,327 @@ QPixmap makeSquareShading(const ColorModel &color, ColorChannel channel,
 //    HexagonalColorWheel  implementation
 //*****************************************************************************
 
+HexagonalColorWheel_New::HexagonalColorWheel_New(QWidget *parent)
+  : QWidget(parent)
+  , m_bgColor(128, 128, 128)  // defaul value in case this value does not set
+                              // in the style sheet
+{
+  setObjectName("HexagonalColorWheel");
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  setFocusPolicy(Qt::NoFocus);
+  m_currentWheel = none;
+  //if (Preferences::instance()->isColorCalibrationEnabled())
+  //  m_lutCalibrator = new LutCalibrator();
+}
+
+//-----------------------------------------------------------------------------
+
+//HexagonalColorWheel_New::~HexagonalColorWheel_New() {
+//  if (m_fbo) delete m_fbo;
+//}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::resizeEvent(QResizeEvent* event) {
+  float w = float(width());
+  float h = float(height());
+  //w *= getDevPixRatio();
+  //h *= getDevPixRatio();
+  float d = (w - 5.0f) / 2.5f;
+  bool isHorizontallyLong = ((d * 1.732f) < h) ? false : true;
+
+  if (isHorizontallyLong) {
+    m_triEdgeLen = (float)h / 1.732f;
+    m_triHeight = (float)h / 2.0f;
+    m_wheelPosition.setX(((float)w - (m_triEdgeLen * 2.5f + 5.0f)) / 2.0f);
+    m_wheelPosition.setY(0.0f);
+  }
+  else {
+    m_triEdgeLen = d;
+    m_triHeight = m_triEdgeLen * 0.866f;
+    m_wheelPosition.setX(0.0f);
+    m_wheelPosition.setY(((float)h - (m_triHeight * 2.0f)) / 2.0f);
+  }
+
+  // set all vertices positions
+  m_wp[0].setX(m_triEdgeLen);
+  m_wp[0].setY(m_triHeight);
+  m_wp[1].setX(m_triEdgeLen * 0.5f);
+  m_wp[1].setY(0.0f);
+  m_wp[2].setX(0.0f);
+  m_wp[2].setY(m_triHeight);
+  m_wp[3].setX(m_triEdgeLen * 0.5f);
+  m_wp[3].setY(m_triHeight * 2.0f);
+  m_wp[4].setX(m_triEdgeLen * 1.5f);
+  m_wp[4].setY(m_triHeight * 2.0f);
+  m_wp[5].setX(m_triEdgeLen * 2.0f);
+  m_wp[5].setY(m_triHeight);
+  m_wp[6].setX(m_triEdgeLen * 1.5f);
+  m_wp[6].setY(0.0f);
+
+  m_leftp[0].setX(m_wp[6].x() + 5.0f);
+  m_leftp[0].setY(0.0f);
+  m_leftp[1].setX(m_leftp[0].x() + m_triEdgeLen);
+  m_leftp[1].setY(m_triHeight * 2.0f);
+  m_leftp[2].setX(m_leftp[1].x());
+  m_leftp[2].setY(0.0f);
+
+  // GL settings
+  //glViewport(0, 0, w, h);
+  //glMatrixMode(GL_PROJECTION);
+  //glLoadIdentity();
+  //glOrtho(0.0, (GLdouble)w, (GLdouble)h, 0.0, 1.0, -1.0);
+
+  // remake fbo with new size
+  //if (m_lutCalibrator && m_lutCalibrator->isValid()) {
+  //  if (m_fbo) delete m_fbo;
+  //  m_fbo = new QOpenGLFramebufferObject(w, h);
+  //}
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::paintEvent(QPaintEvent *event) {
+  QPainter p(this);
+  QColor const color = getBGColor();
+  p.fillRect(rect(), color);
+
+
+
+  QImage bgImg(m_leftp[1].x(), m_triHeight * 2.0f, QImage::Format_RGB32);
+
+  //if (!bgPixmap.isNull()) p.drawTiledPixmap(0, 0, size, size, bgPixmap);
+
+
+
+
+  //glMatrixMode(GL_MODELVIEW);
+
+  //if (m_lutCalibrator && m_lutCalibrator->isValid()) m_fbo->bind();
+
+  //glClear(GL_COLOR_BUFFER_BIT);
+  p.beginNativePainting();
+
+  glMatrixMode(GL_MODELVIEW);
+  glViewport(0, 0, width(), height());
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0.0, (GLdouble)width(), (GLdouble)height(), 0.0, 1.0, -1.0);
+
+  float v = (float)m_color.getValue(eValue) / 100.0f;
+
+  glPushMatrix();
+
+  // draw hexagonal color wheel
+  glTranslatef(m_wheelPosition.rx(), m_wheelPosition.ry(), 0.0f);
+  glBegin(GL_TRIANGLE_FAN);
+  glColor3f(v, v, v);
+  glVertex2f(m_wp[0].x(), m_wp[0].y());
+
+  glColor3f(0.0f, v, 0.0f);
+  glVertex2f(m_wp[1].x(), m_wp[1].y());
+  glColor3f(0.0f, v, v);
+  glVertex2f(m_wp[2].x(), m_wp[2].y());
+  glColor3f(0.0f, 0.0f, v);
+  glVertex2f(m_wp[3].x(), m_wp[3].y());
+  glColor3f(v, 0.0f, v);
+  glVertex2f(m_wp[4].x(), m_wp[4].y());
+  glColor3f(v, 0.0f, 0.0f);
+  glVertex2f(m_wp[5].x(), m_wp[5].y());
+  glColor3f(v, v, 0.0f);
+  glVertex2f(m_wp[6].x(), m_wp[6].y());
+  glColor3f(0.0f, v, 0.0f);
+  glVertex2f(m_wp[1].x(), m_wp[1].y());
+  glEnd();
+
+  QColor leftCol = QColor().fromHsv(m_color.getValue(eHue), 255, 255);
+
+  // draw triangle color picker
+  glBegin(GL_TRIANGLES);
+  glColor3f(leftCol.redF(), leftCol.greenF(), leftCol.blueF());
+  glVertex2f(m_leftp[0].x(), m_leftp[0].y());
+  glColor3f(0.0f, 0.0f, 0.0f);
+  glVertex2f(m_leftp[1].x(), m_leftp[1].y());
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex2f(m_leftp[2].x(), m_leftp[2].y());
+  glEnd();
+
+  // draw small quad at current color position
+  drawCurrentColorMark();
+
+  glPopMatrix();
+
+  p.endNativePainting();
+  //if (m_lutCalibrator && m_lutCalibrator->isValid())
+  //  m_lutCalibrator->onEndDraw(m_fbo);
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::drawCurrentColorMark() {
+  int h;
+  float s, v;
+
+  // show hue in a counterclockwise fashion
+  h = 360 - m_color.getValue(eHue);
+
+  s = (float)m_color.getValue(eSaturation) / 100.0f;
+  v = (float)m_color.getValue(eValue) / 100.0f;
+
+  // d is a distance from a center of the wheel
+  float d, phi;
+  phi = (float)(h % 60 - 30) / 180.0f * 3.1415f;
+  d = s * m_triHeight / cosf(phi);
+
+  // set marker color
+  if (v > 0.4f)
+    glColor3f(0.0f, 0.0f, 0.0f);
+  else
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+  // draw marker (in the wheel)
+  glPushMatrix();
+  glTranslatef(m_wp[0].x(), m_wp[0].y(), 0.1f);
+  glRotatef(h, 0.0, 0.0, 1.0);
+  glTranslatef(d, 0.0f, 0.0f);
+  glRotatef(-h, 0.0, 0.0, 1.0);
+  glBegin(GL_LINE_LOOP);
+  glVertex2f(-3, -3);
+  glVertex2f(3, -3);
+  glVertex2f(3, 3);
+  glVertex2f(-3, 3);
+  glEnd();
+  glPopMatrix();
+
+  // draw marker (in the triangle)
+  glPushMatrix();
+  glTranslatef(m_leftp[1].x(), m_leftp[1].y(), 0.1f);
+  glTranslatef(-m_triEdgeLen * v * s, -m_triHeight * v * 2.0f, 0.0f);
+  glBegin(GL_LINE_LOOP);
+  glVertex2f(-3, -3);
+  glVertex2f(3, -3);
+  glVertex2f(3, 3);
+  glVertex2f(-3, 3);
+  glEnd();
+  glPopMatrix();
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::mousePressEvent(QMouseEvent *event) {
+  if (~event->buttons() & Qt::LeftButton) return;
+
+  // check whether the mouse cursor is in the wheel or in the triangle (or
+  // nothing).
+  QPoint curPos = event->pos() * getDevPixRatio();
+
+  QPolygonF wheelPolygon;
+  // in the case of the wheel
+  wheelPolygon << m_wp[1] << m_wp[2] << m_wp[3] << m_wp[4] << m_wp[5]
+    << m_wp[6];
+  wheelPolygon.translate(m_wheelPosition);
+  if (wheelPolygon.toPolygon().containsPoint(curPos, Qt::OddEvenFill)) {
+    m_currentWheel = leftWheel;
+    clickLeftWheel(curPos);
+    return;
+  }
+
+  wheelPolygon.clear();
+  // in the case of the triangle
+  wheelPolygon << m_leftp[0] << m_leftp[1] << m_leftp[2];
+  wheelPolygon.translate(m_wheelPosition);
+  if (wheelPolygon.toPolygon().containsPoint(curPos, Qt::OddEvenFill)) {
+    m_currentWheel = rightTriangle;
+    clickRightTriangle(curPos);
+    return;
+  }
+
+  //... or, in the case of nothing
+  m_currentWheel = none;
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::mouseMoveEvent(QMouseEvent *event) {
+  // change the behavior according to the current touching wheel
+  switch (m_currentWheel) {
+  case none:
+    break;
+  case leftWheel:
+    clickLeftWheel(event->pos() * getDevPixRatio());
+    break;
+  case rightTriangle:
+    clickRightTriangle(event->pos() * getDevPixRatio());
+    break;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::mouseReleaseEvent(QMouseEvent *event) {
+  m_currentWheel = none;
+  emit colorChanged(m_color, false);
+}
+
+//-----------------------------------------------------------------------------
+/*! compute hue and saturation position. saturation value must be clamped
+*/
+void HexagonalColorWheel_New::clickLeftWheel(const QPoint &pos) {
+  QLineF p(m_wp[0] + m_wheelPosition, QPointF(pos));
+  QLineF horizontal(0, 0, 1, 0);
+  float theta = (p.dy() < 0) ? p.angle(horizontal) : 360 - p.angle(horizontal);
+  float phi = theta;
+  while (phi >= 60.0f) phi -= 60.0f;
+  phi -= 30.0f;
+  // d is a length from center to edge of the wheel when saturation = 100
+  float d = m_triHeight / cosf(phi / 180.0f * 3.1415f);
+
+  int h = (int)theta;
+  if (h > 359) h = 359;
+  // clamping
+  int s = (int)(std::min(p.length() / d, 1.0) * 100.0f);
+
+  m_color.setValues(eValue, h, s);
+
+  emit colorChanged(m_color, true);
+}
+
+//-----------------------------------------------------------------------------
+
+void HexagonalColorWheel_New::clickRightTriangle(const QPoint &pos) {
+  int s, v;
+  QPointF p = m_leftp[1] + m_wheelPosition - QPointF(pos);
+  if (p.ry() <= 0.0f) {
+    s = 0;
+    v = 0;
+  }
+  else {
+    float v_ratio = std::min((float)(p.ry() / (m_triHeight * 2.0f)), 1.0f);
+    float s_f = p.rx() / (m_triEdgeLen * v_ratio);
+    v = (int)(v_ratio * 100.0f);
+    s = (int)(std::min(std::max(s_f, 0.0f), 1.0f) * 100.0f);
+  }
+  m_color.setValues(eHue, s, v);
+  emit colorChanged(m_color, true);
+}
+
+//-----------------------------------------------------------------------------
+
+//void HexagonalColorWheel_New::onContextAboutToBeDestroyed() {
+//  if (!m_lutCalibrator) return;
+//  makeCurrent();
+ // m_lutCalibrator->cleanup();
+//  doneCurrent();
+//}
+
+//*****************************************************************************
+
+
+
+
+
+
+
 HexagonalColorWheel::HexagonalColorWheel(QWidget *parent)
     : GLWidgetForHighDpi(parent)
     , m_bgColor(128, 128, 128)  // defaul value in case this value does not set
@@ -1471,7 +1792,7 @@ PlainColorPage::PlainColorPage(QWidget *parent)
 
   // m_verticalSlider = new ColorSliderBar(this, Qt::Vertical);
 
-  m_hexagonalColorWheel = new HexagonalColorWheel(this);
+  m_hexagonalColorWheel = new HexagonalColorWheel_New(this);
 
   /*
   QButtonGroup *channelButtonGroup = new QButtonGroup();

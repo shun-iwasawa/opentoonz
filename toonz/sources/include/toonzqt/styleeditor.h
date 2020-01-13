@@ -133,6 +133,61 @@ public:
 
 enum CurrentWheel { none, leftWheel, rightTriangle };
 
+class DVAPI HexagonalColorWheel_New final : public QWidget{
+  Q_OBJECT
+
+  // backgoround color (R160, G160, B160)
+  QColor m_bgColor;
+Q_PROPERTY(QColor BGColor READ getBGColor WRITE setBGColor)
+
+ColorModel m_color;
+QPointF m_wheelPosition;
+float m_triEdgeLen;
+float m_triHeight;
+QPointF m_wp[7], m_leftp[3];
+
+CurrentWheel m_currentWheel;
+
+// used for color calibration with 3DLUT
+//QOpenGLFramebufferObject *m_fbo = NULL;
+//LutCalibrator *m_lutCalibrator = NULL;
+
+bool m_firstInitialized = true;
+
+private:
+  void drawCurrentColorMark();
+  void clickLeftWheel(const QPoint &pos);
+  void clickRightTriangle(const QPoint &pos);
+
+public:
+  HexagonalColorWheel_New(QWidget *parent);
+  void setColor(const ColorModel &color) { m_color = color; };
+
+  //~HexagonalColorWheel_New();
+
+  void setBGColor(const QColor &color) { m_bgColor = color; }
+  QColor getBGColor() const { return m_bgColor; }
+
+protected:
+  //void initializeGL() override;
+  //void resizeGL(int width, int height) override;
+  //void paintGL() override;
+  QSize SizeHint() const { return QSize(300, 200); };
+
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+
+  void paintEvent(QPaintEvent *event) override;
+  void resizeEvent(QResizeEvent * event) override;
+
+signals:
+  void colorChanged(const ColorModel &color, bool isDragging);
+
+  //public slots:
+  //void onContextAboutToBeDestroyed();
+};
+
 class DVAPI HexagonalColorWheel final : public GLWidgetForHighDpi {
   Q_OBJECT
 
@@ -450,7 +505,8 @@ class PlainColorPage final : public StyleEditorPage {
   ColorChannelControl *m_channelControls[7];
   // SquaredColorWheel *m_squaredColorWheel; //iwsw not used
 
-  HexagonalColorWheel *m_hexagonalColorWheel;
+  HexagonalColorWheel_New *m_hexagonalColorWheel;
+  //HexagonalColorWheel *m_hexagonalColorWheel;
 
   ColorModel m_color;
   bool m_signalEnabled;
