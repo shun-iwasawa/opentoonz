@@ -20,6 +20,7 @@
 #include "toonz/tstageobjectid.h"
 #include "toonz/tstageobject.h"
 #include "toonz/fxdag.h"
+#include "toonz/tstageobjecttree.h"
 
 // Boost includes
 #include "boost/noncopyable.hpp"
@@ -117,12 +118,15 @@ public:
 
 //-------------------------------------------------------------------
 
-class XsheetDrawingCalculatorNode final : public CalculatorNode,
-                                          public boost::noncopyable {
-  TXsheet *m_xsh;
+class XsheetDrawingCalculatorNode : public CalculatorNode,
+                                    public boost::noncopyable {
   int m_columnIndex;
-
   std::unique_ptr<CalculatorNode> m_frame;
+
+protected:
+  TXsheet *m_xsh;
+
+  virtual int getColumnIndex() const { return m_columnIndex; }
 
 public:
   XsheetDrawingCalculatorNode(Calculator *calc, TXsheet *xsh, int columnIndex,
@@ -137,15 +141,39 @@ public:
     int i    = tfloor(f);
     f        = f - (double)i;
     TXshCell cell;
-    cell     = m_xsh->getCell(i, m_columnIndex);
+    int columnIndex = getColumnIndex();
+    if (columnIndex == -1) return 0;
+    cell     = m_xsh->getCell(i, columnIndex);
     int d0   = cell.isEmpty() ? 0 : cell.m_frameId.getNumber();
-    cell     = m_xsh->getCell(i + 1, m_columnIndex);
+    cell     = m_xsh->getCell(i + 1, columnIndex);
     int d1   = cell.isEmpty() ? 0 : cell.m_frameId.getNumber();
     double d = (1 - f) * d0 + f * d1;
     return d;
   }
 
   void accept(TSyntax::CalculatorNodeVisitor &) override {}
+};
+
+class XsheetDrawingCalculatorNode_ColByName final
+    : public XsheetDrawingCalculatorNode {
+  std::string m_columnName;
+
+protected:
+  int getColumnIndex() const override {
+    for (int c = 0; c < m_xsh->getColumnCount(); c++) {
+      TStageObjectId objId = TStageObjectId::ColumnId(c);
+      std::string name     = m_xsh->getStageObject(objId)->getName();
+      if (m_columnName == toLower(name)) return c;
+    }
+    return -1;
+  }
+
+public:
+  XsheetDrawingCalculatorNode_ColByName(Calculator *calc, TXsheet *xsh,
+                                        std::string columnName,
+                                        std::unique_ptr<CalculatorNode> frame)
+      : XsheetDrawingCalculatorNode(calc, xsh, -1, std::move(frame))
+      , m_columnName(columnName) {}
 };
 
 //===================================================================
@@ -285,6 +313,207 @@ public:
     }
   }
 };
+
+//-------------------------------------------------------------------
+
+class ObjectByNameReferencePattern final : public Pattern {
+  TXsheet *m_xsh;
+
+  /*
+  Full pattern layout:
+
+  object ( " objectName " ) . action (  expr )
+    0    1 2     3      4 5 6   7    8   9   10
+  */
+
+  enum Positions {
+    OBJECT_TYPE,
+    L1,
+    QUOTE1,
+    OBJECT_NAME,
+    QUOTE2,
+    R1,
+    SELECTOR,
+    ACTION,
+    L2,
+    EXPR,
+    R2,
+    POSITIONS_COUNT
+  };
+
+  enum ObjectType { None, Column, Camera, Pegbar };
+
+public:
+  ObjectByNameReferencePattern(TXsheet *xsh) : m_xsh(xsh) {
+    setDescription(
+        std::string(
+            "object(\"objectName\").action\nTransformation reference\n") +
+        "object can be: cam, camera, col, peg, pegbar\n" +
+        "action can be: "
+        "ns,ew,rot,ang,angle,z,zdepth,sx,sy,sc,scale,scalex,scaley,"
+        "path,pos,shx,shy");
+  }
+
+  ObjectType getObjType(const Token &token) const {
+    if (token.getType() != Token::Ident) return None;
+
+    std::string s = toLower(token.getText());
+
+    if (s == "col")
+      return Column;
+    else if (s == "cam" || s == "camera")
+      return Camera;
+    else if (s == "peg" || s == "pegbar")
+      return Pegbar;
+    return None;
+  }
+
+  TStageObjectId objIdByName(const Token &typeToken,
+                             const Token &nameToken) const {
+    ObjectType type = getObjType(typeToken);
+    if (type == None) return TStageObjectId::NoneId;
+
+    if (nameToken.getType() != Token::Ident) return TStageObjectId::NoneId;
+
+    std::string s = toLower(nameToken.getText());
+
+    switch (type) {
+    case Column:
+      for (int c = 0; c < m_xsh->getColumnCount(); c++) {
+        TStageObjectId objId = TStageObjectId::ColumnId(c);
+        std::string name     = m_xsh->getStageObject(objId)->getName();
+        if (s == toLower(name)) return objId;
+      }
+      break;
+    case Camera:
+    case Pegbar:
+      TStageObjectTree *tree = m_xsh->getStageObjectTree();
+      int objIndex           = 0;
+      for (;;) {
+        TStageObjectId objId = (type == Camera)
+                                   ? TStageObjectId::CameraId(objIndex)
+                                   : TStageObjectId::PegbarId(objIndex);
+        if (tree->getStageObject(objId, false) != 0) {
+          std::string name = m_xsh->getStageObject(objId)->getName();
+          if (s == toLower(name)) return objId;
+          objIndex++;
+          continue;
+        }
+        break;
+      }
+      break;
+    }
+    return TStageObjectId::NoneId;
+  }
+
+  TStageObject::Channel matchChannelName(const Token &token) const {
+    std::string s = toLower(token.getText());
+    if (s == "ns")
+      return TStageObject::T_Y;
+    else if (s == "ew")
+      return TStageObject::T_X;
+    else if (s == "rot" || s == "ang" || s == "angle")
+      return TStageObject::T_Angle;
+    else if (s == "z" || s == "zdepth")
+      return TStageObject::T_Z;
+    else if (s == "sx" || s == "scalex" || s == "xscale" || s == "xs" ||
+             s == "sh" || s == "scaleh" || s == "hscale" || s == "hs")
+      return TStageObject::T_ScaleX;
+    else if (s == "sy" || s == "scaley" || s == "yscale" || s == "ys" ||
+             s == "sv" || s == "scalev" || s == "vscale" || s == "vs")
+      return TStageObject::T_ScaleY;
+    else if (s == "sc" || s == "scale")
+      return TStageObject::T_Scale;
+    else if (s == "path" || s == "pos")
+      return TStageObject::T_Path;
+    else if (s == "shearx" || s == "shx" || s == "shearh" || s == "shh")
+      return TStageObject::T_ShearX;
+    else if (s == "sheary" || s == "shy" || s == "shearv" || s == "shv")
+      return TStageObject::T_ShearY;
+    else
+      return TStageObject::T_ChannelCount;
+  }
+
+  bool expressionExpected(
+      const std::vector<Token> &previousTokens) const override {
+    return previousTokens.size() == EXPR;
+  }
+  bool matchToken(const std::vector<Token> &previousTokens,
+                  const Token &token) const override {
+    const std::string &text = token.getText();
+    int pos                 = previousTokens.size();
+    if (!m_fixedTokens[pos].empty()) return (text == m_fixedTokens[pos]);
+
+    switch (pos) {
+    case OBJECT_TYPE:
+      return (getObjType(token) != None);
+
+    case OBJECT_NAME:
+      return (objIdByName(previousTokens[OBJECT_TYPE], token) !=
+              TStageObjectId::NoneId);
+
+    case ACTION:
+      if (matchChannelName(token) < TStageObject::T_ChannelCount)
+        return true;
+      else
+        return token.getText() == "cell" &&
+               getObjType(previousTokens[OBJECT_TYPE]) == Column;
+      break;
+    }
+    return false;
+  }
+  bool isFinished(const std::vector<Token> &previousTokens,
+                  const Token &token) const override {
+    return (previousTokens.size() >= POSITIONS_COUNT);
+  }
+  bool isComplete(const std::vector<Token> &previousTokens,
+                  const Token &token) const override {
+    return (previousTokens.size() >= POSITIONS_COUNT ||
+            previousTokens.size() == L2);
+  }
+  TSyntax::TokenType getTokenType(const std::vector<Token> &previousTokens,
+                                  const Token &token) const override {
+    return TSyntax::Operator;
+  }
+
+  void getAcceptableKeywords(
+      std::vector<std::string> &keywords) const override {
+    keywords.insert(keywords.end(), {"col", "cam", "camera", "peg", "pegbar"});
+  }
+
+  void createNode(Calculator *calc, std::vector<CalculatorNode *> &stack,
+                  const std::vector<Token> &tokens) const override {
+    assert(tokens.size() >= ACTION);
+
+    std::unique_ptr<CalculatorNode> frameNode(
+        (tokens.size() == POSITIONS_COUNT)
+            ? popNode(stack)
+            : new VariableNode(calc, CalculatorNode::FRAME));
+
+    TStageObjectId objectId =
+        objIdByName(tokens[OBJECT_TYPE], tokens[OBJECT_NAME]);
+
+    std::string field = toLower(tokens[ACTION].getText());
+    if (field == "cell" || field == "cel" || field == "cels") {
+      std::string columnName = toLower(tokens[OBJECT_NAME].getText());
+      stack.push_back(new XsheetDrawingCalculatorNode_ColByName(
+          calc, m_xsh, columnName, std::move(frameNode)));
+    } else {
+      TStageObject *object              = m_xsh->getStageObject(objectId);
+      TStageObject::Channel channelName = matchChannelName(tokens[ACTION]);
+      TDoubleParam *channel             = object->getParam(channelName);
+      if (channel)
+        stack.push_back(
+            new ParamCalculatorNode(calc, channel, std::move(frameNode)));
+    }
+  }
+
+private:
+  static const std::string m_fixedTokens[POSITIONS_COUNT];
+};
+
+const std::string ObjectByNameReferencePattern::m_fixedTokens[POSITIONS_COUNT] =
+    {"", "(", "\"", "", "\"", ")", ".", "", "(", "", ")"};
 
 //-------------------------------------------------------------------
 
@@ -590,6 +819,7 @@ const PlasticVertexPattern::Component PlasticVertexPattern::m_components[] = {
 TSyntax::Grammar *createXsheetGrammar(TXsheet *xsh) {
   Grammar *grammar = new Grammar();
   grammar->addPattern(new XsheetReferencePattern(xsh));
+  grammar->addPattern(new ObjectByNameReferencePattern(xsh));
   grammar->addPattern(new FxReferencePattern(xsh));
   grammar->addPattern(new PlasticVertexPattern(xsh));
   return grammar;
