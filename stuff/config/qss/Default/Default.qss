@@ -2102,9 +2102,13 @@ SpreadsheetViewer {
   qproperty-KeyFrameColor: #995d1d;
   qproperty-KeyFrameBorderColor: #c9b04b;
   qproperty-SelectedKeyFrameColor: #be772b;
+  qproperty-IgnoredKeyFrameColor: #ac2a39;
+  qproperty-SelectedIgnoredKeyFrameColor: #c94050;
   qproperty-InBetweenColor: #666250;
   qproperty-InBetweenBorderColor: #cdcec8;
   qproperty-SelectedInBetweenColor: #7d7a6c;
+  qproperty-IgnoredInBetweenColor: #8a695e;
+  qproperty-SelectedIgnoredInBetweenColor: #9d867e;
   qproperty-SelectedEmptyColor: #6c6c6c;
   qproperty-SelectedSceneRangeEmptyColor: #757575;
   qproperty-TextColor: #e6e6e6;

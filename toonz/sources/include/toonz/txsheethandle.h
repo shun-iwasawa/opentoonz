@@ -4,6 +4,7 @@
 #define TXSHEETHANDLE_H
 
 #include <QObject>
+#include <QSet>
 
 #include "tcommon.h"
 
@@ -19,6 +20,7 @@
 
 // forward declaration
 class TXsheet;
+class TDoubleParam;
 
 //=============================================================================
 // TXsheetHandle
@@ -40,11 +42,24 @@ public:
   void notifyXsheetSoundChanged() { emit xsheetSoundChanged(); }
   void changeXsheetCamera(int index) { emit xsheetCameraChange(index); }
 
+  void notifyReferenceParamsChanged(TDoubleParam *curve, QSet<int> colBefore,
+                                    QSet<int> colAfter,
+                                    QSet<TDoubleParam *> paramsBefore,
+                                    QSet<TDoubleParam *> paramsAfter) {
+    emit referenceParamsChanged(curve, colBefore, colAfter, paramsBefore,
+                                paramsAfter);
+  }
+
 signals:
   void xsheetSwitched();
   void xsheetChanged();
   void xsheetSoundChanged();
   void xsheetCameraChange(int);
+
+  void referenceParamsChanged(TDoubleParam *curve, QSet<int> colBefore,
+                              QSet<int> colAfter,
+                              QSet<TDoubleParam *> paramsBefore,
+                              QSet<TDoubleParam *> paramsAfter);
 };
 
 #endif  // TXSHEETHANDLE_H

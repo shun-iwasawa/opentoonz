@@ -129,6 +129,7 @@ enum PreferencesItemId {
   // Animation
   keyframeType,
   animationStep,
+  modifyExpressionOnMovingColumn,
 
   //----------
   // Preview

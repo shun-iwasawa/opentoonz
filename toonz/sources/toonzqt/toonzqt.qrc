@@ -83,6 +83,8 @@
         <file>Resources/param_on.svg</file>
         <file>Resources/paramanim_off.svg</file>
         <file>Resources/paramanim_on.svg</file>
+        <file>Resources/paramignored_off.svg</file>
+        <file>Resources/paramignored_on.svg</file>
         <file>Resources/pegbar_off.svg</file>
         <file>Resources/pegbar_on.svg</file>
         <file>Resources/plaincolor_off.svg</file>

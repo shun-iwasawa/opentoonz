@@ -131,29 +131,43 @@ bool FunctionTreeModel::ChannelGroup::isAnimated() const {
 
 //-----------------------------------------------------------------------------
 
+bool FunctionTreeModel::ChannelGroup::isIgnored() const {
+  // Same for the ignored ones, show warning icon if any of its children is.
+  int c, childCount = getChildCount();
+  for (c = 0; c != childCount; ++c)
+    if (static_cast<Item *>(getChild(c))->isIgnored()) return true;
+
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
 QVariant FunctionTreeModel::ChannelGroup::data(int role) const {
   if (role == Qt::DisplayRole)
     return getLongName();
   else if (role == Qt::DecorationRole) {
     bool animated = isAnimated();
-    bool active   = isActive();
+    bool active = isActive();
+    bool ignored = (animated)?isIgnored():false;
 
     if (active) {
       static QIcon folderAnimOpen(":Resources/folderanim_open.svg");
       static QIcon folderAnimClose(":Resources/folderanim_close.svg");
       static QIcon folderOpen(":Resources/folder_open.svg");
       static QIcon folderClose(":Resources/folder_close.svg");
+      static QIcon ignoredOn(":Resources/paramignored_on.svg");
 
-      return animated ? isOpen() ? folderAnimOpen : folderAnimClose
-                      : isOpen() ? folderOpen : folderClose;
+      return animated ? (isOpen() ? folderAnimOpen : (ignored?ignoredOn:folderAnimClose))
+                      : (isOpen() ? folderOpen : folderClose);
     } else {
       static QIcon folderAnimOpen(":Resources/folderanim_open_off.svg");
       static QIcon folderAnimClose(":Resources/folderanim_close_off.svg");
       static QIcon folderOpen(":Resources/folder_open_off.svg");
       static QIcon folderClose(":Resources/folder_close_off.svg");
+      static QIcon ignoredOff(":Resources/paramignored_off.svg");
 
-      return animated ? isOpen() ? folderAnimOpen : folderAnimClose
-                      : isOpen() ? folderOpen : folderClose;
+      return animated ? (isOpen() ? folderAnimOpen : (ignored ? ignoredOff : folderAnimClose) )
+                      : (isOpen() ? folderOpen : folderClose);
     }
   } else
     return Item::data(role);
@@ -351,22 +365,25 @@ QVariant FxChannelGroup::data(int role) const {
       isOneChildActive = true;
       break;
     }
+    bool ignored = (isAnimated) ? isIgnored() : false;
     if (isOneChildActive) {
       static QIcon folderAnimOpen(":Resources/folderanim_open.svg");
       static QIcon folderAnimClose(":Resources/folderanim_close.svg");
       static QIcon folderOpen(":Resources/folder_open.svg");
       static QIcon folderClose(":Resources/folder_close.svg");
+      static QIcon ignoredOn(":Resources/paramignored_on.svg");
 
-      return isAnimated ? isOpen() ? folderAnimOpen : folderAnimClose
-                        : isOpen() ? folderOpen : folderClose;
+      return isAnimated ? (isOpen() ? folderAnimOpen : (ignored ? ignoredOn : folderAnimClose))
+                        : (isOpen() ? folderOpen : folderClose);
     } else {
       static QIcon folderAnimOpen(":Resources/folderanim_open_off.svg");
       static QIcon folderAnimClose(":Resources/folderanim_close_off.svg");
       static QIcon folderOpen(":Resources/folder_open_off.svg");
       static QIcon folderClose(":Resources/folder_close_off.svg");
+      static QIcon ignoredOff(":Resources/paramignored_off.svg");
 
-      return isAnimated ? isOpen() ? folderAnimOpen : folderAnimClose
-                        : isOpen() ? folderOpen : folderClose;
+      return isAnimated ? (isOpen() ? folderAnimOpen : (ignored ? ignoredOff : folderAnimClose))
+                        : (isOpen() ? folderOpen : folderClose);
     }
   } else if (role == Qt::DisplayRole) {
     std::wstring name = m_fx->getName();
@@ -560,12 +577,28 @@ bool FunctionTreeModel::Channel::isAnimated() const {
 
 //-----------------------------------------------------------------------------
 
+bool FunctionTreeModel::Channel::isIgnored() const {
+  if (!isAnimated()) return false;
+  TDoubleParam *dp = dynamic_cast<TDoubleParam *>(m_param.getPointer());
+  if (!dp) return false;
+  FunctionTreeView *view =
+    dynamic_cast<FunctionTreeView *>(m_model->m_view);
+  if (!view) return false;
+  return view->getXsheetHandle()->getXsheet()->isReferenceManagementIgnored(dp);
+}
+
+//-----------------------------------------------------------------------------
+
 QVariant FunctionTreeModel::Channel::data(int role) const {
   if (role == Qt::DecorationRole) {
     static QIcon paramAnimOn(":Resources/paramanim_on.svg");
     static QIcon paramAnimOff(":Resources/paramanim_off.svg");
     static QIcon paramOn(":Resources/param_on.svg");
     static QIcon paramOff(":Resources/param_off.svg");
+    static QIcon paramIgnoredOn(":Resources/paramignored_on.svg");
+    static QIcon paramIgnoredOff(":Resources/paramignored_off.svg");
+
+    if (isIgnored()) return isActive() ? paramIgnoredOn : paramIgnoredOff;
 
     return m_param->hasKeyframes() ? isActive() ? paramAnimOn : paramAnimOff
                                    : isActive() ? paramOn : paramOff;
@@ -589,6 +622,20 @@ QVariant FunctionTreeModel::Channel::data(int role) const {
 #endif
     return (isCurrent()) ? view->getViewer()->getCurrentTextColor()
                          : view->getTextColor();
+  } else if (role == Qt::ToolTipRole) {
+    if (m_param->hasKeyframes()) {
+      TDoubleParam *dp = dynamic_cast<TDoubleParam *>(m_param.getPointer());
+      FunctionTreeView *view =
+          dynamic_cast<FunctionTreeView *>(m_model->m_view);
+      if (dp && view &&
+          view->getXsheetHandle()->getXsheet()->isReferenceManagementIgnored(
+              dp))
+        return tr(
+            "Some key(s) in this parameter loses original reference in "
+            "expression.\nManually pressing \"Apply\" button in the segment "
+            "viewer will clear the warning.");
+    }
+    return TreeModel::Item::data(role);
   } else
     return TreeModel::Item::data(role);
 }

@@ -29,6 +29,8 @@ class ComboViewerPanel;
 class SceneViewerPanel;
 class FxSettings;
 class VectorGuidedDrawingPane;
+class FxSelection;
+class StageObjectSelection;
 
 //=========================================================
 // PaletteViewerPanel
@@ -175,6 +177,8 @@ protected slots:
   void onExplodeChild(const QList<TFxP> &);
   void onExplodeChild(QList<TStageObjectId>);
   void onEditObject();
+  void onDeleteFxs(const FxSelection *);
+  void onDeleteStageObjects(const StageObjectSelection *);
 };
 
 //=========================================================
@@ -277,18 +281,18 @@ protected:
 //---------------------------------------------------------
 
 class SceneViewerPanelContainer final : public StyleShortcutSwitchablePanel {
-    Q_OBJECT
-        SceneViewerPanel *m_sceneViewer;
+  Q_OBJECT
+  SceneViewerPanel *m_sceneViewer;
 
 public:
-    SceneViewerPanelContainer(QWidget* parent);
-    // reimplementation of TPanel::widgetInThisPanelIsFocused
-    bool widgetInThisPanelIsFocused() override;
+  SceneViewerPanelContainer(QWidget *parent);
+  // reimplementation of TPanel::widgetInThisPanelIsFocused
+  bool widgetInThisPanelIsFocused() override;
 
 protected:
-    // reimplementation of TPanel::widgetFocusOnEnter
-    void widgetFocusOnEnter() override;
-    void widgetClearFocusOnLeave() override;
+  // reimplementation of TPanel::widgetFocusOnEnter
+  void widgetFocusOnEnter() override;
+  void widgetClearFocusOnLeave() override;
 };
 
 //=========================================================

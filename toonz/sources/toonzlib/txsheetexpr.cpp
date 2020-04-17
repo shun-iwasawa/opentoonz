@@ -57,16 +57,49 @@ public:
 };
 
 //===================================================================
+/*
+class ColumnReferenceFinder final : public TSyntax::CalculatorNodeVisitor {
+  QSet<int> m_indices;
+
+public:
+  ColumnReferenceFinder() {}
+
+  void registerColumnIndex(int columnIndex) { m_indices.insert(columnIndex); }
+
+  QSet<int> indices() const { return m_indices; }
+};
+*/
+//===================================================================
+
+class ParamReferenceFinder final : public TSyntax::CalculatorNodeVisitor {
+  QSet<TDoubleParam *> m_refParams;
+  QSet<int> m_columnIndices;
+
+public:
+  ParamReferenceFinder() {}
+
+  void registerRefParam(TDoubleParam *param) { m_refParams.insert(param); }
+  void registerColumnIndex(int columnIndex) {
+    m_columnIndices.insert(columnIndex);
+  }
+
+  QSet<int> columnIndices() const { return m_columnIndices; }
+  QSet<TDoubleParam *> refParams() const { return m_refParams; }
+};
+
+//===================================================================
 //
 // Calculator Nodes
 //
 //-------------------------------------------------------------------
 
-class ParamCalculatorNode final : public CalculatorNode,
-                                  public TParamObserver,
-                                  public boost::noncopyable {
-  TDoubleParamP m_param;
+class ParamCalculatorNode : public CalculatorNode,
+                            public TParamObserver,
+                            public boost::noncopyable {
   std::unique_ptr<CalculatorNode> m_frame;
+
+protected:
+  TDoubleParamP m_param;
 
 public:
   ParamCalculatorNode(Calculator *calculator, const TDoubleParamP &param,
@@ -88,10 +121,18 @@ public:
   }
 
   void accept(TSyntax::CalculatorNodeVisitor &visitor) override {
+    ParamReferenceFinder *prf = dynamic_cast<ParamReferenceFinder *>(&visitor);
+    if (prf) {
+      prf->registerRefParam(m_param.getPointer());
+      return;
+    }
+
     ParamDependencyFinder *pdf =
         dynamic_cast<ParamDependencyFinder *>(&visitor);
-    pdf->check(m_param.getPointer());
-    m_param->accept(visitor);
+    if (pdf) {
+      pdf->check(m_param.getPointer());
+      m_param->accept(visitor);
+    }
   }
 
   void onChange(const TParamChange &paramChange) override {
@@ -111,6 +152,36 @@ public:
       std::set<TParamObserver *>::const_iterator ot, oEnd = observers.end();
       for (ot = observers.begin(); ot != oEnd; ++ot)
         (*ot)->onChange(propagatedChange);
+    }
+  }
+
+  bool hasReference() const override { return true; }
+};
+
+// ParamCalculatorNode subclass to monitor referenced columns
+class ColumnParamCalculatorNode final : public ParamCalculatorNode {
+  int m_columnIndex;
+
+public:
+  ColumnParamCalculatorNode(Calculator *calculator, const TDoubleParamP &param,
+                            std::unique_ptr<CalculatorNode> frame,
+                            int columnIndex)
+      : ParamCalculatorNode(calculator, param, std::move(frame))
+      , m_columnIndex(columnIndex) {}
+
+  void accept(TSyntax::CalculatorNodeVisitor &visitor) override {
+    ParamReferenceFinder *prf = dynamic_cast<ParamReferenceFinder *>(&visitor);
+    if (prf) {
+      prf->registerRefParam(m_param.getPointer());
+      prf->registerColumnIndex(m_columnIndex);
+      return;
+    }
+
+    ParamDependencyFinder *pdf =
+        dynamic_cast<ParamDependencyFinder *>(&visitor);
+    if (pdf) {
+      pdf->check(m_param.getPointer());
+      m_param->accept(visitor);
     }
   }
 };
@@ -145,7 +216,12 @@ public:
     return d;
   }
 
-  void accept(TSyntax::CalculatorNodeVisitor &) override {}
+  void accept(TSyntax::CalculatorNodeVisitor &visitor) override {
+    ParamReferenceFinder *prf = dynamic_cast<ParamReferenceFinder *>(&visitor);
+    if (prf) prf->registerColumnIndex(m_columnIndex);
+  }
+
+  bool hasReference() const override { return true; }
 };
 
 //===================================================================
@@ -279,9 +355,14 @@ public:
       TStageObject *object              = m_xsh->getStageObject(objectId);
       TStageObject::Channel channelName = matchChannelName(tokens[2]);
       TDoubleParam *channel             = object->getParam(channelName);
-      if (channel)
-        stack.push_back(
-            new ParamCalculatorNode(calc, channel, std::move(frameNode)));
+      if (channel) {
+        if (objectId.isColumn())
+          stack.push_back(new ColumnParamCalculatorNode(
+              calc, channel, std::move(frameNode), objectId.getIndex()));
+        else
+          stack.push_back(
+              new ParamCalculatorNode(calc, channel, std::move(frameNode)));
+      }
     }
   }
 };
@@ -605,4 +686,19 @@ bool dependsOn(TDoubleParam *param, TDoubleParam *possiblyDependentParam) {
   ParamDependencyFinder pdf(possiblyDependentParam);
   param->accept(pdf);
   return pdf.found();
+}
+/*
+QSet<int> refColumnIndices(TExpression &expr) {
+  ColumnReferenceFinder crf;
+  expr.accept(crf);
+  return crf.indices();
+}
+*/
+
+void referenceParams(TExpression &expr, QSet<int> &columnIndices,
+                     QSet<TDoubleParam *> &params) {
+  ParamReferenceFinder prf;
+  expr.accept(prf);
+  columnIndices = prf.columnIndices();
+  params        = prf.refParams();
 }

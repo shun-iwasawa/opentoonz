@@ -35,8 +35,26 @@
 #include <QPushButton>
 #include <QIntValidator>
 #include <QTextEdit>
+#include <QSet>
 
 using namespace DVGui;
+
+namespace {
+void getRefereceParams(TDoubleParam *curve, int segmentIndex,
+                       QSet<int> &columnIndices, QSet<TDoubleParam *> &params) {
+  TDoubleKeyframe keyframe = curve->getKeyframe(segmentIndex);
+
+  if (keyframe.m_type != TDoubleKeyframe::Expression &&
+      keyframe.m_type != TDoubleKeyframe::SimilarShape)
+    return;
+
+  TExpression expr;
+  expr.setGrammar(curve->getGrammar());
+  expr.setText(keyframe.m_expressionText);
+
+  referenceParams(expr, columnIndices, params);
+}
+}  // namespace
 
 //-----------------------------------------------------------------------------
 
@@ -1392,8 +1410,28 @@ void FunctionSegmentViewer::onApplyButtonPressed() {
 
   if (m_panel) setter.setPixelRatio(m_panel->getPixelRatio(m_curve));
 
+  QSet<int> refColIndices_before, refColIndices_after;
+  QSet<TDoubleParam *> refParams_before, refParams_after;
+  getRefereceParams(m_curve, m_segmentIndex, refColIndices_before,
+                    refParams_before);
+
   setter.setAllParams(step, comboType, speedIn, speedOut, expressionText,
                       unitName, fileParams, similarShapeOffset);
+
+  getRefereceParams(m_curve, m_segmentIndex, refColIndices_after,
+                    refParams_after);
+
+  bool isIgnored =
+      m_xshHandle &&
+      m_xshHandle->getXsheet()->isReferenceManagementIgnored(m_curve);
+  // if the reference column indices are changed, notify handle to update
+  // observer
+  if (m_xshHandle &&
+      (isIgnored || refColIndices_before != refColIndices_after ||
+       refParams_before != refParams_after))
+    m_xshHandle->notifyReferenceParamsChanged(
+        m_curve, refColIndices_before, refColIndices_after, refParams_before,
+        refParams_after);
 }
 
 // for displaying the types of neighbor segments

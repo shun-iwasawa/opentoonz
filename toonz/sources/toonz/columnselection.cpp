@@ -95,6 +95,8 @@ void TColumnSelection::pasteColumnsAbove() {
 
 //-----------------------------------------------------------------------------
 void TColumnSelection::deleteColumns() {
+  if (!ColumnCmd::checkExpressionReferences(m_indices, false)) return;
+
   ColumnCmd::deleteColumns(m_indices, false, false);
 }
 

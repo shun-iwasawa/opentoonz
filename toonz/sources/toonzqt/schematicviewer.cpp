@@ -13,6 +13,8 @@
 #include "toonzqt/gutil.h"
 #include "toonzqt/imageutils.h"
 #include "toonzqt/dvscrollwidget.h"
+#include "toonzqt/fxselection.h"
+#include "stageobjectselection.h"
 
 // TnzLib includes
 #include "toonz/txsheethandle.h"
@@ -776,6 +778,11 @@ SchematicViewer::SchematicViewer(QWidget *parent)
   connect(m_stageScene, SIGNAL(editObject()), this, SIGNAL(editObject()));
   connect(m_fxScene, SIGNAL(editObject()), this, SIGNAL(editObject()));
 
+  connect(m_fxScene->getFxSelection(), SIGNAL(doDelete()), this,
+          SLOT(deleteFxs()));
+  connect(m_stageScene->getStageSelection(), SIGNAL(doDelete()), this,
+          SLOT(deleteStageObjects()));
+
   m_viewer->setScene(m_stageScene);
   m_fxToolbar->hide();
 
@@ -1202,3 +1209,15 @@ void SchematicViewer::zoomModeEnabled() { setCursorMode(CursorMode::Zoom); }
 //------------------------------------------------------------------
 
 void SchematicViewer::handModeEnabled() { setCursorMode(CursorMode::Hand); }
+
+//------------------------------------------------------------------
+
+void SchematicViewer::deleteFxs() {
+  emit doDeleteFxs(m_fxScene->getFxSelection());
+}
+
+//------------------------------------------------------------------
+
+void SchematicViewer::deleteStageObjects() {
+  emit doDeleteStageObjects(m_stageScene->getStageSelection());
+}

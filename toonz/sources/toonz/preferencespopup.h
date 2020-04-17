@@ -128,6 +128,8 @@ private:
   // Xsheet
   void onShowKeyframesOnCellAreaChanged();
   void onShowXSheetToolbarClicked();
+  // Animation
+  void onModifyExpressionOnMovingColumnChanged();
   // Preview
   void onBlankCountChanged();
   void onBlankColorChanged();

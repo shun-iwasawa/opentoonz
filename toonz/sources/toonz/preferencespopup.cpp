@@ -510,6 +510,13 @@ void PreferencesPopup::onShowXSheetToolbarClicked() {
 
 //-----------------------------------------------------------------------------
 
+void PreferencesPopup::onModifyExpressionOnMovingColumnChanged() {
+  TApp::instance()->getCurrentScene()->notifyPreferenceChanged(
+      "modifyExpressionOnMovingColumn");
+}
+
+//-----------------------------------------------------------------------------
+
 void PreferencesPopup::onBlankCountChanged() {
   TApp::instance()->getCurrentScene()->notifyPreferenceChanged("BlankCount");
 }
@@ -1051,6 +1058,8 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       // Animation
       {keyframeType, tr("Default Interpolation:")},
       {animationStep, tr("Animation Step:")},
+      {modifyExpressionOnMovingColumn,
+       tr("Automatically Modify Expression On Moving Referenced Column")},
 
       // Preview
       {blanksCount, tr("Blank Frames:")},
@@ -1699,9 +1708,15 @@ QWidget* PreferencesPopup::createAnimationPage() {
 
   insertUI(keyframeType, lay, getComboItemList(keyframeType));
   insertUI(animationStep, lay);
+  insertUI(modifyExpressionOnMovingColumn, lay);
 
   lay->setRowStretch(lay->rowCount(), 1);
   widget->setLayout(lay);
+
+  m_onEditedFuncMap.insert(
+      modifyExpressionOnMovingColumn,
+      &PreferencesPopup::onModifyExpressionOnMovingColumnChanged);
+
   return widget;
 }
 

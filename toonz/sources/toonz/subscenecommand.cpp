@@ -30,6 +30,7 @@
 #include "toonz/tstageobjecttree.h"
 #include "toonz/tstageobjectspline.h"
 #include "toonz/tcamera.h"
+#include "toonz/expressionreferencemonitor.h"
 
 // TnzQt includes
 #include "toonzqt/menubarcommand.h"
@@ -47,6 +48,7 @@
 #include "tapp.h"
 #include "columnselection.h"
 #include "cellselection.h"
+#include "expressionreferencemanager.h"
 
 #include "subscenecommand.h"
 
@@ -1186,11 +1188,15 @@ void collapseColumns(std::set<int> indices, bool columnsOnly) {
   TApp *app    = TApp::instance();
   TXsheet *xsh = app->getCurrentXsheet()->getXsheet();
 
+  std::set<int> oldIndices = indices;
+
   StageObjectsData *data = new StageObjectsData();
   // store xsheet data to be collapsed
   data->storeColumns(indices, xsh, StageObjectsData::eDoClone);
   data->storeColumnFxs(indices, xsh, StageObjectsData::eDoClone);
 
+  ExpressionReferenceMonitor* monitor = xsh->getExpRefMonitor()->clone();
+  
   ToonzScene *scene = app->getCurrentScene()->getScene();
   TXshLevel *xl     = scene->createNewLevel(CHILD_XSHLEVEL);
   assert(xl);
@@ -1209,6 +1215,8 @@ void collapseColumns(std::set<int> indices, bool columnsOnly) {
   if (!columnsOnly)
     bringPegbarsInsideChildXsheet(xsh, childXsh, indices, newIndices);
 
+  ExpressionReferenceManager::instance()->onCollapse(childXsh, monitor, oldIndices, newIndices);
+  
   childXsh->updateFrameCount();
 
   app->getCurrentXsheet()->blockSignals(true);
@@ -2149,6 +2157,8 @@ public:
 void SubsceneCmd::collapse(std::set<int> &indices) {
   if (indices.empty()) return;
 
+  if (!ColumnCmd::checkExpressionReferences(indices, false, true)) return;
+
   // User must decide if pegbars must be collapsed too
   QString question(QObject::tr("Collapsing columns: what you want to do?"));
 
@@ -2208,6 +2218,8 @@ void SubsceneCmd::collapse(const QList<TStageObjectId> &objects) {
   std::set<int> indices;
   getColumnIndexes(objects, indices);
 
+  if (!ColumnCmd::checkExpressionReferences(indices, false, true)) return;
+
   std::set<int> oldIndices = indices;
   int index                = *indices.begin();
 
@@ -2249,6 +2261,12 @@ void SubsceneCmd::collapse(const QList<TStageObjectId> &objects) {
 void SubsceneCmd::collapse(const QList<TFxP> &fxs) {
   if (fxs.isEmpty()) return;
 
+  std::set<int> indices;
+  std::set<TFx *> internalFx;
+  getColumnIndexesAndInternalFxs(fxs, indices, internalFx);
+
+  if (!ColumnCmd::checkExpressionReferences(indices, internalFx, true)) return;
+
   QString question(QObject::tr("Collapsing columns: what you want to do?"));
   QList<QString> list;
   list.append(
@@ -2256,11 +2274,7 @@ void SubsceneCmd::collapse(const QList<TFxP> &fxs) {
   list.append(QObject::tr("Include only selected columns in the sub-xsheet."));
   int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
   if (ret == 0) return;
-
-  std::set<int> indices;
-  std::set<TFx *> internalFx;
-  getColumnIndexesAndInternalFxs(fxs, indices, internalFx);
-
+  
   std::set<int> oldIndices = indices;
   int index                = *indices.begin();
 

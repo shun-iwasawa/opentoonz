@@ -386,6 +386,7 @@ void FunctionViewer::setXsheetHandle(TXsheetHandle *xshHandle) {
 
   m_xshHandle = xshHandle;
   m_segmentViewer->setXsheetHandle(xshHandle);
+  m_treeView->setXsheetHandle(xshHandle);
 
   if (m_xshHandle && isVisible()) {
     TXsheet *xsh = m_xshHandle->getXsheet();

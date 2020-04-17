@@ -488,8 +488,8 @@ void Preferences::definePreferenceItems() {
   define(cursorOutlineEnabled, "cursorOutlineEnabled", QMetaType::Bool, true);
   define(levelBasedToolsDisplay, "levelBasedToolsDisplay", QMetaType::Int,
          0);  // Default
-  define(useCtrlAltToResizeBrush, "useCtrlAltToResizeBrush",
-         QMetaType::Bool, true);
+  define(useCtrlAltToResizeBrush, "useCtrlAltToResizeBrush", QMetaType::Bool,
+         true);
 
   // Xsheet
   define(xsheetLayoutPreference, "xsheetLayoutPreference", QMetaType::QString,
@@ -524,6 +524,8 @@ void Preferences::definePreferenceItems() {
   // Animation
   define(keyframeType, "keyframeType", QMetaType::Int, 2);  // Linear
   define(animationStep, "animationStep", QMetaType::Int, 1, 1, 500);
+  define(modifyExpressionOnMovingColumn, "modifyExpressionOnMovingColumn",
+         QMetaType::Bool, false);
 
   // Preview
   define(blanksCount, "blanksCount", QMetaType::Int, 0, 0, 1000);

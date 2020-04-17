@@ -6,6 +6,7 @@
 #include <set>
 
 class StageObjectsData;
+class TFx;
 
 namespace ColumnCmd {
 
@@ -35,6 +36,14 @@ void clearCells(int index);
 //! Adds an undo object for converting layer to vector.
 void addConvertToVectorUndo(std::set<int> &newColumnIndices);
 
-}  // namespace
+// "checkInvert" flag is ON when collapsing columns. 
+// expression references need to be checked in both way,
+// the columns to be collapsed and other columns to be kept in the parent xsheet.
+
+bool checkExpressionReferences(const std::set<int> &indices, bool onlyColumns, bool checkInvert = false);
+bool checkExpressionReferences(const std::set<int> &indices,
+                               const std::set<TFx *> &fxs, bool checkInvert = false);
+
+}  // namespace ColumnCmd
 
 #endif
