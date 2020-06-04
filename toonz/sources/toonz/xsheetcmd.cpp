@@ -1051,7 +1051,7 @@ static void removeEmptyColumns() {
   }
 
   if (indices.empty()) return;
-  if (!ColumnCmd::checkExpressionReferences(indices, false)) return;
+  if (!ColumnCmd::checkExpressionReferences(indices)) return;
 
   ColumnCmd::deleteColumns(indices, false, false);
 

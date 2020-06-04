@@ -4,6 +4,9 @@
 #define COLUMN_COMMAND_INCLUDED
 
 #include <set>
+#include <QList>
+
+#include "toonz/tstageobjectid.h"
 
 class StageObjectsData;
 class TFx;
@@ -40,9 +43,11 @@ void addConvertToVectorUndo(std::set<int> &newColumnIndices);
 // expression references need to be checked in both way,
 // the columns to be collapsed and other columns to be kept in the parent xsheet.
 
-bool checkExpressionReferences(const std::set<int> &indices, bool onlyColumns, bool checkInvert = false);
+bool checkExpressionReferences(const std::set<int> &indices, bool onlyColumns = true, bool checkInvert = false);
 bool checkExpressionReferences(const std::set<int> &indices,
-                               const std::set<TFx *> &fxs, bool checkInvert = false);
+                               const std::set<TFx *> &fxs, bool onlyColumns = true, bool checkInvert = false);
+// checkInvert is always true for collapsing in stage schematic
+bool checkExpressionReferences(const QList<TStageObjectId> &objects);
 
 }  // namespace ColumnCmd
 

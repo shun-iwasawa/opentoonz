@@ -38,6 +38,7 @@
 #include "toonz/tstageobjectspline.h"
 #include "toonz/fxcommand.h"
 #include "toonz/preferences.h"
+#include "toonz/tstageobjectid.h"
 
 // TnzBase includes
 #include "tfx.h"
@@ -814,9 +815,7 @@ void ColumnCmd::deleteColumns(std::set<int> &indices, bool onlyColumns,
                               bool withoutUndo) {
   indices.erase(-1);  // Ignore camera column
   if (indices.empty()) return;
-
-  // if (!checkExpressionReferences(indices, onlyColumns)) return;
-
+  
   if (!withoutUndo && !onlyColumns)
     TUndoManager::manager()->add(new DeleteColumnsUndo(indices));
 
@@ -1204,6 +1203,9 @@ void ColumnCmd::clearCells(int index) {
 //=============================================================================
 // checkExpressionReferences
 //=============================================================================
+// onlyColumnsがtrueのときはColumnのみが削除される見込み
+// onlyColumnsがfalseのときはCollapse時、Pegbarも一緒に畳まれる場合
+// FxはonlyColumnsに関係なく連結しているものが一緒に畳まれる
 
 bool ColumnCmd::checkExpressionReferences(const std::set<int> &indices,
                                           bool onlyColumns, bool checkInvert) {
@@ -1231,23 +1233,36 @@ bool ColumnCmd::checkExpressionReferences(const std::set<int> &indices,
     }
   }
 
-  if (!onlyColumns) {
-    /*-- カラムを消した時、一緒に消してもよいFxを格納していく --*/
-    TFxSet *fxSet = xsh->getFxDag()->getInternalFxs();
-    for (int i = 0; i < fxSet->getFxCount(); i++) {
-      TFx *fx = fxSet->getFx(i);
-      if (canRemoveFx(leaves, fx)) fxsToBeDeleted.insert(fx);
+  /*-- カラムを消した時、一緒に消してもよいFxを格納していく --*/
+  TFxSet *fxSet = xsh->getFxDag()->getInternalFxs();
+  for (int i = 0; i < fxSet->getFxCount(); i++) {
+    TFx *fx = fxSet->getFx(i);
+    if (canRemoveFx(leaves, fx)) fxsToBeDeleted.insert(fx);
+  }
+
+  // Collapse時、サブシート内に複製されるオブジェクトIDを登録する
+  QList<TStageObjectId> objIdsToBeDuplicated;
+  if (checkInvert && !onlyColumns) {
+    for (auto index : indices) {
+      TStageObjectId id =
+        xsh->getStageObjectParent(TStageObjectId::ColumnId(index));
+      // Columnの上流のPegbar/Cameraを格納していく
+      while (id.isPegbar() || id.isCamera()) {
+        if(!objIdsToBeDuplicated.contains(id))
+          objIdsToBeDuplicated.append(id);
+        id = xsh->getStageObjectParent(id);
+      }
     }
   }
 
   return ExpressionReferenceManager::instance()->checkReferenceDeletion(
-      colIdsToBeDeleted, fxsToBeDeleted, checkInvert);
+      colIdsToBeDeleted, fxsToBeDeleted, objIdsToBeDuplicated, checkInvert);
 }
 
 //-----------------------------------------------------------------------------
 
 bool ColumnCmd::checkExpressionReferences(const std::set<int> &indices,
-                                          const std::set<TFx *> &fxs, bool checkInvert) {
+                                          const std::set<TFx *> &fxs, bool onlyColumns, bool checkInvert) {
   if (!Preferences::instance()->isModifyExpressionOnMovingColumnEnabled())
     return true;
 
@@ -1272,9 +1287,69 @@ bool ColumnCmd::checkExpressionReferences(const std::set<int> &indices,
   TFxSet *fxSet = xsh->getFxDag()->getInternalFxs();
   for (auto fx : fxs) fxsToBeDeleted.insert(fx);
 
+  // Collapse時、サブシート内に複製されるオブジェクトIDを登録する
+  QList<TStageObjectId> objIdsToBeDuplicated;
+  if (checkInvert && !onlyColumns) {
+    for (auto index : indices) {
+      TStageObjectId id =
+        xsh->getStageObjectParent(TStageObjectId::ColumnId(index));
+      /*- Columnの上流のPegbar/Cameraを格納していく -*/
+      while (id.isPegbar() || id.isCamera()) {
+        if(!objIdsToBeDuplicated.contains(id))
+          objIdsToBeDuplicated.append(id);
+        id = xsh->getStageObjectParent(id);
+      }
+    }
+  }
+
   return ExpressionReferenceManager::instance()->checkReferenceDeletion(
-      colIdsToBeDeleted, fxsToBeDeleted, checkInvert);
+      colIdsToBeDeleted, fxsToBeDeleted, objIdsToBeDuplicated, checkInvert);
 }
+
+//-----------------------------------------------------------------------------
+
+bool ColumnCmd::checkExpressionReferences( const QList<TStageObjectId> &objects) {
+  if (!Preferences::instance()->isModifyExpressionOnMovingColumnEnabled())
+    return true;
+
+  TApp *app = TApp::instance();
+  TXsheet *xsh = app->getCurrentXsheet()->getXsheet();
+
+  QSet<int> colIdsToBeDeleted;
+  QSet<TFx *> fxsToBeDeleted;
+  QList<TStageObjectId> objIdsToBeDuplicated;
+  
+  // leavesに消されるカラムのColumnFxを格納していく
+  std::set<TFx *> leaves;
+  for (auto objId : objects) {
+    if (objId.isColumn()) {
+      int index = objId.getIndex();
+      if (index < 0) continue;
+      TXshColumn *column = xsh->getColumn(index);
+      if (!column) continue;
+      colIdsToBeDeleted.insert(index);
+      TFx *fx = column->getFx();
+      if (fx) {
+        leaves.insert(fx);
+        TZeraryColumnFx *zcfx = dynamic_cast<TZeraryColumnFx *>(fx);
+        if (zcfx) fxsToBeDeleted.insert(zcfx->getZeraryFx());
+      }
+    }
+    else
+      objIdsToBeDuplicated.append(objId);
+  }
+
+  // カラムを消した時、一緒に消してもよいFxを格納していく
+  TFxSet *fxSet = xsh->getFxDag()->getInternalFxs();
+  for (int i = 0; i < fxSet->getFxCount(); i++) {
+    TFx *fx = fxSet->getFx(i);
+    if (canRemoveFx(leaves, fx)) fxsToBeDeleted.insert(fx);
+  }
+  
+  return ExpressionReferenceManager::instance()->checkReferenceDeletion(
+    colIdsToBeDeleted, fxsToBeDeleted, objIdsToBeDuplicated, true);
+}
+
 //=============================================================================
 
 namespace {

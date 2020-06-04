@@ -43,7 +43,9 @@ class ExpressionReferenceManager
 
   bool doCheckReferenceDeletion(
       const QSet<int>& columnIdsToBeDeleted, const QSet<TFx*>& fxsToBeDeleted,
-      const QList<TStageObjectId>& objectIdsToBeDeleted, bool checkInvert = false);
+      const QList<TStageObjectId>& objectIdsToBeDeleted,
+      const QList<TStageObjectId>& objIdsToBeDuplicated,
+      bool checkInvert = false);
 
   void removeDeletedParameters(TXsheet* xsh);
 
@@ -56,12 +58,14 @@ public:
   void init();
 
   bool checkReferenceDeletion(const QSet<int>& columnIdsToBeDeleted,
-                              const QSet<TFx*>& fxsToBeDeleted, bool checkInvert);
+                              const QSet<TFx*>& fxsToBeDeleted,
+                              const QList<TStageObjectId>& objIdsToBeDuplicated,
+                              bool checkInvert);
   bool checkReferenceDeletion(
       const QList<TStageObjectId>& objectIdsToBeDeleted);
 
   void onCollapse(TXsheet* childXsh, ExpressionReferenceMonitor* parentMonitor,
-    std::set<int> indices, std::set<int> newIndices);
+    std::set<int> indices, std::set<int> newIndices, bool columnsOnly);
 protected slots:
   void onReferenceParamsChanged(TDoubleParam* curve, QSet<int> colBefore,
                                 QSet<int> colAfter,

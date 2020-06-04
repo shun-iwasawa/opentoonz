@@ -1098,6 +1098,22 @@ void closeSubXsheet(int dlevel) {
 }
 
 //=============================================================================
+// returns true if there is at least one pegbar to be brought inside subxsheet on collase in order to see if the confirmation dialog is needed
+
+bool hasPegbarsToBringInsideChildXsheet(TXsheet *xsh, std::set<int> indices) {
+  std::set<int>::iterator itr = indices.begin();
+  while (itr != indices.end()) {
+    TStageObjectId id =
+      xsh->getStageObjectParent(TStageObjectId::ColumnId(*itr));
+    // check the parent node
+    if (id.isPegbar() || id.isCamera())
+      return true;
+    itr++;
+  }  
+  return false;
+}
+
+//-----------------------------------------------------------------------------
 
 void bringPegbarsInsideChildXsheet(TXsheet *xsh, TXsheet *childXsh,
                                    std::set<int> indices,
@@ -1215,8 +1231,8 @@ void collapseColumns(std::set<int> indices, bool columnsOnly) {
   if (!columnsOnly)
     bringPegbarsInsideChildXsheet(xsh, childXsh, indices, newIndices);
 
-  ExpressionReferenceManager::instance()->onCollapse(childXsh, monitor, oldIndices, newIndices);
-  
+  ExpressionReferenceManager::instance()->onCollapse(childXsh, monitor, oldIndices, newIndices, columnsOnly);
+
   childXsh->updateFrameCount();
 
   app->getCurrentXsheet()->blockSignals(true);
@@ -2157,18 +2173,21 @@ public:
 void SubsceneCmd::collapse(std::set<int> &indices) {
   if (indices.empty()) return;
 
-  if (!ColumnCmd::checkExpressionReferences(indices, false, true)) return;
-
-  // User must decide if pegbars must be collapsed too
-  QString question(QObject::tr("Collapsing columns: what you want to do?"));
-
-  QList<QString> list;
-  list.append(
+  TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
+  bool onlyColumns = true;
+  if (hasPegbarsToBringInsideChildXsheet(xsh, indices)) {
+    // User must decide if pegbars must be collapsed too
+    QString question(QObject::tr("Collapsing columns: what you want to do?"));
+    QList<QString> list;
+    list.append(
       QObject::tr("Include relevant pegbars in the sub-xsheet as well."));
-  list.append(QObject::tr("Include only selected columns in the sub-xsheet."));
+    list.append(QObject::tr("Include only selected columns in the sub-xsheet."));
 
-  int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
-  if (ret == 0) return;
+    int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
+    if (ret == 0) return;
+    onlyColumns = (ret == 2);
+  }
+  if (!ColumnCmd::checkExpressionReferences(indices, onlyColumns, true)) return;
 
   std::set<int> oldIndices = indices;
   int index                = *indices.begin();
@@ -2176,7 +2195,6 @@ void SubsceneCmd::collapse(std::set<int> &indices) {
   // Retrieve current status to backup it in the UNDO
   StageObjectsData *oldData = new StageObjectsData();
 
-  TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
   oldData->storeColumns(indices, xsh, 0);
   oldData->storeColumnFxs(indices, xsh, 0);
 
@@ -2190,7 +2208,7 @@ void SubsceneCmd::collapse(std::set<int> &indices) {
   getParents(indices, parents);
 
   // Perform the collapse
-  collapseColumns(indices, ret == 2);
+  collapseColumns(indices, onlyColumns);
   setColumnOutputConnections(columnOutputConnections);
 
   // Retrieve current status to backup it in the REDO
@@ -2218,7 +2236,7 @@ void SubsceneCmd::collapse(const QList<TStageObjectId> &objects) {
   std::set<int> indices;
   getColumnIndexes(objects, indices);
 
-  if (!ColumnCmd::checkExpressionReferences(indices, false, true)) return;
+  if (!ColumnCmd::checkExpressionReferences(objects)) return;
 
   std::set<int> oldIndices = indices;
   int index                = *indices.begin();
@@ -2264,23 +2282,28 @@ void SubsceneCmd::collapse(const QList<TFxP> &fxs) {
   std::set<int> indices;
   std::set<TFx *> internalFx;
   getColumnIndexesAndInternalFxs(fxs, indices, internalFx);
-
-  if (!ColumnCmd::checkExpressionReferences(indices, internalFx, true)) return;
-
-  QString question(QObject::tr("Collapsing columns: what you want to do?"));
-  QList<QString> list;
-  list.append(
-      QObject::tr("Include relevant pegbars in the sub-xsheet as well."));
-  list.append(QObject::tr("Include only selected columns in the sub-xsheet."));
-  int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
-  if (ret == 0) return;
   
+  TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
+  bool onlyColumns = true;
+  if (hasPegbarsToBringInsideChildXsheet(xsh, indices)) {
+    // User must decide if pegbars must be collapsed too
+    QString question(QObject::tr("Collapsing columns: what you want to do?"));
+    QList<QString> list;
+    list.append(
+      QObject::tr("Include relevant pegbars in the sub-xsheet as well."));
+    list.append(QObject::tr("Include only selected columns in the sub-xsheet."));
+    int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
+    if (ret == 0) return;
+    onlyColumns = (ret == 2);
+  }
+
+  if (!ColumnCmd::checkExpressionReferences(indices, internalFx, onlyColumns, true)) return;
+
   std::set<int> oldIndices = indices;
   int index                = *indices.begin();
 
   StageObjectsData *oldData = new StageObjectsData();
 
-  TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
   oldData->storeColumns(indices, xsh, 0);
   oldData->storeColumnFxs(indices, xsh, 0);
 
@@ -2296,7 +2319,7 @@ void SubsceneCmd::collapse(const QList<TFxP> &fxs) {
   QMap<TFx *, FxConnections> fxConnections;
   getFxConnections(fxConnections, internalFx, xsh);
 
-  collapseColumns(indices, internalFx, ret == 2);
+  collapseColumns(indices, internalFx, onlyColumns);
 
   indices.clear();
   indices.insert(index);

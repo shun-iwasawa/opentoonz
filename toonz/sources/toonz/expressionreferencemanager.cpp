@@ -21,6 +21,7 @@
 #include "toonz/txshcell.h"
 #include "toonz/txshchildlevel.h"
 #include "toonz/expressionreferencemonitor.h"
+#include "toonz/tstageobjecttree.h"
 
 // TnzBase includes
 #include "tdoubleparam.h"
@@ -497,23 +498,6 @@ bool ExpressionReferenceManager::isIgnored(TDoubleParam* param) {
 }
 
 //-----------------------------------------------------------------------------
-/*
-void ExpressionReferenceManager::checkReferenceRemoval(int indexToBeRemoved) {
-  QStringList refList;
-  for (auto it = m_refMap.begin(); it != m_refMap.end(); it++) {
-    if (it.value().contains(indexToBeRemoved)) {
-      refList.append(m_nameMap.value(it.key()));
-    }
-  }
-
-  if (!refList.isEmpty()) {
-    DVGui::warning(tr("Deleted column was refered by expression in the "
-                      "following parameters:\n\n%1")
-                       .arg(refList.join(", ")));
-  }
-}
-*/
-//-----------------------------------------------------------------------------
 
 void ExpressionReferenceManager::doColumnReplace(
     const QMap<int, int> replaceTable, TXsheet* xsh) {
@@ -606,7 +590,8 @@ void ExpressionReferenceManager::doColumnReplace(
 //-----------------------------------------------------------------------------
 bool ExpressionReferenceManager::doCheckReferenceDeletion(
     const QSet<int>& columnIdsToBeDeleted, const QSet<TFx*>& fxsToBeDeleted,
-    const QList<TStageObjectId>& objectIdsToBeDeleted, bool checkInvert) {
+    const QList<TStageObjectId>& objectIdsToBeDeleted,
+  const QList<TStageObjectId>& objIdsToBeDuplicated, bool checkInvert) {
   // これから消えてしまうパラメータを参照しているパラメータ一覧
   QSet<TDoubleParam*> cautionParams;
   QSet<TDoubleParam*> invCautionParams;
@@ -649,9 +634,11 @@ bool ExpressionReferenceManager::doCheckReferenceDeletion(
     StageObjectChannelGroup* socg = dynamic_cast<StageObjectChannelGroup*>(
       m_model->getStageObjectChannel(i));
     if (!socg) continue;
-    if(objectIdsToBeDeleted.contains(socg->getStageObject()->getId()))
+    TStageObjectId id = socg->getStageObject()->getId();
+    if(objectIdsToBeDeleted.contains(id))
       gatherParams(socg, stageParamsToBeDeleted);
-    else if( checkInvert)
+    // サブシート内に複製されるオブジェクトは参照が切れない
+    else if( checkInvert && !objIdsToBeDuplicated.contains(id) )
       gatherParams(socg, invStageParamsToBeDeleted);
   }
   for (auto it = paramRefMap().begin(); it != paramRefMap().end(); it++) {
@@ -687,7 +674,7 @@ bool ExpressionReferenceManager::doCheckReferenceDeletion(
     warningTxt += "\n  " + nameMap().value(param);
   }
   for (auto param : invCautionParams) {
-    warningTxt += "\n  " + nameMap().value(param) + "  " + tr("(To be collapsed)");
+    warningTxt += "\n  " + nameMap().value(param) + "  " + tr("(To be in the subxsheet)");
   }
   warningTxt += tr("\nDo you want to delete anyway ?");
 
@@ -701,13 +688,17 @@ bool ExpressionReferenceManager::doCheckReferenceDeletion(
 //-----------------------------------------------------------------------------
 // check on deleting columns
 bool ExpressionReferenceManager::checkReferenceDeletion(
-    const QSet<int>& columnIdsToBeDeleted, const QSet<TFx*>& fxsToBeDeleted, bool checkInvert) {
+    const QSet<int>& columnIdsToBeDeleted, 
+  const QSet<TFx*>& fxsToBeDeleted,
+  const QList<TStageObjectId>& objIdsToBeDuplicated,
+  bool checkInvert) {
   QList<TStageObjectId> objectIdsToBeDeleted;
   for (auto colId : columnIdsToBeDeleted)
     objectIdsToBeDeleted.append(TStageObjectId::ColumnId(colId));
 
   return doCheckReferenceDeletion(columnIdsToBeDeleted, fxsToBeDeleted,
-                                  objectIdsToBeDeleted, checkInvert);
+                                  objectIdsToBeDeleted,
+                                  objIdsToBeDuplicated, checkInvert);
 }
 
 //-----------------------------------------------------------------------------
@@ -742,15 +733,17 @@ bool ExpressionReferenceManager::checkReferenceDeletion(
     TFx* fx = fxSet->getFx(i);
     if (canRemoveFx(leaves, fx)) fxsToBeDeleted.insert(fx);
   }
+  QList<TStageObjectId> dummy;
 
   return doCheckReferenceDeletion(columnIdsToBeDeleted, fxsToBeDeleted,
-                                  objectIdsToBeDeleted);
+                                  objectIdsToBeDeleted, dummy);
 }
 
 //----------------------------------------------------------------------------
 void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
   ExpressionReferenceMonitor* parentMonitor,
-  std::set<int> indices, std::set<int> newIndices) {
+  std::set<int> indices, std::set<int> newIndices,
+  bool columnsOnly ) {
 
   // PreferenceがOFFならreturn
   bool on = Preferences::instance()->isModifyExpressionOnMovingColumnEnabled();
@@ -761,6 +754,85 @@ void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
   paramRefMap(childXsh) = parentMonitor->paramRefMap();
   nameMap(childXsh) = parentMonitor->nameMap();
   ignoredParamSet(childXsh) = parentMonitor->ignoredParamSet();
+
+  // pegbarを持ち込む場合は、サブシート内に複製されたオブジェクトのパラメータにポインタを差し替えて監視を続行する
+  if (!columnsOnly) {
+    // 持ち込んだPegbarのリストを作る
+    QList<TStageObjectId> duplicatedObjs;
+    for (auto index : newIndices) {
+      TStageObjectId id =
+        childXsh->getStageObjectParent(TStageObjectId::ColumnId(index));
+      while (id.isPegbar() || id.isCamera()) {
+        duplicatedObjs.append(id);
+        id = childXsh->getStageObjectParent(id);
+      }
+    }
+
+    // 差し替えテーブルを作る
+    QMap<TDoubleParam*, TDoubleParam*> replaceTable;
+    TApp* app = TApp::instance();
+    TXsheet* xsh = app->getCurrentXsheet()->getXsheet();
+    for ( auto dupObjId : duplicatedObjs){
+      TStageObject *parentObj = xsh->getStageObjectTree()->getStageObject(dupObjId, false);
+      TStageObject *childObj = childXsh->getStageObjectTree()->getStageObject(dupObjId, false);
+      assert(parentObj && childObj);
+      if (!parentObj || !childObj) continue;
+      for (int c = 0; c < TStageObject::T_ChannelCount; c++) {
+        TDoubleParam* parent_p = parentObj->getParam((TStageObject::Channel)c);
+        TDoubleParam* child_p = childObj->getParam((TStageObject::Channel)c);
+        replaceTable.insert(parent_p, child_p);
+      }
+    }
+
+    //差し替える
+    QMap<TDoubleParam*, TDoubleParam*>::const_iterator table_itr = replaceTable.constBegin();
+    while (table_itr != replaceTable.constEnd()) {
+      //cout << i.key() << ": " << i.value() << endl;
+      auto colRef_itr = colRefMap(childXsh).find(table_itr.key());
+      if (colRef_itr != colRefMap(childXsh).end()) {
+        QSet<int> val = colRef_itr.value();
+        colRefMap(childXsh).erase(colRef_itr);
+        colRefMap(childXsh).insert(table_itr.value(), val);
+      }
+      // keyの差し替え。valueの方は後で行う
+      auto paramRef_itr = paramRefMap(childXsh).find(table_itr.key());
+      if (paramRef_itr != paramRefMap(childXsh).end()) {
+        QSet<TDoubleParam*> val = paramRef_itr.value();
+        paramRefMap(childXsh).erase(paramRef_itr);
+        paramRefMap(childXsh).insert(table_itr.value(), val);
+      }
+      auto name_itr = nameMap(childXsh).find(table_itr.key());
+      if (name_itr != nameMap(childXsh).end()) {
+        QString val = name_itr.value();
+        nameMap(childXsh).erase(name_itr);
+        nameMap(childXsh).insert(table_itr.value(), val);
+      }
+      auto ignore_itr = ignoredParamSet(childXsh).find(table_itr.key());
+      if (ignore_itr != ignoredParamSet(childXsh).end()) {
+        ignoredParamSet(childXsh).erase(ignore_itr);
+        ignoredParamSet(childXsh).insert(table_itr.value());
+      }
+      ++table_itr;
+    }
+    //paramRefMapのvalueの方の差し替え
+    QMap<TDoubleParam*, QSet<TDoubleParam*>>::iterator pRef_itr = paramRefMap(childXsh).begin();
+    while (pRef_itr != paramRefMap(childXsh).end()) {
+      QSet<TDoubleParam*> repSet;
+      QSet<TDoubleParam*>::iterator i = pRef_itr.value().begin();
+      while (i != pRef_itr.value().end()) {
+        if (replaceTable.contains(*i)) {
+          repSet.insert(replaceTable.value(*i));
+          i = pRef_itr.value().erase(i);
+        }
+        else
+          ++i;
+      }
+      pRef_itr.value().unite(repSet);
+
+      ++pRef_itr;
+    }
+
+  }
 
   // parentMonitorの中から、畳まれたxshに含まれる項目を移行
   // ignore項目を更新
