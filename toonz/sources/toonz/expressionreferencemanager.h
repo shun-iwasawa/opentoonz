@@ -66,6 +66,12 @@ public:
 
   void onCollapse(TXsheet* childXsh, ExpressionReferenceMonitor* parentMonitor,
     std::set<int> indices, std::set<int> newIndices, bool columnsOnly);
+  void onCollapse(TXsheet* childXsh, ExpressionReferenceMonitor* parentMonitor,
+    std::set<int> indices, std::set<int> newIndices, const QList<TStageObjectId> &objIds);
+
+
+  void doOnCollapse(TXsheet* childXsh, ExpressionReferenceMonitor* parentMonitor,
+    std::set<int> indices, std::set<int> newIndices, QList<TStageObjectId>& duplicatedObjs);
 protected slots:
   void onReferenceParamsChanged(TDoubleParam* curve, QSet<int> colBefore,
                                 QSet<int> colAfter,

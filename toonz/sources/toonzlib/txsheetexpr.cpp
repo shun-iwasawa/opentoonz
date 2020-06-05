@@ -20,6 +20,7 @@
 #include "toonz/tstageobjectid.h"
 #include "toonz/tstageobject.h"
 #include "toonz/fxdag.h"
+#include "toonz/tstageobjecttree.h"
 
 // Boost includes
 #include "boost/noncopyable.hpp"
@@ -354,7 +355,9 @@ public:
       stack.push_back(new XsheetDrawingCalculatorNode(calc, m_xsh, columnIndex,
                                                       std::move(frameNode)));
     } else {
-      TStageObject *object              = m_xsh->getStageObject(objectId);
+      // 指定したオブジェクトが存在しない場合は作らない
+      TStageObject *object              = m_xsh->getStageObjectTree()->getStageObject(objectId, false);
+      if (!object) return;
       TStageObject::Channel channelName = matchChannelName(tokens[2]);
       TDoubleParam *channel             = object->getParam(channelName);
       if (channel) {

@@ -1302,6 +1302,7 @@ void collapseColumns(std::set<int> indices,
 
   TApp *app    = TApp::instance();
   TXsheet *xsh = app->getCurrentXsheet()->getXsheet();
+  std::set<int> oldIndices = indices;
 
   int index = *indices.begin();
 
@@ -1317,16 +1318,10 @@ void collapseColumns(std::set<int> indices,
                      StageObjectsData::eDoClone);
   data->storeColumnFxs(indices, xsh, StageObjectsData::eDoClone);
 
-  app->getCurrentXsheet()->blockSignals(true);
-  app->getCurrentObject()->blockSignals(true);
-  ColumnCmd::deleteColumns(indices, false, true);
-  app->getCurrentXsheet()->blockSignals(false);
-  app->getCurrentObject()->blockSignals(false);
-
-  xsh->insertColumn(index);
+  ExpressionReferenceMonitor* monitor = xsh->getExpRefMonitor()->clone();
 
   ToonzScene *scene = app->getCurrentScene()->getScene();
-  TXshLevel *xl     = scene->createNewLevel(CHILD_XSHLEVEL);
+  TXshLevel *xl = scene->createNewLevel(CHILD_XSHLEVEL);
   assert(xl);
 
   TXshChildLevel *childLevel = xl->getChildLevel();
@@ -1339,6 +1334,16 @@ void collapseColumns(std::set<int> indices,
   data->restoreObjects(newIndices, restoredSplineIds, childXsh, 0);
   childXsh->updateFrameCount();
 
+  ExpressionReferenceManager::instance()->onCollapse(childXsh, monitor, oldIndices, newIndices, objIds);
+
+  app->getCurrentXsheet()->blockSignals(true);
+  app->getCurrentObject()->blockSignals(true);
+  ColumnCmd::deleteColumns(indices, false, true);
+  app->getCurrentXsheet()->blockSignals(false);
+  app->getCurrentObject()->blockSignals(false);
+
+  xsh->insertColumn(index);
+  
   int r, rowCount = childXsh->getFrameCount();
   for (r = 0; r < rowCount; r++)
     xsh->setCell(r, index, TXshCell(xl, TFrameId(r + 1)));
@@ -1366,11 +1371,14 @@ void collapseColumns(std::set<int> indices, const std::set<TFx *> &fxs,
   TApp *app    = TApp::instance();
   TXsheet *xsh = app->getCurrentXsheet()->getXsheet();
 
+  std::set<int> oldIndices = indices;
   //++++++++++++++++++++++++++++++
 
   StageObjectsData *data = new StageObjectsData();
   data->storeColumns(indices, xsh, StageObjectsData::eDoClone);
   data->storeFxs(fxs, xsh, StageObjectsData::eDoClone);
+
+  ExpressionReferenceMonitor* monitor = xsh->getExpRefMonitor()->clone();
 
   ToonzScene *scene = app->getCurrentScene()->getScene();
   TXshLevel *xl     = scene->createNewLevel(CHILD_XSHLEVEL);
@@ -1385,6 +1393,8 @@ void collapseColumns(std::set<int> indices, const std::set<TFx *> &fxs,
 
   if (!columnsOnly)
     bringPegbarsInsideChildXsheet(xsh, childXsh, indices, newIndices);
+
+  ExpressionReferenceManager::instance()->onCollapse(childXsh, monitor, oldIndices, newIndices, columnsOnly);
 
   childXsh->updateFrameCount();
 

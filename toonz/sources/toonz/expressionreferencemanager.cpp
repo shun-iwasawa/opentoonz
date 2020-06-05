@@ -778,25 +778,18 @@ bool ExpressionReferenceManager::checkReferenceDeletion(
 }
 
 //----------------------------------------------------------------------------
+// xhseet / fx schematic上でcollapseをした場合の処理
+
 void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
   ExpressionReferenceMonitor* parentMonitor,
   std::set<int> indices, std::set<int> newIndices,
-  bool columnsOnly ) {
-
+  bool columnsOnly) {
   // PreferenceがOFFならreturn
   bool on = Preferences::instance()->isModifyExpressionOnMovingColumnEnabled();
   if (!on) return;
-  
-  //まずコピー
-  colRefMap(childXsh) = parentMonitor->colRefMap();
-  paramRefMap(childXsh) = parentMonitor->paramRefMap();
-  nameMap(childXsh) = parentMonitor->nameMap();
-  ignoredParamSet(childXsh) = parentMonitor->ignoredParamSet();
-
+  QList<TStageObjectId> duplicatedObjs;
   // pegbarを持ち込む場合は、サブシート内に複製されたオブジェクトのパラメータにポインタを差し替えて監視を続行する
   if (!columnsOnly) {
-    // 持ち込んだPegbarのリストを作る
-    QList<TStageObjectId> duplicatedObjs;
     for (auto index : newIndices) {
       TStageObjectId id =
         childXsh->getStageObjectParent(TStageObjectId::ColumnId(index));
@@ -805,6 +798,42 @@ void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
         id = childXsh->getStageObjectParent(id);
       }
     }
+  }
+  doOnCollapse(childXsh, parentMonitor, indices, newIndices, duplicatedObjs);
+}
+
+//----------------------------------------------------------------------------
+// stage schematic 上でcollapseをした場合の処理
+
+void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
+  ExpressionReferenceMonitor* parentMonitor,
+  std::set<int> indices, std::set<int> newIndices, const QList<TStageObjectId> &objIds) {
+  // PreferenceがOFFならreturn
+  bool on = Preferences::instance()->isModifyExpressionOnMovingColumnEnabled();
+  if (!on) return;
+  QList<TStageObjectId> duplicatedObjs;
+  for (auto id : objIds) {
+    if (id.isPegbar() || id.isCamera())
+      duplicatedObjs.append(id);
+  }
+  
+  doOnCollapse(childXsh, parentMonitor, indices, newIndices, duplicatedObjs);
+}
+
+  //----------------------------------------------------------------------------
+void ExpressionReferenceManager::doOnCollapse(TXsheet* childXsh,
+  ExpressionReferenceMonitor* parentMonitor,
+  std::set<int> indices, std::set<int> newIndices, 
+  QList<TStageObjectId>& duplicatedObjs) {
+    
+  //まずコピー
+  colRefMap(childXsh) = parentMonitor->colRefMap();
+  paramRefMap(childXsh) = parentMonitor->paramRefMap();
+  nameMap(childXsh) = parentMonitor->nameMap();
+  ignoredParamSet(childXsh) = parentMonitor->ignoredParamSet();
+
+  // pegbarを持ち込む場合は、サブシート内に複製されたオブジェクトのパラメータにポインタを差し替えて監視を続行する
+  if (!duplicatedObjs.isEmpty()) {
 
     // 差し替えテーブルを作る
     QMap<TDoubleParam*, TDoubleParam*> replaceTable;
