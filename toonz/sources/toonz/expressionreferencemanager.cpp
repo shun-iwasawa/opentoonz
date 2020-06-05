@@ -509,6 +509,44 @@ void ExpressionReferenceManager::doColumnReplace(
         if (keyframe.m_type != TDoubleKeyframe::Expression &&
             keyframe.m_type != TDoubleKeyframe::SimilarShape)
           continue;
+
+        //循環参照をチェックする
+        TExpression expr;
+        expr.setGrammar(curve->getGrammar());
+        expr.setText(keyframe.m_expressionText);        
+        //循環参照が発生した場合はカラム番号を`?n?`に差し替える
+        if (dependsOn(expr, curve)) {
+          // replace expression
+          QString expr = QString::fromStdString(keyframe.m_expressionText);
+          QStringList list = expr.split('"');
+          bool isStringToken = false;
+          for (QString& partialExp : list) {
+            if (isStringToken) continue;
+            isStringToken = !isStringToken;
+            int j = 0;
+            while ((j = partialExp.indexOf("col", j)) != -1) {
+              // move iterator to the column number
+              j += 3;
+              // position to the next period
+              int k = partialExp.indexOf(".", j);
+              if (k != -1) {
+                // obtain column number
+                QString numStr = partialExp.mid(j, k - j);
+                bool ok;
+                int colIndex = numStr.toInt(&ok);
+                if (ok) {
+                  partialExp.replace(
+                    j, k - j,"?"+ numStr +"?");
+                }
+              }
+              ++j;
+            }
+          }
+
+          QString newExpr = list.join('"');
+          keyframe.m_expressionText = newExpr.toStdString();
+        }
+
         KeyframeSetter setter(curve, kIndex, false);
         if (keyframe.m_type == TDoubleKeyframe::Expression)
           setter.setExpression(keyframe.m_expressionText);
@@ -840,19 +878,14 @@ void ExpressionReferenceManager::onCollapse(TXsheet* childXsh,
   
   // column indices がcollapse範囲に含まれなかった項目をignoreリストに追加する
   for (auto it = colRefMap(childXsh).begin(); it != colRefMap(childXsh).end();) {
-    bool ignore = false;
     for (auto col: it.value()) {
       if (indices.find(col) == indices.end()) { // 参照カラムがたたむインデックス一覧に含まれていない場合
-        ignore = true;
+        ignoredParamSet(childXsh).insert(it.key()); // 無視リストに入れる
         break;
       }
     }
-    if (ignore) {
-      ignoredParamSet(childXsh).insert(it.key()); // 無視リストに入れる
-      it = colRefMap(childXsh).erase(it);
-    }
-    else
-      ++it;
+    
+    ++it;
   }
 
   // ColumnIndicesのシフト

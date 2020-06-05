@@ -131,7 +131,8 @@ public:
         dynamic_cast<ParamDependencyFinder *>(&visitor);
     if (pdf) {
       pdf->check(m_param.getPointer());
-      m_param->accept(visitor);
+      if (!pdf->found())
+        m_param->accept(visitor);
     }
   }
 
@@ -181,7 +182,8 @@ public:
         dynamic_cast<ParamDependencyFinder *>(&visitor);
     if (pdf) {
       pdf->check(m_param.getPointer());
-      m_param->accept(visitor);
+      if(!pdf->found())
+        m_param->accept(visitor);
     }
   }
 };
