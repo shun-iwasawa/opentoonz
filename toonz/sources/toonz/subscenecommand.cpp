@@ -2362,6 +2362,15 @@ void SubsceneCmd::explode(int index) {
   TXshChildLevel *childLevel = cell.getChildLevel();
   if (!childLevel) return;
 
+  // Cannot remove the column if it contains frames of a TXshSimpleLevel.
+  int from, to;
+  /*--
+  このカラムがsubXsheetLevelしか入っていない場合は、カラムを消去できるのでremoveColumnはtrue
+  何か別のLevelが入っていた場合は、カラムを消去しないので、removeColumnはfalse
+  --*/
+  bool removeColumn =
+    mustRemoveColumn(from, to, childLevel, xsh, index, frameIndex);
+
   /*- Pegbarを親Sheetに持って出るか？の質問ダイアログ -*/
   QString question(QObject::tr("Exploding Sub-xsheet: what you want to do?"));
   QList<QString> list;
@@ -2429,14 +2438,6 @@ void SubsceneCmd::explode(int index) {
   for (i = 0; i < columnFx->getOutputConnectionCount(); i++)
     outPorts.push_back(columnFx->getOutputConnection(i));
 
-  // Cannot remove the column if it contains frames of a TXshSimpleLevel.
-  int from, to;
-  /*--
-  このカラムがsubXsheetLevelしか入っていない場合は、カラムを消去できるのでremoveColumnはtrue
-          何か別のLevelが入っていた場合は、カラムを消去しないので、removeColumnはfalse
-  --*/
-  bool removeColumn =
-      mustRemoveColumn(from, to, childLevel, xsh, index, frameIndex);
   QList<TStageObject *> pegObjects;
   QMap<TStageObjectSpline *, TStageObjectSpline *> splines;
 
