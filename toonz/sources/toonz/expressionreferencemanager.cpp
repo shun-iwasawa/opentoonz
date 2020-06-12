@@ -777,6 +777,84 @@ bool ExpressionReferenceManager::checkReferenceDeletion(
                                   objectIdsToBeDeleted, dummy);
 }
 
+//-----------------------------------------------------------------------------
+// check on exploding sub xsheet
+/*
+方針：
+removeColumnがtrueの場合：親シートのsubSheetColumnがDeleteされる
+columnsOnlyがtrueの場合：サブシート内のColumn以外への参照が切れる
+columnsOnlyがfalseの場合：サブシート内のTableにつながっていないCameraへの参照が切れる
+それらを参照しているExpressionがある場合、警告を出す
+*/
+bool ExpressionReferenceManager::checkExplode(TXsheet *childXsh, int index, bool removeColumn, bool columnsOnly) {
+
+  // PreferenceがOFFならreturn
+  bool on = Preferences::instance()->isModifyExpressionOnMovingColumnEnabled();
+  if (!on) return true;
+
+  QSet<TDoubleParam*> mainCautionParams;
+  if (removeColumn) {
+    // 展開されるcolumnIdを含むparamを見つける
+    for (auto it = colRefMap().begin(); it != colRefMap().end(); it++) {
+      if (it.value().contains(index))
+        mainCautionParams.insert(it.key());
+    }
+  }
+
+  QSet<TDoubleParam*> subCautionParams;
+
+  m_model->refreshData(childXsh);
+  // Stageのパラメータを参照しているparamを見つける
+  QSet<TDoubleParam*> stageParamsToBeDeleted;
+  TStageObject* table = childXsh->getStageObject(TStageObjectId::TableId);
+  for (int i = 0; i < m_model->getStageObjectsChannelCount(); i++) {
+    StageObjectChannelGroup* socg = dynamic_cast<StageObjectChannelGroup*>(
+      m_model->getStageObjectChannel(i));
+    if (!socg) continue;
+    TStageObjectId id = socg->getStageObject()->getId();
+    if ((columnsOnly && !id.isColumn()) || (!columnsOnly && !socg->getStageObject()->isAncestor(table)))
+      gatherParams(socg, stageParamsToBeDeleted);
+  }
+  for (auto it = paramRefMap(childXsh).begin(); it != paramRefMap(childXsh).end(); it++) {
+    for (auto refParam : it.value()) {
+      if (stageParamsToBeDeleted.contains(refParam)) {
+        subCautionParams.insert(it.key());
+        break;
+      }
+    }
+  }
+
+  //パラメータ一覧の中で、それら自体が消える場合は除外
+  for (auto it = subCautionParams.begin(); it != subCautionParams.end();)
+    if (stageParamsToBeDeleted.contains(*it))
+      it = subCautionParams.erase(it);
+    else
+      ++it;
+
+  TXsheet* currentXsh = TApp::instance()->getCurrentXsheet()->getXsheet();
+  m_model->refreshData(currentXsh);
+
+  //警告が必要なパラメータがある場合はポップアップを出す
+  if (mainCautionParams.isEmpty() && subCautionParams.isEmpty()) return true;
+
+  QString warningTxt =
+    tr("Following parameters will lose reference in expressions:");
+  for (auto param : mainCautionParams) {
+    warningTxt += "\n  " + nameMap().value(param) + "  " + tr("(In the current xsheet)");
+  }
+  for (auto param : subCautionParams) {
+    warningTxt += "\n  " + nameMap(childXsh).value(param) + "  " + tr("(To be brought from the subxsheet)");
+  }
+  warningTxt += tr("\nDo you want to delete anyway ?");
+
+  int ret =
+    DVGui::MsgBox(warningTxt, QObject::tr("OK"), QObject::tr("Cancel"), 0);
+  if (ret == 0 || ret == 2) return false;
+
+  return true;
+}
+
+
 //----------------------------------------------------------------------------
 // xhseet / fx schematic上でcollapseをした場合の処理
 

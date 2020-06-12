@@ -63,6 +63,7 @@ public:
                               bool checkInvert);
   bool checkReferenceDeletion(
       const QList<TStageObjectId>& objectIdsToBeDeleted);
+  bool checkExplode(TXsheet *childXsh, int index, bool removeColumn, bool columnsOnly);
 
   void onCollapse(TXsheet* childXsh, ExpressionReferenceMonitor* parentMonitor,
     std::set<int> indices, std::set<int> newIndices, bool columnsOnly);

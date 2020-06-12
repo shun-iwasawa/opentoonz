@@ -2379,6 +2379,8 @@ void SubsceneCmd::explode(int index) {
   int ret = DVGui::RadioButtonMsgBox(DVGui::WARNING, question, list);
   if (ret == 0) return;
 
+  if (!ExpressionReferenceManager::instance()->checkExplode(childLevel->getXsheet(), index, removeColumn, ret == 2)) return;
+
   // Collect column stage object informations
   TStageObjectId colId    = TStageObjectId::ColumnId(index);
   TStageObjectId parentId = xsh->getStageObjectParent(colId);
