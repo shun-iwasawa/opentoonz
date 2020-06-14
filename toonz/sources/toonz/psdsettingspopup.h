@@ -14,6 +14,7 @@
 // forward declaration
 class QPushButton;
 class QComboBox;
+class QStackedLayout;
 
 namespace DVGui {
 class CheckBox;
@@ -34,8 +35,16 @@ class PsdSettingsPopup final : public DVGui::Dialog {
   // layer
   // contained
   // into folder is a frame of TLevel
+public:
+  enum Mode { FLAT, FRAMES, FRAMES_GROUP, COLUMNS, FOLDER };
 
-  enum Mode { FLAT, FRAMES, COLUMNS, FOLDER };
+  enum GroupOptions {
+    IgnoreGroups,
+    GroupAsSubXsheet,
+    GroupAsColumn,
+    GroupAsSingleImage
+  };
+private:
 
   TFilePath m_path;
   std::vector<TFilePath> m_psdLevelPaths;
@@ -46,7 +55,10 @@ class PsdSettingsPopup final : public DVGui::Dialog {
   QPushButton *m_cancelBtn;
   QComboBox *m_loadMode, *m_levelNameType;
   DVGui::CheckBox *m_createSubXSheet;
-  QButtonGroup *m_psdFolderOptions;
+  
+  QStackedLayout* m_groupOptionStack;
+  QComboBox *m_frameGroupOptions;
+  QComboBox *m_columnsGroupOptions;
 
   // QTreeWidget *m_psdTree;	// per adesso non serve. Servirà in un secondo
   // momento quando implemento la scelta dei livelli
@@ -55,7 +67,7 @@ class PsdSettingsPopup final : public DVGui::Dialog {
   TPSDParser *m_psdparser;
   QLabel *m_filename;   // Name
   QLabel *m_parentDir;  // Path
-
+  
 public slots:
   void onOk();
 
@@ -72,7 +84,7 @@ public:
   bool subxsheet();
   int levelNameType();
 
-  int getFolderOption();
+  int getGroupOption();
   int getSubfolderLevelIndex(int psdLevelIndex, int frameIndex);
 
 private:
@@ -80,7 +92,7 @@ private:
 
 protected slots:
   void onModeChanged();
-  void onFolderOptionChange(int id);
+  void onGroupOptionChange();
 };
 
 #endif  // PsdSettingsPopup_H

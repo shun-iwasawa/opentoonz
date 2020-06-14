@@ -2167,7 +2167,7 @@ static int loadPSDResource(IoCmd::LoadResourceArguments &args,
   loadedPsdLevelIndex.clear();
   // for each layer in psd
   for (int i = 0; i < popup->getPsdLevelCount(); i++) {
-    if (popup->isFolder(i) && popup->getFolderOption() == 1) {
+    if (popup->isFolder(i) && popup->getGroupOption() == PsdSettingsPopup::GroupAsSubXsheet) {
       if (find(loadedPsdLevelIndex.begin(), loadedPsdLevelIndex.end(), i) !=
           loadedPsdLevelIndex.end())
         continue;

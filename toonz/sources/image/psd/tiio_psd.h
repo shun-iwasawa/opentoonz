@@ -21,7 +21,7 @@ public:
   TDimension getSize() const { return TDimension(m_lx, m_ly); }
   TRect getBBox() const { return TRect(0, 0, m_lx - 1, m_ly - 1); }
 
-  void setLayerId(int layerId) { m_layerId = layerId; }
+  void setLayerIds(std::vector<int> layerIds) { m_layerIds = layerIds; }
   // int m_IOError;
 
 private:
@@ -29,8 +29,8 @@ private:
   int m_lx, m_ly;
   int m_layersCount;
   TPSDReader *m_psdreader;
-  int m_layerId;
-  std::map<TFrameId, int> m_frameTable;  // frameID, layerId
+  std::vector<int> m_layerIds;
+  std::map<TFrameId, std::vector<int>> m_frameTable;  // frameID, layerIds
 public:
   static TLevelReader *create(const TFilePath &f);
   TThread::Mutex m_mutex;

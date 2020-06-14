@@ -24,6 +24,7 @@
 #include <QStringList>
 #include <QTreeWidgetItem>
 #include <QMainWindow>
+#include <QStackedLayout>
 
 using namespace DVGui;
 #define REF_LAYER_BY_NAME
@@ -105,6 +106,17 @@ static void doPSDInfo(TFilePath psdpath, QTreeWidget *psdTree) {
   }
 }
 
+namespace {
+  class TitleTextLabel : public QLabel
+  {
+  public:
+    TitleTextLabel(const QString &text, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags())
+    : QLabel(text, parent, f) {
+      setObjectName("TitleTxtLabel");
+    }
+  };
+}
+
 //=============================================================================
 // PsdSettingsPopup
 //-----------------------------------------------------------------------------
@@ -112,125 +124,130 @@ static void doPSDInfo(TFilePath psdpath, QTreeWidget *psdTree) {
 PsdSettingsPopup::PsdSettingsPopup()
     : Dialog(TApp::instance()->getMainWindow(), true, true, "PsdSettings")
     , m_mode(FLAT) {
-  bool ret = true;
 
   setWindowTitle(tr("Load PSD File"));
-
   if (modesDescription.isEmpty()) {
     modesDescription
-        << tr("Flatten visible document layers into a single image. Layer "
-              "styles are maintained.")
-        << tr("Load document layers as frames into a single xsheet column.")
-        << tr("Load document layers as xhseet columns.");
+      << tr("Flatten visible document layers into a single image. Layer "
+        "styles are maintained.")
+      << tr("Load document layers as frames into a single xsheet column.")
+      << tr("Load document layers as xhseet columns.");
   }
-
+  
   m_filename = new QLabel(tr(""));
+  m_parentDir = new QLabel(tr(""));
+  m_loadMode = new QComboBox();
+  m_modeDescription = new QTextEdit(modesDescription[0]);
+  m_createSubXSheet = new CheckBox(tr("Expose in a Sub-xsheet"));
+  m_levelNameType = new QComboBox();
+  
+
   m_filename->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   m_filename->setFixedHeight(WidgetHeight);
-  m_parentDir = new QLabel(tr(""));
   m_parentDir->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   m_parentDir->setFixedHeight(WidgetHeight);
-  QLabel *nmLbl = new QLabel(tr("Name:"));
-  nmLbl->setObjectName("TitleTxtLabel");
-  QLabel *ptLbl = new QLabel(tr("Path:"));
-  ptLbl->setObjectName("TitleTxtLabel");
-  QGridLayout *grid = new QGridLayout();
-  grid->setColumnMinimumWidth(0, 65);
-  grid->addWidget(nmLbl, 0, 0, Qt::AlignRight);
-  grid->addWidget(m_filename, 0, 1, Qt::AlignLeft);
-  grid->addWidget(ptLbl, 1, 0, Qt::AlignRight);
-  grid->addWidget(m_parentDir, 1, 1, Qt::AlignLeft);
-  QHBoxLayout *layinfo = new QHBoxLayout;
-  layinfo->addLayout(grid);
-  layinfo->addStretch();
-  addLayout(layinfo, false);
 
-  /*
-          m_psdTree = new QTreeWidget();
-          m_psdTree->setIconSize(QSize(21,17));
-          m_psdTree->setColumnCount(1);
-          m_psdTree->setMaximumHeight(7*WidgetHeight);
-          m_psdTree->setHeaderLabel("PSD Info");
-          addWidget(m_psdTree);			 */
-
-  addSeparator();
-
-  m_loadMode = new QComboBox();
   m_loadMode->addItem(tr("Single Image"), QString("Single Image"));
   m_loadMode->addItem(tr("Frames"), QString("Frames"));
   m_loadMode->addItem(tr("Columns"), QString("Columns"));
   m_loadMode->setFixedHeight(WidgetHeight);
   m_loadMode->setFixedWidth(120);
 
-  m_modeDescription = new QTextEdit(modesDescription[0]);
   m_modeDescription->setFixedHeight(40);
   m_modeDescription->setMinimumWidth(250);
   m_modeDescription->setReadOnly(true);
-  m_createSubXSheet = new CheckBox(tr("Expose in a Sub-xsheet"));
   m_createSubXSheet->setMaximumHeight(WidgetHeight);
   m_createSubXSheet->setEnabled(false);
 
-  m_levelNameType = new QComboBox();
   QStringList types;
   types << tr("FileName#LayerName") << tr("LayerName");
   m_levelNameType->addItems(types);
   m_levelNameType->setFixedHeight(WidgetHeight);
   m_levelNameType->setEnabled(false);
 
-  QLabel *modeLbl = new QLabel(tr("Load As:"));
-  modeLbl->setObjectName("TitleTxtLabel");
-
-  QLabel *levelNameLbl = new QLabel(tr("Level Name:"));
-  levelNameLbl->setObjectName("TitleTxtLabel");
-
-  QGridLayout *gridMode = new QGridLayout();
-  gridMode->setColumnMinimumWidth(0, 65);
-  gridMode->setMargin(0);
-  gridMode->addWidget(modeLbl, 0, 0, Qt::AlignRight);
-  gridMode->addWidget(m_loadMode, 0, 1, Qt::AlignLeft);
-  gridMode->addWidget(m_modeDescription, 1, 1, Qt::AlignLeft);
-  gridMode->addWidget(m_createSubXSheet, 2, 1, Qt::AlignLeft);
-  gridMode->addWidget(levelNameLbl, 3, 0, Qt::AlignRight);
-  gridMode->addWidget(m_levelNameType, 3, 1, Qt::AlignLeft);
+  m_frameGroupOptions = new QComboBox(this);
+  m_frameGroupOptions->addItem(tr("Ignore groups"), IgnoreGroups);
+  m_frameGroupOptions->addItem(tr("Combine layers in a group as a single image"), GroupAsSingleImage);
+  
+  m_columnsGroupOptions = new QComboBox(this);
+  m_columnsGroupOptions->addItem(tr("Ignore groups"), IgnoreGroups);
+  m_columnsGroupOptions->addItem(tr("Expose layers in a group as columns in a sub-xsheet"), GroupAsSubXsheet);
+  m_columnsGroupOptions->addItem(tr("Expose layers in a group as frames in a column"), GroupAsColumn);
+  
+  QHBoxLayout *layinfo = new QHBoxLayout;
+  {
+    QGridLayout *grid = new QGridLayout();
+    grid->setColumnMinimumWidth(0, 65);
+    {
+      grid->addWidget(new TitleTextLabel(tr("Name:")), 0, 0, Qt::AlignRight);
+      grid->addWidget(m_filename, 0, 1, Qt::AlignLeft);
+      grid->addWidget(new TitleTextLabel(tr("Path:")), 1, 0, Qt::AlignRight);
+      grid->addWidget(m_parentDir, 1, 1, Qt::AlignLeft);
+    }
+    layinfo->addLayout(grid);
+    layinfo->addStretch();
+  }
+  addLayout(layinfo, false);
+  
+  addSeparator();
+  
   QHBoxLayout *modeLayout = new QHBoxLayout;
-  modeLayout->addLayout(gridMode);
-  modeLayout->addStretch();
+  {
+    QGridLayout *gridMode = new QGridLayout();
+    gridMode->setColumnMinimumWidth(0, 65);
+    gridMode->setMargin(0);
+    {
+      gridMode->addWidget(new TitleTextLabel(tr("Load As:")), 0, 0, Qt::AlignRight);
+      gridMode->addWidget(m_loadMode, 0, 1, Qt::AlignLeft);
+      gridMode->addWidget(m_modeDescription, 1, 1, Qt::AlignLeft);
+      gridMode->addWidget(m_createSubXSheet, 2, 1, Qt::AlignLeft);
+      gridMode->addWidget(new TitleTextLabel(tr("Level Name:")), 3, 0, Qt::AlignRight);
+      gridMode->addWidget(m_levelNameType, 3, 1, Qt::AlignLeft);
+    }
+    modeLayout->addLayout(gridMode);
+    modeLayout->addStretch();
+  }
   addLayout(modeLayout, false);
 
-  addSeparator(tr("Group Option"));
-  m_psdFolderOptions = new QButtonGroup(this);
-  QList<QString> folderOptionsList;
-  folderOptionsList << tr("Ignore groups");
-  folderOptionsList << tr(
-      "Expose layers in a group as columns in a sub-xsheet");
-  folderOptionsList << tr("Expose layers in a group as frames in a column");
+  m_groupOptionStack = new QStackedLayout();
+  m_groupOptionStack->addWidget(new QWidget(this)); //Flat
 
-  QGridLayout *gridButton = new QGridLayout();
-  gridButton->setColumnMinimumWidth(0, 70);
-  int i;
-  for (i = 0; i < folderOptionsList.count(); i++) {
-    QRadioButton *radioButton = new QRadioButton(folderOptionsList.at(i));
-    if (i == 0) radioButton->setChecked(true);
-
-    radioButton->setMaximumHeight(WidgetHeight);
-    if (m_mode != COLUMNS) {
-      radioButton->setEnabled(false);
-    }
-    m_psdFolderOptions->addButton(radioButton);
-    m_psdFolderOptions->setId(radioButton, i);
-    gridButton->addWidget(radioButton, i, 1);
+  QWidget* frameGroup = new QWidget();
+  QHBoxLayout *frameGroupLayout = new QHBoxLayout();
+  frameGroupLayout->setMargin(0);
+  frameGroupLayout->setSpacing(5);
+  {
+    frameGroupLayout->addWidget(new QLabel(tr("Group Option:"), this), 0);
+    frameGroupLayout->addWidget(m_frameGroupOptions, 0);
+    frameGroupLayout->addStretch(1);
   }
-  QHBoxLayout *folderOptLayout = new QHBoxLayout;
-  folderOptLayout->addLayout(gridButton);
-  folderOptLayout->addStretch();
-  addLayout(folderOptLayout, false);
+  frameGroup->setLayout(frameGroupLayout);
+  m_groupOptionStack->addWidget(frameGroup); //Frames
 
+  QWidget* columnGroup = new QWidget();
+  QHBoxLayout *columnGroupLayout = new QHBoxLayout();
+  columnGroupLayout->setMargin(0);
+  columnGroupLayout->setSpacing(5);
+  {
+    columnGroupLayout->addWidget(new QLabel(tr("Group Option:"), this), 0);
+    columnGroupLayout->addWidget(m_columnsGroupOptions, 0);
+    columnGroupLayout->addStretch(1);
+  }
+  columnGroup->setLayout(columnGroupLayout);
+  m_groupOptionStack->addWidget(columnGroup); //Columns
+
+  addLayout(m_groupOptionStack, false);
+
+  bool ret = true;
   ret = ret && connect(m_loadMode, SIGNAL(currentIndexChanged(const QString &)),
                        SLOT(onModeChanged()));
+  
+  ret = ret && connect(m_frameGroupOptions, SIGNAL(activated(int)), this,
+                       SLOT(onGroupOptionChange()));
+  ret = ret && connect(m_columnsGroupOptions, SIGNAL(activated(int)), this,
+    SLOT(onGroupOptionChange()));
   assert(ret);
-  ret = ret && connect(m_psdFolderOptions, SIGNAL(buttonClicked(int)), this,
-                       SLOT(onFolderOptionChange(int)));
-  assert(ret);
+
   m_okBtn     = new QPushButton(tr("OK"), this);
   m_cancelBtn = new QPushButton(tr("Cancel"), this);
   connect(m_okBtn, SIGNAL(clicked()), this, SLOT(onOk()));
@@ -271,57 +288,60 @@ void PsdSettingsPopup::onModeChanged() {
     m_modeDescription->setText(modesDescription[0]);
     m_createSubXSheet->setEnabled(false);
     m_levelNameType->setEnabled(false);
-    QList<QAbstractButton *> buttons = m_psdFolderOptions->buttons();
-    while (!buttons.isEmpty()) {
-      QAbstractButton *btn = buttons.takeFirst();
-      btn->setEnabled(false);
-    }
+
+    m_groupOptionStack->setCurrentIndex(0);
   } else if (mode == "Frames") {
-    m_mode = FRAMES;
+    if (m_frameGroupOptions->currentData() == IgnoreGroups)
+      m_mode = FRAMES;
+    else
+      m_mode = FRAMES_GROUP;
+
     m_modeDescription->setText(modesDescription[1]);
     m_createSubXSheet->setEnabled(false);
     m_levelNameType->setEnabled(false);
-    QList<QAbstractButton *> buttons = m_psdFolderOptions->buttons();
-    while (!buttons.isEmpty()) {
-      QAbstractButton *btn = buttons.takeFirst();
-      btn->setEnabled(false);
-    }
+
+    m_groupOptionStack->setCurrentIndex(1);
   } else if (mode == "Columns") {
-    if (m_psdFolderOptions->checkedId() == 2 ||
-        m_psdFolderOptions->checkedId() == 1)
+    if (m_columnsGroupOptions->currentData() == GroupAsSubXsheet ||
+        m_columnsGroupOptions->currentData() == GroupAsColumn)
       m_mode = FOLDER;
     else
       m_mode = COLUMNS;
+
     m_modeDescription->setText(modesDescription[2]);
     m_createSubXSheet->setEnabled(true);
     m_levelNameType->setEnabled(true);
-    QList<QAbstractButton *> buttons = m_psdFolderOptions->buttons();
-    while (!buttons.isEmpty()) {
-      QAbstractButton *btn = buttons.takeFirst();
-      btn->setEnabled(true);
-    }
+
+    m_groupOptionStack->setCurrentIndex(2);
   } else {
     assert(false);
   }
 }
 
-void PsdSettingsPopup::onFolderOptionChange(int id) {
-  switch (id) {
-  case 0:  // Ignore Folder
-    m_mode = COLUMNS;
-    break;
-  case 1:  // Fodler as SUBXSHEET
-    m_mode = FOLDER;
-    break;
-  case 2:  // Frames
-    m_mode = FOLDER;
-    break;
-  default:
-    assert(0);
+void PsdSettingsPopup::onGroupOptionChange() {
+  QString mode = m_loadMode->currentData().toString();
+  if (mode == "Frames") {
+    if (m_frameGroupOptions->currentData() == IgnoreGroups)
+      m_mode = FRAMES;
+    else
+      m_mode = FRAMES_GROUP;
   }
+  else if (mode == "Columns") {
+    if (m_columnsGroupOptions->currentData() == GroupAsSubXsheet ||
+      m_columnsGroupOptions->currentData() == GroupAsColumn)
+      m_mode = FOLDER;
+    else
+      m_mode = COLUMNS;
+  }
+  else 
+    assert(false);
 }
-int PsdSettingsPopup::getFolderOption() {
-  return m_psdFolderOptions->checkedId();
+
+int PsdSettingsPopup::getGroupOption() {
+  QString mode = m_loadMode->currentData().toString();
+  if (mode == "Frames")  return m_frameGroupOptions->currentData().toInt();
+  else if (mode == "Columns") return m_columnsGroupOptions->currentData().toInt();
+  else return -1;
 }
 
 void PsdSettingsPopup::doPsdParser() {
@@ -336,6 +356,13 @@ void PsdSettingsPopup::doPsdParser() {
     mode = "#frames";
     std::string name =
         psdpath.getName() + "#1" + mode + psdpath.getDottedType();
+    psdpath = psdpath.getParentDir() + TFilePath(name);
+    break;
+  }
+  case FRAMES_GROUP: {
+    mode = "#framesgroup";
+    std::string name =
+      psdpath.getName() + "#1" + mode + psdpath.getDottedType();
     psdpath = psdpath.getParentDir() + TFilePath(name);
     break;
   }
@@ -362,7 +389,7 @@ void PsdSettingsPopup::doPsdParser() {
     for (int i = 0; i < m_psdparser->getLevelsCount(); i++) {
       int layerId      = m_psdparser->getLevelId(i);
       std::string name = m_path.getName();
-      if (layerId > 0 && m_mode != FRAMES) {
+      if (layerId > 0 && (m_mode != FRAMES && m_mode != FRAMES_GROUP)) {
         if (m_levelNameType->currentIndex() == 0)  // FileName#LevelName
           name += "#" + std::to_string(layerId);
         else  // LevelName
@@ -384,7 +411,7 @@ TFilePath PsdSettingsPopup::getPsdPath(int levelIndex) {
 }
 TFilePath PsdSettingsPopup::getPsdFramePath(int levelIndex, int frameIndex) {
   int layerId      = m_psdparser->getLevelId(levelIndex);
-  int frameId      = m_psdparser->getFrameId(layerId, frameIndex);
+  int frameId      = m_psdparser->getFrameLayerIds(layerId, frameIndex)[0];
   std::string name = m_path.getName();
   if (frameId > 0) name += "#" + std::to_string(frameId);
   name += m_path.getDottedType();
@@ -413,7 +440,7 @@ bool PsdSettingsPopup::isSubFolder(int levelIndex, int frameIndex) {
 int PsdSettingsPopup::getSubfolderLevelIndex(int psdLevelIndex,
                                              int frameIndex) {
   int levelId        = m_psdparser->getLevelId(psdLevelIndex);
-  int frameId        = m_psdparser->getFrameId(levelId, frameIndex);
+  int frameId        = m_psdparser->getFrameLayerIds(levelId, frameIndex)[0];
   int subFolderIndex = m_psdparser->getLevelIndexById(frameId);
   return subFolderIndex;
 }

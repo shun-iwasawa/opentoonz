@@ -211,14 +211,17 @@ class DVAPI TPSDParser {
     void addFrame(int layerId, bool isFolder = false) {
       framesId.push_back(Frame(layerId, isFolder));
     }
+    void addFrame(std::vector<int> layerIds, bool isFolder = false) {
+      framesId.push_back(Frame(layerIds, isFolder));
+    }
     int getFrameCount() { return (int)framesId.size(); }
     std::string getName() { return name; }
     int getLayerId() { return layerId; }
     void setName(std::string nname) { name = nname; }
     void setLayerId(int nlayerId) { layerId = nlayerId; }
-    int getFrameId(int index) {
+    std::vector<int> getFrameLayerIds(int index) {
       assert(index >= 0 && index < (int)framesId.size());
-      return framesId[index].layerId;
+      return framesId[index].layerIds;
     }
     // return true if frame is a subfolder
     bool isSubFolder(int frameIndex) {
@@ -230,9 +233,12 @@ class DVAPI TPSDParser {
 
   private:
     struct Frame {
-      int layerId;  // psd layerId
+      std::vector<int> layerIds;  // psd layerId
       bool isFolder;
-      Frame(int layId, bool folder) : layerId(layId), isFolder(folder) {}
+      Frame(int layId, bool folder) : isFolder(folder) {
+        layerIds.push_back(layId);
+      }
+      Frame(std::vector<int>layIds, bool folder) : layerIds(layIds), isFolder(folder) {}
     };
 
     std::string name;             // psd name
@@ -275,16 +281,16 @@ public:
   int getLevelIndexById(int levelId);
   // Returns layerID by name. Note that the layer name is not unique, so it
   // return the first layer id found.
-  int getLevelIdByName(std::string levelName);
-  int getFrameId(int layerId, int frameIndex) {
-    return m_levels[getLevelIndexById(layerId)].getFrameId(frameIndex);
+  int getLayerIdByName(std::string layerName);
+  std::vector<int> getFrameLayerIds(int layerId, int frameIndex) {
+    return m_levels[getLevelIndexById(layerId)].getFrameLayerIds(frameIndex);
   }
-  int getFramesCount(int levelId);
+  int getFramesCount(int layerId);
   bool isSubFolder(int levelIndex, int frameIndex) {
     assert(levelIndex >= 0 && levelIndex < (int)m_levels.size());
     return m_levels[levelIndex].isSubFolder(frameIndex);
   }
-  std::string getLevelName(int levelId);
+  std::string getLevelName(int layerId);
   // Returns level name.
   // If there are 2 or more level with the same name then
   // returns levelname, levelname__2, etc

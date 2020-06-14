@@ -1,6 +1,8 @@
 #include "tiio_psd.h"
 #include "trasterimage.h"
 #include "timageinfo.h"
+
+#include "trop.h"
 #if (defined(x64) || defined(__LP64__))
 #include "toonz/preferences.h"
 #include <QtCore>
@@ -20,7 +22,9 @@
 //                              where fodler is the folder belongs psd layer.
 
 TLevelReaderPsd::TLevelReaderPsd(const TFilePath &path)
-    : TLevelReader(path), m_path(path), m_layerId(0) {
+    : TLevelReader(path), m_path(path)
+  //, m_layerId(0)
+{
   m_psdreader           = new TPSDReader(m_path);
   TPSDHeaderInfo header = m_psdreader->getPSDHeaderInfo();
   m_lx                  = header.cols;
@@ -37,20 +41,24 @@ TLevelReaderPsd::TLevelReaderPsd(const TFilePath &path)
 
   QString name     = m_path.getName().c_str();
   QStringList list = name.split("#");
-  if (list.size() >= 2) {
+  if (list.size() < 2)
+    m_layerIds.push_back(0);
+  // Single Image (FLAT mode) ‚Å‚È‚¢ê‡
+  else {
     // There's a layer id, otherwise the level is loaded in FLAT mode
     const QString &layerStr = list.at(1);
 
 #ifdef REF_LAYER_BY_NAME
 #if (defined(x64) || defined(__LP64__))
-    if (layerStr != "frames") {
+    // Columns‚Ìê‡
+    if (!layerStr.startsWith("frames")) {
       QTextCodec *layerNameCodec = QTextCodec::codecForName(
-          Preferences::instance()->getLayerNameEncoding().c_str());
+          Preferences::instance()->getLayerNameEncoding().c_str());//Œ»ó SJIS ‚ÅŒÅ’è‚³‚ê‚Ä‚¢‚é
       TPSDParser psdparser(m_path);
-      m_layerId = psdparser.getLevelIdByName(
-          layerNameCodec->fromUnicode(layerStr).toStdString());
-    } else {
-      m_layerId = layerStr.toInt();
+      m_layerIds.push_back( psdparser.getLayerIdByName(
+          layerNameCodec->fromUnicode(layerStr).toStdString()));
+    } else { // Frames‚Ìê‡
+      m_layerIds.push_back(layerStr.toInt());//????
     }
 #endif
 #else
@@ -66,26 +74,31 @@ TLevelReaderPsd::~TLevelReaderPsd() { delete m_psdreader; }
 //------------------------------------------------
 
 void TLevelReaderPsd::load(TRasterImageP &rasP, int shrinkX, int shrinkY,
-                           TRect region) {
+  TRect region) {
   QMutexLocker sl(&m_mutex);
-  TRasterImageP img;
   m_psdreader->setShrink(shrinkX, shrinkY);
   m_psdreader->setRegion(region);
-  m_psdreader->load(img, m_layerId);  // if layerId==0 load Merged
-  rasP = img;
+  for (int layerId : m_layerIds){
+    TRasterImageP img;
+    m_psdreader->load(img, layerId);  // if layerId==0 load Merged
+    if (!rasP.getPointer())
+      rasP = img;
+    else
+      TRop::quickPut(rasP->getRaster(), img->getRaster(), TAffine());
+  }
 }
 
 TLevelP TLevelReaderPsd::loadInfo() {
   TPSDParser *psdparser = new TPSDParser(m_path);
-  assert(m_layerId >= 0);
-  int framesCount = psdparser->getFramesCount(m_layerId);
+  assert(!m_layerIds.empty());
+  int framesCount = psdparser->getFramesCount(m_layerIds[0]);
   TLevelP level;
-  level->setName(psdparser->getLevelName(m_layerId));
+  level->setName(psdparser->getLevelName(m_layerIds[0]));
   m_frameTable.clear();
   for (int i = 0; i < framesCount; i++) {
     TFrameId frame(i + 1);
     m_frameTable.insert(
-        std::make_pair(frame, psdparser->getFrameId(m_layerId, i)));
+        std::make_pair(frame, psdparser->getFrameLayerIds(m_layerIds[0], i)));
     level->setFrame(frame, TImageP());
   }
   return level;
@@ -104,7 +117,7 @@ TLevelReader *TLevelReaderPsd::create(const TFilePath &f) {
 
 class TImageReaderLayerPsd final : public TImageReader {
 public:
-  TImageReaderLayerPsd(const TFilePath &, int layerId, TLevelReaderPsd *lr,
+  TImageReaderLayerPsd(const TFilePath &, std::vector<int> layerIds, TLevelReaderPsd *lr,
                        TImageInfo *info);
   ~TImageReaderLayerPsd() { m_lr->release(); }
 
@@ -122,14 +135,14 @@ private:
   TPSDReader *m_psdreader;
   TLevelReaderPsd *m_lr;
   TImageInfo *m_info;
-  int m_layerId;
+  std::vector<int> m_layerIds;
 };
 
-TImageReaderLayerPsd::TImageReaderLayerPsd(const TFilePath &path, int layerId,
+TImageReaderLayerPsd::TImageReaderLayerPsd(const TFilePath &path, std::vector<int> layerIds,
                                            TLevelReaderPsd *lr,
                                            TImageInfo *info)
-    : TImageReader(path), m_lr(lr), m_layerId(layerId), m_info(info) {
-  m_lr->setLayerId(layerId);
+    : TImageReader(path), m_lr(lr), m_layerIds(layerIds), m_info(info) {
+  m_lr->setLayerIds(layerIds);
   m_lr->addRef();
 }
 
@@ -140,9 +153,9 @@ TImageP TImageReaderLayerPsd::load() {
 }
 
 TImageReaderP TLevelReaderPsd::getFrameReader(TFrameId fid) {
-  int layerId = m_frameTable[fid];
+  std::vector<int> layerIds = m_frameTable[fid];
   TImageReaderLayerPsd *ir =
-      new TImageReaderLayerPsd(m_path, layerId, this, m_info);
+      new TImageReaderLayerPsd(m_path, layerIds, this, m_info);
   return TImageReaderP(ir);
 }
 

@@ -343,6 +343,7 @@ void TPSDReader::doImage(TRasterP &rasP, int layerId) {
   long pixh    = li ? li->bottom - li->top : m_headerInfo.rows;
   int channels = li ? li->channels : m_headerInfo.channels;
 
+  // start pos for loading the complete merged image
   if (li == NULL)
     fseek(m_file, m_headerInfo.lmistart + m_headerInfo.lmilen, SEEK_SET);
 
@@ -1089,6 +1090,9 @@ void readLongData(FILE *f, struct dictentry *parent, TPSDLayerInfo *li) {
     li->layerId = id;
   else if (strcmp(parent->key, "lspf") == 0)
     li->protect = id;
+  // Type. 4 possible values, 0 = any other type of layer, 
+  // 1 = open "folder", 2 = closed "folder", 
+  // 3 = bounding section divider, hidden in the UI
   else if (strcmp(parent->key, "lsct") == 0)
     li->section = id;
   else if (strcmp(parent->key, "ffxi") == 0)
@@ -1151,7 +1155,7 @@ TPSDParser::TPSDParser(const TFilePath &path) {
 
 TPSDParser::~TPSDParser() { delete m_psdreader; }
 
-void TPSDParser::doLevels() {
+void TPSDParser::doLevels() { // ここ大事！！！
   QString path     = m_path.getName().c_str();
   QStringList list = path.split("#");
   m_levels.clear();
@@ -1176,7 +1180,57 @@ void TPSDParser::doLevels() {
         level.addFrame(firstLayerId);  // succede nel caso in cui la psd non ha
                                        // blocco layerInfo
       m_levels.push_back(level);
-    } else if (list.size() == 3) {
+    } else if (list.contains("framesgroup") && list.at(0) != "framesfroup") {
+      int firstLayerId = 0;
+      int folderTagOpen = 0;
+      Level level;
+      std::vector<int> groupLayerIds;
+      for (int i = 0; i < psdheader.layersCount; i++) {
+        TPSDLayerInfo *li = m_psdreader->getLayerInfo(i);
+        long width = li->right - li->left;
+        long height = li->bottom - li->top;
+        if (width > 0 && height > 0 && folderTagOpen == 0) {
+          assert(li->layerId >= 0);
+          if (i == 0) firstLayerId = li->layerId;
+          level.addFrame(li->layerId);
+        }
+        else {
+          // グループ内のレイヤー
+          if (width != 0 && height != 0) {
+            groupLayerIds.push_back(li->layerId);
+          }
+          else {
+            // グループ閉じる
+            if (strcmp(li->name, "</Layer group>") == 0 ||
+              strcmp(li->name, "</Layer set>") == 0) {
+              assert(li->layerId >= 0);
+              folderTagOpen++;
+            }
+            else if (li->section > 0 &&
+              li->section <= 3)  // vedi specifiche psd
+            {
+              assert(li->layerId >= 0);
+              folderTagOpen--;
+              if (folderTagOpen == 0) {
+                level.addFrame(groupLayerIds);
+                groupLayerIds.clear();
+              }
+            }
+          }
+        }
+
+
+
+ 
+      }
+      // non ha importanza quale layerId assegno, l'importante è che esista
+      level.setLayerId(0);
+      if (psdheader.layersCount == 0)
+        level.addFrame(firstLayerId);  // succede nel caso in cui la psd non ha
+                                       // blocco layerInfo
+      m_levels.push_back(level);
+    }
+    else if (list.size() == 3) {
       if (list.at(2) == "group") {
         int folderTagOpen = 0;
         int scavenge      = 0;
@@ -1195,6 +1249,7 @@ void TPSDParser::doLevels() {
               m_levels[m_levels.size() - 1 - (scavenge - folderTagOpen)]
                   .addFrame(li->layerId);
             } else {
+              // グループ閉じる
               if (strcmp(li->name, "</Layer group>") == 0 ||
                   strcmp(li->name, "</Layer set>") == 0) {
                 assert(li->layerId >= 0);
@@ -1266,29 +1321,29 @@ void TPSDParser::load(TRasterImageP &rasP, int layerId) {
 }
 
 int TPSDParser::getLevelIndexById(int layerId) {
-  int layerIndex = -1;
+  int levelIndex = -1;
   for (int i = 0; i < (int)m_levels.size(); i++) {
     if (m_levels[i].getLayerId() == layerId) {
-      layerIndex = i;
+      levelIndex = i;
       break;
     }
   }
-  if (layerId == 0 && layerIndex < 0) layerIndex = 0;
-  if (layerIndex < 0 && layerId != 0)
+  if (layerId == 0 && levelIndex < 0) levelIndex = 0;
+  if (levelIndex < 0 && layerId != 0)
     throw TImageException(m_path, "Layer ID not exists");
-  return layerIndex;
+  return levelIndex;
 }
-int TPSDParser::getLevelIdByName(std::string levelName) {
-  int pos     = levelName.find_last_of(LEVEL_NAME_INDEX_SEP);
+int TPSDParser::getLayerIdByName(std::string layerName) {
+  int pos     = layerName.find_last_of(LEVEL_NAME_INDEX_SEP);
   int counter = 0;
   if (pos != std::string::npos) {
-    counter   = atoi(levelName.substr(pos + 1).c_str());
-    levelName = levelName.substr(0, pos);
+    counter   = atoi(layerName.substr(pos + 1).c_str());
+    layerName = layerName.substr(0, pos);
   }
   int lyid           = -1;
   int levelNameCount = 0;
   for (int i = 0; i < (int)m_levels.size(); i++) {
-    if (m_levels[i].getName() == levelName) {
+    if (m_levels[i].getName() == layerName) {
       lyid = m_levels[i].getLayerId();
       if (counter == levelNameCount) break;
       levelNameCount++;
@@ -1299,13 +1354,13 @@ int TPSDParser::getLevelIdByName(std::string levelName) {
     throw TImageException(m_path, "Layer ID not exists");
   return lyid;
 }
-int TPSDParser::getFramesCount(int levelId) {
-  int levelIndex = getLevelIndexById(levelId);
+int TPSDParser::getFramesCount(int layerId) {
+  int levelIndex = getLevelIndexById(layerId);
   assert(levelIndex >= 0 && levelIndex < (int)m_levels.size());
   return m_levels[levelIndex].getFrameCount();
 }
-std::string TPSDParser::getLevelName(int levelId) {
-  int levelIndex = getLevelIndexById(levelId);
+std::string TPSDParser::getLevelName(int layerId) {
+  int levelIndex = getLevelIndexById(layerId);
   assert(levelIndex >= 0 && levelIndex < (int)m_levels.size());
   return m_levels[levelIndex].getName();
 }
