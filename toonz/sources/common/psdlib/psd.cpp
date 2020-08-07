@@ -1138,6 +1138,40 @@ void readLayer16(FILE *f, struct dictentry *parent, TPSDLayerInfo *li) {
   // dolayerinfo(f, psd_header);
   // processlayers(f, psd_header);
 }
+
+
+class LayerGroup {
+  std::vector<int> m_layerIds;
+  LayerGroup* m_parentGroup = nullptr;
+  LayerGroup* m_childGroup = nullptr;
+public:
+  LayerGroup(LayerGroup* parent = nullptr) : m_parentGroup(parent) {}
+  ~LayerGroup() { delete m_childGroup; }
+  void addLayerId(int layerId) {
+    m_layerIds.push_back(layerId);
+  }
+  std::vector<int> getIds() { return m_layerIds; }
+  void clearIds() { m_layerIds.clear(); }
+  LayerGroup*parent() { return m_parentGroup; }
+  LayerGroup* openChild() {
+    assert(m_childGroup == nullptr);
+    m_childGroup = new LayerGroup(this);
+    return m_childGroup;
+  }
+  void discardChild() {
+    if (!m_childGroup) return;
+    delete m_childGroup;
+    m_childGroup = nullptr;
+  }
+  void mergeChild() {
+    if (!m_childGroup) return;
+    std::vector<int> childIds = m_childGroup->getIds();
+    m_layerIds.insert(m_layerIds.end(), childIds.begin(), childIds.end());
+    delete m_childGroup;
+    m_childGroup = nullptr;
+  }
+};
+
 //---------------------------- END Utility functions
 
 // TPSD PARSER
@@ -1161,6 +1195,12 @@ void TPSDParser::doLevels() { // ここ大事！！！
   m_levels.clear();
   if (list.size() > 1) {
     TPSDHeaderInfo psdheader = m_psdreader->getPSDHeaderInfo();
+
+    bool skipInvisible = (list.contains("SI") && list.at(0) != "SI");
+    bool skipBackground = (list.contains("SB") && list.at(0) != "SB");
+    const char BIT_TRANSP_PROTECTED = (1 << 0);
+    const char BIT_INVISIBLE = (1 << 1);
+
     if (list.contains("frames") && list.at(0) != "frames") {
       int firstLayerId = 0;
       Level level;
@@ -1168,9 +1208,15 @@ void TPSDParser::doLevels() { // ここ大事！！！
         TPSDLayerInfo *li = m_psdreader->getLayerInfo(i);
         long width        = li->right - li->left;
         long height       = li->bottom - li->top;
+        bool isVisible = !(li->blend.flags & BIT_INVISIBLE);
+        bool isTranspProtected = li->blend.flags & BIT_TRANSP_PROTECTED;
         if (width > 0 && height > 0) {
+          // skip invisible
+          if (skipInvisible && !isVisible) continue;
+          // skip background
+          if (i == 0 && skipBackground && isTranspProtected) continue;
           assert(li->layerId >= 0);
-          if (i == 0) firstLayerId = li->layerId;
+          if (firstLayerId == 0) firstLayerId = li->layerId;
           level.addFrame(li->layerId);
         }
       }
@@ -1180,55 +1226,71 @@ void TPSDParser::doLevels() { // ここ大事！！！
         level.addFrame(firstLayerId);  // succede nel caso in cui la psd non ha
                                        // blocco layerInfo
       m_levels.push_back(level);
-    } else if (list.contains("framesgroup") && list.at(0) != "framesfroup") {
-      int firstLayerId = 0;
-      int folderTagOpen = 0;
+    } else if (list.contains("framesgroup") && list.at(0) != "framesgroup") {
       Level level;
-      std::vector<int> groupLayerIds;
+      LayerGroup* rootLG = new LayerGroup();
+      LayerGroup* currentLG = rootLG;
+      //std::vector<int> groupLayerIds;
       for (int i = 0; i < psdheader.layersCount; i++) {
         TPSDLayerInfo *li = m_psdreader->getLayerInfo(i);
         long width = li->right - li->left;
         long height = li->bottom - li->top;
-        if (width > 0 && height > 0 && folderTagOpen == 0) {
+        
+
+        // グループのお尻にはInvisible情報はない。仮にスタックしておいて、Invisibleの場合は破棄する必要
+        std::cout << std::endl << "layer " << i << "  flag:" << (int)li->blend.flags << std::endl;
+        bool isVisible = !(li->blend.flags & BIT_INVISIBLE);
+        bool isTranspProtected = li->blend.flags & BIT_TRANSP_PROTECTED;
+
+        if (width > 0 && height > 0 && currentLG == rootLG) {
           assert(li->layerId >= 0);
-          if (i == 0) firstLayerId = li->layerId;
+          // skip invisible
+          if (skipInvisible && !isVisible) continue;
+          // skip background
+          if (i == 0 && skipBackground && isTranspProtected) continue;
           level.addFrame(li->layerId);
+          std::cout << "layer" << std::endl;
         }
         else {
           // グループ内のレイヤー
           if (width != 0 && height != 0) {
-            groupLayerIds.push_back(li->layerId);
+            // skip invisible
+            if (skipInvisible && !isVisible) continue;
+            currentLG->addLayerId(li->layerId);
+            std::cout << "layer in group" << std::endl;
           }
           else {
             // グループ閉じる
             if (strcmp(li->name, "</Layer group>") == 0 ||
               strcmp(li->name, "</Layer set>") == 0) {
               assert(li->layerId >= 0);
-              folderTagOpen++;
+              currentLG = currentLG->openChild();
+              std::cout << "end of group" << std::endl;
             }
             else if (li->section > 0 &&
               li->section <= 3)  // vedi specifiche psd
             {
               assert(li->layerId >= 0);
-              folderTagOpen--;
-              if (folderTagOpen == 0) {
-                level.addFrame(groupLayerIds);
-                groupLayerIds.clear();
+
+              currentLG = currentLG->parent();
+              if (skipInvisible && !isVisible)
+                currentLG->discardChild();
+              else
+                currentLG->mergeChild();
+
+              if (currentLG == rootLG && !currentLG->getIds().empty()) {
+                level.addFrame(currentLG->getIds());
+                currentLG->clearIds();
               }
+              std::cout << "begin of group" << std::endl;
             }
           }
-        }
-
-
-
- 
+        } 
       }
       // non ha importanza quale layerId assegno, l'importante è che esista
       level.setLayerId(0);
-      if (psdheader.layersCount == 0)
-        level.addFrame(firstLayerId);  // succede nel caso in cui la psd non ha
-                                       // blocco layerInfo
       m_levels.push_back(level);
+      delete rootLG;
     }
     else if (list.size() == 3) {
       if (list.at(2) == "group") {

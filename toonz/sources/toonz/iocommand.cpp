@@ -1272,6 +1272,8 @@ void IoCmd::newScene() {
   CacheFxCommand::instance()->onNewScene();
   CacheFxCommand::instance()->onSceneLoaded();
 
+  app->getCurrentLevel()->setLevel(nullptr);
+
 #ifdef USE_SQLITE_HDPOOL
   // INTERMEDIATE CACHE RESULTS MANAGEMENT: Clear all resources not accessed in
   // the last 2 sessions

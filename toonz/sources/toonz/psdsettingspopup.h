@@ -60,6 +60,8 @@ private:
   QComboBox *m_frameGroupOptions;
   QComboBox *m_columnsGroupOptions;
 
+  DVGui::CheckBox *m_skipInvisible, *m_skipBackground;
+
   // QTreeWidget *m_psdTree;	// per adesso non serve. Servirà in un secondo
   // momento quando implemento la scelta dei livelli
   // da caricare

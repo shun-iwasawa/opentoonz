@@ -140,7 +140,9 @@ PsdSettingsPopup::PsdSettingsPopup()
   m_modeDescription = new QTextEdit(modesDescription[0]);
   m_createSubXSheet = new CheckBox(tr("Expose in a Sub-xsheet"));
   m_levelNameType = new QComboBox();
-  
+
+  m_skipInvisible = new CheckBox(tr("Skip Invisible Layers"));
+  m_skipBackground = new CheckBox(tr("Skip Background Layer"));
 
   m_filename->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
   m_filename->setFixedHeight(WidgetHeight);
@@ -213,14 +215,18 @@ PsdSettingsPopup::PsdSettingsPopup()
   m_groupOptionStack->addWidget(new QWidget(this)); //Flat
 
   QWidget* frameGroup = new QWidget();
-  QHBoxLayout *frameGroupLayout = new QHBoxLayout();
+  QGridLayout *frameGroupLayout = new QGridLayout();
   frameGroupLayout->setMargin(0);
-  frameGroupLayout->setSpacing(5);
+  frameGroupLayout->setHorizontalSpacing(5);
+  frameGroupLayout->setVerticalSpacing(5);
   {
-    frameGroupLayout->addWidget(new QLabel(tr("Group Option:"), this), 0);
-    frameGroupLayout->addWidget(m_frameGroupOptions, 0);
-    frameGroupLayout->addStretch(1);
+    frameGroupLayout->addWidget(new QLabel(tr("Group Option:"), this), 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+    frameGroupLayout->addWidget(m_frameGroupOptions, 0, 1 );
+
+    frameGroupLayout->addWidget(m_skipInvisible, 1, 0, 1, 2);
+    frameGroupLayout->addWidget(m_skipBackground, 2, 0, 1, 2);
   }
+  frameGroupLayout->setColumnStretch(2, 1);
   frameGroup->setLayout(frameGroupLayout);
   m_groupOptionStack->addWidget(frameGroup); //Frames
 
@@ -354,6 +360,10 @@ void PsdSettingsPopup::doPsdParser() {
   }
   case FRAMES: {
     mode = "#frames";
+    if (m_skipInvisible->isChecked())
+      mode += "#SI";
+    if (m_skipBackground->isChecked())
+      mode += "#SB";
     std::string name =
         psdpath.getName() + "#1" + mode + psdpath.getDottedType();
     psdpath = psdpath.getParentDir() + TFilePath(name);
@@ -361,6 +371,10 @@ void PsdSettingsPopup::doPsdParser() {
   }
   case FRAMES_GROUP: {
     mode = "#framesgroup";
+    if (m_skipInvisible->isChecked())
+      mode += "#SI";
+    if (m_skipBackground->isChecked())
+      mode += "#SB";
     std::string name =
       psdpath.getName() + "#1" + mode + psdpath.getDottedType();
     psdpath = psdpath.getParentDir() + TFilePath(name);
