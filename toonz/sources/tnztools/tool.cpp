@@ -44,6 +44,7 @@
 #include "trasterimage.h"
 #include "strokeselection.h"
 #include "tundo.h"
+#include "tsystem.h"
 
 #include "toonzvectorbrushtool.h"
 
@@ -403,6 +404,7 @@ TImage *TTool::touchImage() {
       // no drawing found
       if (sl->isSubsequence() || sl->isReadOnly() || !isAutoCreateEnabled)
         return 0;
+
       // create a new drawing
       TImageP img = sl->createEmptyFrame();
       sl->setFrame(cell.getFrameId(), img);

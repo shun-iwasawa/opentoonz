@@ -14,6 +14,7 @@
 #include "toonz/stage.h"
 #include "toonz/textureutils.h"
 #include "toonz/levelset.h"
+#include "toonz/tcamera.h"
 
 // TnzBase includes
 #include "tenv.h"
@@ -1903,9 +1904,52 @@ void TXshSimpleLevel::invalidateFrame(const TFrameId &fid) {
 }
 
 //-----------------------------------------------------------------------------
+// sceneのメンバにするべきかな…？
+// level にもともとDIMが入っている可能性も要確認
+void TXshSimpleLevel::initializeForCreatingTheFirstFrame() {
+  if (!isEmpty()) return;
+  int type = getType();
+  if (type == TZP_XSHLEVEL || type == PLI_XSHLEVEL)
+    setPalette(new TPalette());
+  if (type == OVL_XSHLEVEL)
+    setPalette(FullColorPalette::instance()->getPalette(getScene()));
+  TPalette *palette = getPalette();
+  if (palette && type != OVL_XSHLEVEL) {
+    palette->setPaletteName(getName());
+    palette->setDirtyFlag(true);
+  }
+
+  if (type == TZP_XSHLEVEL || type == OVL_XSHLEVEL) {
+    double w, h, dpi, dpiY;
+    Preferences *pref = Preferences::instance();
+    if (pref->isNewLevelSizeToCameraSizeEnabled()) {
+      TDimensionD camSize = getScene()->getCurrentCamera()->getSize();
+      w = camSize.lx;
+      h = camSize.ly;
+      getProperties()->setDpiPolicy(LevelProperties::DP_CustomDpi);
+      dpi = getScene()->getCurrentCamera()->getDpi().x;
+      dpiY = getScene()->getCurrentCamera()->getDpi().y;
+    }
+    else {
+      w = pref->getDefLevelWidth();
+      h = pref->getDefLevelHeight();
+      getProperties()->setDpiPolicy(LevelProperties::DP_ImageDpi);
+      dpi = pref->getDefLevelDpi();
+      dpiY = dpi;
+    }
+
+    getProperties()->setImageRes(
+      TDimension(tround(w * dpi), tround(h * dpiY)));
+
+    getProperties()->setImageDpi(TPointD(dpi, dpiY));
+    getProperties()->setDpi(dpi);
+  }
+}
+//-----------------------------------------------------------------------------
 
 // crea un frame con tipo, dimensioni, dpi, ecc. compatibili con il livello
 TImageP TXshSimpleLevel::createEmptyFrame() {
+  initializeForCreatingTheFirstFrame();
   TImageP result;
 
   switch (m_type) {

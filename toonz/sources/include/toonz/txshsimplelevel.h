@@ -243,6 +243,8 @@ Editable range is contained in \b m_editableRange.
   //!  and assigns the specified level path.
   TImageP createEmptyFrame();
 
+  void initializeForCreatingTheFirstFrame();
+
   TDimension getResolution();
 
   TPointD getImageDpi(const TFrameId &fid = TFrameId::NO_FRAME,
