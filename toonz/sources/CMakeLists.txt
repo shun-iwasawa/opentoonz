@@ -167,7 +167,7 @@ elseif(BUILD_ENV_APPLE)
             -DMACOSX
             -Di386
         )
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -std=c++11 -stdlib=libc++ -fno-implicit-templates")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -std=c++11 -stdlib=libc++ -fno-implicit-templates -D GL_SILENCE_DEPRECATION")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
     elseif(PLATFORM EQUAL 32)
         set(QT_PATH "~/Qt5.9.2/5.9.2/clang_32/lib" CACHE PATH "Qt installation directory")
