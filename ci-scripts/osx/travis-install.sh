@@ -1,4 +1,17 @@
 #!/bin/bash
+# cleanup cached Homebrew's subdirectories 
+curdir=`pwd`
+cd /usr/local/Homebrew/
+if [[ -d Library/Taps/homebrew/homebrew-cask ]]; then
+   rm -rf Library/Taps/caskroom/homebrew-cask
+fi
+for d in `find $(pwd) -type d -name .git`; do
+   cd `dirname $d`
+   git clean -fxd
+done
+brew cleanup
+cd $curdir
+
 brew update
 brew install glew lz4 lzo libusb libmypaint
 brew tap tcr/tcr
