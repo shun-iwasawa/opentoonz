@@ -12,7 +12,8 @@ done
 brew cleanup
 cd $curdir
 
-brew update
+export HOMEBREW_NO_AUTO_UPDATE=1
+# brew update
 brew install glew lz4 lzo libusb libmypaint
 brew tap tcr/tcr
 brew install clang-format
