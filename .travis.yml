@@ -20,6 +20,4 @@ matrix:
           compiler: clang
         - os: osx
           osx_image: xcode12.2
-          cache:
-            directories:
-              - /usr/local/Homebrew
+          cache: ccache

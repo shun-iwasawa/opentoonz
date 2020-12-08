@@ -1,6 +1,6 @@
 #!/bin/bash
 pushd thirdparty/tiff-4.0.3
-./configure --disable-lzma && make -j4
+./configure --disable-lzma && make -j2
 popd
 cd toonz && mkdir build && cd build
 QTVERSION=`ls /usr/local/Cellar/qt`
@@ -9,4 +9,4 @@ cmake ../sources \
       -DQT_PATH=/usr/local/Cellar/qt/$QTVERSION/lib/ \
       -DTIFF_INCLUDE_DIR=../../thirdparty/tiff-4.0.3/libtiff/ \
       -DSUPERLU_INCLUDE_DIR=../../thirdparty/superlu/SuperLU_4.1/include/
-make -j4
+make -j2
