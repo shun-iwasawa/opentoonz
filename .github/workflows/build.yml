@@ -140,7 +140,7 @@ jobs:
   Windows:
     runs-on: windows-2019
     env:
-      vcpkg_ref: d989ad416b923a9f895c4bddc446d1ef370a3af8
+      vcpkg_ref: 1d8728ae1ba66ad94b344708cf8d0ace1a6330b8
       CLCACHE_CL: 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl_original.exe'
     steps:
     - uses: actions/checkout@v2
