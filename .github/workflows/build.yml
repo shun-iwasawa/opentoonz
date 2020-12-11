@@ -95,8 +95,20 @@ jobs:
 
     - name: Install libraries
       run: |
+        checkPkgAndInstall()
+        {
+          while [ $# -ne 0 ]
+          do
+            if brew ls --versions $1 ; then
+              brew upgrade $1
+            else
+              brew install $1
+            fi
+            shift
+          done
+        }
         brew update
-        brew install pkg-config glew lz4 libjpeg libpng lzo qt boost libusb libmypaint ccache
+        checkPkgAndInstall pkg-config glew lz4 libjpeg libpng lzo qt boost libusb libmypaint ccache
         curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/284557d4f5b29a7b9fb48bf8a54cf8a72d26c5eb/Formula/ninja.rb
         brew install ./ninja.rb
 
