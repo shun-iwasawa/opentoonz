@@ -35,4 +35,6 @@ set(headers
   mypaint.h
 )
 
-add_library(libmypaint STATIC ${sources} ${headers})
+add_library(libmypaint SHARED ${sources} ${headers})
+
+target_link_libraries(libmypaint ${JSON-C_LIB})

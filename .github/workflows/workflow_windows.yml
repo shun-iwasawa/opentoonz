@@ -11,13 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Checkout mypaint/libmypaint
-      uses: actions/checkout@v2
-      with:
-        repository: 'mypaint/libmypaint'
-        ref: '70f7686db792fa4953dc60f28a322bf2cd388ed7'
-        path: 'libmypaint'
-
     - name: Checkout xiaoyeli/superlu
       uses: actions/checkout@v2
       with:
@@ -43,7 +36,7 @@ jobs:
     - name: Install libraries
       run: |
         vcpkg install --clean-after-build --triplet x64-windows icu
-        vcpkg install --clean-after-build --triplet x64-windows-static json-c libjpeg-turbo libpng lz4 lzo openblas zlib
+        vcpkg install --clean-after-build --triplet x64-windows-static libjpeg-turbo libpng lz4 lzo openblas zlib
         vcpkg install --clean-after-build --triplet x64-windows freeglut glew
         ls -Recurse C:/vcpkg/installed -Filter *.pdb | rm
 
@@ -83,22 +76,6 @@ jobs:
         $env:CLCACHE_CL = '${{ env.CLCACHE_CL }}'
         msbuild LibTIFF.vcxproj /p:PlatformToolset=v142 /p:Platform=x64 /p:Configuration=Release -maxcpucount:3
 
-    - name: Build mypaint/libmypaint
-      run: |
-        cd libmypaint
-        cp ../.github/workflows/CMakeLists.txt .
-        echo '#define MYPAINT_CONFIG_USE_GLIB 0' > config.h
-        python generate.py mypaint-brush-settings-gen.h brushsettings-gen.h
-        mkdir build | Out-Null
-        cd build
-        $env:CLCACHE_CL = '${{ env.CLCACHE_CL }}'
-        cmake ../ -G 'Visual Studio 16 2019' -Ax64 -Djson-c_DIR='C:/vcpkg/installed/x64-windows-static/share/json-c/' -DJSON-C_INCLUDE_DIR='C:/vcpkg/installed/x64-windows-static/include/json-c/'
-        cmake --build . --config Release
-        cp C:/vcpkg/installed/x64-windows-static/lib/json-c.lib .
-        $env:Path += ';C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.28.29333/bin/Hostx64/x64'
-        lib /OUT:libmypaint.lib Release/libmypaint.lib json-c.lib
-        cp libmypaint.lib Release/libmypaint.lib
-
     - name: Build xiaoyeli/superlu
       run: |
         cd superlu
@@ -119,7 +96,6 @@ jobs:
         cp C:/vcpkg/installed/x64-windows-static/lib/zlib.lib zlib-1.2.8/lib/zlib-1.2.8_2015_64.lib
         cp C:/vcpkg/installed/x64-windows/lib/freeglut.lib glut/3.7.6/lib/glut64.lib
         cp C:/vcpkg/installed/x64-windows/lib/glew32.lib glew/glew-1.9.0/lib/glew64.lib
-        cp D:/a/opentoonz/opentoonz/libmypaint/build/Release/libmypaint.lib libmypaint/dist/64/libmypaint.lib
         cp D:/a/opentoonz/opentoonz/superlu/build/SRC/Release/superlu.lib superlu/SuperLU_2015_64.lib
         cp D:/a/opentoonz/opentoonz/thirdparty/tiff-4.0.3/prj/LibTIFF/x64/Release/LibTIFF.lib tiff-4.0.3/lib/LibTIFF-4.0.3_2015_64.lib
 
@@ -149,6 +125,10 @@ jobs:
         D:/a/opentoonz/Qt/5.15.2/msvc2019_64/bin/windeployqt.exe OpenToonz.exe
         cp C:/vcpkg/installed/x64-windows/bin/freeglut.dll .
         cp C:/vcpkg/installed/x64-windows/bin/glew32.dll .
+        cp D:/a/opentoonz/opentoonz/thirdparty/libmypaint/dist/64/libiconv-2.dll .
+        cp D:/a/opentoonz/opentoonz/thirdparty/libmypaint/dist/64/libintl-8.dll .
+        cp D:/a/opentoonz/opentoonz/thirdparty/libmypaint/dist/64/libjson-c-2.dll .
+        cp D:/a/opentoonz/opentoonz/thirdparty/libmypaint/dist/64/libmypaint-1-4-0.dll .
 
     - uses: actions/upload-artifact@v1
       with:
