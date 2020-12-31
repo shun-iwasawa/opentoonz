@@ -23,9 +23,9 @@ jobs:
           done
         }
         brew update
-        checkPkgAndInstall pkg-config glew lz4 libjpeg libpng lzo qt boost libusb libmypaint ccache
+        checkPkgAndInstall pkg-config glew lz4 libjpeg libpng lzo qt boost libusb libmypaint ccache jpeg-turbo
         rm -f '/usr/local/bin/2to3'
-        checkPkgAndInstall ninja
+        checkPkgAndInstall ninja opencv
 
     - uses: actions/cache@v1
       with:
@@ -42,6 +42,7 @@ jobs:
 
     - name: Build
       run: |
+        export PKG_CONFIG_PATH="/usr/local/opt/jpeg-turbo/lib/pkgconfig:$PKG_CONFIG_PATH"
         cd toonz
         mkdir build
         cd build

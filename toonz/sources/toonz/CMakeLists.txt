@@ -485,10 +485,11 @@ elseif(BUILD_ENV_APPLE)
 
     # 変なところにライブラリ生成するカスども
     set(EXTRA_LIBS ${EXTRA_LIBS} "$<TARGET_FILE:tnzstdfx>" "$<TARGET_FILE:tfarm>")
+    set(X64ONLY_LIBS)
     if(PLATFORM EQUAL 64)
-        set(EXTRA_LIBS ${EXTRA_LIBS} Qt5::SerialPort ${TURBOJPEG_LIB} ${OpenCV_LIBS})
+        set(X64ONLY_LIBS ${X64ONLY_LIBS} Qt5::SerialPort ${TURBOJPEG_LIB} ${OpenCV_LIBS})
         if(WITH_CANON)
-            set(EXTRA_LIBS ${EXTRA_LIBS} ${CANON_LIB})
+            set(X64ONLY_LIBS ${X64ONLY_LIBS} ${CANON_LIB})
         endif()
     endif()
 
@@ -498,7 +499,7 @@ elseif(BUILD_ENV_APPLE)
         Qt5::Core Qt5::Gui Qt5::Network Qt5::OpenGL Qt5::Svg Qt5::Xml
         Qt5::Script Qt5::Widgets Qt5::PrintSupport Qt5::Multimedia Qt5::MultimediaWidgets
         ${GL_LIB} ${GLUT_LIB}
-        ${COCOA_LIB} ${EXTRA_LIBS} mousedragfilter
+        ${COCOA_LIB} ${EXTRA_LIBS} ${X64ONLY_LIBS} mousedragfilter
     )
 
 elseif(BUILD_ENV_UNIXLIKE)

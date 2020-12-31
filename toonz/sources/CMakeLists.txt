@@ -170,6 +170,7 @@ elseif(BUILD_ENV_APPLE)
     add_definitions(
         -DMACOSX
         -Di386
+        -D__MACOS__
     )
     if(PLATFORM EQUAL 64)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -std=c++11 -stdlib=libc++ -fno-implicit-templates")
@@ -401,7 +402,7 @@ elseif(BUILD_ENV_APPLE)
     pkg_check_modules(MYPAINT_LIB REQUIRED libmypaint)
 
     if(PLATFORM EQUAL 64)
-        pkg_check_modules(TURBOJPEG REQUIRED libturbojpeg)
+    	pkg_check_modules(TURBOJPEG REQUIRED libturbojpeg)
         find_library(TURBOJPEG_LIB turbojpeg ${TURBOJPEG_LIBRARY_DIRS})
         message("**************** turbojpeg lib:" ${TURBOJPEG_LIB})
 
@@ -541,7 +542,7 @@ include_directories(
     ${MYPAINT_LIB_INCLUDE_DIRS}
 )
 
-if(BUILD_TARGET_WIN AND PLATFORM EQUAL 64)
+if(PLATFORM EQUAL 64)
     add_definitions(-Dx64)
 endif()
 
