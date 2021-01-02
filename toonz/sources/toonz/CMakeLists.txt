@@ -131,11 +131,11 @@ if(PLATFORM EQUAL 64)
         ../stopmotion/webcam.h
         ../stopmotion/jpgconverter.h
         ../stopmotion/canon.h
-        ../stopmotion/stopmotionserial.h
         ../stopmotion/stopmotionlight.h
         cameracapturelevelcontrol.h
         penciltestpopup.h
     )
+    # ../stopmotion/stopmotionserial.h
 else()
     set(MOC_HEADERS
         ${MOC_HEADERS}
@@ -373,11 +373,11 @@ if(PLATFORM EQUAL 64)
         ../stopmotion/webcam.cpp
         ../stopmotion/jpgconverter.cpp
         ../stopmotion/canon.cpp
-        ../stopmotion/stopmotionserial.cpp
         ../stopmotion/stopmotionlight.cpp
         cameracapturelevelcontrol.cpp
         penciltestpopup.cpp
     )
+    # ../stopmotion/stopmotionserial.cpp
 else()
     set(SOURCES
         ${SOURCES}
@@ -466,7 +466,7 @@ endif()
 if(BUILD_ENV_MSVC)
     set(EXTRA_LIBS)
     if(PLATFORM EQUAL 64)
-        set(EXTRA_LIBS ${EXTRA_LIBS} Qt5::SerialPort ${TURBOJPEG_LIB} ${OpenCV_LIBS})
+        set(EXTRA_LIBS ${EXTRA_LIBS} ${TURBOJPEG_LIB} ${OpenCV_LIBS})
         if(WITH_CANON)
             set(EXTRA_LIBS ${EXTRA_LIBS} ${CANON_LIB})
         endif()
@@ -487,7 +487,7 @@ elseif(BUILD_ENV_APPLE)
     set(EXTRA_LIBS ${EXTRA_LIBS} "$<TARGET_FILE:tnzstdfx>" "$<TARGET_FILE:tfarm>")
     set(X64ONLY_LIBS)
     if(PLATFORM EQUAL 64)
-        set(X64ONLY_LIBS ${X64ONLY_LIBS} Qt5::SerialPort ${TURBOJPEG_LIB} ${OpenCV_LIBS})
+        set(X64ONLY_LIBS ${X64ONLY_LIBS} ${TURBOJPEG_LIB} ${OpenCV_LIBS})
         if(WITH_CANON)
             set(X64ONLY_LIBS ${X64ONLY_LIBS} ${CANON_LIB})
         endif()
@@ -510,7 +510,7 @@ elseif(BUILD_ENV_UNIXLIKE)
 
     set(EXTRA_LIBS ${EXTRA_LIBS} ${Boost_LIBRARIES} ${OPENBLAS_LIB})
     if(PLATFORM EQUAL 64)
-        set(EXTRA_LIBS ${EXTRA_LIBS} Qt5::SerialPort ${TURBOJPEG_LIB} ${OpenCV_LIBS})
+        set(EXTRA_LIBS ${EXTRA_LIBS} ${TURBOJPEG_LIB} ${OpenCV_LIBS})
     endif()
 
     if(BUILD_TARGET_WIN)

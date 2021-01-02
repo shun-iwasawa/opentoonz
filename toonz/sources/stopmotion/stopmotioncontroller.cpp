@@ -53,7 +53,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
-#include <QSerialPort>
+//#include <QSerialPort>
 
 #ifdef _WIN32
 #include <dshow.h>
@@ -184,12 +184,12 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
   m_tabBar->addSimpleTab(tr("Settings"));
   m_tabBar->addSimpleTab(tr("Options"));
   m_tabBar->addSimpleTab(tr("Light"));
-  m_tabBar->addSimpleTab(tr("Motion"));
+  //m_tabBar->addSimpleTab(tr("Motion"));
   m_tabBarContainer    = new TabBarContainter(this);
   m_mainControlsPage   = new QFrame(this);
   m_cameraSettingsPage = new QFrame(this);
   m_optionsPage        = new QFrame(this);
-  m_motionPage         = new QFrame(this);
+  //m_motionPage         = new QFrame(this);
   m_lightPage          = new QFrame(this);
 
   // **********************
@@ -853,44 +853,44 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
     if (m_stopMotion->m_light->m_screenCount < 3) m_screen3Box->hide();
     if (m_stopMotion->m_light->m_screenCount < 2) m_screen2Box->hide();
 
-    QVBoxLayout *motionOutsideLayout = new QVBoxLayout;
+    //QVBoxLayout *motionOutsideLayout = new QVBoxLayout;
     // QGridLayout* motionInsideLayout = new QGridLayout;
-    m_controlDeviceCombo = new QComboBox(this);
-    m_controlDeviceCombo->addItems(
-        m_stopMotion->m_serial->getAvailableSerialPorts());
+    //m_controlDeviceCombo = new QComboBox(this);
+    //m_controlDeviceCombo->addItems(
+    //    m_stopMotion->m_serial->getAvailableSerialPorts());
 
-    QGroupBox *motionBox      = new QGroupBox(tr("Motion Control"), this);
-    QGridLayout *motionLayout = new QGridLayout;
-    motionLayout->addWidget(new QLabel(tr("Port: ")), 0, 0, Qt::AlignRight);
-    motionLayout->addWidget(m_controlDeviceCombo, 0, 1, Qt::AlignLeft);
-    motionLayout->setColumnStretch(1, 30);
-    motionBox->setLayout(motionLayout);
-    motionBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-    motionOutsideLayout->addWidget(motionBox, Qt::AlignCenter);
-    motionOutsideLayout->addStretch();
+    //QGroupBox *motionBox      = new QGroupBox(tr("Motion Control"), this);
+    //QGridLayout *motionLayout = new QGridLayout;
+    //motionLayout->addWidget(new QLabel(tr("Port: ")), 0, 0, Qt::AlignRight);
+    //motionLayout->addWidget(m_controlDeviceCombo, 0, 1, Qt::AlignLeft);
+    //motionLayout->setColumnStretch(1, 30);
+    //motionBox->setLayout(motionLayout);
+    //motionBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+    //motionOutsideLayout->addWidget(motionBox, Qt::AlignCenter);
+    //motionOutsideLayout->addStretch();
 
     // motionOutsideLayout->addLayout(motionInsideLayout);
-    m_motionPage->setLayout(motionOutsideLayout);
+    //m_motionPage->setLayout(motionOutsideLayout);
 
     QScrollArea *mainArea = makeChooserPageWithoutScrollBar(m_mainControlsPage);
     QScrollArea *settingsArea =
         makeChooserPageWithoutScrollBar(m_cameraSettingsPage);
     QScrollArea *optionsArea = makeChooserPageWithoutScrollBar(m_optionsPage);
     QScrollArea *lightArea   = makeChooserPageWithoutScrollBar(m_lightPage);
-    QScrollArea *motionArea  = makeChooserPageWithoutScrollBar(m_motionPage);
+    //QScrollArea *motionArea  = makeChooserPageWithoutScrollBar(m_motionPage);
 
     mainArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     settingsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     optionsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     lightArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    motionArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    //motionArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     m_stackedChooser = new QStackedWidget(this);
     m_stackedChooser->addWidget(mainArea);
     m_stackedChooser->addWidget(settingsArea);
     m_stackedChooser->addWidget(optionsArea);
     m_stackedChooser->addWidget(lightArea);
-    m_stackedChooser->addWidget(motionArea);
+    //m_stackedChooser->addWidget(motionArea);
     m_stackedChooser->setFocusPolicy(Qt::NoFocus);
 
     QFrame *opacityFrame    = new QFrame();
@@ -1219,8 +1219,8 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
                        this, SLOT(onBlackCaptureSignal(bool)));
 
   // Serial Port Connections
-  ret = ret && connect(m_controlDeviceCombo, SIGNAL(currentIndexChanged(int)),
-                       this, SLOT(serialPortChanged(int)));
+  //ret = ret && connect(m_controlDeviceCombo, SIGNAL(currentIndexChanged(int)),
+  //                     this, SLOT(serialPortChanged(int)));
 
   // Time Lapse
   ret = ret && connect(m_timerCB, SIGNAL(toggled(bool)), this,
@@ -2760,9 +2760,9 @@ void StopMotionController::onSceneSwitched() {
 
 //-----------------------------------------------------------------------------
 
-void StopMotionController::serialPortChanged(int index) {
-  m_stopMotion->m_serial->setSerialPort(m_controlDeviceCombo->currentText());
-}
+//void StopMotionController::serialPortChanged(int index) {
+//  m_stopMotion->m_serial->setSerialPort(m_controlDeviceCombo->currentText());
+//}
 
 //-----------------------------------------------------------------------------
 

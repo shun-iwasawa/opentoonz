@@ -67,7 +67,7 @@ class StopMotionController final : public QWidget {
   QFrame *m_mainControlsPage;
   QFrame *m_cameraSettingsPage;
   QFrame *m_optionsPage;
-  QFrame *m_motionPage;
+  //QFrame *m_motionPage;
   QFrame *m_lightPage;
   QFrame *m_dslrFrame;
   QFrame *m_webcamFrame;
@@ -165,7 +165,7 @@ protected slots:
   void setToCurrentXSheetFrame();
 
   // motion control
-  void serialPortChanged(int);
+  //void serialPortChanged(int);
 
   // time lapse
   void onIntervalTimerCBToggled(bool);
