@@ -270,15 +270,15 @@ endif()
 
 
 if(PLATFORM EQUAL 64)
-    if(BUILD_ENV_UNIXLIKE)
-        find_package(OpenCV 3.2 REQUIRED)
-    else() # Windows and MacOS case
-        find_package(OpenCV 4.1 REQUIRED)
-    endif()
-    include_directories(
-        ${SDKROOT}/libjpeg-turbo64/include
-        ${OpenCV_INCLUDE_DIRS}
-    )
+    # if(BUILD_ENV_UNIXLIKE)
+    #     find_package(OpenCV 3.2 REQUIRED)
+    # else() # Windows and MacOS case
+    #     find_package(OpenCV 4.1 REQUIRED)
+    # endif()
+    # include_directories(
+    #     ${SDKROOT}/libjpeg-turbo64/include
+    #     ${OpenCV_INCLUDE_DIRS}
+    # )
     if(WITH_CANON)
         include_directories(
             ${SDKROOT}/canon/Header
@@ -342,7 +342,7 @@ if(BUILD_ENV_MSVC)
     set(MYPAINT_LIB_LDFLAGS ${SDKROOT}/libmypaint/dist/${PLATFORM}/libmypaint.lib)
 
     if(PLATFORM EQUAL 64)
-        set(TURBOJPEG_LIB ${SDKROOT}/libjpeg-turbo64/lib/turbojpeg.lib)
+        # set(TURBOJPEG_LIB ${SDKROOT}/libjpeg-turbo64/lib/turbojpeg.lib)
         if (WITH_CANON)
             set(CANON_LIB ${SDKROOT}/canon/library/EDSDK.lib)
         endif()

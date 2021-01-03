@@ -17,7 +17,7 @@
 #include "locatorpopup.h"
 #include "cellselection.h"
 
-#if defined(x64)
+#if defined(x64_)
 #include "stopmotion.h"
 #endif
 
@@ -1394,7 +1394,7 @@ void SceneViewer::keyPressEvent(QKeyEvent *event) {
   }
   else
 #endif
-#if defined(x64)
+#if defined(x64_)
   if (m_stopMotion->m_liveViewStatus == 2 &&
     (key == Qt::Key_Enter || key == Qt::Key_Return)) {
     m_stopMotion->captureImage();

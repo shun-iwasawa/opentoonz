@@ -6,7 +6,7 @@
 #include "cellselection.h"
 #include "columnselection.h"
 
-#if defined(x64)
+#if defined(x64_)
 #include "penciltestpopup.h"
 #else
 #include "penciltestpopup_qt.h"
