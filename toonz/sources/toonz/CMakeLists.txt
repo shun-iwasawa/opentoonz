@@ -464,18 +464,18 @@ if(BUILD_TARGET_WIN)
 endif()
 
 if(BUILD_ENV_MSVC)
-    set(EXTRA_LIBS)
+    set(X64ONLY_LIBS)
     if(PLATFORM EQUAL 64)
-        set(EXTRA_LIBS ${EXTRA_LIBS} ${TURBOJPEG_LIB} ${OpenCV_LIBS})
+        set(X64ONLY_LIBS ${X64ONLY_LIBS} ${TURBOJPEG_LIB} ${OpenCV_LIBS})
         if(WITH_CANON)
-            set(EXTRA_LIBS ${EXTRA_LIBS} ${CANON_LIB})
+            set(X64ONLY_LIBS ${X64ONLY_LIBS} ${CANON_LIB})
         endif()
     endif()
     target_link_libraries(OpenToonz
         Qt5::WinMain Qt5::Core Qt5::Gui Qt5::Network Qt5::OpenGL Qt5::Svg Qt5::Xml
         Qt5::Script Qt5::Widgets Qt5::PrintSupport Qt5::Multimedia
         ${GL_LIB} ${GLUT_LIB} 
-        ${EXTRA_LIBS} strmiids
+        ${X64ONLY_LIBS} strmiids
         tnzcore tnzbase toonzlib colorfx tnzext image sound toonzqt tnztools tnzstdfx tfarm
     )
 elseif(BUILD_ENV_APPLE)
