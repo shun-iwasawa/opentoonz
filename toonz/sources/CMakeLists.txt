@@ -278,8 +278,6 @@ if(PLATFORM EQUAL 64)
     endif()
     include_directories(
         ${TURBOJPEG_INCLUDE_DIR}
-        # ${SDKROOT}/libjpeg-turbo64/include
-        # ${OpenCV_INCLUDE_DIRS}
     )
     if(WITH_CANON)
         include_directories(

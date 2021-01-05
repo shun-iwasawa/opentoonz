@@ -11,7 +11,7 @@
 #include "menubarcommandids.h"
 #include "ruler.h"
 #include "locatorpopup.h"
-#if defined(x64_)
+#if defined(x64)
 #include "../stopmotion/stopmotion.h"
 #endif
 
@@ -783,7 +783,7 @@ SceneViewer::SceneViewer(ImageUtils::FullScreenWidget *parent)
     , m_isBusyOnTabletMove(false) {
   m_visualSettings.m_sceneProperties =
       TApp::instance()->getCurrentScene()->getScene()->getProperties();
-#if defined(x64_)
+#if defined(x64)
   m_stopMotion = StopMotion::instance();
 #endif
   // Enables multiple key input.
@@ -1067,7 +1067,7 @@ void SceneViewer::showEvent(QShowEvent *) {
 
   ret = ret &&
         connect(app, SIGNAL(tabletLeft()), this, SLOT(resetTabletStatus()));
-#if defined(x64_)
+#if defined(x64)
   if (m_stopMotion) {
     ret = ret && connect(m_stopMotion, SIGNAL(newLiveViewImageReady()), this,
                          SLOT(onNewStopMotionImageReady()));
@@ -1133,7 +1133,7 @@ void SceneViewer::hideEvent(QHideEvent *) {
 
   disconnect(app, SIGNAL(tabletLeft()), this, SLOT(resetTabletStatus()));
 
-#if defined(x64_)
+#if defined(x64)
   if (m_stopMotion) {
     disconnect(m_stopMotion, SIGNAL(newImageReady()), this,
                SLOT(onNewStopMotionImageReady()));
@@ -1162,7 +1162,7 @@ int SceneViewer::getHGuideCount() {
 double SceneViewer::getVGuide(int index) { return m_vRuler->getGuide(index); }
 double SceneViewer::getHGuide(int index) { return m_hRuler->getGuide(index); }
 
-#if defined(x64_)
+#if defined(x64)
 //-----------------------------------------------------------------------------
 
 void SceneViewer::onNewStopMotionImageReady() {
@@ -2038,7 +2038,7 @@ void SceneViewer::drawScene() {
       args.m_guidedFrontStroke      = guidedFrontStroke;
       args.m_guidedBackStroke       = guidedBackStroke;
 
-#if defined(x64_)
+#if defined(x64)
       if (m_stopMotion->m_alwaysUseLiveViewImages &&
         m_stopMotion->m_liveViewStatus > 0 &&
         frame != m_stopMotion->getXSheetFrameNumber() - 1 &&

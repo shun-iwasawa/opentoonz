@@ -145,7 +145,7 @@ class SceneViewer final : public GLWidgetForHighDpi,
   TRaster32P m_3DSideL;
   TRaster32P m_3DSideR;
   TRaster32P m_3DTop;
-#if defined(x64_)
+#if defined(x64)
   TRasterImageP m_stopMotionImage, m_stopMotionLineUpImage;
   StopMotion *m_stopMotion        = NULL;
   bool m_hasStopMotionImage       = false;
@@ -446,7 +446,7 @@ public slots:
 
   void onContextAboutToBeDestroyed();
 
-#if defined(x64_)
+#if defined(x64)
   void onNewStopMotionImageReady();
   void onStopMotionLiveViewStopped();
 #endif

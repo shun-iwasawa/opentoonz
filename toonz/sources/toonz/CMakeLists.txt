@@ -123,26 +123,26 @@ set(MOC_HEADERS
 	expressionreferencemanager.h
 )
 
-# if(PLATFORM EQUAL 64)
-#     set(MOC_HEADERS
-#         ${MOC_HEADERS}
-#         ../stopmotion/stopmotion.h
-#         ../stopmotion/stopmotioncontroller.h
-#         ../stopmotion/webcam.h
-#         ../stopmotion/jpgconverter.h
-#         ../stopmotion/canon.h
-#         ../stopmotion/stopmotionlight.h
-#         cameracapturelevelcontrol.h
-#         penciltestpopup.h
-#     )
-#     # ../stopmotion/stopmotionserial.h
-# else()
+if(PLATFORM EQUAL 64)
+    set(MOC_HEADERS
+        ${MOC_HEADERS}
+        ../stopmotion/stopmotion.h
+        ../stopmotion/stopmotioncontroller.h
+        ../stopmotion/webcam.h
+        ../stopmotion/jpgconverter.h
+        ../stopmotion/canon.h
+        ../stopmotion/stopmotionlight.h
+        cameracapturelevelcontrol.h
+        penciltestpopup.h
+    )
+    # ../stopmotion/stopmotionserial.h
+else()
     set(MOC_HEADERS
         ${MOC_HEADERS}
         cameracapturelevelcontrol_qt.h
         penciltestpopup_qt.h
     )
-# endif()
+endif()
 
 set(HEADERS
     ${MOC_HEADERS}
@@ -365,26 +365,26 @@ set(SOURCES
     predict3d.cpp
 )
 
-# if(PLATFORM EQUAL 64)
-#     set(SOURCES
-#         ${SOURCES}
-#         ../stopmotion/stopmotion.cpp
-#         ../stopmotion/stopmotioncontroller.cpp
-#         ../stopmotion/webcam.cpp
-#         ../stopmotion/jpgconverter.cpp
-#         ../stopmotion/canon.cpp
-#         ../stopmotion/stopmotionlight.cpp
-#         cameracapturelevelcontrol.cpp
-#         penciltestpopup.cpp
-#     )
-#     # ../stopmotion/stopmotionserial.cpp
-# else()
+if(PLATFORM EQUAL 64)
+    set(SOURCES
+        ${SOURCES}
+        ../stopmotion/stopmotion.cpp
+        ../stopmotion/stopmotioncontroller.cpp
+        ../stopmotion/webcam.cpp
+        ../stopmotion/jpgconverter.cpp
+        ../stopmotion/canon.cpp
+        ../stopmotion/stopmotionlight.cpp
+        cameracapturelevelcontrol.cpp
+        penciltestpopup.cpp
+    )
+    # ../stopmotion/stopmotionserial.cpp
+else()
     set(SOURCES
         ${SOURCES}
         cameracapturelevelcontrol_qt.cpp
         penciltestpopup_qt.cpp
     )
-# endif()
+endif()
 
 if(WITH_TRANSLATION)
     add_translation(toonz ${HEADERS} ${SOURCES})
@@ -440,11 +440,10 @@ message("Bin: " ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(
     ../../sources/toonzfarm/include
     ../../sources/toonzqt
-#     ../../sources/stopmotion
+    ../../sources/stopmotion
 )
 
 if(PLATFORM EQUAL 64)
-    # target_include_directories(OpenToonz PUBLIC ${OpenCV_INCLUDE_DIRS})
     if (WITH_CANON)
         add_definitions(-DWITH_CANON)
     endif()
