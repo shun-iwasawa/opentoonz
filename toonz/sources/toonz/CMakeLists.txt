@@ -444,7 +444,7 @@ include_directories(
 )
 
 if(PLATFORM EQUAL 64)
-    include_directories(${OpenCV_INCLUDE_DIRS})
+    # target_include_directories(OpenToonz PUBLIC ${OpenCV_INCLUDE_DIRS})
     if (WITH_CANON)
         add_definitions(-DWITH_CANON)
     endif()
