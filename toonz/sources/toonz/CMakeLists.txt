@@ -443,8 +443,11 @@ include_directories(
 #     ../../sources/stopmotion
 )
 
-if (WITH_CANON)
-    add_definitions(-DWITH_CANON)
+if(PLATFORM EQUAL 64)
+    include_directories(${OpenCV_INCLUDE_DIRS})
+    if (WITH_CANON)
+        add_definitions(-DWITH_CANON)
+    endif()
 endif()
 
 if(BUILD_ENV_APPLE)
