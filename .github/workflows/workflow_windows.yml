@@ -129,7 +129,8 @@ jobs:
         cp D:/a/opentoonz/opentoonz/libmypaint/build/Release/libmypaint.lib libmypaint/dist/64/libmypaint.lib
         cp D:/a/opentoonz/opentoonz/superlu/build/SRC/Release/superlu.lib superlu/SuperLU_2015_64.lib
         cp D:/a/opentoonz/opentoonz/thirdparty/tiff-4.0.3/prj/LibTIFF/x64/Release/LibTIFF.lib tiff-4.0.3/lib/LibTIFF-4.0.3_2015_64.lib
-        cp C:/vcpkg/installed/x64-windows-static/lib/turbojpeg-static.lib libjpeg-turbo64/lib/turbojpeg-static.lib
+        mkdir libjpeg-turbo64/lib
+        cp C:/vcpkg/installed/x64-windows-static/lib/turbojpeg.lib libjpeg-turbo64/lib/turbojpeg.lib
 
     - name: Copy headers
       run: |

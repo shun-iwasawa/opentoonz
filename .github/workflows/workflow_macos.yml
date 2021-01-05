@@ -25,7 +25,10 @@ jobs:
         brew update
         checkPkgAndInstall pkg-config glew lz4 libjpeg libpng lzo qt boost libusb libmypaint ccache jpeg-turbo
         rm -f '/usr/local/bin/2to3'
-        checkPkgAndInstall ninja opencv
+        checkPkgAndInstall ninja
+        brew unlink gcc@8
+        brew unlink gcc@9
+        checkPkgAndInstall opencv
 
     - uses: actions/cache@v1
       with:
