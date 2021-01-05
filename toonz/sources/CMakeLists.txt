@@ -271,15 +271,15 @@ endif()
 
 if(PLATFORM EQUAL 64)
     set(TURBOJPEG_INCLUDE_DIR "${SDKROOT}/libjpeg-turbo64/include")
-    # if(BUILD_ENV_UNIXLIKE)
-    #     find_package(OpenCV 3.2 REQUIRED)
-    # else() # Windows and MacOS case
-    #     find_package(OpenCV 4.1 REQUIRED)
-    # endif()
+    if(BUILD_ENV_UNIXLIKE)
+        find_package(OpenCV 3.2 REQUIRED)
+    else() # Windows and MacOS case
+        find_package(OpenCV 4.1 REQUIRED)
+    endif()
     include_directories(
         ${TURBOJPEG_INCLUDE_DIR}
         # ${SDKROOT}/libjpeg-turbo64/include
-        # ${OpenCV_INCLUDE_DIRS}
+        ${OpenCV_INCLUDE_DIRS}
     )
     if(WITH_CANON)
         include_directories(
