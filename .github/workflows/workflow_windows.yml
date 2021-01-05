@@ -44,7 +44,7 @@ jobs:
       run: |
         vcpkg install --clean-after-build --triplet x64-windows icu
         vcpkg install --clean-after-build --triplet x64-windows-static json-c libjpeg-turbo libpng lz4 lzo openblas zlib
-        vcpkg install --clean-after-build --triplet x64-windows freeglut glew opencv
+        vcpkg install --clean-after-build --triplet x64-windows freeglut glew opencv[world]
         vcpkg integrate install
         ls -Recurse C:/vcpkg/installed -Filter *.pdb | rm
 
