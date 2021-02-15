@@ -266,6 +266,17 @@ QPixmap recolorPixmap(QPixmap pixmap, QColor color) {
 //-----------------------------------------------------------------------------
 
 QIcon createQIcon(const char *iconSVGName, bool useFullOpacity) {
+  if (!iconSVGName || !*iconSVGName) {
+    static QIcon emptyIcon;
+    if (emptyIcon.isNull()) {
+      QPixmap pm(1, 1);
+      pm.fill(Qt::green);
+      //pm.fill(Qt::transparent);
+      emptyIcon.addPixmap(pm);
+    }
+    return emptyIcon;
+  }
+
   QIcon normalIcon = QIcon::fromTheme(iconSVGName);
 
   QSize iconSize(0, 0);  // Get largest

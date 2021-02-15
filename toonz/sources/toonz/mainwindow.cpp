@@ -1449,7 +1449,7 @@ QAction *MainWindow::createAction(const char *id, const QString &name,
                                   const QString &defaultShortcut,
                                   CommandType type) {
   QAction *action = new DVAction(name, this);
-  action->setIconVisibleInMenu(false);  // Hide icons
+  action->setIconVisibleInMenu(true);  // Hide icons
   addAction(action);
 #ifdef MACOSX
   // To prevent the wrong menu items (due to MacOS menu naming conventions),
@@ -2301,8 +2301,9 @@ void MainWindow::defineActions() {
   menuAct =
       createMenuWindowsAction(MI_AudioRecording, tr("Record Audio"), "Alt+A");
   menuAct->setIcon(createQIcon("recordaudio"));
-  createMenuWindowsAction(MI_ResetRoomLayout, tr("&Reset to Default Rooms"),
+  menuAct = createMenuWindowsAction(MI_ResetRoomLayout, tr("&Reset to Default Rooms"),
                           "");
+  menuAct->setIcon(createQIcon(""));
   menuAct = createMenuWindowsAction(MI_MaximizePanel,
                                     tr("Toggle Maximize Panel"), "`");
   menuAct->setIcon(createQIcon("fit_to_window"));
