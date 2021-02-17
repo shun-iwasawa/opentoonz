@@ -444,11 +444,11 @@
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットの保存に失敗しました。</translation>
     </message>
     <message>
         <source>and %1 more item(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>さらに %1 個のファイル。</translation>
     </message>
 </context>
 <context>

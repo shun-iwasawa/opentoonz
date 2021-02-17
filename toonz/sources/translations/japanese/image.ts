@@ -291,12 +291,12 @@ Please try raising the FFmpeg timeout in Preferences.</source>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="737"/>
         <source>32(RGBA)</source>
-        <translation type="unfinished"></translation>
+        <translation>32ビット (RGBA)</translation>
     </message>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="738"/>
         <source>64(RGBA)</source>
-        <translation type="unfinished"></translation>
+        <translation>64ビット (RGBA)</translation>
     </message>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="739"/>

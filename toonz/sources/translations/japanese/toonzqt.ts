@@ -428,15 +428,15 @@ Possibly the preset file has been corrupted</source>
     </message>
     <message>
         <source>Range:</source>
-        <translation type="unfinished">範囲：</translation>
+        <translation>範囲：</translation>
     </message>
     <message>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>出力:</translation>
     </message>
     <message>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>入力:</translation>
     </message>
 </context>
 <context>
@@ -733,15 +733,15 @@ Possibly the preset file has been corrupted</source>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>サウンド</translation>
     </message>
     <message>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>ロケーター</translation>
     </message>
     <message>
         <source>&amp;Next Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>次のフレーム (&amp;N)</translation>
     </message>
 </context>
 <context>
@@ -996,7 +996,7 @@ Possibly the preset file has been corrupted</source>
     </message>
     <message>
         <source>Link/Unlink Handles</source>
-        <translation type="unfinished"></translation>
+        <translation>ハンドルを連結/分離</translation>
     </message>
 </context>
 <context>
@@ -1105,7 +1105,8 @@ Possibly the preset file has been corrupted</source>
     <message>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>このパラメータの中の１つまたは複数のキーフレームで、エクスプレッションによる参照が切れています。
+手動でいずれかのキーフレームを変更するとこの警告は消えます。</translation>
     </message>
 </context>
 <context>
@@ -1140,7 +1141,8 @@ Manually changing any keyframe will clear the warning.</source>
     <message>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>このパラメータの中の１つまたは複数のキーフレームで、エクスプレッションによる参照が切れています。
+手動でいずれかのキーフレームを変更するとこの警告は消えます。</translation>
     </message>
 </context>
 <context>
@@ -1641,15 +1643,15 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Hide New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイル追加ボタンを隠す</translation>
     </message>
     <message>
         <source>Show New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイル追加ボタンを表示する</translation>
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットの保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -1676,7 +1678,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source> + </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1699,7 +1701,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>Failed to import palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットの読み込みに失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -1717,7 +1719,7 @@ Select FX nodes and related links before copying or cutting the selection you wa
     </message>
     <message>
         <source>View help page</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプの表示</translation>
     </message>
 </context>
 <context>
@@ -2323,25 +2325,27 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     </message>
     <message>
         <source>There are no unused styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>使用していないスタイルがありません。</translation>
     </message>
     <message>
         <source>and %1 more styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>さらに %1 個のスタイル。</translation>
     </message>
     <message>
         <source>Erasing unused styles with following indices. Are you sure?
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>以下の番号のスタイルを削除します。よろしいですか？
+
+%1</translation>
     </message>
     <message>
         <source>Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>削除</translation>
     </message>
     <message>
         <source>Click &amp; Drag Palette into Studio Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>[スタジオパレットにドラッグ] このパレットをスタジオパレットに登録する</translation>
     </message>
 </context>
 <context>
@@ -2657,7 +2661,7 @@ Are you sure ?</source>
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットの保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -2817,15 +2821,15 @@ Apply</source>
     </message>
     <message>
         <source>Cleanup </source>
-        <translation type="unfinished"></translation>
+        <translation>トレース</translation>
     </message>
     <message>
         <source>Studio </source>
-        <translation type="unfinished"></translation>
+        <translation>スタジオ</translation>
     </message>
     <message>
         <source>Level </source>
-        <translation type="unfinished"></translation>
+        <translation>レベル</translation>
     </message>
 </context>
 <context>

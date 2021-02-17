@@ -262,31 +262,31 @@
     </message>
     <message>
         <source>Snap</source>
-        <translation type="unfinished">スナップ</translation>
+        <translation>スナップ</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation type="unfinished">タイプ：</translation>
+        <translation>タイプ：</translation>
     </message>
     <message>
         <source>Rectangular</source>
-        <translation type="unfinished">長方形</translation>
+        <translation>長方形</translation>
     </message>
     <message>
         <source>Freehand</source>
-        <translation type="unfinished">なげなわ</translation>
+        <translation>なげなわ</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished">低</translation>
+        <translation>低</translation>
     </message>
     <message>
         <source>Med</source>
-        <translation type="unfinished">中</translation>
+        <translation>中</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished">高</translation>
+        <translation>高</translation>
     </message>
 </context>
 <context>
@@ -498,23 +498,23 @@
     </message>
     <message>
         <source>Segment</source>
-        <translation type="unfinished">線分の自動検出</translation>
+        <translation>線分の自動検出</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished">均等割り</translation>
+        <translation>均等割り</translation>
     </message>
     <message>
         <source>Ease In</source>
-        <translation type="unfinished"></translation>
+        <translation>後詰め</translation>
     </message>
     <message>
         <source>Ease Out</source>
-        <translation type="unfinished"></translation>
+        <translation>先詰め</translation>
     </message>
     <message>
         <source>Ease In/Out</source>
-        <translation type="unfinished"></translation>
+        <translation>両詰め</translation>
     </message>
 </context>
 <context>
@@ -1045,11 +1045,11 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>MultiArc</source>
-        <translation type="unfinished"></translation>
+        <translation>連続円弧</translation>
     </message>
     <message>
         <source>Smooth</source>
-        <translation type="unfinished">滑らかに連結</translation>
+        <translation>滑らかに連結</translation>
     </message>
 </context>
 <context>
@@ -1259,7 +1259,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Snap At Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>交点にスナップ</translation>
     </message>
 </context>
 <context>
@@ -1833,7 +1833,7 @@ moved to the end of the first page of the palette.</source>
     </message>
     <message>
         <source>Include Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>交差選択</translation>
     </message>
 </context>
 <context>

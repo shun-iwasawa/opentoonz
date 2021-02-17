@@ -2057,48 +2057,49 @@ contain the dpi information, then the current camera dpi will be used.
     <name>ExpressionReferenceManager</name>
     <message>
         <source>Expression monitoring restarted: &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>次のエクスプレッションの監視を再開しました：&quot;%1&quot;</translation>
     </message>
     <message>
         <source>Expression modified: &quot;%1&quot; key at frame %2, %3 -&gt; %4</source>
-        <translation type="unfinished"></translation>
+        <translation>次のエクスプレッションが変更されました： &quot;%1&quot; フレーム%2のキーフレーム, %3 -&gt; %4</translation>
     </message>
     <message>
         <source>Following parameters will lose reference in expressions:</source>
-        <translation type="unfinished"></translation>
+        <translation>以下のパラメータのエクスプレッション内で参照が失われます：</translation>
     </message>
     <message>
         <source>(To be in the sub xsheet)</source>
-        <translation type="unfinished"></translation>
+        <translation>（サブシートへ移動）</translation>
     </message>
     <message>
         <source>Do you want to continue the operation anyway ?</source>
-        <translation type="unfinished"></translation>
+        <translation>それでも操作を実行しますか？</translation>
     </message>
     <message>
         <source>(In the current xsheet)</source>
-        <translation type="unfinished"></translation>
+        <translation>（現在のシート内）</translation>
     </message>
     <message>
         <source>(To be brought from the subxsheet)</source>
-        <translation type="unfinished"></translation>
+        <translation>（サブシートから持ち出し）</translation>
     </message>
     <message>
         <source>
 Do you want to explode anyway ?</source>
-        <translation type="unfinished"></translation>
+        <translation>
+それでもサブシートを展開しますか？</translation>
     </message>
     <message>
         <source>(In a sub xsheet)</source>
-        <translation type="unfinished"></translation>
+        <translation>（サブシート内）</translation>
     </message>
     <message>
         <source>Following parameters may contain broken references in expressions:</source>
-        <translation type="unfinished"></translation>
+        <translation>以下のパラメータのエクスプレッション内で参照が途切れている恐れがあります：</translation>
     </message>
     <message>
         <source>Do you want to save the scene anyway ?</source>
-        <translation type="unfinished"></translation>
+        <translation>それでもシーンを保存しますか？</translation>
     </message>
 </context>
 <context>
@@ -2415,27 +2416,27 @@ Hold F3 Key on the Viewer to Show This Frame Only</source>
     </message>
     <message>
         <source>INBETWEEN</source>
-        <translation type="unfinished"></translation>
+        <translation>INBETWEEN</translation>
     </message>
     <message>
         <source>Panel Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>パネル設定</translation>
     </message>
     <message>
         <source>Toggle Orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>縦/横向きを切り替え</translation>
     </message>
     <message>
         <source>Show/Hide Drop Down Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>レベル選択ボックスの表示/非表示</translation>
     </message>
     <message>
         <source>Show/Hide Level Navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>ナビゲータの表示/非表示</translation>
     </message>
     <message>
         <source>Select Level</source>
-        <translation type="unfinished"></translation>
+        <translation>レベルを選択</translation>
     </message>
 </context>
 <context>
@@ -2629,15 +2630,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Ease In</source>
-        <translation>スローイン</translation>
+        <translation>後詰め</translation>
     </message>
     <message>
         <source>Ease Out</source>
-        <translation>スローアウト</translation>
+        <translation>先詰め</translation>
     </message>
     <message>
         <source>Ease In / Ease Out</source>
-        <translation>スローイン/スローアウト</translation>
+        <translation>両詰め</translation>
     </message>
     <message>
         <source>Interpolation:</source>
@@ -2696,7 +2697,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished">検索：</translation>
+        <translation>検索：</translation>
     </message>
 </context>
 <context>
@@ -4542,11 +4543,11 @@ Please use the frame numbers for reference.</source>
     </message>
     <message>
         <source>Fill Tool - Areas</source>
-        <translation>塗りつぶしツール (塗りモード)</translation>
+        <translation>塗りつぶしツール（切り替え） - モード - 塗り</translation>
     </message>
     <message>
         <source>Fill Tool - Lines</source>
-        <translation>塗りつぶしツール (線モード)</translation>
+        <translation>塗りつぶしツール（切り替え） - モード - 線</translation>
     </message>
     <message>
         <source>Paint Brush Tool</source>
@@ -4566,11 +4567,11 @@ Please use the frame numbers for reference.</source>
     </message>
     <message>
         <source>Style Picker Tool - Areas</source>
-        <translation></translation>
+        <translation>スポイトツール（切り替え） - モード - 塗り</translation>
     </message>
     <message>
         <source>Style Picker Tool - Lines</source>
-        <translation></translation>
+        <translation>スポイトツール（切り替え） - モード - 線</translation>
     </message>
     <message>
         <source>RGB Picker Tool</source>
@@ -5764,423 +5765,423 @@ or you may delete necessary files for it.</source>
     </message>
     <message>
         <source>Save All</source>
-        <translation type="unfinished">シーンとレベルを全て保存</translation>
+        <translation>シーンとレベルを全て保存</translation>
     </message>
     <message>
         <source>&amp;Paste as a Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>複製して貼り付け (&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Move to Back</source>
-        <translation type="unfinished"></translation>
+        <translation>最背面へ移動 (&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Move Back One</source>
-        <translation type="unfinished"></translation>
+        <translation>背面へ移動 (&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Move Forward One</source>
-        <translation type="unfinished"></translation>
+        <translation>前面へ移動 (&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Move to Front</source>
-        <translation type="unfinished"></translation>
+        <translation>最前面へ移動 (&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Open Sub-Xsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシートを開く (&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Close Sub-Xsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシートを閉じる (&amp;C)</translation>
     </message>
     <message>
         <source>Explode Sub-Xsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシートを解除する</translation>
     </message>
     <message>
         <source>&amp;Save Sub-Xsheet As...</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシートを別名で保存 (&amp;S)...</translation>
     </message>
     <message>
         <source>Clone Sub-Xsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシートをクローン</translation>
     </message>
     <message>
         <source>&amp;Clone Cells</source>
-        <translation type="unfinished"></translation>
+        <translation>レベルのクローンを作る (&amp;C)</translation>
     </message>
     <message>
         <source>Reframe on 1&apos;s</source>
-        <translation type="unfinished"></translation>
+        <translation>1コマにリフレーム</translation>
     </message>
     <message>
         <source>Reframe on 2&apos;s</source>
-        <translation type="unfinished"></translation>
+        <translation>2コマにリフレーム</translation>
     </message>
     <message>
         <source>Reframe on 3&apos;s</source>
-        <translation type="unfinished"></translation>
+        <translation>3コマにリフレーム</translation>
     </message>
     <message>
         <source>Reframe on 4&apos;s</source>
-        <translation type="unfinished"></translation>
+        <translation>4コマにリフレーム</translation>
     </message>
     <message>
         <source>Previous Drawing</source>
-        <translation type="unfinished">前の画像</translation>
+        <translation>前の画像</translation>
     </message>
     <message>
         <source>Previous Step</source>
-        <translation type="unfinished"></translation>
+        <translation>前のステップ</translation>
     </message>
     <message>
         <source>Previous Key</source>
-        <translation type="unfinished"></translation>
+        <translation>前のキー</translation>
     </message>
     <message>
         <source>About OpenToonz...</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenToonzについて...</translation>
     </message>
     <message>
         <source>Online Manual...</source>
-        <translation type="unfinished"></translation>
+        <translation>オンラインマニュアル...</translation>
     </message>
     <message>
         <source>What&apos;s New...</source>
-        <translation type="unfinished"></translation>
+        <translation>リリースノート...</translation>
     </message>
     <message>
         <source>Community Forum...</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーフォーラム...</translation>
     </message>
     <message>
         <source>Report a Bug...</source>
-        <translation type="unfinished"></translation>
+        <translation>不具合を報告する...</translation>
     </message>
     <message>
         <source>Geometric Shape Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 長方形</translation>
     </message>
     <message>
         <source>Geometric Shape Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 円形</translation>
     </message>
     <message>
         <source>Geometric Shape Ellipse</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 楕円形</translation>
     </message>
     <message>
         <source>Geometric Shape Line</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 直線</translation>
     </message>
     <message>
         <source>Geometric Shape Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 折れ線</translation>
     </message>
     <message>
         <source>Geometric Shape Arc</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 円弧</translation>
     </message>
     <message>
         <source>Geometric Shape MultiArc</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 連続円弧</translation>
     </message>
     <message>
         <source>Geometric Shape Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール - 形状 - 多角形</translation>
     </message>
     <message>
         <source>Mode - Lines &amp;&amp; Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>共通 - モード - 線と塗り</translation>
     </message>
     <message>
         <source>Mode - Endpoint to Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール - モード - 端点から端点</translation>
     </message>
     <message>
         <source>Mode - Endpoint to Line</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール - モード - 端点から線</translation>
     </message>
     <message>
         <source>Mode - Line to Line</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール - モード - 線から線</translation>
     </message>
     <message>
         <source>Type - Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>共通 - 線分の自動検出</translation>
     </message>
     <message>
         <source>TypeTool Style - Oblique</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール - スタイル - 斜体</translation>
     </message>
     <message>
         <source>TypeTool Style - Regular</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール - スタイル - 標準</translation>
     </message>
     <message>
         <source>TypeTool Style - Bold Oblique</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール - スタイル - 太字斜体</translation>
     </message>
     <message>
         <source>TypeTool Style - Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール - スタイル - 太字</translation>
     </message>
     <message>
         <source>Skeleton Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>ボーンツール - モード</translation>
     </message>
     <message>
         <source>Edit Mesh Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール - メッシュの編集モード</translation>
     </message>
     <message>
         <source>Paint Rigid Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール - 固定ペイントブラシモード</translation>
     </message>
     <message>
         <source>Animate Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸</translation>
     </message>
     <message>
         <source>Animate Tool - Position</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - 位置</translation>
     </message>
     <message>
         <source>Animate Tool - Rotation</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - 回転</translation>
     </message>
     <message>
         <source>Animate Tool - Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - 拡大縮小</translation>
     </message>
     <message>
         <source>Animate Tool - Shear</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - シアー</translation>
     </message>
     <message>
         <source>Animate Tool - Center</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - 基準点</translation>
     </message>
     <message>
         <source>Animate Tool - All</source>
-        <translation type="unfinished"></translation>
+        <translation>編集ツール（切り替え） - 軸 - 全て</translation>
     </message>
     <message>
         <source>Selection Tool - Next Type</source>
-        <translation type="unfinished"></translation>
+        <translation>選択ツール（切り替え） - タイプ</translation>
     </message>
     <message>
         <source>Selection Tool - Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>選択ツール（切り替え） - タイプ - 長方形</translation>
     </message>
     <message>
         <source>Selection Tool - Freehand</source>
-        <translation type="unfinished"></translation>
+        <translation>選択ツール（切り替え） - タイプ - なげなわ</translation>
     </message>
     <message>
         <source>Selection Tool - Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>選択ツール（切り替え） - タイプ - 多角形</translation>
     </message>
     <message>
         <source>Geometric Tool - Next Shape</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状</translation>
     </message>
     <message>
         <source>Geometric Tool - Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 長方形</translation>
     </message>
     <message>
         <source>Geometric Tool - Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 円形</translation>
     </message>
     <message>
         <source>Geometric Tool - Ellipse</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 楕円形</translation>
     </message>
     <message>
         <source>Geometric Tool - Line</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 直線</translation>
     </message>
     <message>
         <source>Geometric Tool - Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 折れ線</translation>
     </message>
     <message>
         <source>Geometric Tool - Arc</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 円弧</translation>
     </message>
     <message>
         <source>Geometric Tool - MultiArc</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 連続円弧</translation>
     </message>
     <message>
         <source>Geometric Tool - Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>図形ツール（切り替え） - 形状 - 多角形</translation>
     </message>
     <message>
         <source>Type Tool - Next Style</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール（切り替え） - スタイル</translation>
     </message>
     <message>
         <source>Type Tool - Oblique</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール（切り替え） - スタイル - 斜体</translation>
     </message>
     <message>
         <source>Type Tool - Regular</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール（切り替え） - スタイル - 標準</translation>
     </message>
     <message>
         <source>Type Tool - Bold Oblique</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール（切り替え） - スタイル - 太字斜体</translation>
     </message>
     <message>
         <source>Type Tool - Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>文字ツール（切り替え） - スタイル - 太字</translation>
     </message>
     <message>
         <source>Fill Tool - Next Type</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - タイプ</translation>
     </message>
     <message>
         <source>Fill Tool - Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - タイプ - 通常</translation>
     </message>
     <message>
         <source>Fill Tool - Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - タイプ - 長方形</translation>
     </message>
     <message>
         <source>Fill Tool - Freehand</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - タイプ - なげなわ</translation>
     </message>
     <message>
         <source>Fill Tool - Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - タイプ - 多角形</translation>
     </message>
     <message>
         <source>Fill Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - モード</translation>
     </message>
     <message>
         <source>Fill Tool - Lines &amp; Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>塗りつぶしツール（切り替え） - モード - 線と塗り</translation>
     </message>
     <message>
         <source>Eraser Tool - Next Type</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - タイプ</translation>
     </message>
     <message>
         <source>Eraser Tool - Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - タイプ - 通常</translation>
     </message>
     <message>
         <source>Eraser Tool - Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - タイプ - 長方形</translation>
     </message>
     <message>
         <source>Eraser Tool - Freehand</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - タイプ - なげなわ</translation>
     </message>
     <message>
         <source>Eraser Tool - Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - タイプ - 多角形</translation>
     </message>
     <message>
         <source>Eraser Tool - Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>消しゴムツール（切り替え） - 線分の自動検出</translation>
     </message>
     <message>
         <source>Tape Tool - Next Type</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - タイプ</translation>
     </message>
     <message>
         <source>Tape Tool - Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - タイプ - 通常</translation>
     </message>
     <message>
         <source>Tape Tool - Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - タイプ - 長方形</translation>
     </message>
     <message>
         <source>Tape Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - モード</translation>
     </message>
     <message>
         <source>Tape Tool - Endpoint to Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - モード - 端点から端点</translation>
     </message>
     <message>
         <source>Tape Tool - Endpoint to Line</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - モード - 端点から線</translation>
     </message>
     <message>
         <source>Tape Tool - Line to Line</source>
-        <translation type="unfinished"></translation>
+        <translation>線つなぎツール（切り替え） - モード - 線から線</translation>
     </message>
     <message>
         <source>Style Picker Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>スポイトツール（切り替え） - モード</translation>
     </message>
     <message>
         <source>Style Picker Tool - Lines &amp; Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>スポイトツール（切り替え） - モード - 線と塗り</translation>
     </message>
     <message>
         <source>RGB Picker Tool - Next Type</source>
-        <translation type="unfinished"></translation>
+        <translation>RGBスポイトツール（切り替え） - タイプ</translation>
     </message>
     <message>
         <source>RGB Picker Tool - Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>RGBスポイトツール（切り替え） - タイプ - 通常</translation>
     </message>
     <message>
         <source>RGB Picker Tool - Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>RGBスポイトツール（切り替え） - タイプ - 長方形</translation>
     </message>
     <message>
         <source>RGB Picker Tool - Freehand</source>
-        <translation type="unfinished"></translation>
+        <translation>RGBスポイトツール（切り替え） - タイプ - なげなわ</translation>
     </message>
     <message>
         <source>RGB Picker Tool - Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>RGBスポイトツール（切り替え） - タイプ - 多角形</translation>
     </message>
     <message>
         <source>Skeleton Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>ボーンツール（切り替え） - モード</translation>
     </message>
     <message>
         <source>Skeleton Tool - Build Skeleton</source>
-        <translation type="unfinished"></translation>
+        <translation>ボーンツール（切り替え） - モード - ボーン作成</translation>
     </message>
     <message>
         <source>Skeleton Tool - Animate</source>
-        <translation type="unfinished"></translation>
+        <translation>ボーンツール（切り替え） - モード - アニメート</translation>
     </message>
     <message>
         <source>Skeleton Tool - Inverse Kinematics</source>
-        <translation type="unfinished"></translation>
+        <translation>ボーンツール（切り替え） - モード - 逆運動学（IK)</translation>
     </message>
     <message>
         <source>Plastic Tool - Next Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール（切り替え） - モード</translation>
     </message>
     <message>
         <source>Plastic Tool - Edit Mesh</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール（切り替え） - モード - メッシュの編集</translation>
     </message>
     <message>
         <source>Plastic Tool - Paint Rigid</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール（切り替え） - モード - 固定ペイントブラシ</translation>
     </message>
     <message>
         <source>Plastic Tool - Build Skeleton</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール（切り替え） - モード - ボーン作成</translation>
     </message>
     <message>
         <source>Plastic Tool - Animate</source>
-        <translation type="unfinished"></translation>
+        <translation>プラスチックツール（切り替え） - モード - アニメート</translation>
     </message>
 </context>
 <context>
@@ -6800,27 +6801,27 @@ The parameters to be saved are:
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished">カメラ</translation>
+        <translation>カメラ</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished">ファイル</translation>
+        <translation>ファイル</translation>
     </message>
     <message>
         <source>More</source>
-        <translation type="unfinished"></translation>
+        <translation>その他</translation>
     </message>
     <message>
         <source>More Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>その他の設定</translation>
     </message>
     <message>
         <source>Frame Rate:</source>
-        <translation type="unfinished">フレームレート:</translation>
+        <translation>フレームレート:</translation>
     </message>
     <message>
         <source>(linked to Scene Settings)</source>
-        <translation type="unfinished"></translation>
+        <translation>（シーン設定）</translation>
     </message>
 </context>
 <context>
@@ -7232,11 +7233,11 @@ WARNING : Image size mismatch. The saved image size is %1 x %2.</source>
     </message>
     <message>
         <source>Use Direct Show Webcam Drivers</source>
-        <translation type="unfinished">DirectShowデバイスドライバを使用する</translation>
+        <translation>DirectShowデバイスドライバを使用する</translation>
     </message>
     <message>
         <source>Use MJPG with Webcam</source>
-        <translation type="unfinished">ウェブカメラの取り込みにMJPGを用いる</translation>
+        <translation>ウェブカメラの取り込みにMJPGを用いる</translation>
     </message>
 </context>
 <context>
@@ -8477,66 +8478,66 @@ in non alpha-enabled image format.</source>
     </message>
     <message>
         <source>Switch to dark icons</source>
-        <translation type="unfinished"></translation>
+        <translation>暗色のアイコンに切り替える</translation>
     </message>
     <message>
         <source>Level Strip Thumbnail Size*:</source>
-        <translation type="unfinished"></translation>
+        <translation>レベルビューアのサムネイルサイズ*:</translation>
     </message>
     <message>
         <source>Color Calibration using 3D Look-up Table</source>
-        <translation type="unfinished"></translation>
+        <translation>３Dルックアップテーブルを用いて色補正を行う</translation>
     </message>
     <message>
         <source>3DLUT File for [%1]:</source>
-        <translation type="unfinished"></translation>
+        <translation>モニタ [%1] 用の3DLUTファイル:</translation>
     </message>
     <message>
         <source>Clear Undo History when Saving Levels</source>
-        <translation type="unfinished"></translation>
+        <translation>レベル保存時に「元に戻す」の履歴を消去する</translation>
     </message>
     <message>
         <source>Use %1 to Resize Brush</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 でブラシサイズを変更する</translation>
     </message>
     <message>
         <source>Switch Tool Temporarily Keypress Length (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールの一時切り替えに必要なショートカットキーの押下時間（ms）:</translation>
     </message>
     <message>
         <source>[Experimental Feature] </source>
-        <translation type="unfinished"></translation>
+        <translation>[試験的な新機能] </translation>
     </message>
     <message>
         <source>Automatically Modify Expression On Moving Referenced Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプレッションを監視し、参照オブジェクトの移動に合わせて自動的に調整する</translation>
     </message>
     <message>
         <source>Edit Additional Style Sheet..</source>
-        <translation type="unfinished"></translation>
+        <translation>追加スタイルシートの編集..</translation>
     </message>
     <message>
         <source>Icon Theme*:</source>
-        <translation type="unfinished"></translation>
+        <translation>アイコンのテーマ*:</translation>
     </message>
 </context>
 <context>
     <name>PreferencesPopup::AdditionalStyleEdit</name>
     <message>
         <source>Additional Style Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>追加スタイルシート</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">適用</translation>
+        <translation>適用</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
 </context>
 <context>
@@ -10873,63 +10874,63 @@ Do you want to create it?</source>
     </message>
     <message>
         <source>No columns can be exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>書き出し可能な列がありません。</translation>
     </message>
     <message>
         <source>Export Exchange Digital Time Sheet (XDTS)</source>
-        <translation type="unfinished">デジタルタイムシート情報（XDTS）の書き出し</translation>
+        <translation>デジタルタイムシート情報（XDTS）の書き出し</translation>
     </message>
     <message>
         <source>Maintain parenting relationships in the sub-xsheet as well.</source>
-        <translation type="unfinished"></translation>
+        <translation>タップの親子関係をサブシート内でも維持する。</translation>
     </message>
     <message>
         <source>Include the selected columns in the sub-xsheet without parenting info.</source>
-        <translation type="unfinished"></translation>
+        <translation>タップの親子関係は無視して選択した列をサブシート内に持ち込む。</translation>
     </message>
     <message>
         <source>Maintain parenting relationships in the main xsheet.</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシート内のタップの親子関係を維持して親シートに持ち出す。</translation>
     </message>
     <message>
         <source>Bring columns in the main xsheet without parenting.</source>
-        <translation type="unfinished"></translation>
+        <translation>サブシート内のタップの親子関係は無視して列を親シートに持ち出す。</translation>
     </message>
     <message>
         <source>and %1 more item(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>さらに %1 個のファイル。</translation>
     </message>
     <message>
         <source>Convert to Vectors</source>
-        <translation type="unfinished"></translation>
+        <translation>ベクターに変換</translation>
     </message>
     <message>
         <source>There are no copied cells to duplicate.</source>
-        <translation type="unfinished"></translation>
+        <translation>複製するコマがコピーされていません。</translation>
     </message>
     <message>
         <source>Cannot paste cells on locked layers.</source>
-        <translation type="unfinished"></translation>
+        <translation>ロックされた列にはコマをペーストできません。</translation>
     </message>
     <message>
         <source>Can&apos;t place drawings on the camera column.</source>
-        <translation type="unfinished"></translation>
+        <translation>カメラ列には動画フレームを配置できません。</translation>
     </message>
     <message>
         <source>Cannot duplicate frames in read only levels</source>
-        <translation type="unfinished"></translation>
+        <translation>読み取り専用のレベル内にはフレームを複製できません</translation>
     </message>
     <message>
         <source>Can only duplicate frames in image sequence levels.</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームの複製は連番フレームを持ったレベル内でのみ可能です。</translation>
     </message>
     <message>
         <source>Toggle vector column as mask. </source>
-        <translation type="unfinished"></translation>
+        <translation>ベクター列のマスク化の切り替え</translation>
     </message>
     <message>
         <source>Script file %1 does not exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>スクリプトファイル %1 は存在しません。</translation>
     </message>
 </context>
 <context>
@@ -11035,16 +11036,16 @@ The audio file will not be included in the rendered clip.</source>
     </message>
     <message>
         <source>Please specify an file name.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Drag a scene into the box to export a scene.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>The %1 scene contains a plastic deformed level.
 These levels can&apos;t be exported with this tool.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -11156,11 +11157,11 @@ These levels can&apos;t be exported with this tool.</source>
     </message>
     <message>
         <source>Left-click and drag to move guide, right-click to delete guide.</source>
-        <translation type="unfinished"></translation>
+        <translation>[ドラッグ] ガイドを移動 [右クリック] ガイドを削除</translation>
     </message>
     <message>
         <source>Click to create a horizontal guide</source>
-        <translation type="unfinished"></translation>
+        <translation>［クリック］水平ガイドを作成</translation>
     </message>
 </context>
 <context>
@@ -12401,15 +12402,15 @@ Please commit or revert changes first.</source>
     </message>
     <message>
         <source>GUI Show / Hide</source>
-        <translation type="unfinished">GUI 表示/非表示</translation>
+        <translation>GUI 表示/非表示</translation>
     </message>
     <message>
         <source>Playback Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>再生コントロール</translation>
     </message>
     <message>
         <source>Frame Slider</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームスライダ</translation>
     </message>
 </context>
 <context>
@@ -12556,19 +12557,19 @@ Please commit or revert changes first.</source>
     </message>
     <message>
         <source>Save Settings</source>
-        <translation type="unfinished">設定を保存</translation>
+        <translation>設定を保存</translation>
     </message>
     <message>
         <source>Load Settings</source>
-        <translation type="unfinished">設定を読み込み</translation>
+        <translation>設定を読み込み</translation>
     </message>
     <message>
         <source>Failed to load %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル %1 の読み込みに失敗しました。</translation>
     </message>
     <message>
         <source>Failed to create the folder.</source>
-        <translation type="unfinished">フォルダの作成に失敗しました。</translation>
+        <translation>フォルダの作成に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -14283,16 +14284,17 @@ Click the arrow button to create a new sub-xsheet</source>
     </message>
     <message>
         <source>Align Boundary Strokes Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>境界線の向きを揃える</translation>
     </message>
     <message>
         <source>Align boundary strokes direction to be the same.
 (clockwise, i.e. left to right as viewed from inside of the shape)</source>
-        <translation type="unfinished"></translation>
+        <translation>境界線の向きを揃えて同じにします。
+（時計回り：シェイプの内側からみて左から右の方向）</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション</translation>
     </message>
 </context>
 <context>
