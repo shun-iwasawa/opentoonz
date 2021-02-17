@@ -426,6 +426,18 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
         <source>Channel:</source>
         <translation>Canal:</translation>
     </message>
+    <message>
+        <source>Range:</source>
+        <translation type="unfinished">Rango:</translation>
+    </message>
+    <message>
+        <source>Output:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DVGui::ValidatedChoiceDialog</name>
@@ -609,7 +621,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>&amp;Next frame</source>
-        <translation>Fotograma &amp;siguiente</translation>
+        <translation type="vanished">Fotograma &amp;siguiente</translation>
     </message>
     <message>
         <source>&amp;Last Frame</source>
@@ -718,6 +730,18 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     <message>
         <source>&amp;Reset View</source>
         <translation>&amp;Restablecer vista</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Next Frame</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -970,6 +994,10 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
         <source>Step</source>
         <translation>Exposición</translation>
     </message>
+    <message>
+        <source>Link/Unlink Handles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FunctionSelection</name>
@@ -1073,6 +1101,14 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
 </context>
 <context>
+    <name>FunctionSheetColumnHeadViewer</name>
+    <message>
+        <source>Some key(s) in this parameter loses original reference in expression.
+Manually changing any keyframe will clear the warning.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FunctionToolbar</name>
     <message>
         <source>Value</source>
@@ -1100,6 +1136,11 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     <message>
         <source>Plastic Skeleton</source>
         <translation>Esqueleto de Plástico</translation>
+    </message>
+    <message>
+        <source>Some key(s) in this parameter loses original reference in expression.
+Manually changing any keyframe will clear the warning.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1598,6 +1639,18 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
         <source>)</source>
         <translation>)</translation>
     </message>
+    <message>
+        <source>Hide New Style Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show New Style Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save palette.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PaletteViewerGUI::PageViewer</name>
@@ -1621,6 +1674,10 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
         <source>Name Editor</source>
         <translation>Editor de nombres</translation>
     </message>
+    <message>
+        <source> + </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PalettesScanPopup</name>
@@ -1640,6 +1697,10 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
         <source>&lt;files&gt;</source>
         <translation>&lt;archivos&gt;</translation>
     </message>
+    <message>
+        <source>Failed to import palette.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ParamViewer</name>
@@ -1652,7 +1713,11 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     <name>ParamsPageSet</name>
     <message>
         <source>Fx Help</source>
-        <translation>Ayuda del efecto</translation>
+        <translation type="vanished">Ayuda del efecto</translation>
+    </message>
+    <message>
+        <source>View help page</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1748,7 +1813,7 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Palette</source>
-        <translation>Paleta</translation>
+        <translation type="vanished">Paleta</translation>
     </message>
     <message>
         <source>Save</source>
@@ -2265,6 +2330,28 @@ La segunda línea debería tener la forma &quot;Mesh [profundidad de bits de ent
         <source>That is a reserved file name and cannot be used.</source>
         <translation>Ése es un nombre de archivo reservado y no es posible su uso.</translation>
     </message>
+    <message>
+        <source>There are no unused styles.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>and %1 more styles.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erasing unused styles with following indices. Are you sure?
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click &amp; Drag Palette into Studio Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPushButton</name>
@@ -2577,6 +2664,10 @@ Are you sure ?</source>
         <source>Convert</source>
         <translation>Convertir</translation>
     </message>
+    <message>
+        <source>Failed to save palette.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StudioPaletteViewer</name>
@@ -2663,15 +2754,15 @@ Autom</translation>
     </message>
     <message>
         <source>[CLEANUP]  </source>
-        <translation>[LIMPIEZA]  </translation>
+        <translation type="vanished">[LIMPIEZA]  </translation>
     </message>
     <message>
         <source>[STUDIO]  </source>
-        <translation>[ESTUDIO]  </translation>
+        <translation type="vanished">[ESTUDIO]  </translation>
     </message>
     <message>
         <source>[LEVEL]  </source>
-        <translation>[NIVEL]  </translation>
+        <translation type="vanished">[NIVEL]  </translation>
     </message>
     <message>
         <source>- Style is Not Valid -</source>
@@ -2732,6 +2823,18 @@ Autom</translation>
     <message>
         <source>Palette</source>
         <translation>Paleta</translation>
+    </message>
+    <message>
+        <source>Cleanup </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Studio </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Level </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

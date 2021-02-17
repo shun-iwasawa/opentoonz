@@ -260,6 +260,34 @@
         <source>Auto Select Drawing</source>
         <translation>Seleccionar dibujo automáticamente</translation>
     </message>
+    <message>
+        <source>Snap</source>
+        <translation type="unfinished">Adherencia</translation>
+    </message>
+    <message>
+        <source>Type:</source>
+        <translation type="unfinished">Tipo:</translation>
+    </message>
+    <message>
+        <source>Rectangular</source>
+        <translation type="unfinished">Rectangular</translation>
+    </message>
+    <message>
+        <source>Freehand</source>
+        <translation type="unfinished">Lazo</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">Baja</translation>
+    </message>
+    <message>
+        <source>Med</source>
+        <translation type="unfinished">Media</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">Alta</translation>
+    </message>
 </context>
 <context>
     <name>ControlPointSelection</name>
@@ -467,6 +495,26 @@
     <message>
         <source>Lines &amp; Areas</source>
         <translation>Líneas y áreas</translation>
+    </message>
+    <message>
+        <source>Segment</source>
+        <translation type="unfinished">Segmento</translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished">Lineal</translation>
+    </message>
+    <message>
+        <source>Ease In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ease Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ease In/Out</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -995,6 +1043,14 @@ Do you want to proceed?</source>
         <source>Med</source>
         <translation>Media</translation>
     </message>
+    <message>
+        <source>MultiArc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Smooth</source>
+        <translation type="unfinished">Suavizar</translation>
+    </message>
 </context>
 <context>
     <name>PumpTool</name>
@@ -1200,6 +1256,10 @@ Do you want to proceed?</source>
     <message>
         <source>The selection cannot be moved. It is not editable.</source>
         <translation>La selección no puede ser movida. No es editable.</translation>
+    </message>
+    <message>
+        <source>Snap At Intersection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1770,6 +1830,10 @@ movido hacia el final de la primera página de la paleta.</translation>
     <message>
         <source>Bevel join</source>
         <translation>Biseladas</translation>
+    </message>
+    <message>
+        <source>Include Intersection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

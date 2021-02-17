@@ -260,6 +260,34 @@
         <source>Auto Select Drawing</source>
         <translation>レベルをまたいで選択</translation>
     </message>
+    <message>
+        <source>Snap</source>
+        <translation type="unfinished">スナップ</translation>
+    </message>
+    <message>
+        <source>Type:</source>
+        <translation type="unfinished">タイプ：</translation>
+    </message>
+    <message>
+        <source>Rectangular</source>
+        <translation type="unfinished">長方形</translation>
+    </message>
+    <message>
+        <source>Freehand</source>
+        <translation type="unfinished">なげなわ</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">低</translation>
+    </message>
+    <message>
+        <source>Med</source>
+        <translation type="unfinished">中</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">高</translation>
+    </message>
 </context>
 <context>
     <name>ControlPointSelection</name>
@@ -467,6 +495,26 @@
     <message>
         <source>Lines &amp; Areas</source>
         <translation>線と塗り</translation>
+    </message>
+    <message>
+        <source>Segment</source>
+        <translation type="unfinished">線分の自動検出</translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished">均等割り</translation>
+    </message>
+    <message>
+        <source>Ease In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ease Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ease In/Out</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -995,6 +1043,14 @@ Do you want to proceed?</source>
         <source>High</source>
         <translation>高</translation>
     </message>
+    <message>
+        <source>MultiArc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Smooth</source>
+        <translation type="unfinished">滑らかに連結</translation>
+    </message>
 </context>
 <context>
     <name>PumpTool</name>
@@ -1200,6 +1256,10 @@ Do you want to proceed?</source>
     <message>
         <source>The selection cannot be moved. It is not editable.</source>
         <translation>選択グループを移動できません。レベルまたは列が編集不可に設定されています。</translation>
+    </message>
+    <message>
+        <source>Snap At Intersection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1770,6 +1830,10 @@ moved to the end of the first page of the palette.</source>
     <message>
         <source>Round cap</source>
         <translation>丸型線端</translation>
+    </message>
+    <message>
+        <source>Include Intersection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
