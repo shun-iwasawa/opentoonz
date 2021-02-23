@@ -6,17 +6,17 @@
     <message>
         <location filename="../../common/tiio/tiio_bmp.cpp" line="755"/>
         <source>Bits Per Pixel</source>
-        <translation type="unfinished">Битов на пиксель</translation>
+        <translation>Битов на пиксель</translation>
     </message>
     <message>
         <location filename="../../common/tiio/tiio_bmp.cpp" line="756"/>
         <source>24 bits</source>
-        <translation type="unfinished">24 бита</translation>
+        <translation>24 бита</translation>
     </message>
     <message>
         <location filename="../../common/tiio/tiio_bmp.cpp" line="757"/>
         <source>8 bits (Greyscale)</source>
-        <translation type="unfinished">8 бит (оттенки серого)</translation>
+        <translation>8 бит (оттенки серого)</translation>
     </message>
 </context>
 <context>
@@ -24,12 +24,12 @@
     <message>
         <location filename="../../common/tiio/tiio_jpg.cpp" line="284"/>
         <source>Quality</source>
-        <translation type="unfinished">Качество</translation>
+        <translation>Качество</translation>
     </message>
     <message>
         <location filename="../../common/tiio/tiio_jpg.cpp" line="285"/>
         <source>Smoothing</source>
-        <translation type="unfinished">Сглаживание</translation>
+        <translation>Сглаживание</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@
     <message>
         <location filename="../../include/tundo.h" line="49"/>
         <source>Unidentified Action</source>
-        <translation type="unfinished">Нераспознанное действие</translation>
+        <translation>Нераспознанное действие</translation>
     </message>
 </context>
 <context>

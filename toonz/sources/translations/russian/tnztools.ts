@@ -275,37 +275,37 @@
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="343"/>
         <source>Snap</source>
-        <translation type="unfinished">Привязка</translation>
+        <translation>Привязка</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="344"/>
         <source>Type:</source>
-        <translation type="unfinished">Тип:</translation>
+        <translation>Тип:</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="345"/>
         <source>Rectangular</source>
-        <translation type="unfinished"></translation>
+        <translation>Прямоугольная</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="346"/>
         <source>Freehand</source>
-        <translation type="unfinished">От руки</translation>
+        <translation>От руки</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="349"/>
         <source>Low</source>
-        <translation type="unfinished">Низкий</translation>
+        <translation>Слабая</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="350"/>
         <source>Med</source>
-        <translation type="unfinished">Средний</translation>
+        <translation>Средняя</translation>
     </message>
     <message>
         <location filename="../../tnztools/controlpointeditortool.cpp" line="351"/>
         <source>High</source>
-        <translation type="unfinished">Высокий</translation>
+        <translation>Сильная</translation>
     </message>
 </context>
 <context>
@@ -550,27 +550,27 @@
     <message>
         <location filename="../../tnztools/vectorerasertool.cpp" line="437"/>
         <source>Segment</source>
-        <translation type="unfinished">Сегмент</translation>
+        <translation>Сегмент</translation>
     </message>
     <message>
         <location filename="../../tnztools/vectorerasertool.cpp" line="440"/>
         <source>Linear</source>
-        <translation type="unfinished">Линейный</translation>
+        <translation>Линейный</translation>
     </message>
     <message>
         <location filename="../../tnztools/vectorerasertool.cpp" line="441"/>
         <source>Ease In</source>
-        <translation type="unfinished"></translation>
+        <translation>Замедл. в конце</translation>
     </message>
     <message>
         <location filename="../../tnztools/vectorerasertool.cpp" line="442"/>
         <source>Ease Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Замедл. в начале</translation>
     </message>
     <message>
         <location filename="../../tnztools/vectorerasertool.cpp" line="443"/>
         <source>Ease In/Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Замедл. в конце/ начале</translation>
     </message>
     <message>
         <location filename="../../tnztools/rastererasertool.cpp" line="632"/>
@@ -1126,7 +1126,7 @@ Do you want to proceed?</source>
     <message>
         <location filename="../../tnztools/geometrictool.cpp" line="478"/>
         <source>MultiArc</source>
-        <translation type="unfinished"></translation>
+        <translation>Мульти-дуга</translation>
     </message>
     <message>
         <location filename="../../tnztools/geometrictool.cpp" line="479"/>
@@ -1171,7 +1171,7 @@ Do you want to proceed?</source>
     <message>
         <location filename="../../tnztools/geometrictool.cpp" line="488"/>
         <source>Smooth</source>
-        <translation type="unfinished">Плавность</translation>
+        <translation>Плавность</translation>
     </message>
     <message>
         <location filename="../../tnztools/geometrictool.cpp" line="489"/>
@@ -1517,7 +1517,7 @@ Do you want to proceed?</source>
     <message>
         <location filename="../../tnztools/cuttertool.cpp" line="449"/>
         <source>Snap At Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>Привязка к пересечению</translation>
     </message>
 </context>
 <context>
@@ -2180,7 +2180,7 @@ moved to the end of the first page of the palette.</source>
     <message>
         <location filename="../../tnztools/vectorselectiontool.cpp" line="1342"/>
         <source>Include Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>Выделять пересечением</translation>
     </message>
     <message>
         <location filename="../../tnztools/vectorselectiontool.cpp" line="1343"/>
