@@ -262,31 +262,31 @@
     </message>
     <message>
         <source>Snap</source>
-        <translation type="unfinished">Adherencia</translation>
+        <translation>Adherencia</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation type="unfinished">Tipo:</translation>
+        <translation>Tipo:</translation>
     </message>
     <message>
         <source>Rectangular</source>
-        <translation type="unfinished">Rectangular</translation>
+        <translation>Rectangular</translation>
     </message>
     <message>
         <source>Freehand</source>
-        <translation type="unfinished">Lazo</translation>
+        <translation>Lazo</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished">Baja</translation>
+        <translation>Baja</translation>
     </message>
     <message>
         <source>Med</source>
-        <translation type="unfinished">Media</translation>
+        <translation>Media</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished">Alta</translation>
+        <translation>Alta</translation>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Set Nonlinear Control Point</source>
-        <translation>Punto de control Bézier</translation>
+        <translation>Punto de control Bezier</translation>
     </message>
 </context>
 <context>
@@ -498,23 +498,23 @@
     </message>
     <message>
         <source>Segment</source>
-        <translation type="unfinished">Segmento</translation>
+        <translation>Segmento</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished">Lineal</translation>
+        <translation>Lineal</translation>
     </message>
     <message>
         <source>Ease In</source>
-        <translation type="unfinished"></translation>
+        <translation>Desaceleración suave</translation>
     </message>
     <message>
         <source>Ease Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceleración suave</translation>
     </message>
     <message>
         <source>Ease In/Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceleración y desaceleración suaves</translation>
     </message>
 </context>
 <context>
@@ -997,7 +997,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Polyline</source>
-        <translation>Curva Bézier</translation>
+        <translation>Curva Bezier</translation>
     </message>
     <message>
         <source>Arc</source>
@@ -1045,11 +1045,11 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>MultiArc</source>
-        <translation type="unfinished"></translation>
+        <translation>Arco múltiple</translation>
     </message>
     <message>
         <source>Smooth</source>
-        <translation type="unfinished">Suavizar</translation>
+        <translation>Suavizar</translation>
     </message>
 </context>
 <context>
@@ -1259,7 +1259,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Snap At Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>Adherir a intersecciones</translation>
     </message>
 </context>
 <context>
@@ -1319,7 +1319,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Style Index:</source>
-        <translation>Índice del estilo:</translation>
+        <translation>Identificador del estilo:</translation>
     </message>
     <message>
         <source>Opacity:</source>
@@ -1448,7 +1448,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Link</source>
-        <translation>Vinculado</translation>
+        <translation>Vincular</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -1833,7 +1833,7 @@ movido hacia el final de la primera página de la paleta.</translation>
     </message>
     <message>
         <source>Include Intersection</source>
-        <translation type="unfinished"></translation>
+        <translation>Incluir intersección</translation>
     </message>
 </context>
 <context>

@@ -292,12 +292,12 @@ intentar aumentar el tiempo de espera en las Preferencias.</translation>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="737"/>
         <source>32(RGBA)</source>
-        <translation type="unfinished"></translation>
+        <translation>32 (color + alfa)</translation>
     </message>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="738"/>
         <source>64(RGBA)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 (color + alfa)</translation>
     </message>
     <message>
         <location filename="../../image/tif/tiio_tif.cpp" line="739"/>

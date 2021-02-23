@@ -428,15 +428,15 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Range:</source>
-        <translation type="unfinished">Rango:</translation>
+        <translation>Rango:</translation>
     </message>
     <message>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Salida:</translation>
     </message>
     <message>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrada:</translation>
     </message>
 </context>
 <context>
@@ -733,15 +733,15 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonido</translation>
     </message>
     <message>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Localizador</translation>
     </message>
     <message>
         <source>&amp;Next Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotograma &amp;siguiente</translation>
     </message>
 </context>
 <context>
@@ -817,7 +817,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Speed In / Speed Out Interpolation</source>
-        <translation>Interpolación Bézier</translation>
+        <translation>Interpolación Bezier</translation>
     </message>
     <message>
         <source>Ease In / Ease Out Interpolation</source>
@@ -896,7 +896,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Speed In / Speed Out</source>
-        <translation>Bézier</translation>
+        <translation>Bezier</translation>
     </message>
     <message>
         <source>Ease In / Ease Out</source>
@@ -952,7 +952,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Speed</source>
-        <translation>Bézier</translation>
+        <translation>Bezier</translation>
     </message>
     <message>
         <source>Ease</source>
@@ -996,7 +996,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Link/Unlink Handles</source>
-        <translation type="unfinished"></translation>
+        <translation>Vincular/Desvincular tangentes</translation>
     </message>
 </context>
 <context>
@@ -1029,7 +1029,7 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>Speed In / Speed Out Interpolation</source>
-        <translation>Interpolación Bézier</translation>
+        <translation>Interpolación Bezier</translation>
     </message>
     <message>
         <source>Ease In / Ease Out Interpolation</source>
@@ -1105,7 +1105,8 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     <message>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos claves en este parámetro perderán su referencia original en la expresión.
+Cambiar el fotograma clave de forma manual eliminará la advertencia.</translation>
     </message>
 </context>
 <context>
@@ -1140,7 +1141,8 @@ Manually changing any keyframe will clear the warning.</source>
     <message>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos claves en este parámetro perderán su referencia original en la expresión.
+Cambiar el fotograma clave de forma manual eliminará la advertencia.</translation>
     </message>
 </context>
 <context>
@@ -1641,15 +1643,15 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Hide New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar botón de nuevo estilo</translation>
     </message>
     <message>
         <source>Show New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar botón de nuevo estilo</translation>
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falla al guardar paleta.</translation>
     </message>
 </context>
 <context>
@@ -1676,7 +1678,7 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source> + </source>
-        <translation type="unfinished"></translation>
+        <translation> + </translation>
     </message>
 </context>
 <context>
@@ -1699,7 +1701,7 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Failed to import palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falla al importar paleta.</translation>
     </message>
 </context>
 <context>
@@ -1717,7 +1719,7 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>View help page</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver ayuda</translation>
     </message>
 </context>
 <context>
@@ -2332,25 +2334,27 @@ La segunda línea debería tener la forma &quot;Mesh [profundidad de bits de ent
     </message>
     <message>
         <source>There are no unused styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay estilos no utilizados.</translation>
     </message>
     <message>
         <source>and %1 more styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>y %1 estilo(s) más.</translation>
     </message>
     <message>
         <source>Erasing unused styles with following indices. Are you sure?
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar estilos no utilizados con los siguientes identificadores. ¿Seguro?
+
+%1</translation>
     </message>
     <message>
         <source>Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <source>Click &amp; Drag Palette into Studio Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrastrar la paleta a la Paleta de estudio</translation>
     </message>
 </context>
 <context>
@@ -2666,7 +2670,7 @@ Are you sure ?</source>
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falla al guardar paleta.</translation>
     </message>
 </context>
 <context>
@@ -2826,15 +2830,15 @@ Autom</translation>
     </message>
     <message>
         <source>Cleanup </source>
-        <translation type="unfinished"></translation>
+        <translation>Limpieza </translation>
     </message>
     <message>
         <source>Studio </source>
-        <translation type="unfinished"></translation>
+        <translation>Estudio </translation>
     </message>
     <message>
         <source>Level </source>
-        <translation type="unfinished"></translation>
+        <translation>Nivel </translation>
     </message>
 </context>
 <context>
@@ -2895,7 +2899,7 @@ Autom</translation>
     <name>StyleEditorGUI::SettingsPage</name>
     <message>
         <source>Autopaint for Lines</source>
-        <translation>Pintar (líneas) automáticamente al rellenar</translation>
+        <translation>Pintar líneas automáticamente al rellenar</translation>
     </message>
     <message>
         <source>Reset to default</source>

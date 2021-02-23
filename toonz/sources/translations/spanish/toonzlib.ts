@@ -444,11 +444,11 @@
     </message>
     <message>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falla al guardar paleta.</translation>
     </message>
     <message>
         <source>and %1 more item(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>y %1 elemento(s) más.</translation>
     </message>
 </context>
 <context>
@@ -579,11 +579,11 @@
     </message>
     <message>
         <source>frame index (%1) must be a number</source>
-        <translation>el índice de fotogramas (%1) debe ser numérico</translation>
+        <translation>el identificador de fotogramas (%1) debe ser numérico</translation>
     </message>
     <message>
         <source>frame index (%1) is out of range (0-%2)</source>
-        <translation>el índice de fotogramas (%1) se encuentra fuera de rango (0-%2)</translation>
+        <translation>el identificador de fotogramas (%1) se encuentra fuera de rango (0-%2)</translation>
     </message>
     <message>
         <source>second argument (%1) is not an image</source>
