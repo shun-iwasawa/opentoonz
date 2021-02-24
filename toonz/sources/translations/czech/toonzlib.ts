@@ -96,7 +96,7 @@ Pravděpodobně kodek nemůže pracovat řádně.</translation>
     <message>
         <location filename="../../toonzlib/studiopalettecmd.cpp" line="47"/>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit paletu.</translation>
     </message>
     <message>
         <location filename="../../toonzlib/studiopalettecmd.cpp" line="85"/>
@@ -500,7 +500,7 @@ Pravděpodobně kodek nemůže pracovat řádně.</translation>
     <message>
         <location filename="../../toonzlib/sceneresources.cpp" line="519"/>
         <source>and %1 more item(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>a %1 další položku(y).</translation>
     </message>
     <message>
         <location filename="../../toonzlib/sceneresources.cpp" line="522"/>

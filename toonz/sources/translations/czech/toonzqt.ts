@@ -416,17 +416,17 @@ Možná byl soubor s přednastavením poškozen</translation>
     <message>
         <location filename="../../toonzqt/tonecurvefield.cpp" line="905"/>
         <source>Range:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozsah:</translation>
     </message>
     <message>
         <location filename="../../toonzqt/tonecurvefield.cpp" line="923"/>
         <source>Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Výstup:</translation>
     </message>
     <message>
         <location filename="../../toonzqt/tonecurvefield.cpp" line="926"/>
         <source>Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vstup:</translation>
     </message>
 </context>
 <context>
@@ -559,12 +559,12 @@ Možná byl soubor s přednastavením poškozen</translation>
     <message>
         <location filename="../../toonzqt/flipconsole.cpp" line="1142"/>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvuk</translation>
     </message>
     <message>
         <location filename="../../toonzqt/flipconsole.cpp" line="1148"/>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>Polohový maják</translation>
     </message>
     <message>
         <location filename="../../toonzqt/flipconsole.cpp" line="1153"/>
@@ -653,7 +653,7 @@ Možná byl soubor s přednastavením poškozen</translation>
     <message>
         <location filename="../../toonzqt/flipconsole.cpp" line="1254"/>
         <source>&amp;Next Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Další snímek</translation>
     </message>
     <message>
         <location filename="../../toonzqt/flipconsole.cpp" line="1256"/>
@@ -1005,7 +1005,7 @@ Možná byl soubor s přednastavením poškozen</translation>
         <location filename="../../toonzqt/functionsegmentviewer.cpp" line="978"/>
         <location filename="../../toonzqt/functionsegmentviewer.cpp" line="979"/>
         <source>Link/Unlink Handles</source>
-        <translation type="unfinished"></translation>
+        <translation>Propojit/Zrušit propojení úchopů</translation>
     </message>
     <message>
         <location filename="../../toonzqt/functionsegmentviewer.cpp" line="998"/>
@@ -1201,7 +1201,8 @@ Možná byl soubor s přednastavením poškozen</translation>
         <location filename="../../toonzqt/functionsheet.cpp" line="413"/>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Některý(é) klíčový snímek(y) v tomto parametru ztratí ve výrazu původní odkaz.
+Ruční změna libovolného klíčového snímku vymaže varování.</translation>
     </message>
 </context>
 <context>
@@ -1223,7 +1224,8 @@ Manually changing any keyframe will clear the warning.</source>
         <location filename="../../toonzqt/functiontreeviewer.cpp" line="636"/>
         <source>Some key(s) in this parameter loses original reference in expression.
 Manually changing any keyframe will clear the warning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Některý(é) klíčový snímek(y) v tomto parametru ztratí ve výrazu původní odkaz.
+Ruční změna libovolného klíčového snímku vymaže varování.</translation>
     </message>
     <message>
         <location filename="../../toonzqt/functiontreeviewer.cpp" line="859"/>
@@ -1720,13 +1722,13 @@ Vyberte uzly efektů a příbuzné odkazy, jež chcete vložit, před kopírová
         <location filename="../../toonzqt/paletteviewer.cpp" line="400"/>
         <location filename="../../toonzqt/paletteviewer.cpp" line="1168"/>
         <source>Hide New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrýt tlačítko nového stylu</translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="401"/>
         <location filename="../../toonzqt/paletteviewer.cpp" line="1169"/>
         <source>Show New Style Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat tlačítko nového stylu</translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="417"/>
@@ -1773,7 +1775,7 @@ Vyberte uzly efektů a příbuzné odkazy, jež chcete vložit, před kopírová
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="960"/>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit paletu.</translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="1098"/>
@@ -1817,7 +1819,7 @@ Vyberte uzly efektů a příbuzné odkazy, jež chcete vložit, před kopírová
         <location filename="../../toonzqt/paletteviewergui.cpp" line="663"/>
         <location filename="../../toonzqt/paletteviewergui.cpp" line="908"/>
         <source> + </source>
-        <translation type="unfinished"></translation>
+        <translation> + </translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewergui.cpp" line="1147"/>
@@ -1861,7 +1863,7 @@ Vyberte uzly efektů a příbuzné odkazy, jež chcete vložit, před kopírová
     <message>
         <location filename="../../toonzqt/palettesscanpopup.cpp" line="196"/>
         <source>Failed to import palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se zavést paletu.</translation>
     </message>
 </context>
 <context>
@@ -1881,7 +1883,7 @@ Vyberte uzly efektů a příbuzné odkazy, jež chcete vložit, před kopírová
     <message>
         <location filename="../../toonzqt/fxsettings.cpp" line="714"/>
         <source>View help page</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit stránku nápovědy</translation>
     </message>
 </context>
 <context>
@@ -2048,24 +2050,26 @@ Jste si jistý?</translation>
     <message>
         <location filename="../../toonzqt/styleselection.cpp" line="754"/>
         <source>There are no unused styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nejsou žádné nepoužívané styly.</translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleselection.cpp" line="761"/>
         <source>and %1 more styles.</source>
-        <translation type="unfinished"></translation>
+        <translation>a %1 dalších stylů.</translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleselection.cpp" line="764"/>
         <source>Erasing unused styles with following indices. Are you sure?
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazání nepoužívaných stylů s následujícími čísly. Jste si jistý?
+
+%1</translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleselection.cpp" line="768"/>
         <source>Erase</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat</translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleselection.cpp" line="1032"/>
@@ -2633,7 +2637,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../../toonzqt/paletteviewergui.cpp" line="1668"/>
         <source>Click &amp; Drag Palette into Studio Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepnout a táhnout paletu do studiové palety</translation>
     </message>
 </context>
 <context>
@@ -2903,7 +2907,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../../toonzqt/studiopaletteviewer.cpp" line="511"/>
         <source>Failed to save palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit paletu.</translation>
     </message>
     <message>
         <location filename="../../toonzqt/studiopaletteviewer.cpp" line="816"/>
@@ -3126,17 +3130,17 @@ Jste si jistý?</translation>
     <message>
         <location filename="../../toonzqt/styleeditor.cpp" line="3354"/>
         <source>Cleanup </source>
-        <translation type="unfinished"></translation>
+        <translation>Vyčištění </translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleeditor.cpp" line="3356"/>
         <source>Studio </source>
-        <translation type="unfinished"></translation>
+        <translation>Studio </translation>
     </message>
     <message>
         <location filename="../../toonzqt/styleeditor.cpp" line="3358"/>
         <source>Level </source>
-        <translation type="unfinished"></translation>
+        <translation>Úroveň </translation>
     </message>
     <message>
         <source>[CLEANUP]  </source>
