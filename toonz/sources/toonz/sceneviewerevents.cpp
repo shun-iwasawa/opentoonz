@@ -357,7 +357,7 @@ void SceneViewer::tabletEvent(QTabletEvent *e) {
     }
 #endif
     QPointF curPos = e->posF() * getDevPixRatio();
-#if defined(_WIN32) && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     // Use the application attribute Qt::AA_CompressTabletEvents instead of the
     // delay timer
     if (curPos != m_lastMousePos) {
