@@ -540,6 +540,17 @@ Detenerla o esperar a su finalización antes de eliminarla.</translation>
     </message>
 </context>
 <context>
+    <name>Canon</name>
+    <message>
+        <source>AC Power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CanvasSizePopup</name>
     <message>
         <source>Canvas Size</source>
@@ -5290,7 +5301,7 @@ Usar los números de fotograma como referencia.</translation>
     </message>
     <message>
         <source>Toggle Edit in Place</source>
-        <translation>Editar en contexto</translation>
+        <translation type="vanished">Editar en contexto</translation>
     </message>
     <message>
         <source>&amp;ComboViewer</source>
@@ -5766,7 +5777,7 @@ o es posible que se termine borrando algún archivo usado por ésta.</translatio
     </message>
     <message>
         <source>Save All</source>
-        <translation>Guardar todo</translation>
+        <translation type="vanished">Guardar todo</translation>
     </message>
     <message>
         <source>&amp;Paste as a Copy</source>
@@ -5842,23 +5853,23 @@ o es posible que se termine borrando algún archivo usado por ésta.</translatio
     </message>
     <message>
         <source>About OpenToonz...</source>
-        <translation>Acerca de OpenToonz...</translation>
+        <translation type="vanished">Acerca de OpenToonz...</translation>
     </message>
     <message>
         <source>Online Manual...</source>
-        <translation>Manual en línea...</translation>
+        <translation type="vanished">Manual en línea...</translation>
     </message>
     <message>
         <source>What&apos;s New...</source>
-        <translation>Novedades de esta versión...</translation>
+        <translation type="vanished">Novedades de esta versión...</translation>
     </message>
     <message>
         <source>Community Forum...</source>
-        <translation>Foro de la comunidad...</translation>
+        <translation type="vanished">Foro de la comunidad...</translation>
     </message>
     <message>
         <source>Report a Bug...</source>
-        <translation>Reportar un error...</translation>
+        <translation type="vanished">Reportar un error...</translation>
     </message>
     <message>
         <source>Geometric Shape Rectangle</source>
@@ -6183,6 +6194,26 @@ o es posible que se termine borrando algún archivo usado por ésta.</translatio
     <message>
         <source>Plastic Tool - Animate</source>
         <translation>Plástico - Animar</translation>
+    </message>
+    <message>
+        <source>&amp;Export Stop Motion Image Sequence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick Focus Check Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove frame before Stop Motion Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next Frame including Stop Motion Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show original live view images.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6895,6 +6926,13 @@ Do you want to overwrite it?</source>
 What do you want to do?</source>
         <translation>El archivo &quot;%1&quot; ya existe.
 ¿Qué se desea hacer?</translation>
+    </message>
+</context>
+<context>
+    <name>PaletteViewerPanel</name>
+    <message>
+        <source>Freeze</source>
+        <translation type="unfinished">Congelar</translation>
     </message>
 </context>
 <context>
@@ -8522,6 +8560,16 @@ contengan píxeles transparentes en formatos de imagen sin soporte para canal al
     <message>
         <source>Icon Theme*:</source>
         <translation>Tema de íconos*:</translation>
+    </message>
+    <message>
+        <source>Show Icons In Menu*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Qt&apos;s Native Windows Ink Support*
+(CAUTION: This options is for maintenance purpose. 
+ Do not activate this option or the tablet won&apos;t work properly.)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10931,6 +10979,14 @@ Do you want to create it?</source>
         <source>Script file %1 does not exists.</source>
         <translation>El archivo %1 no existe.</translation>
     </message>
+    <message>
+        <source>Add Level to Scene Cast : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Premultiply options in the following levels are disabled, since PNG files are premultiplied on loading in the current version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ReframePopup</name>
@@ -12790,6 +12846,10 @@ Por favor enviar o revertir los cambios antes.</translation>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
+    <message>
+        <source>Stop Motion</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShortcutViewer</name>
@@ -13317,7 +13377,51 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Cannot capture webcam image unless live view is active.</source>
-        <translation>No es posible capturar imágenes con una cámara web a menos que Ver en vivo se encuentre activo.</translation>
+        <translation type="vanished">No es posible capturar imágenes con una cámara web a menos que Ver en vivo se encuentre activo.</translation>
+    </message>
+    <message>
+        <source>Please start live view before using time lapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot capture image unless live view is active.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No level exists with the current name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is not an image level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is not a stop motion level.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not find an xsheet level with  the current level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No export path given.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not find the source file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overwrite existing files?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occurred.  Aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully exported %1 images.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13400,11 +13504,11 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Zoom</source>
-        <translation>Zoom</translation>
+        <translation type="vanished">Zoom</translation>
     </message>
     <message>
         <source>Pick Zoom</source>
-        <translation>Detalle de zoom</translation>
+        <translation type="vanished">Detalle de zoom</translation>
     </message>
     <message>
         <source>&lt;</source>
@@ -13512,7 +13616,7 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Black Screen for Capture</source>
-        <translation>Oscurecer cámara al capturar</translation>
+        <translation type="vanished">Oscurecer cámara al capturar</translation>
     </message>
     <message>
         <source>Use Reduced Resolution Images</source>
@@ -13524,7 +13628,7 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Place on XSheet</source>
-        <translation>Colocar en planilla</translation>
+        <translation type="vanished">Colocar en planilla</translation>
     </message>
     <message>
         <source>Use Numpad Shortcuts When Active</source>
@@ -13532,7 +13636,7 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Show Live View on All Frames</source>
-        <translation>Mostrar la vista en vivo en todos los fotogramas</translation>
+        <translation type="vanished">Mostrar la vista en vivo en todos los fotogramas</translation>
     </message>
     <message>
         <source>Capture Review Time: </source>
@@ -13540,7 +13644,7 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Level Subsampling: </source>
-        <translation>Sub-muestreo del nivel: </translation>
+        <translation type="vanished">Sub-muestreo del nivel: </translation>
     </message>
     <message>
         <source>Opacity:</source>
@@ -13573,6 +13677,141 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     <message>
         <source>Stop Live View</source>
         <translation>Detener en vivo</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Motion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Camera Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show original live view images in timeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom in to check focus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set focus check location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a camera to change settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>insert webcam name here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manual Focus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Focus: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness: </source>
+        <translation type="unfinished">Brillo: </translation>
+    </message>
+    <message>
+        <source>Contrast: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gain: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More</source>
+        <translation type="unfinished">Más</translation>
+    </message>
+    <message>
+        <source>Time Lapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use time lapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interval(sec):</source>
+        <translation type="unfinished">Intervalo(seg):</translation>
+    </message>
+    <message>
+        <source>Blackout all Screens</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Screen 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Motion Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> - Battery: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aperture: Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shutter Speed: Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Capturing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Capturing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StopMotionSerial</name>
+    <message>
+        <source>No Device</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
