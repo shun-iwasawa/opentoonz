@@ -175,23 +175,23 @@ Es posible que el archivo de dicho ajuste se encuentre corrupto.</translation>
     </message>
     <message>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>cm</translation>
     </message>
     <message>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>pulgadas</translation>
     </message>
     <message>
         <source>field</source>
-        <translation type="unfinished"></translation>
+        <translation>campos</translation>
     </message>
     <message>
         <source>pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>píxeles</translation>
     </message>
 </context>
 <context>
@@ -1675,11 +1675,11 @@ Seleccionar los nodos de efecto y sus vínculos relacionados antes de copiar o c
     </message>
     <message>
         <source>Set Toolbar Below Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Botones abajo</translation>
     </message>
     <message>
         <source>Set Toolbar Above Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Botones arriba</translation>
     </message>
 </context>
 <context>

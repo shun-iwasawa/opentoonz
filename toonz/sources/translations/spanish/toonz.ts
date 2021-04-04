@@ -543,11 +543,11 @@ Detenerla o esperar a su finalización antes de eliminarla.</translation>
     <name>Canon</name>
     <message>
         <source>AC Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Encendido</translation>
     </message>
     <message>
         <source>Full</source>
-        <translation type="unfinished"></translation>
+        <translation>Completo</translation>
     </message>
 </context>
 <context>
@@ -1934,7 +1934,7 @@ contuviera información de PPP, entonces se usarán los de la cámara actual.
     </message>
     <message>
         <source>Vectors Export Box</source>
-        <translation>Exportación vectorial</translation>
+        <translation>Exportación de vectores</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -2422,7 +2422,7 @@ Mantener presionada la tecla F3 para ver sólo este fotograma en el visor</trans
     </message>
     <message>
         <source>no icon</source>
-        <translation>sin ícono</translation>
+        <translation>sin miniaturas</translation>
     </message>
     <message>
         <source>Auto Inbetween</source>
@@ -3389,11 +3389,11 @@ Usar los números de fotograma como referencia.</translation>
     </message>
     <message>
         <source>All Icons</source>
-        <translation>Todos los íconos</translation>
+        <translation>Todas las miniaturas</translation>
     </message>
     <message>
         <source>All Icons &amp; Images</source>
-        <translation>Todos los íconos e imágenes</translation>
+        <translation>Todas las miniaturas e imágenes</translation>
     </message>
     <message>
         <source>Load Level</source>
@@ -5589,7 +5589,7 @@ Usar los números de fotograma como referencia.</translation>
     </message>
     <message>
         <source>Export Exchange Digital Time Sheet (XDTS)</source>
-        <translation>Exportar archivo XDTS (Exchange Digital Time Sheet)</translation>
+        <translation>Exportar archivo &amp;XDTS (Exchange Digital Time Sheet)</translation>
     </message>
     <message>
         <source>&amp;Clear Cache Folder</source>
@@ -5765,7 +5765,7 @@ o es posible que se termine borrando algún archivo usado por ésta.</translatio
     </message>
     <message>
         <source>Guided Drawing Controls</source>
-        <translation>Controles de asistencia para dibujo vectorial</translation>
+        <translation>Asistencia para dibujo vectorial</translation>
     </message>
     <message>
         <source>Flip Next Guide Stroke Direction</source>
@@ -6197,23 +6197,23 @@ o es posible que se termine borrando algún archivo usado por ésta.</translatio
     </message>
     <message>
         <source>&amp;Export Stop Motion Image Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar secuencia de imágenes de stop-&amp;motion</translation>
     </message>
     <message>
         <source>Pick Focus Check Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Escoger ubicación de comprobación del foco</translation>
     </message>
     <message>
         <source>Remove frame before Stop Motion Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar fotograma anterior a la imagen de cámara</translation>
     </message>
     <message>
         <source>Next Frame including Stop Motion Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotograma siguiente, incluyendo imagen de cámara</translation>
     </message>
     <message>
         <source>Show original live view images.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar imágenes en vivo originales</translation>
     </message>
 </context>
 <context>
@@ -6932,7 +6932,7 @@ What do you want to do?</source>
     <name>PaletteViewerPanel</name>
     <message>
         <source>Freeze</source>
-        <translation type="unfinished">Congelar</translation>
+        <translation>Congelar</translation>
     </message>
 </context>
 <context>
@@ -7563,7 +7563,7 @@ También establecer la ruta de salida a esa carpeta.</translation>
     </message>
     <message>
         <source>Keep Original Cleaned Up Drawings As Backup</source>
-        <translation>Mantener originales de los dibujos limpiados</translation>
+        <translation>Mantener respaldo de dibujos limpiados originales</translation>
     </message>
     <message>
         <source>Animation</source>
@@ -7919,11 +7919,11 @@ También establecer la ruta de salida a esa carpeta.</translation>
     </message>
     <message>
         <source>All Icons</source>
-        <translation>Todos los íconos</translation>
+        <translation>Todas las miniaturas</translation>
     </message>
     <message>
         <source>All Icons &amp; Images</source>
-        <translation>Todos los íconos e imágenes</translation>
+        <translation>Todas las miniaturas e imágenes</translation>
     </message>
     <message>
         <source>At Once</source>
@@ -8157,7 +8157,7 @@ Is it OK to release these shortcuts?</source>
     </message>
     <message>
         <source>Column Icon:</source>
-        <translation>Íconos de columna:</translation>
+        <translation>Miniaturas de columnas:</translation>
     </message>
     <message>
         <source>Palette Type on Loading Raster Image as Color Model:</source>
@@ -8523,7 +8523,7 @@ contengan píxeles transparentes en formatos de imagen sin soporte para canal al
     </message>
     <message>
         <source>Level Strip Thumbnail Size*:</source>
-        <translation>Miniaturas en Cinta de nivel*:</translation>
+        <translation>Tamaño de miniaturas*:</translation>
     </message>
     <message>
         <source>Color Calibration using 3D Look-up Table</source>
@@ -8563,13 +8563,15 @@ contengan píxeles transparentes en formatos de imagen sin soporte para canal al
     </message>
     <message>
         <source>Show Icons In Menu*</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar íconos en menúes*</translation>
     </message>
     <message>
         <source>Use Qt&apos;s Native Windows Ink Support*
 (CAUTION: This options is for maintenance purpose. 
  Do not activate this option or the tablet won&apos;t work properly.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar soporte nativo de Qt para Windows Ink*
+(PRECAUCIÓN: Esta opción es para propósitos de mantenimiento. 
+ No activarla o la tableta dejará de funcionar correctamente.)</translation>
     </message>
 </context>
 <context>
@@ -10897,7 +10899,7 @@ Do you want to create it?</source>
     </message>
     <message>
         <source>Vector Guided Drawing Controls</source>
-        <translation>Controles de asistencia para dibujo vectorial</translation>
+        <translation>Asistencia para dibujo vectorial</translation>
     </message>
     <message>
         <source>Vector Guided Drawing</source>
@@ -10981,11 +10983,11 @@ Do you want to create it?</source>
     </message>
     <message>
         <source>Add Level to Scene Cast : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar nivel a Componentes de la escena : %1</translation>
     </message>
     <message>
         <source>The Premultiply options in the following levels are disabled, since PNG files are premultiplied on loading in the current version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Las opciones de premultiplicación se encuentran deshabilitadas para los siguientes niveles, dado que en la versión actual los archivos PNG son premultiplicados al ser cargados: %1</translation>
     </message>
 </context>
 <context>
@@ -12848,7 +12850,7 @@ Por favor enviar o revertir los cambios antes.</translation>
     </message>
     <message>
         <source>Stop Motion</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop Motion</translation>
     </message>
 </context>
 <context>
@@ -13381,47 +13383,47 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Please start live view before using time lapse.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor iniciar la vista en vivo antes de usar un lapso.</translation>
     </message>
     <message>
         <source>Cannot capture image unless live view is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>No es posible capturar imágenes a menos que la vista en vivo se encuentre activa.</translation>
     </message>
     <message>
         <source>No level exists with the current name.</source>
-        <translation type="unfinished"></translation>
+        <translation>No existe ningún nivel con el nombre actual.</translation>
     </message>
     <message>
         <source>This is not an image level.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este no es un nivel de imagen.</translation>
     </message>
     <message>
         <source>This is not a stop motion level.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este no es un nivel de stop-motion.</translation>
     </message>
     <message>
         <source>Could not find an xsheet level with  the current level</source>
-        <translation type="unfinished"></translation>
+        <translation>No fue posible encontrar una planilla con el nivel actual.</translation>
     </message>
     <message>
         <source>No export path given.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se proporcionó una ruta de exportación.</translation>
     </message>
     <message>
         <source>Could not find the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>No pudo encontrarse el archivo de origen.</translation>
     </message>
     <message>
         <source>Overwrite existing files?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Sobrescribir archivos existentes?</translation>
     </message>
     <message>
         <source>An error occurred.  Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocurrió un error.  Abortando.</translation>
     </message>
     <message>
         <source>Successfully exported %1 images.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se exportaron %1 imágenes de forma exitosa.</translation>
     </message>
 </context>
 <context>
@@ -13680,138 +13682,138 @@ ADVERTENCIA : Tamaño de imagen no coincidente. El tamaño del nivel con esa rut
     </message>
     <message>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Luz</translation>
     </message>
     <message>
         <source>Motion</source>
-        <translation type="unfinished"></translation>
+        <translation>Movimiento</translation>
     </message>
     <message>
         <source>Camera Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado de la cámara</translation>
     </message>
     <message>
         <source>Show original live view images in timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar imágenes originales en vivo en la línea de tiempo</translation>
     </message>
     <message>
         <source>Check</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprobar</translation>
     </message>
     <message>
         <source>Zoom in to check focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Acercamiento para comprobar el foco</translation>
     </message>
     <message>
         <source>Pick</source>
-        <translation type="unfinished"></translation>
+        <translation>Escoger</translation>
     </message>
     <message>
         <source>Set focus check location</source>
-        <translation type="unfinished"></translation>
+        <translation>Definir ubicación de comprobación de foco</translation>
     </message>
     <message>
         <source>Select a camera to change settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar una cámara para cambiar sus opciones.</translation>
     </message>
     <message>
         <source>insert webcam name here</source>
-        <translation type="unfinished"></translation>
+        <translation>insertar nombre de cámara aquí</translation>
     </message>
     <message>
         <source>Manual Focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Foco manual</translation>
     </message>
     <message>
         <source>Focus: </source>
-        <translation type="unfinished"></translation>
+        <translation>Foco: </translation>
     </message>
     <message>
         <source>Brightness: </source>
-        <translation type="unfinished">Brillo: </translation>
+        <translation>Brillo: </translation>
     </message>
     <message>
         <source>Contrast: </source>
-        <translation type="unfinished"></translation>
+        <translation>Contraste: </translation>
     </message>
     <message>
         <source>Gain: </source>
-        <translation type="unfinished"></translation>
+        <translation>Ganancia: </translation>
     </message>
     <message>
         <source>Saturation: </source>
-        <translation type="unfinished"></translation>
+        <translation>Saturación: </translation>
     </message>
     <message>
         <source>More</source>
-        <translation type="unfinished">Más</translation>
+        <translation>Más</translation>
     </message>
     <message>
         <source>Time Lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapso</translation>
     </message>
     <message>
         <source>Use time lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar lapso</translation>
     </message>
     <message>
         <source>Interval(sec):</source>
-        <translation type="unfinished">Intervalo(seg):</translation>
+        <translation>Intervalo (seg):</translation>
     </message>
     <message>
         <source>Blackout all Screens</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar todas las pantallas</translation>
     </message>
     <message>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Probar</translation>
     </message>
     <message>
         <source>Screen 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pantalla 1</translation>
     </message>
     <message>
         <source>Screen 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Pantalla 2</translation>
     </message>
     <message>
         <source>Screen 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Pantalla 3</translation>
     </message>
     <message>
         <source>Motion Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Control de movimiento</translation>
     </message>
     <message>
         <source>Port: </source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto: </translation>
     </message>
     <message>
         <source> - Battery: </source>
-        <translation type="unfinished"></translation>
+        <translation> - Batería: </translation>
     </message>
     <message>
         <source>Aperture: Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Apertura: Auto</translation>
     </message>
     <message>
         <source>Shutter Speed: Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Obturación: Auto</translation>
     </message>
     <message>
         <source>Start Capturing</source>
-        <translation type="unfinished"></translation>
+        <translation>Comenzar captura</translation>
     </message>
     <message>
         <source>Stop Capturing</source>
-        <translation type="unfinished"></translation>
+        <translation>Detener captura</translation>
     </message>
 </context>
 <context>
     <name>StopMotionSerial</name>
     <message>
         <source>No Device</source>
-        <translation type="unfinished"></translation>
+        <translation>sin dispositivo</translation>
     </message>
 </context>
 <context>
