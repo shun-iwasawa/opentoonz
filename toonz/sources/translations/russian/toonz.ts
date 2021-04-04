@@ -665,12 +665,12 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../../stopmotion/canon.cpp" line="541"/>
         <source>AC Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Переменный ток</translation>
     </message>
     <message>
         <location filename="../../stopmotion/canon.cpp" line="543"/>
         <source>Full</source>
-        <translation type="unfinished"></translation>
+        <translation>Полный</translation>
     </message>
 </context>
 <context>
@@ -5816,7 +5816,7 @@ Please use the frame numbers for reference.</source>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2897"/>
         <source>&amp;Export Stop Motion Image Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Экспорт секвенции изображений стоп-моушн</translation>
     </message>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2899"/>
@@ -5846,7 +5846,7 @@ Please use the frame numbers for reference.</source>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2910"/>
         <source>Pick Focus Check Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать место для проверки фокуса</translation>
     </message>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2913"/>
@@ -5866,17 +5866,17 @@ Please use the frame numbers for reference.</source>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2919"/>
         <source>Remove frame before Stop Motion Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить кадр перед стоп-моушн камерой</translation>
     </message>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2922"/>
         <source>Next Frame including Stop Motion Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Следующий кадр, включая стоп-моушн камеру</translation>
     </message>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="2925"/>
         <source>Show original live view images.</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать исходные изображения в режиме реального времени.</translation>
     </message>
     <message>
         <location filename="../../toonz/mainwindow.cpp" line="3489"/>
@@ -8396,7 +8396,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../toonz/tpanels.cpp" line="534"/>
         <source>Freeze</source>
-        <translation type="unfinished">Заморозить</translation>
+        <translation>Заморозить</translation>
     </message>
 </context>
 <context>
@@ -10137,7 +10137,7 @@ in non alpha-enabled image format.</source>
     <message>
         <location filename="../../toonz/preferencespopup.cpp" line="1062"/>
         <source>Show Icons In Menu*</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать иконки в меню*</translation>
     </message>
     <message>
         <location filename="../../toonz/preferencespopup.cpp" line="1082"/>
@@ -10284,7 +10284,9 @@ in non alpha-enabled image format.</source>
         <source>Use Qt&apos;s Native Windows Ink Support*
 (CAUTION: This options is for maintenance purpose. 
  Do not activate this option or the tablet won&apos;t work properly.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Используйте Qt&apos;s Native Windows Ink Support*
+(ВНИМАНИЕ: эта опция предназначена для технического обслуживания.
+  Не активируйте эту опцию, иначе планшет не будет работать должным образом.)</translation>
     </message>
     <message>
         <location filename="../../toonz/preferencespopup.cpp" line="1479"/>
@@ -11405,7 +11407,7 @@ Are you sure ?</source>
     <message>
         <location filename="../../toonz/levelcommand.cpp" line="463"/>
         <source>Add Level to Scene Cast : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить уровень к составу сцены:%1</translation>
     </message>
     <message>
         <source>The Revert to Last Saved command is not supported for the current selection.</source>
@@ -11518,7 +11520,8 @@ What would you like to do? </source>
     <message>
         <location filename="../../toonz/iocommand.cpp" line="1242"/>
         <source> Anyway</source>
-        <translation> тем не менее</translation>
+        <translatorcomment>в русском языке это излишне</translatorcomment>
+        <translation> </translation>
     </message>
     <message>
         <source>The file %1 already exists.
@@ -11695,7 +11698,7 @@ What would you like to do?</source>
     <message>
         <location filename="../../toonz/iocommand.cpp" line="2024"/>
         <source>The Premultiply options in the following levels are disabled, since PNG files are premultiplied on loading in the current version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Опции предварительного умножения на следующих уровнях отключены, поскольку файлы PNG предварительно умножаются при загрузке в текущей версии:%1</translation>
     </message>
     <message>
         <location filename="../../toonz/iocommand.cpp" line="2379"/>
@@ -15757,7 +15760,7 @@ Please commit or revert changes first.</source>
     <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="233"/>
         <source>Stop Motion</source>
-        <translation type="unfinished"></translation>
+        <translation>Стоп-моушн</translation>
     </message>
     <message>
         <location filename="../../toonz/shortcutpopup.cpp" line="234"/>
@@ -16293,7 +16296,7 @@ Possibly the preset file has been corrupted</source>
         <location filename="../../stopmotion/stopmotion.cpp" line="583"/>
         <location filename="../../stopmotion/stopmotion.cpp" line="611"/>
         <source>Please start live view before using time lapse.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, начните просмотр в реальном времени перед использованием таймлапса.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="1451"/>
@@ -16348,7 +16351,7 @@ Do you want to create it?</source>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="1770"/>
         <source>Cannot capture image unless live view is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно захватить изображение, если не включен режим просмотра в реальном времени.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="1779"/>
@@ -16362,47 +16365,47 @@ Do you want to create it?</source>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2127"/>
         <source>No level exists with the current name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровня с текущим именем не существует.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2133"/>
         <source>This is not an image level.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это не уровень изображения.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2137"/>
         <source>This is not a stop motion level.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это не уровень стоп-иоушн.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2165"/>
         <source>Could not find an xsheet level with  the current level</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти текущий уровень на Xsheet</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2177"/>
         <source>No export path given.</source>
-        <translation type="unfinished"></translation>
+        <translation>Путь экспорта не указан.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2196"/>
         <source>Could not find the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти исходный файл.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2201"/>
         <source>Overwrite existing files?</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезаписать существующие файлы?</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2209"/>
         <source>An error occurred.  Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла ошибка. Прерывание.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2213"/>
         <source>Successfully exported %1 images.</source>
-        <translation type="unfinished"></translation>
+        <translation>Успешно экспортировано%1 изображений.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotion.cpp" line="2296"/>
@@ -16584,67 +16587,68 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="304"/>
         <source>Show original live view images in timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать исходные изображения в режиме реального времени на таймлайне</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="312"/>
         <source>Check</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="316"/>
         <source>Zoom in to check focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличьте масштаб, чтобы проверить фокус</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="318"/>
         <source>Pick</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Выбрать</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="322"/>
         <source>Set focus check location</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить место проверки фокуса</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="576"/>
         <source>insert webcam name here</source>
-        <translation type="unfinished"></translation>
+        <translation>вставьте сюда название веб-камеры</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="584"/>
         <source>Manual Focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Ручная фокусировка</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="592"/>
         <source>Focus: </source>
-        <translation type="unfinished"></translation>
+        <translation>Фокус: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="621"/>
         <source>Brightness: </source>
-        <translation type="unfinished">Яркость: </translation>
+        <translation>Яркость: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="631"/>
         <source>Contrast: </source>
-        <translation type="unfinished"></translation>
+        <translation>Контрастность: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="641"/>
         <source>Gain: </source>
-        <translation type="unfinished"></translation>
+        <translation>Усиление: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="651"/>
         <source>Saturation: </source>
-        <translation type="unfinished"></translation>
+        <translation>Насыщенность: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="663"/>
         <source>More</source>
-        <translation type="unfinished">Другое</translation>
+        <translation>Другое</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="665"/>
@@ -16655,12 +16659,12 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="2693"/>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="2711"/>
         <source>Start Capturing</source>
-        <translation type="unfinished"></translation>
+        <translation>Начать захват</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="2701"/>
         <source>Stop Capturing</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершить захват</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="290"/>
@@ -16671,17 +16675,17 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="186"/>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Свет</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="187"/>
         <source>Motion</source>
-        <translation type="unfinished"></translation>
+        <translation>Движение</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="204"/>
         <source>Camera Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус камеры</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="247"/>
@@ -16811,7 +16815,7 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="467"/>
         <source>Select a camera to change settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите камеру для изменения настроек.</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="496"/>
@@ -16834,57 +16838,57 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="747"/>
         <source>Interval(sec):</source>
-        <translation type="unfinished">Интервал(сек):</translation>
+        <translation>Интервал(сек):</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="793"/>
         <source>Blackout all Screens</source>
-        <translation type="unfinished"></translation>
+        <translation>Затемнить все экраны</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="795"/>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Тест</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="817"/>
         <source>Screen 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Экран 1</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="827"/>
         <source>Screen 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Экран 2</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="837"/>
         <source>Screen 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Экран 3</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="862"/>
         <source>Motion Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Управления движением</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="864"/>
         <source>Port: </source>
-        <translation type="unfinished"></translation>
+        <translation>Порт: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="1691"/>
         <source> - Battery: </source>
-        <translation type="unfinished"></translation>
+        <translation> - Батарея: </translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="1706"/>
         <source>Aperture: Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Диафрагма: Авто</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="1732"/>
         <source>Shutter Speed: Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдержка: авто</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="1738"/>
@@ -16942,12 +16946,12 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="685"/>
         <source>Time Lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Промежуток времени</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="686"/>
         <source>Use time lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать замедленную съемку</translation>
     </message>
     <message>
         <location filename="../../stopmotion/stopmotioncontroller.cpp" line="702"/>
@@ -17049,7 +17053,7 @@ WARNING : Image size mismatch. The size of level with the same path is %1 x %2.<
     <message>
         <location filename="../../stopmotion/stopmotionserial.cpp" line="16"/>
         <source>No Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет устройства</translation>
     </message>
 </context>
 <context>

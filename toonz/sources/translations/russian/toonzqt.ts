@@ -118,27 +118,27 @@
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="182"/>
         <source>cm</source>
-        <translation type="unfinished"></translation>
+        <translation>см</translation>
     </message>
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="183"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>мм</translation>
     </message>
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="184"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>дюйм</translation>
     </message>
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="185"/>
         <source>field</source>
-        <translation type="unfinished"></translation>
+        <translation>поле</translation>
     </message>
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="186"/>
         <source>pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>пиксель</translation>
     </message>
     <message>
         <location filename="../../toonzqt/camerasettingswidget.cpp" line="212"/>
@@ -1807,13 +1807,13 @@ Select FX nodes and related links before copying or cutting the selection you wa
         <location filename="../../toonzqt/paletteviewer.cpp" line="224"/>
         <location filename="../../toonzqt/paletteviewer.cpp" line="459"/>
         <source>Set Toolbar Below Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить панель инструментов под стилями</translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="228"/>
         <location filename="../../toonzqt/paletteviewer.cpp" line="461"/>
         <source>Set Toolbar Above Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить панель инструментов над стилями</translation>
     </message>
     <message>
         <location filename="../../toonzqt/paletteviewer.cpp" line="336"/>
