@@ -27,8 +27,8 @@ void DoubleValueLineEdit::focusOutEvent(QFocusEvent *e) {
       qobject_cast<MeasuredDoubleLineEdit *>(this);
   if (lineEdit) {
     int decimal  = lineEdit->getDecimals();
-    isOutOfRange = (value < minValue - pow(0.1, decimal + 1) ||
-                    value > maxValue + pow(0.1, decimal + 1));
+    isOutOfRange = (value < minValue - std::pow(0.1, (double)(decimal + 1)) ||
+                    value > maxValue + std::pow(0.1, (double)(decimal + 1)));
   } else
     isOutOfRange = (value < minValue || value > maxValue);
 
@@ -138,8 +138,8 @@ DoubleValueField::DoubleValueField(QWidget *parent,
 //-----------------------------------------------------------------------------
 
 double DoubleValueField::pos2value(int x) const {
-  int dicimal = m_lineEdit->getDecimals();
-  if (m_isLinearSlider) return (double)x * pow(0.1, dicimal);
+  double dicimal = (double)(m_lineEdit->getDecimals());
+  if (m_isLinearSlider) return (double)x * std::pow(0.1, dicimal);
 
   // nonlinear slider case
   double rangeSize = (double)(m_slider->maximum() - m_slider->minimum());
@@ -153,15 +153,15 @@ double DoubleValueField::pos2value(int x) const {
     t = -0.26 + 0.4 * posRatio;
   else
     t = -8.0 + 9.0 * posRatio;
-  double sliderValue = round((double)m_slider->minimum() + rangeSize * t);
-  return sliderValue * pow(0.1, dicimal);
+  double sliderValue = std::round((double)m_slider->minimum() + rangeSize * t);
+  return sliderValue * std::pow(0.1, dicimal);
 }
 
 //-----------------------------------------------------------------------------
 
 int DoubleValueField::value2pos(double v) const {
-  int dicimal        = m_lineEdit->getDecimals();
-  double sliderValue = round(v * pow(10., dicimal));
+  double dicimal     = (double)(m_lineEdit->getDecimals());
+  double sliderValue = std::round(v * std::pow(10., dicimal));
   if (m_isLinearSlider) return (int)sliderValue;
 
   // nonlinear slider case
@@ -192,9 +192,9 @@ void DoubleValueField::setRange(double minValue, double maxValue) {
 
   m_roller->setRange(minValue, maxValue);
 
-  int dicimal   = m_lineEdit->getDecimals();
-  int sliderMax = (int)round(maxValue * pow(10., dicimal));
-  int sliderMin = (int)round(minValue * pow(10., dicimal));
+  double dicimal = (double)(m_lineEdit->getDecimals());
+  int sliderMax  = (int)std::round(maxValue * std::pow(10., dicimal));
+  int sliderMin  = (int)std::round(minValue * std::pow(10., dicimal));
 
   m_slider->setRange(sliderMin, sliderMax);
 
@@ -320,11 +320,11 @@ void DoubleValueField::onRollerValueChanged(bool isDragging) {
 // DoubleLineEdit
 //-----------------------------------------------------------------------------
 
-DoubleLineEdit::DoubleLineEdit(QWidget *parent, double value)
+DoubleLineEdit::DoubleLineEdit(QWidget *parent, double value, int decimals)
     : DoubleValueLineEdit(parent) {
-  m_validator =
-      new QDoubleValidator(-(std::numeric_limits<double>::max)(),
-                           (std::numeric_limits<double>::max)(), 8, this);
+  m_validator = new QDoubleValidator(-(std::numeric_limits<double>::max)(),
+                                     (std::numeric_limits<double>::max)(),
+                                     decimals, this);
   setValidator(m_validator);
 
   setValue(value);
@@ -382,14 +382,11 @@ int DoubleLineEdit::getDecimals() { return m_validator->decimals(); }
 //-----------------------------------------------------------------------------
 
 DoubleField::DoubleField(QWidget *parent, bool isRollerHide, int decimals)
-    : DoubleValueField(parent, new DoubleLineEdit(0)) {
+    : DoubleValueField(parent, new DoubleLineEdit(0, 1.0, decimals)) {
   if (isRollerHide) enableRoller(false);
 
-  DoubleLineEdit *lineEdit = dynamic_cast<DoubleLineEdit *>(m_lineEdit);
-  lineEdit->setDecimals(decimals);
-
   /*--rollerにもStepを設定--*/
-  if (!isRollerHide) m_roller->setStep(pow(0.1, decimals));
+  if (!isRollerHide) m_roller->setStep(std::pow(0.1, (double)decimals));
 }
 
 //=============================================================================
@@ -621,5 +618,6 @@ void MeasuredDoubleField::setDecimals(int decimals) {
   if (lineEdit) lineEdit->setDecimals(decimals);
 
   /*--- rollerにもStepを設定 ---*/
-  if (isRollerEnabled()) m_roller->setStep(pow(0.1, std::max(decimals - 1, 1)));
+  if (isRollerEnabled())
+    m_roller->setStep(std::pow(0.1, (double)std::max(decimals - 1, 1)));
 }

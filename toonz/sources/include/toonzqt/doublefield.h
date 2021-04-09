@@ -189,7 +189,7 @@ class DVAPI DoubleLineEdit final : public DoubleValueLineEdit {
   QDoubleValidator *m_validator;
 
 public:
-  DoubleLineEdit(QWidget *parent = 0, double value = 1);
+  DoubleLineEdit(QWidget *parent = 0, double value = 1, int decimals = 8);
   ~DoubleLineEdit() {}
 
   /*! Set text field value to double value \b value. */
