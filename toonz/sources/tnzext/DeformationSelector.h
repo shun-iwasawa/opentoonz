@@ -7,17 +7,17 @@
 
 namespace ToonzExt {
 /**
-   * @brief This class is a Singleton that selects the correct
-   *  StrokeDeformationImpl that will use StrokeDeformation.
-   *
-   * The selection use aspect of stroke (type of corner, smoothness,
-   * ...) and priority of StrokeDeformationImpl itself.
-   * Priority can manage simply some strange case (corner that
-   * seems to be straight corner and smooth corner).
-   *
-   * @note Selection can be overridden by user.
-   * @note Private use only.
-   */
+ * @brief This class is a Singleton that selects the correct
+ *  StrokeDeformationImpl that will use StrokeDeformation.
+ *
+ * The selection use aspect of stroke (type of corner, smoothness,
+ * ...) and priority of StrokeDeformationImpl itself.
+ * Priority can manage simply some strange case (corner that
+ * seems to be straight corner and smooth corner).
+ *
+ * @note Selection can be overridden by user.
+ * @note Private use only.
+ */
 class DeformationSelector {
   typedef std::pair<StrokeDeformationImpl *, int> Deformation;
   std::vector<Deformation> ref_;
@@ -35,7 +35,7 @@ public:
 
   StrokeDeformationImpl *getDeformation(const ContextStatus *status);
 };
-}
+}  // namespace ToonzExt
 
 /**
  * @brief This macro manage the registration in internal catalog

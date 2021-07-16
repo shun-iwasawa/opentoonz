@@ -34,7 +34,7 @@ public:
   ~StencilControlManager() {}
 };
 
-}  // Local namespace
+}  // namespace
 
 //-----------------------------------------------------------------------------------------
 
@@ -46,9 +46,9 @@ public:
   // 0 is the first bit plane ; -1 means no stencil mask is writing
 
   int m_virtualState;
-// the state of the (eventually virtual) top mask.
-// A mask is virtual if overflows stencil buffer
-// 0 is closed and disabled, 1 closed and enabled and 2 is opened
+  // the state of the (eventually virtual) top mask.
+  // A mask is virtual if overflows stencil buffer
+  // 0 is closed and disabled, 1 closed and enabled and 2 is opened
 
 #ifdef _DEBUG
   std::stack<bool> fullState;

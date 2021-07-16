@@ -787,7 +787,7 @@ void FxPainter::contextMenuEvent(QGraphicsSceneContextMenuEvent *cme) {
       menu.addAction(connectToXSheet);
     menu.addAction(duplicateFx);
     if ((zsrc && zsrc->getZeraryFx() &&
-            zsrc->getZeraryFx()->getLinkedFx() != zsrc->getZeraryFx()) ||
+         zsrc->getZeraryFx()->getLinkedFx() != zsrc->getZeraryFx()) ||
         fx->getLinkedFx() != fx)
       menu.addAction(unlinkFx);
   }
@@ -822,7 +822,7 @@ void FxPainter::contextMenuEvent(QGraphicsSceneContextMenuEvent *cme) {
 
 //------------------------------------------------------------------------
 /*! for small-scaled display
-*/
+ */
 void FxPainter::paint_small(QPainter *painter) {
   FxSchematicScene *sceneFx = dynamic_cast<FxSchematicScene *>(scene());
   if (!sceneFx) return;
@@ -1146,10 +1146,10 @@ FxSchematicPort::FxSchematicPort(FxSchematicDock *parent, int type)
   else if (getType() == eFxOutputPort || getType() == eFxGroupedOutPort)
     m_hook = QPointF(rect.right(), (rect.top() + rect.bottom()) * 0.5);
   else  // link port
-    m_hook  = QPointF(rect.right(), (rect.top() + rect.bottom()) * 0.5);
-  m_ownerFx = getOwnerFx();
+    m_hook = QPointF(rect.right(), (rect.top() + rect.bottom()) * 0.5);
+  m_ownerFx              = getOwnerFx();
   TZeraryColumnFx *colFx = dynamic_cast<TZeraryColumnFx *>(m_ownerFx);
-  if (colFx) m_ownerFx   = colFx->getZeraryFx();
+  if (colFx) m_ownerFx = colFx->getZeraryFx();
 }
 
 //-----------------------------------------------------
@@ -1490,7 +1490,7 @@ void FxSchematicPort::handleSnappedLinksOnDynamicPortFx(
     int startIndex) {
   FxSchematicNode *node = dynamic_cast<FxSchematicNode *>(getNode());
   if (!m_ownerFx->hasDynamicPortGroups() || !node) return;
-  int groupedPortCount           = groupedPorts.size();
+  int groupedPortCount = groupedPorts.size();
   if (startIndex < 0) startIndex = groupedPortCount - 1;
   if (startIndex >= groupedPortCount || targetIndex >= groupedPortCount) return;
   int i;
@@ -1613,7 +1613,7 @@ void FxSchematicPort::mouseMoveEvent(QGraphicsSceneMouseEvent *me) {
   m_currentTargetPort    = targetPort;
   TFx *targetFx          = targetPort->getOwnerFx();
   TZeraryColumnFx *colFx = dynamic_cast<TZeraryColumnFx *>(targetFx);
-  if (colFx) targetFx    = colFx->getZeraryFx();
+  if (colFx) targetFx = colFx->getZeraryFx();
   if (targetPort->getType() != eFxInputPort ||
       !targetFx->hasDynamicPortGroups() || targetPort == this)
     return;
@@ -1670,8 +1670,8 @@ void FxSchematicPort::mouseReleaseEvent(QGraphicsSceneMouseEvent *me) {
     SchematicPort::mouseReleaseEvent(me);
     return;
   }
-  TFx *targetOwnerFx       = targetPort->getOwnerFx();
-  TZeraryColumnFx *colFx   = dynamic_cast<TZeraryColumnFx *>(targetOwnerFx);
+  TFx *targetOwnerFx     = targetPort->getOwnerFx();
+  TZeraryColumnFx *colFx = dynamic_cast<TZeraryColumnFx *>(targetOwnerFx);
   if (colFx) targetOwnerFx = colFx->getZeraryFx();
 
   // if the target fx has no dynamic port or has dynamic ports but the target
@@ -1806,7 +1806,7 @@ FxSchematicDock::FxSchematicDock(FxSchematicNode *parent, const QString &name,
           }
         } else {
           TZeraryColumnFx *zeraryFx = dynamic_cast<TZeraryColumnFx *>(inputFx);
-          if (zeraryFx) inputFx     = zeraryFx->getZeraryFx();
+          if (zeraryFx) inputFx = zeraryFx->getZeraryFx();
           setToolTip(QString::fromStdWString(inputFx->getName()));
         }
       }
@@ -2375,7 +2375,7 @@ bool isMatteFx(std::string id) {
   else
     return false;
 }
-};
+};  // namespace
 
 FxSchematicNormalFxNode::FxSchematicNormalFxNode(FxSchematicScene *scene,
                                                  TFx *fx)
@@ -3034,7 +3034,7 @@ FxSchematicColumnNode::FxSchematicColumnNode(FxSchematicScene *scene,
   bool ret = true;
   ret      = ret && connect(m_resizeItem, SIGNAL(toggled(bool)), this,
                        SLOT(onChangedSize(bool)));
-  ret = ret &&
+  ret      = ret &&
         connect(m_nameItem, SIGNAL(focusOut()), this, SLOT(onNameChanged()));
   ret = ret && connect(m_renderToggle, SIGNAL(toggled(bool)), this,
                        SLOT(onRenderToggleClicked(bool)));
@@ -3691,9 +3691,8 @@ bool FxGroupNode::isCached() const {
   for (i = 0; i < m_roots.size(); i++) {
     TFx *fx = m_roots[i].getPointer();
     if (TZeraryColumnFx *zcFx = dynamic_cast<TZeraryColumnFx *>(fx))
-      isCached =
-          isCached &&
-          TPassiveCacheManager::instance()->cacheEnabled(zcFx->getZeraryFx());
+      isCached = isCached && TPassiveCacheManager::instance()->cacheEnabled(
+                                 zcFx->getZeraryFx());
     else
       isCached = isCached && TPassiveCacheManager::instance()->cacheEnabled(fx);
   }

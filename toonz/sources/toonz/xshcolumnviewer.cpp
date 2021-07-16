@@ -1074,16 +1074,16 @@ void ColumnArea::DrawHeader::drawThumbnail(QPixmap &iconPixmap) const {
       col >= 0) {
     // display nothing
   } else {
-      if (!iconPixmap.isNull()) {
-        p.drawPixmap(thumbnailImageRect, iconPixmap);
-      }
-      // notify that the column icon is already shown
-      if (levelColumn)
-        levelColumn->setIconVisible(true);
-      else if (meshColumn)
-        meshColumn->setIconVisible(true);
-      else if (zColumn)
-        zColumn->setIconVisible(true);
+    if (!iconPixmap.isNull()) {
+      p.drawPixmap(thumbnailImageRect, iconPixmap);
+    }
+    // notify that the column icon is already shown
+    if (levelColumn)
+      levelColumn->setIconVisible(true);
+    else if (meshColumn)
+      meshColumn->setIconVisible(true);
+    else if (zColumn)
+      zColumn->setIconVisible(true);
   }
 }
 
@@ -1200,8 +1200,7 @@ void ColumnArea::DrawHeader::drawVolumeControl(double volume) const {
                                      NumberRange(layerAxis, layerAxis + 2)));
   }
 
-
-  // slider track 
+  // slider track
   QPainterPath track =
       o->path(PredefinedPath::VOLUME_SLIDER_TRACK).translated(orig);
   p.drawPath(track);
@@ -1650,7 +1649,6 @@ QPixmap ColumnArea::getColumnIcon(int columnIndex) {
         Preferences::LoadOnDemand) {
       onDemand = m_viewer->getCurrentColumn() != columnIndex;
       if (!onDemand) {
-        
         TXshLevelColumn *levelColumn = column->getLevelColumn();
         TXshMeshColumn *meshColumn   = column->getMeshColumn();
         if ((levelColumn && !levelColumn->isIconVisible()) ||
@@ -1660,11 +1658,10 @@ QPixmap ColumnArea::getColumnIcon(int columnIndex) {
       }
     }
     QPixmap icon =
-        zColumn
-            ? FxIconPixmapManager::instance()->getFxIconPm(
-                  zColumn->getZeraryColumnFx()->getZeraryFx()->getFxType())
-            : IconGenerator::instance()->getIcon(xl, cell.m_frameId, false,
-                                                 onDemand);
+        zColumn ? FxIconPixmapManager::instance()->getFxIconPm(
+                      zColumn->getZeraryColumnFx()->getZeraryFx()->getFxType())
+                : IconGenerator::instance()->getIcon(xl, cell.m_frameId, false,
+                                                     onDemand);
     QRect thumbnailImageRect = o->rect(PredefinedRect::THUMBNAIL);
     if (thumbnailImageRect.isEmpty()) return QPixmap();
     return scalePixmapKeepingAspectRatio(icon, thumbnailImageRect.size());

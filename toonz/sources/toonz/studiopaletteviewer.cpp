@@ -34,7 +34,7 @@ using namespace PaletteViewerGUI;
 namespace {
 //-----------------------------------------------------------------------------
 /*! Return true if path is in folder \b rootPath of \b StudioPalette.
-*/
+ */
 bool isInStudioPaletteFolder(TFilePath path, TFilePath rootPath) {
   if (path.getType() != "tpl") return false;
   StudioPalette *studioPlt = StudioPalette::instance();
@@ -52,7 +52,7 @@ bool isInStudioPaletteFolder(TFilePath path, TFilePath rootPath) {
 
 //-----------------------------------------------------------------------------
 /*! Return true if path is in a \b StudioPalette folder.
-*/
+ */
 bool isInStudioPalette(TFilePath path) {
   if (path.getType() != "tpl") return false;
   StudioPalette *studioPlt = StudioPalette::instance();
@@ -183,7 +183,7 @@ void StudioPaletteTreeViewer::setLevelHandle(TXshLevelHandle *levelHandle) {
 
 //-----------------------------------------------------------------------------
 /*! Create root item related to path \b path.
-*/
+ */
 QTreeWidgetItem *StudioPaletteTreeViewer::createRootItem(TFilePath path,
                                                          const QPixmap pix) {
   QString rootName = QString(path.getName().c_str());
@@ -199,7 +199,7 @@ QTreeWidgetItem *StudioPaletteTreeViewer::createRootItem(TFilePath path,
 
 //-----------------------------------------------------------------------------
 /*! Return true if \b item is a root item; false otherwise.
-*/
+ */
 bool StudioPaletteTreeViewer::isRootItem(QTreeWidgetItem *item) {
   assert(item);
   TFilePath path = getFolderPath(item);
@@ -222,7 +222,7 @@ bool StudioPaletteTreeViewer::isRootItem(QTreeWidgetItem *item) {
 
 //-----------------------------------------------------------------------------
 /*! Create a new item related to path \b path.
-*/
+ */
 QTreeWidgetItem *StudioPaletteTreeViewer::createItem(const TFilePath path) {
   static QPixmap PaletteIconPxmp(":Resources/icon.png");
   static QPixmap FolderIconPxmp(":Resources/newfolder_over.png");
@@ -255,14 +255,14 @@ TFilePath StudioPaletteTreeViewer::getFolderPath(QTreeWidgetItem *item) {
 
 //-----------------------------------------------------------------------------
 /*! Return current item path.
-*/
+ */
 TFilePath StudioPaletteTreeViewer::getCurrentFolderPath() {
   return getFolderPath(currentItem());
 }
 
 //-----------------------------------------------------------------------------
 /*! Return item identified by \b path; if it doesn't exist return 0.
-*/
+ */
 QTreeWidgetItem *StudioPaletteTreeViewer::getItem(const TFilePath path) {
   QList<QTreeWidgetItem *> oldItems =
       findItems(QString(""), Qt::MatchContains, 0);
@@ -284,7 +284,7 @@ QTreeWidgetItem *StudioPaletteTreeViewer::getItem(const TFilePath path) {
 //-----------------------------------------------------------------------------
 /*! Return item child of \b parent identified by \b path; if it doesn't exist
  * return 0.
-*/
+ */
 QTreeWidgetItem *StudioPaletteTreeViewer::getFolderItem(QTreeWidgetItem *parent,
                                                         const TFilePath path) {
   int childrenCount = parent->childCount();
@@ -303,7 +303,7 @@ QTreeWidgetItem *StudioPaletteTreeViewer::getFolderItem(QTreeWidgetItem *parent,
 
 //-----------------------------------------------------------------------------
 /*! Refresh all item of three root item in tree and preserve current item.
-*/
+ */
 void StudioPaletteTreeViewer::refresh() {
   StudioPalette *studioPlt = StudioPalette::instance();
 
@@ -370,7 +370,7 @@ void StudioPaletteTreeViewer::refreshItem(QTreeWidgetItem *item) {
 //-----------------------------------------------------------------------------
 /*! If item \b item name changed update name item related path name in \b
  * StudioPalette.
-*/
+ */
 void StudioPaletteTreeViewer::onItemChanged(QTreeWidgetItem *item, int column) {
   if (item != currentItem()) return;
   string name       = item->text(column).toStdString();
@@ -390,7 +390,7 @@ void StudioPaletteTreeViewer::onItemChanged(QTreeWidgetItem *item, int column) {
 
 //-----------------------------------------------------------------------------
 /*! If item \b item is expanded change item icon.
-*/
+ */
 void StudioPaletteTreeViewer::onItemExpanded(QTreeWidgetItem *item) {
   if (!item || isRootItem(item)) return;
   static QPixmap FolderIconExpandedPxmp(":Resources/folder_open.png");
@@ -399,7 +399,7 @@ void StudioPaletteTreeViewer::onItemExpanded(QTreeWidgetItem *item) {
 
 //-----------------------------------------------------------------------------
 /*! If item \b item is collapsed change item icon.
-*/
+ */
 void StudioPaletteTreeViewer::onItemCollapsed(QTreeWidgetItem *item) {
   if (!item || isRootItem(item)) return;
   static QPixmap FolderIconPxmp(":Resources/newfolder_over.png");
@@ -408,7 +408,7 @@ void StudioPaletteTreeViewer::onItemCollapsed(QTreeWidgetItem *item) {
 
 //-----------------------------------------------------------------------------
 /*! If current item is a palette set current studioPalette to it.
-*/
+ */
 void StudioPaletteTreeViewer::onItemSelectionChanged() {
   TFilePath path = getCurrentFolderPath();
   if (!m_stdPltHandle || path.getType() != "tpl") return;
@@ -441,7 +441,7 @@ void StudioPaletteTreeViewer::onItemSelectionChanged() {
 
 //-----------------------------------------------------------------------------
 /*! Create a new \b StudioPalette palette in current item path.
-*/
+ */
 void StudioPaletteTreeViewer::addNewPlt() {
   if (!currentItem()) {
     error("Error: No folder selected.");
@@ -460,7 +460,7 @@ void StudioPaletteTreeViewer::addNewPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Create a new \b StudioPalette folder in current item path.
-*/
+ */
 void StudioPaletteTreeViewer::addNewFolder() {
   if (!currentItem()) {
     error("Error: No folder selected.");
@@ -524,7 +524,7 @@ void StudioPaletteTreeViewer::deleteItem() {
 
 //-----------------------------------------------------------------------------
 /*! Open a \b PalettesScanPopup.
-*/
+ */
 void StudioPaletteTreeViewer::searchForPlt() {
   m_palettesScanPopup->setCurrentFolder(getCurrentFolderPath());
   int ret = m_palettesScanPopup->exec();
@@ -533,7 +533,7 @@ void StudioPaletteTreeViewer::searchForPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Recall \b StudioPaletteCmd::loadIntoCleanupPalette.
-*/
+ */
 void StudioPaletteTreeViewer::loadInCurrentCleanupPlt() {
   StudioPaletteCmd::loadIntoCleanupPalette(m_levelPltHandle, m_sceneHandle,
                                            getCurrentFolderPath());
@@ -541,7 +541,7 @@ void StudioPaletteTreeViewer::loadInCurrentCleanupPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Recall \b StudioPaletteCmd::replaceWithCleanupPalette.
-*/
+ */
 void StudioPaletteTreeViewer::replaceCurrentCleanupPlt() {
   StudioPaletteCmd::replaceWithCleanupPalette(
       m_levelPltHandle, m_stdPltHandle, m_sceneHandle, getCurrentFolderPath());
@@ -549,7 +549,7 @@ void StudioPaletteTreeViewer::replaceCurrentCleanupPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Recall \b StudioPaletteCmd::loadIntoCurrentPalette.
-*/
+ */
 void StudioPaletteTreeViewer::loadInCurrentPlt() {
   StudioPaletteCmd::loadIntoCurrentPalette(m_levelPltHandle, m_sceneHandle,
                                            getCurrentFolderPath());
@@ -557,7 +557,7 @@ void StudioPaletteTreeViewer::loadInCurrentPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Recall \b StudioPaletteCmd::replaceWithCurrentPalette.
-*/
+ */
 void StudioPaletteTreeViewer::replaceCurrentPlt() {
   StudioPaletteCmd::replaceWithCurrentPalette(
       m_levelPltHandle, m_stdPltHandle, m_sceneHandle, getCurrentFolderPath());
@@ -565,7 +565,7 @@ void StudioPaletteTreeViewer::replaceCurrentPlt() {
 
 //-----------------------------------------------------------------------------
 /*! Recall \b StudioPaletteCmd::mergeIntoCurrentPalette.
-*/
+ */
 void StudioPaletteTreeViewer::mergeToCurrentPlt() {
   StudioPaletteCmd::mergeIntoCurrentPalette(m_levelPltHandle, m_sceneHandle,
                                             getCurrentFolderPath());
@@ -585,7 +585,7 @@ void StudioPaletteTreeViewer::paintEvent(QPaintEvent *event) {
 
 //-----------------------------------------------------------------------------
 /*! Open a context menu considering current item data role \b Qt::UserRole.
-*/
+ */
 void StudioPaletteTreeViewer::contextMenuEvent(QContextMenuEvent *event) {
   TFilePath path = getCurrentFolderPath();
 
@@ -658,7 +658,7 @@ void StudioPaletteTreeViewer::createMenuAction(QMenu &menu, QString name,
 
 //-----------------------------------------------------------------------------
 /*! If button left is pressed start drag and drop.
-*/
+ */
 void StudioPaletteTreeViewer::mouseMoveEvent(QMouseEvent *event) {
   // If left button is not pressed return; is not drag event.
   if (!(event->buttons() & Qt::LeftButton)) return;
@@ -667,7 +667,7 @@ void StudioPaletteTreeViewer::mouseMoveEvent(QMouseEvent *event) {
 
 //-----------------------------------------------------------------------------
 /*! If path related to current item exist and is a palette execute drag.
-*/
+ */
 void StudioPaletteTreeViewer::startDragDrop() {
   TFilePath path = getCurrentFolderPath();
   if (!path.isEmpty() && (path.getType() == "tpl" || path.getType() == "pli" ||
@@ -707,7 +707,7 @@ void StudioPaletteTreeViewer::dragEnterEvent(QDragEnterEvent *event) {
 
 //-----------------------------------------------------------------------------
 /*! Find item folder nearest to current position.
-*/
+ */
 void StudioPaletteTreeViewer::dragMoveEvent(QDragMoveEvent *event) {
   QTreeWidgetItem *item = itemAt(event->pos());
   TFilePath newPath     = getFolderPath(item);
@@ -784,7 +784,7 @@ void StudioPaletteTreeViewer::dropEvent(QDropEvent *event) {
 
 //-----------------------------------------------------------------------------
 /*! Set dropItem to 0 and update the tree.
-*/
+ */
 void StudioPaletteTreeViewer::dragLeaveEvent(QDragLeaveEvent *event) {
   m_dropItem = 0;
   update();
@@ -792,7 +792,7 @@ void StudioPaletteTreeViewer::dragLeaveEvent(QDragLeaveEvent *event) {
 
 //-----------------------------------------------------------------------------
 /*! Receive widget hide events. Remove this listener from \b StudioPalette.
-*/
+ */
 void StudioPaletteTreeViewer::hideEvent(QHideEvent *event) {
   StudioPalette::instance()->removeListener(this);
 }

@@ -331,7 +331,7 @@ int StrokeOutlinizationData::buildPoints(const TStroke &stroke,
 #ifdef USE_LENGTH
   bool ok = getChunkAndT_length(path, x, pathChunk, pathT);
 #else
-  bool ok = getChunkAndT_param(path, x, pathChunk, pathT);
+  bool ok  = getChunkAndT_param(path, x, pathChunk, pathT);
 #endif
   assert(ok);
 
@@ -442,8 +442,8 @@ void ReferenceChunksLinearizator::addCenterlinePoints(
   bool ok0 = m_data.getChunkAndT_length(path, x0, chunk0, t0);
   bool ok1 = m_data.getChunkAndT_length(path, x1, chunk1, t1);
 #else
-  bool ok0   = m_data.getChunkAndT_param(path, x0, chunk0, t0);
-  bool ok1   = m_data.getChunkAndT_param(path, x1, chunk1, t1);
+  bool ok0 = m_data.getChunkAndT_param(path, x0, chunk0, t0);
+  bool ok1 = m_data.getChunkAndT_param(path, x1, chunk1, t1);
 #endif
 
   assert(ok0 && ok1);
@@ -860,7 +860,7 @@ void makeCenterline(const TStroke &path, const TEdge &edge,
   const TStroke &stroke = *edge.m_s;
 
   double w0 = edge.m_w0, w1 = edge.m_w1;
-  bool reversed    = w1 < w0;
+  bool reversed = w1 < w0;
   if (reversed) w0 = edge.m_w1, w1 = edge.m_w0;
 
   // Build outlinization data

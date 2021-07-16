@@ -100,8 +100,8 @@ types to be displayed in the file browser.
 
   void setFolder(const TFilePath &fp, bool expandNode = false,
                  bool forceUpdate = false);
-  // process when inputting the folder which is not registered in the folder tree
-  // (e.g. UNC path in Windows)
+  // process when inputting the folder which is not registered in the folder
+  // tree (e.g. UNC path in Windows)
   void setUnregisteredFolder(const TFilePath &fp);
 
   void setHistoryDay(std::string dayDateString);

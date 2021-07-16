@@ -85,7 +85,6 @@
 #define pagetok(__nb) ((__nb) * (getpagesize()))
 #endif
 
-
 #if defined(MACOSX)
 #define PLATFORM MACOSX
 #include <grp.h>
@@ -195,11 +194,11 @@ bool TSystem::memoryShortage() {
   return c.WorkingSetSize >
          memStatus.ullTotalVirtual *
              0.6;  // if total memory used by this process(WorkingSetSize) is
-// half of max allocatable memory
-//(ullTotalVirtual: on 32bits machines, typically it's 2GB)
-// It's better "to stay large"; for values >0.6 this function may
-// returns that there is memory, but for fragmentation the malloc fails the
-// same!
+  // half of max allocatable memory
+  //(ullTotalVirtual: on 32bits machines, typically it's 2GB)
+  // It's better "to stay large"; for values >0.6 this function may
+  // returns that there is memory, but for fragmentation the malloc fails the
+  // same!
 
 #elif defined(MACOSX)
 
@@ -284,7 +283,7 @@ TINT64 TSystem::getFreeMemorySize(bool onlyPhisicalMemory) {
   size_t size;
 #ifdef __OpenBSD__
   int mib[] = {CTL_VM, VM_UVMEXP};
-  struct uvmexp  uvmexp;
+  struct uvmexp uvmexp;
 #else
   int mib[] = {CTL_VM, VM_TOTAL};
   struct vmtotal vmtotal;
@@ -292,14 +291,12 @@ TINT64 TSystem::getFreeMemorySize(bool onlyPhisicalMemory) {
 
 #ifdef __OpenBSD__
   size = sizeof(uvmexp);
-  if (sysctl(mib, 2, &uvmexp, &size, NULL, 0) < 0)
-    return (ret);
+  if (sysctl(mib, 2, &uvmexp, &size, NULL, 0) < 0) return (ret);
   ret = pagetok((guint64)uvmexp.free);
 #else
   size = sizeof(vmtotal);
-  if (sysctl(mib, 2, &vmtotal, &size, NULL, 0) < 0)
-    return (ret);
-  ret = pagetok(vmtotal.t_free);
+  if (sysctl(mib, 2, &vmtotal, &size, NULL, 0) < 0) return (ret);
+  ret       = pagetok(vmtotal.t_free);
 #endif
   return ret;
 
@@ -354,7 +351,7 @@ TINT64 TSystem::getDiskSize(const TFilePath &diskName) {
                               &bytesPerSector,        // bytes per sector
                               &numberOfFreeClusters,  // free clusters
                               &totalNumberOfClusters  // total clusters
-                              );
+  );
 
   if (!rc)
     throw TSystemException(diskName, getFormattedMessage(GetLastError()));
@@ -391,7 +388,7 @@ TINT64 TSystem::getFreeDiskSize(const TFilePath &diskName) {
                               &bytesPerSector,        // bytes per sector
                               &numberOfFreeClusters,  // free clusters
                               &totalNumberOfClusters  // total clusters
-                              );
+  );
 
   if (!rc)  // eccezione... getLastError etc...
     throw TSystemException(diskName, "cannot get disk info!");
@@ -440,7 +437,7 @@ TINT64 TSystem::getMemorySize(bool onlyPhisicalMemory) {
   size_t size;
 #ifdef __OpenBSD__
   int mib[] = {CTL_VM, VM_UVMEXP};
-  struct uvmexp  uvmexp;
+  struct uvmexp uvmexp;
 #else
   int mib[] = {CTL_VM, VM_TOTAL};
   struct vmtotal vmtotal;
@@ -448,13 +445,11 @@ TINT64 TSystem::getMemorySize(bool onlyPhisicalMemory) {
 
 #ifdef __OpenBSD__
   size = sizeof(uvmexp);
-  if (sysctl(mib, 2, &uvmexp, &size, NULL, 0) < 0)
-    return (ret);
+  if (sysctl(mib, 2, &uvmexp, &size, NULL, 0) < 0) return (ret);
   ret = pagetok((guint64)uvmexp.npages);
 #else
   size = sizeof(vmtotal);
-  if (sysctl(mib, 2, &vmtotal, &size, NULL, 0) < 0)
-    return (ret);
+  if (sysctl(mib, 2, &vmtotal, &size, NULL, 0) < 0) return (ret);
   /* cheat : rm = tot used, add free to get total */
   ret = pagetok(vmtotal.t_rm + vmtotal.t_free);
 #endif
@@ -533,53 +528,70 @@ void TSystem::moveFileToRecycleBin(const TFilePath &fp) {
   }
 #elif defined(LINUX)
   //
-  // From https://stackoverflow.com/questions/17964439/move-files-to-trash-recycle-bin-in-qt
+  // From
+  // https://stackoverflow.com/questions/17964439/move-files-to-trash-recycle-bin-in-qt
   //
   QString fileToRecycle = fp.getQString();
   QFileInfo FileName(fileToRecycle);
 
-  QDateTime currentTime(QDateTime::currentDateTime());    // get system time
+  QDateTime currentTime(QDateTime::currentDateTime());  // get system time
 
   // check if the file is on the local drive
   const QStorageInfo fileStorageInfo(fileToRecycle);
   const QStorageInfo homeStorageInfo(QDir::homePath());
   const bool isOnHomeDrive = fileStorageInfo == homeStorageInfo;
 
-  QString trashFilePath = QDir::homePath() + "/.local/share/Trash/files/";    // this folder contains deleted files
-  QString trashInfoPath = QDir::homePath() + "/.local/share/Trash/info/";     // this folder contains information about the deleted files
+  QString trashFilePath =
+      QDir::homePath() +
+      "/.local/share/Trash/files/";  // this folder contains deleted files
+  QString trashInfoPath =
+      QDir::homePath() +
+      "/.local/share/Trash/info/";  // this folder contains information about
+                                    // the deleted files
 
   // different paths are used for external drives
   if (!isOnHomeDrive) {
-    //trashFilePath = fileStorageInfo.rootPath() + "/.Trash-1000/files/";
-    //trashInfoPath = fileStorageInfo.rootPath() + "/.Trash-1000/info/";
+    // trashFilePath = fileStorageInfo.rootPath() + "/.Trash-1000/files/";
+    // trashInfoPath = fileStorageInfo.rootPath() + "/.Trash-1000/info/";
 
     // TODO: Implement this... The standard is /.Trash-<UID>/...
-    outputDebug("Deleting files on external drives in Linux is not implemented yet.");
+    outputDebug(
+        "Deleting files on external drives in Linux is not implemented yet.");
     return;
   }
 
   // check paths exist
-  if( !QDir(trashFilePath).exists() || !QDir(trashInfoPath).exists() ) {
-    outputDebug("Could not find the right paths to send the file to the recycle bin.");
+  if (!QDir(trashFilePath).exists() || !QDir(trashInfoPath).exists()) {
+    outputDebug(
+        "Could not find the right paths to send the file to the recycle bin.");
     return;
   }
 
   // create file for the "Trash/info" folder
-  QFile infoFile(trashInfoPath + FileName.completeBaseName() + "." + FileName.completeSuffix() + ".trashinfo");     // filename+extension+.trashinfo
+  QFile infoFile(trashInfoPath + FileName.completeBaseName() + "." +
+                 FileName.completeSuffix() +
+                 ".trashinfo");  // filename+extension+.trashinfo
 
   infoFile.open(QIODevice::ReadWrite);
 
   QTextStream stream(&infoFile);
 
   stream << "[Trash Info]" << endl;
-  stream << "Path=" + QString(QUrl::toPercentEncoding(FileName.absoluteFilePath(), "~_-./")) << endl;     // convert path to percentage encoded string
-  stream << "DeletionDate=" + currentTime.toString("yyyy-MM-dd") + "T" + currentTime.toString("hh:mm:ss") << endl;      // get date and time in format YYYY-MM-DDThh:mm:ss
+  stream << "Path=" + QString(QUrl::toPercentEncoding(
+                          FileName.absoluteFilePath(), "~_-./"))
+         << endl;  // convert path to percentage encoded string
+  stream << "DeletionDate=" + currentTime.toString("yyyy-MM-dd") + "T" +
+                currentTime.toString("hh:mm:ss")
+         << endl;  // get date and time in format YYYY-MM-DDThh:mm:ss
 
   infoFile.close();
 
   // move the original file to the "Trash/files" folder
   QDir file;
-  file.rename(FileName.absoluteFilePath(), trashFilePath+FileName.completeBaseName() + "." + FileName.completeSuffix());  // rename(original path, trash path)
+  file.rename(
+      FileName.absoluteFilePath(),
+      trashFilePath + FileName.completeBaseName() + "." +
+          FileName.completeSuffix());  // rename(original path, trash path)
 #else
   assert(!"Not implemented yet");
 #endif

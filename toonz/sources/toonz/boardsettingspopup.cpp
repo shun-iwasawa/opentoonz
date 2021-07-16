@@ -148,7 +148,7 @@ void BoardView::resizeEvent(QResizeEvent* event) {
     boardRes = QSize(frameSize.lx / shrinkX, frameSize.ly / shrinkY);
   }
 
-  float ratio = std::min((float)width() / (float)boardRes.width(),
+  float ratio    = std::min((float)width() / (float)boardRes.width(),
                          (float)height() / (float)boardRes.height());
   QSizeF imgSize = QSizeF(boardRes) * ratio;
   QPointF imgTopLeft(((float)width() - imgSize.width()) * 0.5,
@@ -443,13 +443,13 @@ ItemInfoView::ItemInfoView(QWidget* parent) : QStackedWidget(parent) {
   bool ret = true;
   ret      = ret && connect(m_nameEdit, SIGNAL(editingFinished()), this,
                        SLOT(onNameEdited()));
-  ret = ret && connect(m_maxFontSizeEdit, SIGNAL(editingFinished()), this,
+  ret      = ret && connect(m_maxFontSizeEdit, SIGNAL(editingFinished()), this,
                        SLOT(onMaxFontSizeEdited()));
-  ret = ret && connect(m_typeCombo, SIGNAL(activated(int)), this,
+  ret      = ret && connect(m_typeCombo, SIGNAL(activated(int)), this,
                        SLOT(onTypeComboActivated(int)));
-  ret = ret && connect(m_textEdit, SIGNAL(textChanged()), this,
+  ret      = ret && connect(m_textEdit, SIGNAL(textChanged()), this,
                        SLOT(onFreeTextChanged()));
-  ret = ret && connect(m_imgPathField, SIGNAL(pathChanged()), this,
+  ret      = ret && connect(m_imgPathField, SIGNAL(pathChanged()), this,
                        SLOT(onImgPathChanged()));
   ret = ret && connect(m_fontCombo, SIGNAL(currentFontChanged(const QFont&)),
                        this, SLOT(onFontComboChanged(const QFont&)));
@@ -699,13 +699,13 @@ ItemListView::ItemListView(QWidget* parent) : QWidget(parent) {
   bool ret = true;
   ret      = ret && connect(m_list, SIGNAL(currentRowChanged(int)), this,
                        SLOT(onCurrentItemSwitched(int)));
-  ret = ret && connect(newItemBtn, SIGNAL(clicked(bool)), this,
+  ret      = ret && connect(newItemBtn, SIGNAL(clicked(bool)), this,
                        SLOT(onNewItemButtonClicked()));
-  ret = ret && connect(m_deleteItemBtn, SIGNAL(clicked(bool)), this,
+  ret      = ret && connect(m_deleteItemBtn, SIGNAL(clicked(bool)), this,
                        SLOT(onDeleteItemButtonClicked()));
-  ret = ret && connect(m_moveUpBtn, SIGNAL(clicked(bool)), this,
+  ret      = ret && connect(m_moveUpBtn, SIGNAL(clicked(bool)), this,
                        SLOT(onMoveUpButtonClicked()));
-  ret = ret && connect(m_moveDownBtn, SIGNAL(clicked(bool)), this,
+  ret      = ret && connect(m_moveDownBtn, SIGNAL(clicked(bool)), this,
                        SLOT(onMoveDownButtonClicked()));
   assert(ret);
 }

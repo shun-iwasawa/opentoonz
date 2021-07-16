@@ -129,6 +129,6 @@ DVAPI std::vector<int> getSelectedStrokes(
     TVectorImage &vi,  //!< Vector image whose strokes will be selected.
     const LevelSelection
         &levelSelection  //!< Selection filter for the specified image.
-    );
+);
 
 #endif  // LEVELSELECTION_H

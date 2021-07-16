@@ -291,7 +291,7 @@ namespace {
 ExecutorImp *globalImp           = 0;
 ExecutorImpSlots *globalImpSlots = 0;
 bool shutdownVar                 = false;
-}
+}  // namespace
 
 //=====================================================================
 

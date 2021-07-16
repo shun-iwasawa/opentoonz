@@ -36,7 +36,7 @@ class ColorField;
 class ProgressDialog;
 class CheckBox;
 class DoubleLineEdit;
-}
+}  // namespace DVGui
 
 namespace ImageUtils {
 class FrameTaskNotifier;

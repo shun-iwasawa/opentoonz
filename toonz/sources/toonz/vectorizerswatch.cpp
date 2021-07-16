@@ -50,10 +50,9 @@ inline TImageP getXsheetImage(int row, int col) {
   const TXshCell &cell = xsh->getCell(row, col);
   TXshSimpleLevel *sl  = cell.getSimpleLevel();
 
-  return sl
-             ? sl->getFullsampledFrame(cell.getFrameId(),
-                                       ImageManager::dontPutInCache)
-             : TImageP();
+  return sl ? sl->getFullsampledFrame(cell.getFrameId(),
+                                      ImageManager::dontPutInCache)
+            : TImageP();
 }
 
 //-----------------------------------------------------------------------------
@@ -87,7 +86,7 @@ std::unique_ptr<VectorizerConfiguration> getCurrentVectorizerConfiguration(
   return result_type(vParams->getCurrentConfiguration(vFrame));
 }
 
-}  // Local namespace
+}  // namespace
 
 //*****************************************************************************
 //    VectorizationSwatchData declaration
@@ -134,7 +133,7 @@ public:
   void notifyDone(TImageP img);
 };
 
-}  // Local namespace
+}  // namespace
 
 //*****************************************************************************
 //    VectorizationBuilder implementation

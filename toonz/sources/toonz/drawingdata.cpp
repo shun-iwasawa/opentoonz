@@ -186,7 +186,7 @@ void DrawingData::setLevelFrames(TXshSimpleLevel *sl,
 
     // Clone the image and store it in the image cache
     QString id = makeCacheId(
-        (uintptr_t) this,
+        (uintptr_t)this,
         it->getNumber());  // Cloning is necessary since the user may
     TImageCache::instance()->add(
         id, img->cloneImage());  // modify and save the original AFTER the copy
@@ -196,7 +196,7 @@ void DrawingData::setLevelFrames(TXshSimpleLevel *sl,
       Hook *levelHook = levelHooks->getHook(i);
       if (!levelHook || levelHook->isEmpty()) continue;
 
-      Hook *copiedHook            = m_levelHooks.getHook(i);
+      Hook *copiedHook = m_levelHooks.getHook(i);
       if (!copiedHook) copiedHook = m_levelHooks.addHook();
 
       copiedHook->setAPos(frameId, levelHook->getAPos(frameId));
@@ -296,7 +296,7 @@ bool DrawingData::getLevelFrames(TXshSimpleLevel *sl,
     usedImageSet[frameId] = imageId;
 
     if (!imgPlt.getPointer()) {
-      TImageP img     = TImageCache::instance()->get(imageId, false);
+      TImageP img = TImageCache::instance()->get(imageId, false);
       if (img) imgPlt = img->getPalette();
     }
 
@@ -327,9 +327,9 @@ bool DrawingData::getLevelFrames(TXshSimpleLevel *sl,
   auto frameIt = m_imageSet.begin();
   for (auto const &image : usedImageSet) {
     for (int i = 0; i < hookCount; i++) {
-      Hook *levelHook           = levelHooks->getHook(i);
+      Hook *levelHook = levelHooks->getHook(i);
       if (!levelHook) levelHook = levelHooks->addHook();
-      Hook *copiedHook          = m_levelHooks.getHook(i);
+      Hook *copiedHook = m_levelHooks.getHook(i);
       assert(copiedHook);
       levelHook->setAPos(image.first, copiedHook->getAPos((*frameIt).first));
       levelHook->setBPos(image.first, copiedHook->getBPos((*frameIt).first));
@@ -372,8 +372,9 @@ TImageP DrawingData::getImage(QString imageId, TXshSimpleLevel *sl,
       ToonzImageUtils::scrambleStyles(newImg, styleTable);
       TRasterCM32P slRaster  = slTi->getRaster();
       TRasterCM32P imgRaster = newImg->getRaster();
-      TRop::over(slRaster, imgRaster, TTranslation(slRaster->getCenterD() -
-                                                   imgRaster->getCenterD()));
+      TRop::over(
+          slRaster, imgRaster,
+          TTranslation(slRaster->getCenterD() - imgRaster->getCenterD()));
       TRect savebox;
       TRop::computeBBox(slTi->getRaster(), savebox);
       slTi->setSavebox(savebox);
@@ -390,7 +391,7 @@ TImageP DrawingData::getImage(QString imageId, TXshSimpleLevel *sl,
           scene->getProperties()
               ->getVectorizerParameters()
               ->getCurrentConfiguration(0.0));
-      bool leaveUnpainted                           = config->m_leaveUnpainted;
+      bool leaveUnpainted = config->m_leaveUnpainted;
       if (keepVectorFills) config->m_leaveUnpainted = false;
       vectorize(slVi, ti, styleTable, *config);
       config->m_leaveUnpainted = leaveUnpainted;

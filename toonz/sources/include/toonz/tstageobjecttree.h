@@ -223,7 +223,7 @@ new spline.
   TStageObjectSpline *createSpline();
 
   /*! Assign a unique id to the passed \b spline
-*/
+   */
   void assignUniqueSplineId(TStageObjectSpline *spline);
   /*!
 Removes from stage object tree the spline \b spline.

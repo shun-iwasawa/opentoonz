@@ -27,7 +27,7 @@ typedef UCHAR Channel;
 const int MONO  = 0;
 const int LEFT  = 0;
 const int RIGHT = LEFT + 1;
-}
+}  // namespace TSound
 
 //=========================================================
 
@@ -248,7 +248,7 @@ Range in seconds
 class TSoundDeviceException final : public TException {
 public:
   enum Type {
-    NoDevice,           // no device found
+    NoDevice,    // no device found
     FailedInit,  // fallimento del costruttore
     UnableOpenDevice,
     UnableCloseDevice,

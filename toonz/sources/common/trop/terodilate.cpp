@@ -171,7 +171,7 @@ void erodilate_row(int len, const Chan *src, int sIncr, Chan *dst, int dIncr,
       assert((d - dst) % dIncr == 0);
 
       val = func(oldVal = val, *s);
-      *d = (oldVal == val) ? val : one_radR * oldVal + radR * val;
+      *d  = (oldVal == val) ? val : one_radR * oldVal + radR * val;
     }
 
     for (d = std::min(d, dEnd - dIncr); d >= dwBegin; d -= dIncr) {
@@ -180,7 +180,7 @@ void erodilate_row(int len, const Chan *src, int sIncr, Chan *dst, int dIncr,
       assert((d - dst) % dIncr == 0);
 
       val = func(oldVal = val, 0);
-      *d = (oldVal == val) ? val : one_radR * oldVal + radR * val;
+      *d  = (oldVal == val) ? val : one_radR * oldVal + radR * val;
     }
 
     // Compute suffixes
@@ -201,7 +201,7 @@ void erodilate_row(int len, const Chan *src, int sIncr, Chan *dst, int dIncr,
       assert((d - dst) % dIncr == 0);
 
       val = func(oldVal = val, *s);
-      *d = func(*d, (oldVal == val) ? val : one_radR * oldVal + radR * val);
+      *d  = func(*d, (oldVal == val) ? val : one_radR * oldVal + radR * val);
     }
 
     for (; d < dwEnd; d += dIncr) {
@@ -210,7 +210,7 @@ void erodilate_row(int len, const Chan *src, int sIncr, Chan *dst, int dIncr,
       assert((d - dst) % dIncr == 0);
 
       val = func(oldVal = val, 0);
-      *d = func(*d, (oldVal == val) ? val : one_radR * oldVal + radR * val);
+      *d  = func(*d, (oldVal == val) ? val : one_radR * oldVal + radR * val);
     }
   }
 }

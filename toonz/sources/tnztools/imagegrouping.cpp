@@ -316,9 +316,8 @@ selezionato
     mask |= BACK;
     mask |= BACKWARD;
   }
-  if (strokeIndexes.size() > 1 ||
-      strokeIndex + strokeIndexes[0].second - 1 <
-          (int)vimg->getStrokeCount() - 1) {
+  if (strokeIndexes.size() > 1 || strokeIndex + strokeIndexes[0].second - 1 <
+                                      (int)vimg->getStrokeCount() - 1) {
     mask |= FRONT;
     mask |= FORWARD;
   }
@@ -755,10 +754,9 @@ void TGroupCommand::moveGroup(UCHAR moveType) {
                                          // non possono essere forwardati
     {
       i--;
-      while (i >= 0 &&
-             vimg->getStrokeIndex(selectedGroups[i + 1].first) - 1 ==
-                 vimg->getStrokeIndex(selectedGroups[i].first) +
-                     selectedGroups[i].second - 1)
+      while (i >= 0 && vimg->getStrokeIndex(selectedGroups[i + 1].first) - 1 ==
+                           vimg->getStrokeIndex(selectedGroups[i].first) +
+                               selectedGroups[i].second - 1)
         i--;
     }
     for (; i >= 0; i--) doMoveGroup(moveType, vimg, selectedGroups, i);

@@ -53,7 +53,7 @@ void computeBacklit(TRasterPT<T> dst, TRasterPT<T> src, const TPoint &srcPos,
                     // in genere srcPos.x,.y <= 0
                     const TPoint &center
                     // coordinate della sorgente di luce rispetto a dst;
-                    ) {
+) {
   // TRect srcRect = src->getBounds() + srcPos;
   // assert(srcRect.contains(dst->getBounds()));
   // assert(srcRect.contains(center));

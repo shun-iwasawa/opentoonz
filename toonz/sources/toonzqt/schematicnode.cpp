@@ -136,7 +136,7 @@ void SchematicThumbnailToggle::paint(QPainter *painter,
   if (m_isDown)
     pixmap = offIcon.pixmap(sourceRect.size());
   else
-    pixmap   = onIcon.pixmap(sourceRect.size());
+    pixmap = onIcon.pixmap(sourceRect.size());
   sourceRect = QRect(0, 0, sourceRect.width() * getDevPixRatio(),
                      sourceRect.height() * getDevPixRatio());
   painter->drawPixmap(rect, pixmap, sourceRect);
@@ -326,7 +326,7 @@ void SchematicToggle::contextMenuEvent(QGraphicsSceneContextMenuEvent *cme) {
 
 //--------------------------------------------------------
 /*! for Spline Aim and CP toggles
-*/
+ */
 void SchematicToggle_SplineOptions::paint(
     QPainter *painter, const QStyleOptionGraphicsItem *option,
     QWidget *widget) {
@@ -348,7 +348,7 @@ void SchematicToggle_SplineOptions::paint(
 
 //--------------------------------------------------------
 /*! for Spline Aim and CP toggles
-*/
+ */
 void SchematicToggle_SplineOptions::mousePressEvent(
     QGraphicsSceneMouseEvent *me) {
   SchematicToggle::mousePressEvent(me);
@@ -394,8 +394,8 @@ void SchematicHandleSpinBox::paint(QPainter *painter,
 
 void SchematicHandleSpinBox::mouseMoveEvent(QGraphicsSceneMouseEvent *me) {
   if (m_buttonState == Qt::LeftButton) {
-    bool increase           = false;
-    int delta               = me->screenPos().y() - me->lastScreenPos().y();
+    bool increase = false;
+    int delta     = me->screenPos().y() - me->lastScreenPos().y();
     if (delta < 0) increase = true;
     m_delta += abs(delta);
     if (m_delta > 5) {
@@ -916,13 +916,13 @@ SchematicNode::~SchematicNode() {}
 //--------------------------------------------------------
 
 /*!Reimplements the pure virtual QGraphicsItem::boundingRect() method.
-*/
+ */
 QRectF SchematicNode::boundingRect() const { return QRectF(0, 0, 1, 1); }
 
 //--------------------------------------------------------
 
 /*! Reimplements the pure virtual QGraphicsItem::paint() method.
-*/
+ */
 void SchematicNode::paint(QPainter *painter,
                           const QStyleOptionGraphicsItem *option,
                           QWidget *widget) {
@@ -956,7 +956,7 @@ void SchematicNode::paint(QPainter *painter,
 //--------------------------------------------------------
 
 /*! Reimplements the QGraphicsItem::mouseMoveEvent() method.
-*/
+ */
 void SchematicNode::mouseMoveEvent(QGraphicsSceneMouseEvent *me) {
   QList<QGraphicsItem *> items = scene()->selectedItems();
   if (items.empty()) return;
@@ -999,7 +999,7 @@ void SchematicNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *me) {
 
 //--------------------------------------------------------
 /* Add a pair (portId, SchematicPort*port) in the mapping
-*/
+ */
 SchematicPort *SchematicNode::addPort(int portId, SchematicPort *port) {
   QMap<int, SchematicPort *>::iterator it;
   it = m_ports.find(portId);
@@ -1039,7 +1039,7 @@ SchematicPort *SchematicNode::getPort(int portId) const {
 
 /*! Returns a list of all node connected by links to a SchematicPort identified
  * by \b portId.
-*/
+ */
 QList<SchematicNode *> SchematicNode::getLinkedNodes(int portId) const {
   QList<SchematicNode *> list;
   SchematicPort *port = getPort(portId);

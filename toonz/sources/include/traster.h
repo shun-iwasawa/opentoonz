@@ -174,9 +174,9 @@ public:
 
   // devono essere virtuali puri perche' il nuovo raster creato deve essere del
   // tipo giusto
-  virtual TRasterP clone() const        = 0;
-  virtual TRasterP extract(TRect &rect) = 0;
-  virtual TRasterP create() const       = 0;
+  virtual TRasterP clone() const                = 0;
+  virtual TRasterP extract(TRect &rect)         = 0;
+  virtual TRasterP create() const               = 0;
   virtual TRasterP create(int lx, int ly) const = 0;
 
   // definita in termini di extract(rect); non lo posso fare subito perche'
@@ -192,7 +192,7 @@ public:
   // getBounds()
   // e i due raster sono allineati in basso a sinistra (src[0,0] -> dst[offset])
   /*!Copies the content of the source raster in the current raster.
-*/
+   */
   void copy(const TRasterP &src, const TPoint &offset = TPoint());
 
   void xMirror();

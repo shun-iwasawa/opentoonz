@@ -214,7 +214,7 @@ void chooseLeafToClusterize(ClusterContainer::iterator &itRet,
 
     const KEYER_FLOAT *clusterCovariance = clusterFound->statistic.covariance;
     int i                                = 0;
-    for (; i < 9; ++i) tmpMatrixM[i]     = clusterCovariance[i];
+    for (; i < 9; ++i) tmpMatrixM[i] = clusterCovariance[i];
 
     tmpMatrixM[0] -= maxEigenValue;
     tmpMatrixM[4] -= maxEigenValue;
@@ -412,7 +412,7 @@ void SolveCubic(KEYER_FLOAT a,  /* coefficient of x^3 */
     x[0]       = (KEYER_FLOAT)(-2.0 * sqrt(Q) * cos(theta / 3.0) - a1 / 3.0);
     x[1]       = (KEYER_FLOAT)(-2.0 * sqrt(Q) * cos((theta + 2.0 * PI) / 3.0) -
                          a1 / 3.0);
-    x[2] = (KEYER_FLOAT)(-2.0 * sqrt(Q) * cos((theta + 4.0 * PI) / 3.0) -
+    x[2]       = (KEYER_FLOAT)(-2.0 * sqrt(Q) * cos((theta + 4.0 * PI) / 3.0) -
                          a1 / 3.0);
 
     assert(!std::isnan(x[0]));
@@ -530,7 +530,7 @@ static void clusterize(ClusterContainer &clusters, int clustersCount) {
 
 #endif
 
-    for (j                              = 0; j < 9; ++j)
+    for (j = 0; j < 9; ++j)
       subcluster2->statistic.matrixR[j] = choosedCluster->statistic.matrixR[j] -
                                           subcluster1->statistic.matrixR[j];
 
@@ -624,7 +624,7 @@ void Cluster::computeStatistics() {
 
   statistic.sumCoords = TPoint(0, 0);
 
-  int i                                         = 0;
+  int i = 0;
   for (; i < 3; ++i) statistic.sumComponents[i] = 0.0;
 
   for (i = 0; i < 9; ++i) statistic.matrixR[i] = 0.0;
@@ -850,11 +850,11 @@ struct EdgePoint {
     // identify available corners
     if (info & UpperEdge) {
       if (info & RightEdge) info = info | RightUpper;
-      if (info & LeftEdge) info  = info | LeftUpper;
+      if (info & LeftEdge) info = info | LeftUpper;
     }
     if (info & LowerEdge) {
       if (info & RightEdge) info = info | RightLower;
-      if (info & LeftEdge) info  = info | LeftLower;
+      if (info & LeftEdge) info = info | LeftLower;
     }
   }
 

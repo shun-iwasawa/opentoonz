@@ -227,7 +227,7 @@ inline void loadCompressed(const TFilePath &fp, TRasterP &ras,
 
   ras->unlock();
 }
-}
+}  // namespace
 
 //****************************************************************************************************
 //    TCacheResourceP implementation

@@ -133,7 +133,7 @@ void Iwa_MotionBlurCompFx::makeMotionBlurFilter_CPU(
         /* Calculate the inner product of 'p0'->sampling point and 'p0'->'p1' */
         float2 vec_p0_sample = {static_cast<float>(pos.x - p0.x),
                                 static_cast<float>(pos.y - p0.y)};
-        float2 vec_p0_p1 = {static_cast<float>(p1.x - p0.x),
+        float2 vec_p0_p1     = {static_cast<float>(p1.x - p0.x),
                             static_cast<float>(p1.y - p0.y)};
         float dot =
             vec_p0_sample.x * vec_p0_p1.x + vec_p0_sample.y * vec_p0_p1.y;
@@ -330,7 +330,7 @@ void Iwa_MotionBlurCompFx::makeZanzoFilter_CPU(
         float curveValue;
         float frameOffset = p0.w;
         /* If the frame is exactly at the frame origin,
-        * or there is no attenuation value, set curveValue to 1 */
+         * or there is no attenuation value, set curveValue to 1 */
         if (frameOffset == 0.0f || (frameOffset < 0.0f && startValue == 1.0f) ||
             (frameOffset > 0.0f && endValue == 1.0f))
           curveValue = 1.0f;
@@ -565,7 +565,7 @@ void Iwa_MotionBlurCompFx::composeBackgroundExposure_CPU(
        * It is not done for 'digital overlay' (image with alpha mask added by
        * using Photoshop, as known as 'DigiBook' in Japanese animation industry)
        * etc.
-      */
+       */
       if (bgIsPremultiplied) {
         // Unpremultiply
         bgExposure.x /= (*bg_p).w;
@@ -697,7 +697,7 @@ void Iwa_MotionBlurCompFx::doCompute(TTile &tile, double frame,
   int marginBottom = (int)ceil(std::abs(minY));
 
   /* Return the input tile as-is if there is not movement
-  * (= filter margins are all 0). */
+   * (= filter margins are all 0). */
   if (marginLeft == 0 && marginRight == 0 && marginTop == 0 &&
       marginBottom == 0) {
     if (!m_background.isConnected()) m_input->compute(tile, frame, settings);
@@ -748,7 +748,7 @@ void Iwa_MotionBlurCompFx::doCompute(TTile &tile, double frame,
     pointsTable[p].y = (float)points.at(p).y;
     /* z stores the distance of p -> p + 1 vector */
     if (p < pointAmount - 1) {
-      float2 vec = {(float)(points.at(p + 1).x - points.at(p).x),
+      float2 vec       = {(float)(points.at(p + 1).x - points.at(p).x),
                     (float)(points.at(p + 1).y - points.at(p).y)};
       pointsTable[p].z = sqrtf(vec.x * vec.x + vec.y * vec.y);
     }

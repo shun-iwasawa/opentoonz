@@ -68,7 +68,7 @@ void level_ctable_template_(const unsigned int channels,
                      ならOK
                      2009-01-27
                     */
-                            ) {
+) {
   const double div_val = static_cast<double>(div_num);
   const double mul_val = div_val + 0.999999;
 #if defined _WIN32  // vc compile_type
@@ -155,7 +155,7 @@ void change_template_(T *image_array, const int height, const int width,
 
   table_array.clear();
 }
-}
+}  // namespace
 
 void igs::level_auto::change(unsigned char *image_array,
 
@@ -168,10 +168,10 @@ void igs::level_auto::change(unsigned char *image_array,
                              const double *out_min,       // channels array
                              const double *out_max,       // channels array
                              const double *gamma          // channels array
-                             ) {
+) {
   if ((igs::image::rgba::siz != channels) &&
       (igs::image::rgb::siz != channels) && (1 != channels) /* grayscale */
-      ) {
+  ) {
     throw std::domain_error("Bad channels,Not rgba/rgb/grayscale");
   }
 

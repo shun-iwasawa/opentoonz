@@ -660,7 +660,7 @@ void tellipticbrush::OutlineBuilder::addCircularArcPoints(
 
   int i;
   for (i = 1; i <= nAngles; ++i, idx += 2) {
-    rotRay = TPointD(rotRay.x * cos_a - rotRay.y * sin_a,
+    rotRay         = TPointD(rotRay.x * cos_a - rotRay.y * sin_a,
                      rotRay.x * sin_a + rotRay.y * cos_a);
     outPoints[idx] = center + rotRay;
   }

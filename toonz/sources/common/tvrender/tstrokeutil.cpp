@@ -73,27 +73,27 @@ double findMinimum(const TStrokeDeformation &def, const TStroke &stroke,
 //---------------------------------------------------------------------------
 
 /**
-  * Rationale:
-  *  Supponiamo di voler modellare un segmento (rappresentato da una stroke)
-  *  in modo che assuma la forma di una parabola (caso abituale offerto dal
+ * Rationale:
+ *  Supponiamo di voler modellare un segmento (rappresentato da una stroke)
+ *  in modo che assuma la forma di una parabola (caso abituale offerto dal
  * modificatore).
-  *  Poniamo il che:
-  *   (o) i punti della stroke si trovino lungo l'asse y=-100;
-  *   (o) le x che corrisponderanno siano x1=-10 e x2=+10 (ovvio
+ *  Poniamo il che:
+ *   (o) i punti della stroke si trovino lungo l'asse y=-100;
+ *   (o) le x che corrisponderanno siano x1=-10 e x2=+10 (ovvio
  * dall'equazione).
-  *
-  *  La parabola potrà essere rappresentata sul lato sx da una quadratica con
-  *  punti di controllo:
-  *    P0=(-10,-100),
-  *    P1=(-5,    0),
-  *    P2=( 0,    0).
-  *  Se conosciamo il numero di tratti lineari che rappresentano questa
+ *
+ *  La parabola potrà essere rappresentata sul lato sx da una quadratica con
+ *  punti di controllo:
+ *    P0=(-10,-100),
+ *    P1=(-5,    0),
+ *    P2=( 0,    0).
+ *  Se conosciamo il numero di tratti lineari che rappresentano questa
  * parabola,
-  *  sappiamo anche quanti "campioni" sono richiesti per la sua linearizzazione.
-  *  Questo parametro può essere utilizzato per stabilire in modo qualitativo
-  *  il valore con cui campionare la stroke da testare; ci dovranno essere tanti
-  *  punti da spostare per quanti campioni sono presenti nel riferimento.
-  */
+ *  sappiamo anche quanti "campioni" sono richiesti per la sua linearizzazione.
+ *  Questo parametro può essere utilizzato per stabilire in modo qualitativo
+ *  il valore con cui campionare la stroke da testare; ci dovranno essere tanti
+ *  punti da spostare per quanti campioni sono presenti nel riferimento.
+ */
 double computeIncrement(double strokeLength, double pixelSize) {
   assert(pixelSize > 0 && "Pixel size is negative!!!");
   assert(strokeLength > 0 && "Stroke Length size is negative!!!");

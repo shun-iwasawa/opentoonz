@@ -58,7 +58,7 @@ void enableCacheOnAllowedChildren(TRasterFx *fx) {
     // It's a Column Fx. In this case, zeraries may still have descendants,
     // in their inner fx.
     TZeraryColumnFx *zcolfx = dynamic_cast<TZeraryColumnFx *>(fx);
-    if (zcolfx) fx          = static_cast<TRasterFx *>(zcolfx->getZeraryFx());
+    if (zcolfx) fx = static_cast<TRasterFx *>(zcolfx->getZeraryFx());
   }
 
   if (fx->isCacheEnabled()) return;  // Already done
@@ -75,7 +75,7 @@ void enableCacheOnAllowedChildren(TRasterFx *fx) {
     }
   }
 }
-}  // local namespace
+}  // namespace
 
 //******************************************************************************************
 //    CacheFxCommand implementation

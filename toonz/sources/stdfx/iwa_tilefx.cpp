@@ -266,7 +266,7 @@ bool Iwa_TileFx::checkIfThisTileShouldBeComptedOrNot(int horizIndex,
 //------------------------------------------------------------------------------
 //! Make the tile of the image contained in \b inputTile in \b tile
 /*
-*/
+ */
 void Iwa_TileFx::makeTile(const TTile &inputTile, const TTile &tile) {
   tile.getRaster()->clear();
 

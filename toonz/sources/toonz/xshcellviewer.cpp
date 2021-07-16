@@ -2902,9 +2902,8 @@ void CellArea::mouseMoveEvent(QMouseEvent *event) {
       double e0, e1;
       int rh0, rh1;
       if (pegbar->getKeyframeSpan(row, r0, e0, r1, e1) &&
-          getEaseHandles(
-              r0, r1, e0, e1, rh0,
-              rh1)) {  // triangles in the segment between key frames
+          getEaseHandles(r0, r1, e0, e1, rh0,
+                         rh1)) {  // triangles in the segment between key frames
         if (rh0 == row)
           m_tooltip = tr("Click and drag to set the acceleration range");
         else if (rh1 == row)

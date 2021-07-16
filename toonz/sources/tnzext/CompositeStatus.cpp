@@ -14,9 +14,9 @@ namespace ToonzExt {
 
 //---------------------------------------------------------------------------
 /**
-   *@class CompositeStatus
-   *@brief This class maintains internal data for Dragger manipulator.
-   */
+ *@class CompositeStatus
+ *@brief This class maintains internal data for Dragger manipulator.
+ */
 CompositeStatus::CompositeStatus()
     : dbImpl_(new std::map<std::string, CompositeStatus *>), db_(*dbImpl_) {}
 
@@ -67,4 +67,4 @@ CompositeStatus *CompositeStatus::find(const std::string &name) const {
 }
 
 //---------------------------------------------------------------------------
-}
+}  // namespace ToonzExt

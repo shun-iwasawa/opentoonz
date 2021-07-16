@@ -23,7 +23,7 @@ namespace DVGui {
 class MeasuredDoubleField;
 class DoubleLineEdit;
 class IntLineEdit;
-}
+}  // namespace DVGui
 
 class QPushButton;
 

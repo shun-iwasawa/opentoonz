@@ -28,8 +28,8 @@
 namespace ToonzExt {
 
 /**
-   * This class maintains internal data for Dragger manipulator.
-   */
+ * This class maintains internal data for Dragger manipulator.
+ */
 class DVAPI CompositeStatus {
 private:
   std::map<std::string, CompositeStatus *> *dbImpl_;
@@ -52,5 +52,5 @@ public:
 };
 
 //---------------------------------------------------------------------------
-}
+}  // namespace ToonzExt
 #endif /* COMPOSITESTATUS_H */

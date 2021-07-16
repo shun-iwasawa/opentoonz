@@ -108,6 +108,6 @@ DVAPI void paintImage(const TImageP &image, const TDimension &imageSize,
                       const VisualSettings &visualSettings,
                       const CompareSettings &compareSettings,
                       const TRect &loadbox);
-}
+}  // namespace ImagePainter
 
 #endif  // IMAGEPAINTER_H

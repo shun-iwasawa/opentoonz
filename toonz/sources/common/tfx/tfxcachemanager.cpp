@@ -35,7 +35,7 @@ QString prefixErr("#error.txt | ");
 QString prefixTest("#TestRun.txt | ");
 QString prefixComp("#Computing.txt | ");
 QString prefixSubTiles("#SubTiles.txt | ");
-}
+}  // namespace
 
 #endif  // DIAGNOSTICS
 
@@ -111,7 +111,7 @@ inline bool contains(const QRegion &region, const TRect &rect) {
 bool getTilesToBuild(
     const ResourceData &data, const TRectD &rect,
     std::vector<ResourceDeclaration::TileData *> &rectsToCalculate);
-}
+}  // namespace
 
 //****************************************************************************************************
 //    TFxCacheManager Generator

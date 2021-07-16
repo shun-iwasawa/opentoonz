@@ -143,7 +143,7 @@ public:
 class ImageBuilder {
 public:
   virtual ~ImageBuilder() {}
-  virtual ImageBuilder *clone() = 0;
+  virtual ImageBuilder *clone()                               = 0;
   virtual TImageP build(ImageInfo *info, const TRasterP &ras) = 0;
 };
 
@@ -778,7 +778,7 @@ inline TINT32 hasExternalReferences(const TImageP &img) {
 
   return std::max(refCount, img->getRefCount()) > 1;
 }
-}
+}  // namespace
 //------------------------------------------------------------------------------
 
 void TImageCache::Imp::doCompress() {
@@ -825,7 +825,7 @@ void TImageCache::Imp::doCompress() {
       item->m_cantCompress = true;
       CacheItemP newItem   = new CompressedOnMemoryCacheItem(
           item->getImage());  // WARNING the codec buffer allocation can CHANGE
-                              // the cache.
+                                // the cache.
       item->m_cantCompress = false;
       if (newItem->getSize() ==
           0)  /// non c'era memoria sufficiente per il buffer compresso....
@@ -916,7 +916,7 @@ void TImageCache::Imp::doCompress(std::string id) {
   item->m_cantCompress = true;  // ??
   CacheItemP newItem   = new CompressedOnMemoryCacheItem(
       item->getImage());  // WARNING the codec buffer  allocation can CHANGE the
-                          // cache.
+                            // cache.
   item->m_cantCompress = false;  // ??
   if (newItem->getSize() ==
       0)  /// non c'era memoria sufficiente per il buffer compresso....
@@ -1058,7 +1058,7 @@ namespace {
 
 int check       = 0;
 const int magic = 123456;
-}
+}  // namespace
 
 static TImageCache *CacheInstance = 0;
 
@@ -1361,7 +1361,7 @@ void TImageCache::remapIcons(const std::string &dstId,
   int j              = (int)prefix.length();
   for (it = m_imp->m_uncompressedItems.begin();
        it != m_imp->m_uncompressedItems.end(); ++it) {
-    std::string id                      = it->first;
+    std::string id = it->first;
     if (id.find(prefix) == 0) table[id] = dstId + ":" + id.substr(j);
   }
   for (std::map<std::string, std::string>::iterator it2 = table.begin();
@@ -1767,7 +1767,7 @@ public:
     return oldValue + item.second->getSize();
   }
 };
-}
+}  // namespace
 
 UINT TImageCache::getMemUsage() const {
   TThread::MutexLocker sl(&m_imp->m_mutex);

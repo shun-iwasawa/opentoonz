@@ -169,10 +169,10 @@ public:
       /*: m_w(-1.0)
 , m_s(NULL)
 , m_index(0)*/
-      : m_edge(),
-        m_nextIntersection(nextIntersection),
-        m_nextStroke(nextStroke),
-        m_visited(false)
+      : m_edge()
+      , m_nextIntersection(nextIntersection)
+      , m_nextStroke(nextStroke)
+      , m_visited(false)
   //, m_dead(false)
   {}
 
@@ -268,7 +268,7 @@ T *VIList<T>::erase(T *element) {
 template <class T>
 T *VIList<T>::getElemAt(int pos) {
   assert(pos < m_size);
-  T *p            = m_begin;
+  T *p = m_begin;
   while (pos--) p = p->next();
   return p;
 }
@@ -423,9 +423,8 @@ static void cleanIntersectionMarks(const VIList<Intersection> &interList) {
   IntersectedStroke *q;
   for (p = interList.first(); p; p = p->next())
     for (q = p->m_strokeList.first(); q; q = q->next()) {
-      q->m_visited =
-          false;  // Ogni ramo della lista viene messo nella condizione
-                  // di poter essere visitato
+      q->m_visited = false;  // Ogni ramo della lista viene messo nella
+                             // condizione di poter essere visitato
 
       if (q->m_nextIntersection) {
         q->m_nextIntersection = 0;
@@ -582,7 +581,7 @@ void TVectorImage::Imp::doEraseIntersection(int index,
           removeAutocloses = true;
         else
           deleteIt = is.m_edge.m_s;
-        p2         = eraseBranch(p1, p2);
+        p2 = eraseBranch(p1, p2);
       } else
         p2 = p2->next();
       // checkInterList(interList);
@@ -604,8 +603,8 @@ void TVectorImage::Imp::doEraseIntersection(int index,
   }
 
   if (deleteIt) {
-	  m_intersectionData->m_autocloseMap.erase(index);
-	  delete deleteIt;
+    m_intersectionData->m_autocloseMap.erase(index);
+    delete deleteIt;
   }
 }
 
@@ -669,8 +668,8 @@ UINT TVectorImage::Imp::getFillData(std::unique_ptr<IntersectionBranch[]> &v) {
     }
   }
 
-// for (UINT i=0; i<count; i++)
-//  assert(v[i].m_nextBranch != std::numeric_limits<UINT>::max());
+  // for (UINT i=0; i<count; i++)
+  //  assert(v[i].m_nextBranch != std::numeric_limits<UINT>::max());
 
 #ifdef _DEBUG
 /*ofstream of("C:\\temp\\fillDataOut.txt");
@@ -876,7 +875,7 @@ assert(v[b.m_nextBranch].m_nextBranch==i);
       if (!p2->m_edge.m_s && p2->m_edge.m_index < 0) {
         VIStroke *vs = m_intersectionData->m_autocloseMap[p2->m_edge.m_index];
         if (vs) {
-			p2->m_edge.m_s =
+          p2->m_edge.m_s =
               m_intersectionData->m_autocloseMap[p2->m_edge.m_index]->m_s;
 
           // TEdge& e = it2->m_edge;
@@ -1279,10 +1278,11 @@ static bool makeIntersection(IntersectionData &intData,
   if (areAlmostEqual(crossVal, 0.0)) {
     bool endpoint1 = (item1.m_edge.m_w0 == 0.0 || item1.m_edge.m_w0 == 1.0);
     bool endpoint2 = (item2.m_edge.m_w0 == 0.0 || item2.m_edge.m_w0 == 1.0);
-    if (endpoint1 && endpoint2 && ((p0.x * p1.x >= 0 && p0.y * p1.y >= 0 &&
-                                    item1.m_edge.m_w0 != item2.m_edge.m_w0) ||
-                                   (p0.x * p1.x <= 0 && p0.y * p1.y <= 0 &&
-                                    item1.m_edge.m_w0 == item2.m_edge.m_w0)))
+    if (endpoint1 && endpoint2 &&
+        ((p0.x * p1.x >= 0 && p0.y * p1.y >= 0 &&
+          item1.m_edge.m_w0 != item2.m_edge.m_w0) ||
+         (p0.x * p1.x <= 0 && p0.y * p1.y <= 0 &&
+          item1.m_edge.m_w0 == item2.m_edge.m_w0)))
     // due endpoint a 180 gradi;metto
     {
       item1.m_gettingOut = (item1.m_edge.m_w0 == 0.0);
@@ -1403,9 +1403,9 @@ static bool addAutocloseIntersection(IntersectionData &intData,
       const TThickQuadratic *q = s[i]->m_s->getChunk(0);
 
       if ((areAlmostEqual(q->getP0(), v[0], 1e-2) &&
-              areAlmostEqual(q->getP2(), v[1], 1e-2)) ||
+           areAlmostEqual(q->getP2(), v[1], 1e-2)) ||
           (areAlmostEqual(q->getP0(), v[1], 1e-2) &&
-              areAlmostEqual(q->getP2(), v[0], 1e-2))) {
+           areAlmostEqual(q->getP2(), v[0], 1e-2))) {
         return true;
         addIntersection(intData, s, i, ii, DoublePair(0.0, w0), strokeSize,
                         isVectorized);
@@ -1562,9 +1562,8 @@ for (int i = 0; i < numChunks; i++) {
     lastIsY = true;
 
   } else if ((q->getP0().x < q->getP1().x &&
-              q->getP2().x <
-                  q->getP1()
-                      .x) ||  // la quadratica ha un minimo o massimo relativo
+              q->getP2().x < q->getP1().x) ||  // la quadratica ha un minimo o
+                                               // massimo relativo
              (q->getP0().x > q->getP1().x && q->getP2().x > q->getP1().x)) {
     double w = getWfromChunkAndT(s, isBegin ? i : numChunks - 1 - i,
                                  isBegin ? 1.0 : 0.0);
@@ -1832,7 +1831,7 @@ void getClosingSegments(TL2LAutocloser &l2lautocloser, double facMin,
   }
 }
 
-}  // namaspace
+}  // namespace
 
 //---------------------------------------------------------------------------------
 
@@ -1868,9 +1867,8 @@ void getClosingPoints(const TRectD &rect, double fac, const TVectorImageP &vi,
               (s2->getMaxThickness() > 0 ? s2->getMaxThickness() : 2.5) +
           fac;
 
-      if (i != j &&
-          !s1->getBBox().enlarge(enlarge1).overlaps(
-              s2->getBBox().enlarge(enlarge2)))
+      if (i != j && !s1->getBBox().enlarge(enlarge1).overlaps(
+                        s2->getBBox().enlarge(enlarge2)))
         continue;
 
       vector<std::pair<double, double>> segments;
@@ -2494,7 +2492,7 @@ static TRegion *findRegion(VIList<Intersection> &intList, Intersection *p1,
         currStyle = p2->m_edge.m_styleId;
       else if (p2->m_edge.m_styleId != currStyle) {
         currStyle = p2->m_edge.m_styleId;
-        for (UINT i                = 0; i < r->getEdgeCount(); i++)
+        for (UINT i = 0; i < r->getEdgeCount(); i++)
           r->getEdge(i)->m_styleId = currStyle;
       }
     } else
@@ -3008,7 +3006,7 @@ inline TGroupId getGroupId(TRegion *r, const std::vector<VIStroke *> &strokes) {
       return strokes[r->getEdge(i)->m_index]->m_groupId;
   return TGroupId();
 }
-}
+}  // namespace
 
 //------------------------------------------------------------
 
@@ -3065,7 +3063,7 @@ void TVectorImage::replaceStroke(int index, TStroke *newStroke) {
   IntersectedStroke *p2;
 
   for (p1 = m_imp->m_intersectionData->m_intList.first(); p1; p1 = p1->next())
-    for (p2 = (*p1).m_strokeList.first(); p2; p2      = p2->next())
+    for (p2 = (*p1).m_strokeList.first(); p2; p2 = p2->next())
       if (p2->m_edge.m_index == index) p2->m_edge.m_s = newStroke;
 }
 
@@ -3312,7 +3310,7 @@ struct TDeleteMapFunctor {
 };
 
 IntersectionData::~IntersectionData() {
-	std::for_each(m_autocloseMap.begin(), m_autocloseMap.end(),
+  std::for_each(m_autocloseMap.begin(), m_autocloseMap.end(),
                 TDeleteMapFunctor());
 }
 //-----------------------------------------------------------------------------

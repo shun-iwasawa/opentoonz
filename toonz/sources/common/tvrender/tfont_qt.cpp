@@ -173,10 +173,10 @@ TPoint TFont::drawChar(QImage &outImage, TPoint &unused, wchar_t charcode,
   // Bug 3604: https://github.com/opentoonz/opentoonz/issues/3604
 #ifdef Q_OS_UNIX
   if (chars[0] == L' ') {
-      outImage = QImage(raw.averageCharWidth(), raw.ascent() + raw.descent(),
-                        QImage::Format_Grayscale8);
-      outImage.fill(255);
-      return getDistance(charcode, nextCharCode);
+    outImage = QImage(raw.averageCharWidth(), raw.ascent() + raw.descent(),
+                      QImage::Format_Grayscale8);
+    outImage.fill(255);
+    return getDistance(charcode, nextCharCode);
   }
 #endif
 

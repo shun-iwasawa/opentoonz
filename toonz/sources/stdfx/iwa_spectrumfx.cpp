@@ -39,9 +39,9 @@ void Iwa_SpectrumFx::calcBubbleMap(float3 *bubbleColor, double frame,
   float rgbGamma[3]     = {(float)m_RGamma->getValue(frame),
                        (float)m_GGamma->getValue(frame),
                        (float)m_BGamma->getValue(frame)};
-  float lensFactor = (float)m_lensFactor->getValue(frame);
-  float shift      = (float)m_spectrumShift->getValue(frame);
-  float fadeWidth  = (float)m_loopSpectrumFadeWidth->getValue(frame) / 2.0f;
+  float lensFactor      = (float)m_lensFactor->getValue(frame);
+  float shift           = (float)m_spectrumShift->getValue(frame);
+  float fadeWidth = (float)m_loopSpectrumFadeWidth->getValue(frame) / 2.0f;
 
   /* for Iwa_SpectrumFx, incident angle is fixed to 0,
      for Iwa_SoapBubbleFx, compute for all discrete incident angles*/

@@ -234,7 +234,7 @@ int read_bmp_line(FILE *fp, void *line_buffer, UINT w, UINT row, UCHAR **map,
     CASE BMP_GREY16 : __OR BMP_CMAPPED16 : pad = ((w + 7) / 8) * 8;
     rv = load_lineBMP4(fp, pic, w, pad, map);
     CASE BMP_GREY16C : __OR BMP_CMAPPED16C
-                       : rv = load_lineBMPC4(fp, pic, w, row, map);
+        : rv = load_lineBMPC4(fp, pic, w, row, map);
     if (rv == -1)
       rv = 1;
     else if (rv == -2)
@@ -242,11 +242,11 @@ int read_bmp_line(FILE *fp, void *line_buffer, UINT w, UINT row, UCHAR **map,
     else if (rv == -3)
       rv = 0;
     else
-      rv                                         = 0;
+      rv = 0;
     CASE BMP_GREY256 : __OR BMP_CMAPPED256 : pad = ((w + 3) / 4) * 4;
     rv = load_lineBMP8(fp, pic, w, pad, map);
     CASE BMP_GREY256C : __OR BMP_CMAPPED256C
-                        : rv = load_lineBMPC8(fp, pic, w, row, map);
+        : rv = load_lineBMPC8(fp, pic, w, row, map);
     if (rv == -1)
       rv = 1;
     else if (rv == -2)
@@ -254,7 +254,7 @@ int read_bmp_line(FILE *fp, void *line_buffer, UINT w, UINT row, UCHAR **map,
     else if (rv == -3)
       rv = 0;
     else
-      rv               = 0;
+      rv = 0;
     CASE BMP_RGB : pad = (4 - ((w * 3) % 4)) & 0x03;
     rv                 = load_lineBMP24(fp, pic, w, pad);
   DEFAULT:
@@ -281,13 +281,13 @@ int write_bmp_line(FILE *fp, void *line_buffer, UINT w, UINT row, UCHAR *map,
     CASE BMP_GREY16 : __OR BMP_CMAPPED16 : pad = ((w + 7) / 8) * 8;
     rv = line_writeBMP4(fp, pic, w, pad, map);
     CASE BMP_GREY16C : __OR BMP_CMAPPED16C
-                       : rv = line_writeBMPC4(fp, pic, w, row, map);
+        : rv = line_writeBMPC4(fp, pic, w, row, map);
     CASE BMP_GREY256 : __OR BMP_CMAPPED256 : pad = ((w + 3) / 4) * 4;
     rv = line_writeBMP8(fp, pic, w, pad, map);
     CASE BMP_GREY256C : __OR BMP_CMAPPED256C
-                        : rv = line_writeBMPC8(fp, pic, w, row, map);
-    CASE BMP_RGB : pad       = (4 - ((w * 3) % 4)) & 0x03;
-    rv                       = line_writeBMP24(fp, p24, w, pad);
+        : rv           = line_writeBMPC8(fp, pic, w, row, map);
+    CASE BMP_RGB : pad = (4 - ((w * 3) % 4)) & 0x03;
+    rv                 = line_writeBMP24(fp, p24, w, pad);
   DEFAULT:
     break;
   }
@@ -506,7 +506,7 @@ static int img_read_bmp_generic(const MYSTRING fname, int type, IMAGE **pimg)
   if (hd->biSize != BMP_WIN_OS2_OLD) {
     /* skip ahead to colormap, using biSize */
     c = hd->biSize - 40; /* 40 bytes read from biSize to biClrImportant */
-    for (i    = 0; i < c; i++) getc(fp);
+    for (i = 0; i < c; i++) getc(fp);
     hd->biPad = hd->bfOffBits - (hd->biSize + 14);
   }
 
@@ -560,10 +560,10 @@ and the start of the actual bitmap data.
   /* load up the image */
   switch (hd->biBitCount) {
   case 1:
-    rv          = loadBMP1(fp, pic, hd->biWidth, hd->biHeight, r, g, b);
-    CASE 4 : rv = loadBMP4(fp, pic, hd->biWidth, hd->biHeight,
+    rv           = loadBMP1(fp, pic, hd->biWidth, hd->biHeight, r, g, b);
+    CASE 4 : rv  = loadBMP4(fp, pic, hd->biWidth, hd->biHeight,
                            hd->biCompression, r, g, b);
-    CASE 8 : rv = loadBMP8(fp, pic, hd->biWidth, hd->biHeight,
+    CASE 8 : rv  = loadBMP8(fp, pic, hd->biWidth, hd->biHeight,
                            hd->biCompression, r, g, b);
     CASE 24 : rv = loadBMP24(fp, pic, hd->biWidth, hd->biHeight);
   DEFAULT:
@@ -647,8 +647,7 @@ static int img_read_bmp_region(const MYSTRING fname, IMAGE **pimg, int x1,
        hd->biCompression != BMP_BI_RGB) ||
       (hd->biBitCount == 4 && hd->biCompression == BMP_BI_RLE8) ||
       (hd->biBitCount == 8 && hd->biCompression == BMP_BI_RLE4)) {
-    snprintf(buf, sizeof(buf),
-             "Bogus BMP File!  (bitCount=%d, Compression=%d)",
+    snprintf(buf, sizeof(buf), "Bogus BMP File!  (bitCount=%d, Compression=%d)",
              hd->biBitCount, hd->biCompression);
     bmp_error = UNSUPPORTED_BMP_FORMAT;
     goto ERROR;
@@ -669,7 +668,7 @@ static int img_read_bmp_region(const MYSTRING fname, IMAGE **pimg, int x1,
   if (hd->biSize != BMP_WIN_OS2_OLD) {
     /* skip ahead to colormap, using biSize */
     c = hd->biSize - 40; /* 40 bytes read from biSize to biClrImportant */
-    for (i    = 0; i < c; i++) getc(fp);
+    for (i = 0; i < c; i++) getc(fp);
     hd->biPad = hd->bfOffBits - (hd->biSize + 14);
   }
 
@@ -1043,11 +1042,11 @@ static int loadBMP4(FILE *fp, LPIXEL *pic, UINT w, UINT h, UINT comp, UCHAR *r,
         {
           for (i = 0; i < c; i++, x++, pp++) {
             if ((i & 1) == 0) c1 = getc(fp);
-            byte                 = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
-            pp->r                = r[byte];
-            pp->g                = g[byte];
-            pp->b                = b[byte];
-            pp->m                = 255;
+            byte  = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
+            pp->r = r[byte];
+            pp->g = g[byte];
+            pp->b = b[byte];
+            pp->m = 255;
           }
           if (((c & 3) == 1) || ((c & 3) == 2)) /* read pad byte */
             getc(fp);
@@ -1121,13 +1120,13 @@ int load_lineBMPC4(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
   LPIXEL *pp;
 
   /*
-*  Codici di ritorno:
-*
-*     -1:   incontrata la file del file       (EOF)
-*     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
-*     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
-*    altro:   incontrato un delta               (Escape code 0x00 0x02)
-*/
+   *  Codici di ritorno:
+   *
+   *     -1:   incontrata la file del file       (EOF)
+   *     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
+   *     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
+   *    altro:   incontrato un delta               (Escape code 0x00 0x02)
+   */
 
   /* initialize some variables */
   x  = 0;
@@ -1166,11 +1165,11 @@ int load_lineBMPC4(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
       {
         for (i = 0; i < c; i++, x++, pp++) {
           if ((i & 1) == 0) c1 = getc(fp);
-          byte                 = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
-          pp->r                = map[0][byte];
-          pp->g                = map[1][byte];
-          pp->b                = map[2][byte];
-          pp->m                = 255;
+          byte  = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
+          pp->r = map[0][byte];
+          pp->g = map[1][byte];
+          pp->b = map[2][byte];
+          pp->m = 255;
         }
         if (((c & 3) == 1) || ((c & 3) == 2)) /* read pad byte */
           getc(fp);
@@ -1245,7 +1244,7 @@ static int loadBMP8(FILE *fp, LPIXEL *pic, UINT w, UINT h, UINT comp, UCHAR *r,
 #else
       pp = pic + (i * w);
       for (j = 0; j < padw; j++) {
-        c                     = getc(fp);
+        c = getc(fp);
         if ((int)c == EOF) rv = 1;
         if (j < w) {
           pp->r = r[c];
@@ -1392,13 +1391,13 @@ int load_lineBMPC8(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
   LPIXEL *pp;
 
   /*
-*  Codici di ritorno:
-*
-*     -1:   incontrata la file del file       (EOF)
-*     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
-*     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
-*  altro:   incontrato un delta               (Escape code 0x00 0x02)
-*/
+   *  Codici di ritorno:
+   *
+   *     -1:   incontrata la file del file       (EOF)
+   *     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
+   *     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
+   *  altro:   incontrato un delta               (Escape code 0x00 0x02)
+   */
 
   x  = 0;
   pp = pic;
@@ -1632,8 +1631,8 @@ int img_write_bmp(const MYSTRING fname, IMAGE *img)
   case BMP_BW:
     __OR BMP_GREY16 : __OR BMP_GREY16C :
 
-                      __OR BMP_CMAPPED256 : __OR BMP_CMAPPED256C
-                                            : return UNSUPPORTED_BMP_FORMAT;
+        __OR BMP_CMAPPED256 : __OR BMP_CMAPPED256C
+        : return UNSUPPORTED_BMP_FORMAT;
     CASE BMP_GREY256 : __OR BMP_GREY256C : nbits = 8;
     CASE BMP_RGB : nbits                         = 24;
   DEFAULT:

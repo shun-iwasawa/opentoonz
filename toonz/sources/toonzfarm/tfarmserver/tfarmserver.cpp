@@ -67,8 +67,8 @@ TFilePath getGlobalRoot() {
 // Leggo la localRoot da File txt
 #ifdef MACOSX
   // If MACOSX, change to MACOSX path
-  std::string unixpath = "./" + tver.getAppName() +
-                         ".app/Contents/Resources/configfarmroot.txt";
+  std::string unixpath =
+      "./" + tver.getAppName() + ".app/Contents/Resources/configfarmroot.txt";
 #else
   // set path to something suitable for most linux (Unix?) systems
   std::string unixpath = "/etc/" + tver.getAppName() + "/opentoonz.conf";
@@ -111,12 +111,13 @@ TFilePath getLocalRoot() {
 #else
 #ifdef MACOSX
   // If MACOSX, change to MACOSX path
-  std::string unixpath = "./" + tver.getAppName() + 
-                         ".app/Contents/Resources/configfarmroot.txt";
+  std::string unixpath =
+      "./" + tver.getAppName() + ".app/Contents/Resources/configfarmroot.txt";
 #else
   // set path to something suitable for most linux (Unix?) systems
 #ifdef FREEBSD
-  std::string unixpath = "/usr/local/etc/" + tver.getAppName() + "/opentoonz.conf";
+  std::string unixpath =
+      "/usr/local/etc/" + tver.getAppName() + "/opentoonz.conf";
 #else
   std::string unixpath = "/etc/" + tver.getAppName() + "/opentoonz.conf";
 #endif
@@ -661,7 +662,7 @@ void FarmServer::queryHwInfo(HwInfo &hwInfo) {
 #ifdef __sgi
   hwInfo.m_type         = Irix;
 #else
-  hwInfo.m_type         = Linux;
+  hwInfo.m_type = Linux;
 #endif
 #endif
 }
@@ -705,7 +706,7 @@ std::string getLine(std::istream &is) {
           out.append(1, c);
         } else {
           break;
-	}
+        }
       } else {
         break;
       }

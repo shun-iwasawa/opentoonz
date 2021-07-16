@@ -61,7 +61,7 @@ SpectrumBar::~SpectrumBar() {}
 
 //-----------------------------------------------------------------------------
 /*! Return current key position.
-*/
+ */
 int SpectrumBar::getCurrentPos() {
   if (m_currentKeyIndex == -1) return -1;
   return spectrumValueToPos(m_spectrum.getKey(m_currentKeyIndex).first);
@@ -69,7 +69,7 @@ int SpectrumBar::getCurrentPos() {
 
 //-----------------------------------------------------------------------------
 /*! Return current key color.
-*/
+ */
 TPixel32 SpectrumBar::getCurrentColor() {
   if (m_currentKeyIndex == -1)  // C'e' sicuramente una key perche' lo spectrum
                                 // e' strutturato in modo da non avere mai size
@@ -116,7 +116,7 @@ void SpectrumBar::setCurrentPos(int pos, bool isDragging) {
 
 //-----------------------------------------------------------------------------
 /*! Set current key color to \b color.  Update spectrum bar.
-*/
+ */
 void SpectrumBar::setCurrentColor(const TPixel32 &color) {
   if (m_currentKeyIndex == -1) return;
   TSpectrum::ColorKey key = m_spectrum.getKey(m_currentKeyIndex);
@@ -129,14 +129,14 @@ void SpectrumBar::setCurrentColor(const TPixel32 &color) {
 
 //-----------------------------------------------------------------------------
 /*! Return spectrum value from widget position \b pos.
-*/
+ */
 double SpectrumBar::posToSpectrumValue(int pos) {
   return (double)(pos - m_x0) / (double)(width() - 2 * m_x0 - 1);
 }
 
 //-----------------------------------------------------------------------------
 /*! Return widget position from spectrum value \b spectrumValue.
-*/
+ */
 int SpectrumBar::spectrumValueToPos(double spectrumValue) {
   return m_x0 + int(0.5 + spectrumValue * (width() - 2 * m_x0));
 }
@@ -257,7 +257,7 @@ void SpectrumBar::mouseReleaseEvent(QMouseEvent *e) {
 
 //-----------------------------------------------------------------------------
 /*! Return index of key with maximum position.
-*/
+ */
 int SpectrumBar::getMaxPosKeyIndex() {
   int spectrumSize = m_spectrum.getKeyCount();
   if (!spectrumSize) return -1;
@@ -276,7 +276,7 @@ int SpectrumBar::getMaxPosKeyIndex() {
 
 //-----------------------------------------------------------------------------
 /*! Return index of key with minimum position.
-*/
+ */
 int SpectrumBar::getMinPosKeyIndex() {
   int spectrumSize = m_spectrum.getKeyCount();
   if (!spectrumSize) return -1;
@@ -353,7 +353,7 @@ SpectrumField::SpectrumField(QWidget *parent, TPixel32 color)
 
 //-----------------------------------------------------------------------------
 /*! Update all widget and emit keyPositionChanged() signal.
-*/
+ */
 void SpectrumField::onCurrentPosChanged(bool isDragging) {
   if (m_spectrumbar->getCurrentKeyIndex() == -1) return;
   update();
@@ -362,7 +362,7 @@ void SpectrumField::onCurrentPosChanged(bool isDragging) {
 
 //-----------------------------------------------------------------------------
 /*! Set color field to spectrum current key color and update.
-*/
+ */
 void SpectrumField::onCurrentKeyChanged() {
   if (m_spectrumbar->getCurrentKeyIndex() != -1)
     m_colorField->setColor(m_spectrumbar->getCurrentColor());
@@ -371,7 +371,7 @@ void SpectrumField::onCurrentKeyChanged() {
 
 //-----------------------------------------------------------------------------
 /*! Set spectrum current key color to \b color and emit keyColorChanged().
-*/
+ */
 void SpectrumField::onColorChanged(const TPixel32 &color, bool isDragging) {
   m_spectrumbar->setCurrentColor(color);
   emit keyColorChanged(isDragging);
@@ -379,7 +379,7 @@ void SpectrumField::onColorChanged(const TPixel32 &color, bool isDragging) {
 
 //-----------------------------------------------------------------------------
 /*! Paint an arrow to connect current spectrum key and square color field.
-*/
+ */
 void SpectrumField::paintEvent(QPaintEvent *e) {
   int curPos = m_spectrumbar->getCurrentPos();
   if (curPos == -1) return;

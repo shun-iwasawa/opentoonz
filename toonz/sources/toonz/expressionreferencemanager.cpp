@@ -772,7 +772,8 @@ void ExpressionReferenceManager::transferReference(
 
   // 1. create 3 tables for replacing; column indices, parameter pointers, and
   // expression texts. Note that moving columns in the same xsheet does not need
-  // to replace the parameter pointers since they are swapped along with columns.
+  // to replace the parameter pointers since they are swapped along with
+  // columns.
   QMap<int, int> colIdReplaceTable;
   QMap<TDoubleParam*, TDoubleParam*> curveReplaceTable;
   std::map<std::string, std::string> exprReplaceTable;

@@ -598,7 +598,7 @@ static inline void get_flt_fun_rad(TRop::ResampleFilterType flt_type,
     break;
   }
   if (flt_fun) *flt_fun = fun;
-  flt_rad               = rad;
+  flt_rad = rad;
 }
 
 //---------------------------------------------------------------------------
@@ -624,9 +624,9 @@ static FILTER *create_filter(TRop::ResampleFilterType flt_type, double blur,
     nodedist_u = blur; /* magnification */
   else
     nodedist_u = du_dx * blur; /* minification */
-  rad_u        = flt_rad * nodedist_u;
-  rad_x        = rad_u * dx_du;
-  nodefreq_u   = 1 / nodedist_u;
+  rad_u      = flt_rad * nodedist_u;
+  rad_x      = rad_u * dx_du;
+  nodefreq_u = 1 / nodedist_u;
   /*
 mu = lu - 1;
 */
@@ -658,11 +658,11 @@ NOT_MORE_THAN(mu, uhi)
         if (f->w[uhi]) break;
       if (ulo < ulomin) ulomin = ulo;
       if (uhi > uhimax) uhimax = uhi;
-      n                        = uhi - ulo + 1;
-      if (n > nmax) nmax       = n;
-      f->first                 = ulo;
-      f->last                  = uhi;
-      norm                     = 1 / sum;
+      n = uhi - ulo + 1;
+      if (n > nmax) nmax = n;
+      f->first = ulo;
+      f->last  = uhi;
+      norm     = 1 / sum;
       for (u = ulo; u <= uhi; u++) f->w[u] *= (float)norm;
     } else {
       f->w_base = 0;
@@ -1691,9 +1691,9 @@ static void get_prow_gr8(const TRasterGR8P &rin, double a11, double a12,
       prow[p] = (float)troundp(
           fu * gv *
               (((UINT)(u + 1) < lu && (UINT)v < lv) ? in_gr8[du] : BORDER) +
-          fu * fv * (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv)
-                         ? in_gr8[du + dv]
-                         : BORDER) +
+          fu * fv *
+              (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv) ? in_gr8[du + dv]
+                                                          : BORDER) +
           gu * gv * (((UINT)u < lu && (UINT)v < lv) ? in_gr8[0] : BORDER) +
           gu * fv *
               (((UINT)u < lu && (UINT)(v + 1) < lv) ? in_gr8[dv] : BORDER));
@@ -1714,9 +1714,9 @@ static void get_prow_gr8(const TRasterGR8P &rin, double a11, double a12,
       prow[p] = (float)troundp(
           fu * gv *
               (((UINT)(u + 1) < lu && (UINT)v < lv) ? in_gr8[du] : BORDER) +
-          fu * fv * (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv)
-                         ? in_gr8[du + dv]
-                         : BORDER) +
+          fu * fv *
+              (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv) ? in_gr8[du + dv]
+                                                          : BORDER) +
           gu * gv * (((UINT)u < lu && (UINT)v < lv) ? in_gr8[0] : BORDER) +
           gu * fv *
               (((UINT)u < lu && (UINT)(v + 1) < lv) ? in_gr8[dv] : BORDER));
@@ -1789,14 +1789,16 @@ static void get_prow_gr8(const TRaster32P &rin, double a11, double a12,
       gv      = 1. - fv;
       in_32   = bufin_32 + (u * du + v * dv);
       prow[p] = (float)troundp(
-          fu * gv * (((UINT)(u + 1) < lu && (UINT)v < lv) ? grey(in_32[du])
+          fu * gv *
+              (((UINT)(u + 1) < lu && (UINT)v < lv) ? grey(in_32[du])
+                                                    : BORDER) +
+          fu * fv *
+              (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv) ? grey(in_32[du + dv])
                                                           : BORDER) +
-          fu * fv * (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv)
-                         ? grey(in_32[du + dv])
-                         : BORDER) +
           gu * gv * (((UINT)u < lu && (UINT)v < lv) ? grey(in_32[0]) : BORDER) +
-          gu * fv * (((UINT)u < lu && (UINT)(v + 1) < lv) ? grey(in_32[dv])
-                                                          : BORDER));
+          gu * fv *
+              (((UINT)u < lu && (UINT)(v + 1) < lv) ? grey(in_32[dv])
+                                                    : BORDER));
     }
   p1 = p;
   for (p = pmax; p > p1; p--)
@@ -1812,14 +1814,16 @@ static void get_prow_gr8(const TRaster32P &rin, double a11, double a12,
       gv      = 1. - fv;
       in_32   = bufin_32 + (u * du + v * dv);
       prow[p] = (float)troundp(
-          fu * gv * (((UINT)(u + 1) < lu && (UINT)v < lv) ? grey(in_32[du])
+          fu * gv *
+              (((UINT)(u + 1) < lu && (UINT)v < lv) ? grey(in_32[du])
+                                                    : BORDER) +
+          fu * fv *
+              (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv) ? grey(in_32[du + dv])
                                                           : BORDER) +
-          fu * fv * (((UINT)(u + 1) < lu && (UINT)(v + 1) < lv)
-                         ? grey(in_32[du + dv])
-                         : BORDER) +
           gu * gv * (((UINT)u < lu && (UINT)v < lv) ? grey(in_32[0]) : BORDER) +
-          gu * fv * (((UINT)u < lu && (UINT)(v + 1) < lv) ? grey(in_32[dv])
-                                                          : BORDER));
+          gu * fv *
+              (((UINT)u < lu && (UINT)(v + 1) < lv) ? grey(in_32[dv])
+                                                    : BORDER));
     }
   p2 = p;
   for (p = p1; p <= p2; p++)
@@ -1948,7 +1952,7 @@ TCALLOC (colval,    lu);*/
           flatcols = 1;
       else
         flatcols = 0;
-      flatval    = colval[u];
+      flatval = colval[u];
       if (flatcols >= flatdiamu) {
 #ifdef VECCHIA_MANIERA
         x_  = AFF_M_V_1(aff, u - flatradu, v - flatradv);
@@ -1967,7 +1971,7 @@ TCALLOC (colval,    lu);*/
         ylo = std::max(0, (int)ylo_);
         yhi = std::min(my, (int)yhi_);
         for (y = ylo; y <= yhi; y++)
-          for (x                        = xlo; x <= xhi; x++)
+          for (x = xlo; x <= xhi; x++)
             bufout_gr8[x + y * wrapout] = flatval, count++;
       }
       xlo_ += aff.a11;
@@ -2005,7 +2009,7 @@ TCALLOC (colval,    lu);*/
             nocheight[x] = 0;
       }
       if (topy < ly && colnoc[topy].first <= topq) {
-        for (x                                = 0; x < lx; x++)
+        for (x = 0; x < lx; x++)
           if (nocheight[x] < nocdiamy) xxx[x] = 1.0; /* 1.0 == calc */
       } else {
         for (x = 0; x < lx; x++) xxx[x] = 1.0; /* 1.0 == calc */
@@ -2020,7 +2024,7 @@ TCALLOC (colval,    lu);*/
         else {
           nocwidth++;
           if (nocwidth >= nocdiamx)
-            for (p    = rownoc[x].first; p <= rownoc[x].last; p++)
+            for (p = rownoc[x].first; p <= rownoc[x].last; p++)
               prow[p] = 1.0; /* 1.0 == nocalc */
         }
       get_prow_gr8(rin, invrot.a11, invrot.a12, invrot.a21, invrot.a22, pmin,
@@ -2157,7 +2161,7 @@ TCALLOC (colval,    lu);*/
           flatcols = 1;
       else
         flatcols = 0;
-      flatval    = colval[u];
+      flatval = colval[u];
       if (flatcols >= flatdiamu) {
 #ifdef VECCHIA_MANIERA
         x_  = AFF_M_V_1(aff, u - flatradu, v - flatradv);
@@ -2176,7 +2180,7 @@ TCALLOC (colval,    lu);*/
         ylo = std::max(0, (int)ylo_);
         yhi = std::min(my, (int)yhi_);
         for (y = ylo; y <= yhi; y++)
-          for (x                        = xlo; x <= xhi; x++)
+          for (x = xlo; x <= xhi; x++)
             bufout_gr8[x + y * wrapout] = flatval, count++;
       }
       xlo_ += aff.a11;
@@ -2214,7 +2218,7 @@ TCALLOC (colval,    lu);*/
             nocheight[x] = 0;
       }
       if (topy < ly && colnoc[topy].first <= topq) {
-        for (x                                = 0; x < lx; x++)
+        for (x = 0; x < lx; x++)
           if (nocheight[x] < nocdiamy) xxx[x] = 1.0; /* 1.0 == calc */
       } else {
         for (x = 0; x < lx; x++) xxx[x] = 1.0; /* 1.0 == calc */
@@ -2229,7 +2233,7 @@ TCALLOC (colval,    lu);*/
         else {
           nocwidth++;
           if (nocwidth >= nocdiamx)
-            for (p    = rownoc[x].first; p <= rownoc[x].last; p++)
+            for (p = rownoc[x].first; p <= rownoc[x].last; p++)
               prow[p] = 1.0; /* 1.0 == nocalc */
         }
       get_prow_gr8(rin, invrot.a11, invrot.a12, invrot.a21, invrot.a22, pmin,
@@ -2555,7 +2559,7 @@ void rop_resample_rgbm(TRasterPT<T> rout, const TRasterPT<T> &rin,
     if (min_pix_out_fg < min_filter_fg) {
       int delta = min_filter_fg - min_pix_out_fg;
 
-      for (f              = max_filter_fg; f >= min_filter_fg; f--)
+      for (f = max_filter_fg; f >= min_filter_fg; f--)
         filter[f + delta] = filter[f];
       filter += delta;
       for (f = min_filter_fg - 1; f >= min_pix_out_fg; f--) filter[f] = 0;
@@ -3014,7 +3018,7 @@ void do_resample(TRasterCM32P rout, const TRasterCM32P &rin,
         tone_tot                   = 0.0;
         some_pencil                = false;
         for (i = 0; i < 4; i++) {
-          tone                                        = tcm[i] & tone_mask;
+          tone = tcm[i] & tone_mask;
           if ((TUINT32)tone != tone_mask) some_pencil = true;
           tone_tot += tone * w[i];
           new_color_blob.val = tcm[i] & color_mask;
@@ -3059,8 +3063,8 @@ void do_resample(TRasterCM32P rout, const TRasterCM32P &rin,
                v * wrapin;  // Take the associated input pixel pointer
       tcm[0] = in_tcm[0];
       if (u < lu - 1 && v < lv - 1) {
-        // Also take their 4 next neighbours (we shall perform a kinf of bilinear
-        // interpolation)
+        // Also take their 4 next neighbours (we shall perform a kinf of
+        // bilinear interpolation)
         tcm[1] = in_tcm[1];
         tcm[2] = in_tcm[wrapin];
         tcm[3] = in_tcm[wrapin + 1];
@@ -3165,7 +3169,7 @@ void do_resample(TRasterCM32P rout, const TRasterCM32P &rin,
         tone_tot                   = 0.0;
         some_pencil                = false;
         for (i = 0; i < 4; i++) {
-          tone                                        = tcm[i] & tone_mask;
+          tone = tcm[i] & tone_mask;
           if ((TUINT32)tone != tone_mask) some_pencil = true;
           tone_tot += tone * w[i];
           new_color_blob.val = tcm[i] & color_mask;
@@ -3586,7 +3590,7 @@ void resample_main_cm32_rgbm_bigradius(
 
   std::vector<TPixel32> paints(colorCount);
   std::vector<TPixel32> inks(colorCount);
-  for (i      = 0; i < palette->getStyleCount(); i++)
+  for (i = 0; i < palette->getStyleCount(); i++)
     paints[i] = inks[i] =
         ::premultiply(palette->getStyle(i)->getAverageColor());
 
@@ -3775,7 +3779,7 @@ void resample_main_cm32_rgbm_bigradius(
 
   if (calc) delete[] calc;
 }
-}
+}  // namespace
 
 /*---------------------------------------------------------------------------*/
 
@@ -3871,7 +3875,7 @@ void resample_main_cm32_rgbm(TRasterPT<T> rout, const TRasterCM32P &rin,
 
   std::vector<TPixel32> paints(colorCount);
   std::vector<TPixel32> inks(colorCount);
-  for (i      = 0; i < palette->getStyleCount(); i++)
+  for (i = 0; i < palette->getStyleCount(); i++)
     paints[i] = inks[i] =
         ::premultiply(palette->getStyle(i)->getAverageColor());
 
@@ -4140,7 +4144,7 @@ resample_main_rgbm_bigradius<T>( rout, rin,
 
   std::vector<TPixel32> paints(colorCount);
   std::vector<TPixel32> inks(colorCount);
-  for (i      = 0; i < palette->getStyleCount(); i++)
+  for (i = 0; i < palette->getStyleCount(); i++)
     paints[i] = inks[i] =
         ::premultiply(palette->getStyle(i)->getAverageColor());
 
@@ -4585,7 +4589,7 @@ void rop_resample_rgbm_2(TRasterPT<T> rout, const TRasterCM32P &rin,
     if (min_pix_out_fg < min_filter_fg) {
       int delta = min_filter_fg - min_pix_out_fg;
 
-      for (f              = max_filter_fg; f >= min_filter_fg; f--)
+      for (f = max_filter_fg; f >= min_filter_fg; f--)
         filter[f + delta] = filter[f];
       filter += delta;
       for (f = min_filter_fg - 1; f >= min_pix_out_fg; f--) filter[f] = 0;

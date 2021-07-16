@@ -492,7 +492,7 @@ static int img_read_bmp_generic(const MYSTRING fname, int type, IMAGE **pimg)
   if (hd->biSize != BMP_WIN_OS2_OLD) {
     /* skip ahead to colormap, using biSize */
     c = hd->biSize - 40; /* 40 bytes read from biSize to biClrImportant */
-    for (i    = 0; i < c; i++) getc(fp);
+    for (i = 0; i < c; i++) getc(fp);
     hd->biPad = hd->bfOffBits - (hd->biSize + 14);
   }
 
@@ -643,8 +643,7 @@ static int img_read_bmp_region(const MYSTRING fname, IMAGE **pimg, int x1,
        hd->biCompression != BMP_BI_RGB) ||
       (hd->biBitCount == 4 && hd->biCompression == BMP_BI_RLE8) ||
       (hd->biBitCount == 8 && hd->biCompression == BMP_BI_RLE4)) {
-    snprintf(buf, sizeof(buf),
-             "Bogus BMP File!  (bitCount=%d, Compression=%d)",
+    snprintf(buf, sizeof(buf), "Bogus BMP File!  (bitCount=%d, Compression=%d)",
              hd->biBitCount, hd->biCompression);
     bmp_error = UNSUPPORTED_BMP_FORMAT;
     goto ERROR;
@@ -665,7 +664,7 @@ static int img_read_bmp_region(const MYSTRING fname, IMAGE **pimg, int x1,
   if (hd->biSize != BMP_WIN_OS2_OLD) {
     /* skip ahead to colormap, using biSize */
     c = hd->biSize - 40; /* 40 bytes read from biSize to biClrImportant */
-    for (i    = 0; i < c; i++) getc(fp);
+    for (i = 0; i < c; i++) getc(fp);
     hd->biPad = hd->bfOffBits - (hd->biSize + 14);
   }
 
@@ -1033,11 +1032,11 @@ static int loadBMP4(FILE *fp, LPIXEL *pic, UINT w, UINT h, UINT comp, UCHAR *r,
         {
           for (i = 0; i < c; i++, x++, pp++) {
             if ((i & 1) == 0) c1 = getc(fp);
-            byte                 = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
-            pp->r                = r[byte];
-            pp->g                = g[byte];
-            pp->b                = b[byte];
-            pp->m                = 255;
+            byte  = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
+            pp->r = r[byte];
+            pp->g = g[byte];
+            pp->b = b[byte];
+            pp->m = 255;
           }
           if (((c & 3) == 1) || ((c & 3) == 2)) /* read pad byte */
             getc(fp);
@@ -1114,13 +1113,13 @@ int load_lineBMPC4(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
   LPIXEL *pp;
 
   /*
-*  Codici di ritorno:
-*
-*     -1:   incontrata la file del file       (EOF)
-*     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
-*     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
-*    altro:   incontrato un delta               (Escape code 0x00 0x02)
-*/
+   *  Codici di ritorno:
+   *
+   *     -1:   incontrata la file del file       (EOF)
+   *     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
+   *     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
+   *    altro:   incontrato un delta               (Escape code 0x00 0x02)
+   */
 
   /* initialize some variables */
   x  = 0;
@@ -1159,11 +1158,11 @@ int load_lineBMPC4(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
       {
         for (i = 0; i < c; i++, x++, pp++) {
           if ((i & 1) == 0) c1 = getc(fp);
-          byte                 = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
-          pp->r                = map[0][byte];
-          pp->g                = map[1][byte];
-          pp->b                = map[2][byte];
-          pp->m                = 255;
+          byte  = (i & 1) ? (c1 & 0x0f) : ((c1 >> 4) & 0x0f);
+          pp->r = map[0][byte];
+          pp->g = map[1][byte];
+          pp->b = map[2][byte];
+          pp->m = 255;
         }
         if (((c & 3) == 1) || ((c & 3) == 2)) /* read pad byte */
           getc(fp);
@@ -1249,7 +1248,7 @@ static int loadBMP8(FILE *fp, LPIXEL *pic, UINT w, UINT h, UINT comp, UCHAR *r,
 #else
       pp = pic + (i * w);
       for (j = 0; j < padw; j++) {
-        c                     = getc(fp);
+        c = getc(fp);
         if ((int)c == EOF) rv = 1;
         if (j < w) {
           pp->r = r[c];
@@ -1399,13 +1398,13 @@ int load_lineBMPC8(FILE *fp, LPIXEL *pic, UINT w, UINT y, UCHAR **map)
   LPIXEL *pp;
 
   /*
-*  Codici di ritorno:
-*
-*     -1:   incontrata la file del file       (EOF)
-*     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
-*     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
-*  altro:   incontrato un delta               (Escape code 0x00 0x02)
-*/
+   *  Codici di ritorno:
+   *
+   *     -1:   incontrata la file del file       (EOF)
+   *     -2:   incontrata la fine della linea    (Escape code 0x00 0x00)
+   *     -3:   incontrata la fine dell' immagine (Escape code 0x00 0x01)
+   *  altro:   incontrato un delta               (Escape code 0x00 0x02)
+   */
 
   x  = 0;
   pp = pic;

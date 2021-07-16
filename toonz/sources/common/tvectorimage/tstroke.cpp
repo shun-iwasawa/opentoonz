@@ -276,9 +276,8 @@ void roundNegativeThickess(QuadStrokeChunkArray &v) {
         tempVectTQ[2]->setThickP2(TThickPoint(tempVectTQ[2]->getP2(), 0.0));
 
         copy(tempVectTQ.begin(), tempVectTQ.end(), back_inserter(protoStroke));
-        tempVectTQ
-            .clear();  // non serve una clearPointerArray perchè il possesso
-                       // va alla protoStroke
+        tempVectTQ.clear();  // non serve una clearPointerArray perchè il
+                             // possesso va alla protoStroke
       }
       break;
     case 2:
@@ -972,7 +971,7 @@ bool TStroke::Imp::retrieveChunkAndItsParamameterAtLength(double s, int &chunk,
     // estremi
     if (t == -1) {
       if (s <= m_partialLengthArray[controlPointOffset]) t = 0.0;
-      t                                                    = 1.0;
+      t = 1.0;
     }
 
     return false;
@@ -1267,7 +1266,7 @@ bool TStroke::getNearestW(const TPointD &p, double &outW, double &dist2,
                           bool checkBBox) const {
   double outT;
   int chunkIndex;
-  bool ret      = getNearestChunk(p, outT, chunkIndex, dist2, checkBBox);
+  bool ret = getNearestChunk(p, outT, chunkIndex, dist2, checkBBox);
   if (ret) outW = getW(chunkIndex, outT);
   return ret;
 }
@@ -2218,7 +2217,7 @@ void TStroke::split(double w, TStroke &f, TStroke &s) const {
     if (tq1->getLength() != 0.0 || w == 0.0 || vTQ.empty()) vTQ.push_back(tq1);
 
     // build a temp and swap
-    TStroke *ts1  = TStroke::create(vTQ);
+    TStroke *ts1 = TStroke::create(vTQ);
     if (!ts1) ts1 = new TStroke;
     ts1->swapGeometry(f);
 
@@ -2231,7 +2230,7 @@ void TStroke::split(double w, TStroke &f, TStroke &s) const {
 
     for (i = chunk + 1; i < getChunkCount(); ++i) vTQ.push_back(chunkArray[i]);
 
-    TStroke *ts2  = TStroke::create(vTQ);
+    TStroke *ts2 = TStroke::create(vTQ);
     if (!ts2) ts2 = new TStroke;
     ts2->swapGeometry(s);
 
@@ -2295,7 +2294,7 @@ void TStroke::transform(const TAffine &aff, bool doChangeThickness) {
     ref                  = transformQuad(aff, ref, doChangeThickness);
 
     if (doChangeThickness) {
-      double det                                     = aff.det();
+      double det = aff.det();
       if (det == 0) m_imp->m_negativeThicknessPoints = getControlPointCount();
       if (m_imp->m_maxThickness != -1) m_imp->m_maxThickness *= sqrt(fabs(det));
       // else if(det<0)
@@ -2452,10 +2451,10 @@ TThickPoint TStroke::getCentroid() const {
 
   if (totalLen == 0) return getControlPoint(0);
 
-  double step           = totalLen * 0.1;
-  double len            = 0;
+  double step = totalLen * 0.1;
+  double len  = 0;
   if (step > 10.0) step = 10.0;
-  int count             = 0;
+  int count = 0;
   TThickPoint point;
   for (; len <= totalLen; len += step) {
     count++;
@@ -2657,7 +2656,7 @@ bool greaterThanOneAndLesserThanZero(double val) {
   if (val > 1.0 || val < 0.0) return true;
   return false;
 }
-}
+}  // namespace
 
 //---------------------------------------------------------------------------
 
@@ -3063,7 +3062,7 @@ double computeMaxError3D(const TThickCubic &cubic,
     T3DPointD delta =
         thickPntTo3DPnt(cubic.getThickPoint(u[i])) - *(pointsArrayBegin + i);
 
-    double thick            = cubic.getThickPoint(u[i]).thick;
+    double thick = cubic.getThickPoint(u[i]).thick;
     if (thick <= 2.0) thick = 2.0;
 
     err = norm2(TPointD(delta.x, delta.y)) / thick;
@@ -3610,7 +3609,8 @@ TThickCubic *TCubicStroke::generateCubic3D(const T3DPointD pointsArrayBegin[],
 
   for (i = 0; i < size; i++) {
     const T3DPointD A[2] = {
-        tangentLeft * B1(uPrime[i]), tangentRight * B2(uPrime[i]),
+        tangentLeft * B1(uPrime[i]),
+        tangentRight * B2(uPrime[i]),
     };
 
     C[0][0] += A[0] * A[0];
@@ -3655,10 +3655,10 @@ TThickCubic *TCubicStroke::generateCubic3D(const T3DPointD pointsArrayBegin[],
   double thickmax = -(numeric_limits<double>::max)();
 
   for (i = 0; i < size; i++) {
-    if (pointsArrayBegin[i].x < xmin) xmin         = pointsArrayBegin[i].x;
-    if (pointsArrayBegin[i].x > xmax) xmax         = pointsArrayBegin[i].x;
-    if (pointsArrayBegin[i].y < ymin) ymin         = pointsArrayBegin[i].y;
-    if (pointsArrayBegin[i].y > ymax) ymax         = pointsArrayBegin[i].y;
+    if (pointsArrayBegin[i].x < xmin) xmin = pointsArrayBegin[i].x;
+    if (pointsArrayBegin[i].x > xmax) xmax = pointsArrayBegin[i].x;
+    if (pointsArrayBegin[i].y < ymin) ymin = pointsArrayBegin[i].y;
+    if (pointsArrayBegin[i].y > ymax) ymax = pointsArrayBegin[i].y;
     if (pointsArrayBegin[i].z < thickmin) thickmin = pointsArrayBegin[i].z;
     if (pointsArrayBegin[i].z > thickmax) thickmax = pointsArrayBegin[i].z;
   }

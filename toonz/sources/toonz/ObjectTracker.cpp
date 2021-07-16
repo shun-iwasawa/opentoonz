@@ -61,7 +61,7 @@ CObjectTracker::CObjectTracker(int imW, int imH, bool _colorimage,
     m_sTrackingObject.weights_background.reset();
 
   m_sTrackingObject.Status = false;
-  for (short j                         = 0; j < HISTOGRAM_LENGTH; j++)
+  for (short j = 0; j < HISTOGRAM_LENGTH; j++)
     m_sTrackingObject.initHistogram[j] = 0;
 };
 
@@ -232,12 +232,11 @@ void CObjectTracker::FindHistogram(TRaster32P *frame, float(*histogram),
         indice = 4096 * E + 256 * qR + 16 * qG + qB;
       }
 
-      histogram[indice] += 1 -
-                           (((m_sTrackingObject.X - x) / normx) *
-                                ((m_sTrackingObject.X - x) / normx) +
-                            ((m_sTrackingObject.Y - y) / normy) *
-                                ((m_sTrackingObject.Y - y) / normy)) /
-                               (h * h);
+      histogram[indice] += 1 - (((m_sTrackingObject.X - x) / normx) *
+                                    ((m_sTrackingObject.X - x) / normx) +
+                                ((m_sTrackingObject.Y - y) / normy) *
+                                    ((m_sTrackingObject.Y - y) / normy)) /
+                                   (h * h);
     }
 
   if ((colorimage) && (att_background)) {
@@ -250,14 +249,14 @@ void CObjectTracker::FindHistogram(TRaster32P *frame, float(*histogram),
       normc1 += m_sTrackingObject.weights_background[i];
     }
     // Pdf
-    for (i         = 0; i < HISTOGRAM_LENGTH; i++)
+    for (i = 0; i < HISTOGRAM_LENGTH; i++)
       histogram[i] = histogram[i] / (normc * normc1);
   }
 
   else {
     for (i = 0; i < HISTOGRAM_LENGTH; i++) normc += histogram[i];
 
-    for (i         = 0; i < HISTOGRAM_LENGTH; i++)
+    for (i = 0; i < HISTOGRAM_LENGTH; i++)
       histogram[i] = histogram[i] / (normc);
   }
 }
@@ -314,7 +313,7 @@ void CObjectTracker::FindWeightsBackground(TRaster32P *frame) {
   float small1;
   std::unique_ptr<float[]> background(new float[HISTOGRAM_LENGTH]);
   short i;
-  for (i                                    = 0; i < HISTOGRAM_LENGTH; i++)
+  for (i = 0; i < HISTOGRAM_LENGTH; i++)
     m_sTrackingObject.weights_background[i] = 0.0;
 
   // Histogram background

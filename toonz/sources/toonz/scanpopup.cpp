@@ -168,7 +168,7 @@ void makeTransparent(const TRaster32P &ras) {
 
 //=============================================================================
 
-}  // namepsapce
+}  // namespace
 
 //=============================================================================
 /*! \class DefineScannerPopup
@@ -559,7 +559,7 @@ AutocenterPopup::AutocenterPopup() : DVGui::Dialog(0, false, true) {
   bool ret = true;
   ret      = ret && connect(m_autocenter, SIGNAL(toggled(bool)), this,
                        SLOT(onAutocenterToggled(bool)));
-  ret = ret &&
+  ret      = ret &&
         connect(m_pegbarHoles, SIGNAL(currentIndexChanged(const QString &)),
                 this, SLOT(onPegbarHolesChanged(const QString &)));
   ret =
@@ -623,9 +623,9 @@ void AutocenterPopup::onPegbarHolesChanged(const QString &pg) {
                               ->getCleanupParameters();
   CleanupTypes::PEGS_SIDE type;
   if (pg == "Bottom") type = PEGS_BOTTOM;
-  if (pg == "Top") type    = PEGS_TOP;
-  if (pg == "Left") type   = PEGS_LEFT;
-  if (pg == "Right") type  = PEGS_RIGHT;
+  if (pg == "Top") type = PEGS_TOP;
+  if (pg == "Left") type = PEGS_LEFT;
+  if (pg == "Right") type = PEGS_RIGHT;
   if (cp->m_pegSide == type) return;
   cp->m_pegSide = type;
 }

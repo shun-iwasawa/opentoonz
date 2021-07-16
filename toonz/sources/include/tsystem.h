@@ -269,7 +269,7 @@ DVAPI QString getUserName();
 DVAPI QString getSystemValue(const TFilePath &name);
 DVAPI TFilePath getUniqueFile(QString field = "");
 #endif
-}
+}  // namespace TSystem
 
 //
 // Esempio di lettura di una directory:

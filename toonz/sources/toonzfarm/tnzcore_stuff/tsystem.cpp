@@ -509,7 +509,7 @@ string TSystem::getUserName() {
 #endif
   const long bufSize = UNLEN;
 #else
-  const long bufSize                                 = L_cuserid;
+  const long bufSize = L_cuserid;
 #endif
 
   char userName[bufSize + 1];
@@ -1047,11 +1047,11 @@ ULONG TSystem::getDiskSize(const TFilePath &diskName) {
   DWORD totalNumberOfClusters;
 
   BOOL rc = GetDiskFreeSpace(diskName.getFullPath().c_str(),  // root path
-                             &sectorsPerCluster,     // sectors per cluster
-                             &bytesPerSector,        // bytes per sector
+                             &sectorsPerCluster,  // sectors per cluster
+                             &bytesPerSector,  // bytes per sector
                              &numberOfFreeClusters,  // free clusters
                              &totalNumberOfClusters  // total clusters
-                             );
+  );
 
   if (!rc)
     throw TSystemException(diskName, getFormattedMessage(GetLastError()));
@@ -1084,11 +1084,11 @@ ULONG TSystem::getFreeDiskSize(const TFilePath &diskName) {
   DWORD totalNumberOfClusters;
 
   BOOL rc = GetDiskFreeSpace(diskName.getFullPath().c_str(),  // root path
-                             &sectorsPerCluster,     // sectors per cluster
-                             &bytesPerSector,        // bytes per sector
+                             &sectorsPerCluster,  // sectors per cluster
+                             &bytesPerSector,  // bytes per sector
                              &numberOfFreeClusters,  // free clusters
                              &totalNumberOfClusters  // total clusters
-                             );
+  );
 
   if (!rc)  // eccezione... getLastError etc...
     throw TSystemException(diskName, getFormattedMessage(GetLastError()));
@@ -1321,7 +1321,7 @@ extern "C" void unloadPlugins() {
 #endif
   PluginInstanceTable.clear();
 }
-}
+}  // namespace
 
 //--------------------------------------------------------------
 
@@ -1354,7 +1354,7 @@ void TSystem::loadPlugins(const TFilePath &dir) {
 #ifdef WIN32
     HINSTANCE handle = LoadLibrary(fp.getFullPath().c_str());
 #else
-    void *handle   = dlopen(fp.getFullPath().c_str(), RTLD_LAZY);
+    void *handle = dlopen(fp.getFullPath().c_str(), RTLD_LAZY);
 #endif
 
     if (!handle) {

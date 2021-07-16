@@ -45,11 +45,11 @@ private:
   const TStroke *ref_;
   double
       /**
-* @brief Range of mapping
-*
-* Only an interval of potential function will be used to
-* map the transformation.
-*/
+       * @brief Range of mapping
+       *
+       * Only an interval of potential function will be used to
+       * map the transformation.
+       */
       range_,
       par_,            //! Parameter of selection.
       actionLength_,   //! Action length, how many units to move.
@@ -58,7 +58,7 @@ private:
       leftFactor_,     //! How many units to move on the left of curve.
       rightFactor_;    //! How many units to move on the right of curve.
 };
-}
+}  // namespace ToonzExt
 #endif /* LINEAR_POTENTIAL_H */
 //-----------------------------------------------------------------------------
 //  End Of File

@@ -18,11 +18,11 @@
 
 //=============================================================================
 /*
-* This is an example of how to use the TPointT, the TRectT and the TAffine
-* classes.
-*/
+ * This is an example of how to use the TPointT, the TRectT and the TAffine
+ * classes.
+ */
 /*!  The template class TPointT defines the x- and y-coordinates of a point.
-*/
+ */
 template <class T>
 class TPointT {
 public:
@@ -316,14 +316,14 @@ inline T norm2(const T3DPointT<T> &p) {
 }
 
 /*!
-*/
+ */
 template <class T>
 inline T norm(const T3DPointT<T> &p) {
   return std::sqrt(norm2(p));
 }
 
 /*!
-*/
+ */
 inline T3DPointD normalize(const T3DPointD &p) {
   double n = norm(p);
   assert(n != 0.0);
@@ -331,11 +331,11 @@ inline T3DPointD normalize(const T3DPointD &p) {
 }
 
 /*!
-*/
+ */
 inline T3DPointD convert(const T3DPoint &p) { return T3DPointD(p.x, p.y, p.z); }
 
 /*!
-*/
+ */
 inline T3DPoint convert(const T3DPointD &p) {
   return T3DPoint(tround(p.x), tround(p.y), tround(p.z));
 }
@@ -566,10 +566,10 @@ if x0==y1 && y0==y1 and rect is a  TRectD then rect is empty */
       : x0(rect.x0), y0(rect.y0), x1(rect.x1), y1(rect.y1){};
 
   TRectT(const TPointT<T> &p0, const TPointT<T> &p1)  // non importa l'ordine
-      : x0(std::min((T)p0.x, (T)p1.x)),
-        y0(std::min((T)p0.y, (T)p1.y)),
-        x1(std::max((T)p0.x, (T)p1.x)),
-        y1(std::max((T)p0.y, (T)p1.y)){};
+      : x0(std::min((T)p0.x, (T)p1.x))
+      , y0(std::min((T)p0.y, (T)p1.y))
+      , x1(std::max((T)p0.x, (T)p1.x))
+      , y1(std::max((T)p0.y, (T)p1.y)){};
 
   TRectT(const TPointT<T> &bottomLeft, const TDimensionT<T> &d);
 
@@ -592,15 +592,14 @@ TRectI  is empty if x0>x1 || y0>y1 */
   TPointT<T> getP11() const { return TPointT<T>(x1, y1); };
 
   //! Returns the union of two source rectangles.
-  //!The union is the smallest rectangle that contains both source rectangles.
+  //! The union is the smallest rectangle that contains both source rectangles.
   TRectT<T> operator+(const TRectT<T> &rect) const {  // unione
     if (isEmpty())
       return rect;
     else if (rect.isEmpty())
       return *this;
     else
-      return TRectT<T>(std::min((T)x0, (T)rect.x0), 
-                       std::min((T)y0, (T)rect.y0),
+      return TRectT<T>(std::min((T)x0, (T)rect.x0), std::min((T)y0, (T)rect.y0),
                        std::max((T)x1, (T)rect.x1),
                        std::max((T)y1, (T)rect.y1));
   };
@@ -611,8 +610,9 @@ TRectI  is empty if x0>x1 || y0>y1 */
     return *this = *this * rect;
   };
 
-  //!Returns the intersection of two existing rectangles.
-  //The intersection is the largest rectangle contained in both existing rectangles.
+  //! Returns the intersection of two existing rectangles.
+  // The intersection is the largest rectangle contained in both existing
+  // rectangles.
   TRectT<T> operator*(const TRectT<T> &rect) const {  // intersezione
     if (isEmpty() || rect.isEmpty())
       return TRectT<T>();
@@ -710,7 +710,7 @@ inline TRectD convert(const TRect &r) { return TRectD(r.x0, r.y0, r.x1, r.y1); }
 \relates TPointT
 */
 inline TRectD boundingBox(const TPointD &p0, const TPointD &p1) {
-  return TRectD(std::min(p0.x, p1.x), std::min(p0.y, p1.y),  // bottom left
+  return TRectD(std::min(p0.x, p1.x), std::min(p0.y, p1.y),   // bottom left
                 std::max(p0.x, p1.x), std::max(p0.y, p1.y));  // top right
 }
 /*!
@@ -847,14 +847,14 @@ extern DVVAR const T3DPointD nap3d;
 extern DVVAR const TThickPoint natp;
 extern DVVAR const TRectD infiniteRectD;
 extern DVVAR const TRectI infiniteRectI;
-}
+}  // namespace TConsts
 
 //=============================================================================
 //! This is the base class for the affine transformations.
 /*!
  This class performs basic manipulations of affine transformations.
  An affine transformation is a linear transformation followed by a translation.
- 
+ 
   [a11, a12, a13]
   [a21, a22, a23]
 

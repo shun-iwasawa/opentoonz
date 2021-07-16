@@ -194,7 +194,8 @@ DvDirModelFileFolderNode::DvDirModelFileFolderNode(DvDirModelNode *parent,
 //-----------------------------------------------------------------------------
 
 bool DvDirModelFileFolderNode::exists() {
-  return m_existsChecked ? m_exists : m_peeks
+  return m_existsChecked ? m_exists
+                         : m_peeks
              ? m_existsChecked = true,
                m_exists        = TFileStatus(m_path).doesExist() : true;
 }
@@ -1335,7 +1336,7 @@ DvDirModelNode *DvDirModel::getNode(const QModelIndex &index) const {
 QModelIndex DvDirModel::index(int row, int column,
                               const QModelIndex &parent) const {
   if (column != 0) return QModelIndex();
-  DvDirModelNode *parentNode       = m_root;
+  DvDirModelNode *parentNode = m_root;
   if (parent.isValid()) parentNode = getNode(parent);
   if (row < 0 || row >= parentNode->getChildCount()) return QModelIndex();
   DvDirModelNode *node = parentNode->getChild(row);

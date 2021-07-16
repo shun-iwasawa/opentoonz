@@ -36,7 +36,7 @@ void DVAPI MsgBox(MsgType type, const QString &text);
 void DVAPI error(const QString &msg);
 void DVAPI warning(const QString &msg);
 void DVAPI info(const QString &msg);
-};
+};  // namespace DVGui
 
 class DVAPI TMsgCore final : public QObject {
   Q_OBJECT

@@ -263,7 +263,9 @@ string buildQTErrorString(int ec) {
   case QTUnableToSetMovieBox:
     return "unable to set movie box";
 
-  default: { return "unknown error ('" + std::to_string(ec) + "')"; }
+  default: {
+    return "unknown error ('" + std::to_string(ec) + "')";
+  }
   }
 }
 
@@ -401,7 +403,7 @@ void copy(TRasterP rin, PixelXRGB *bufout, int lx, int ly,
   }
   rin->unlock();
 }  // end function
-};
+};  // namespace
 //-----------------------------------------------------------
 /*
 TWriterInfo *TWriterInfoMov::create(const string &)
@@ -519,7 +521,7 @@ bool getFSSpecFromPosixPath(const char *filepath, FSSpec *fileSpec,
   OSErr err = FSGetCatalogInfo(&fileRef, kFSCatInfoNone, 0, 0, fileSpec, 0);
   return err == noErr;
 }
-}
+}  // namespace
 
 void TLevelWriterMov::save(const TImageP &img, int frameIndex) {
   m_firstFrame = tmin(frameIndex, m_firstFrame);
@@ -674,7 +676,7 @@ void TLevelWriterMov::save(const TImageP &img, int frameIndex) {
   copy(ras, buf, buf_lx, buf_ly, rowBytes);
 #endif
 
-// img_descr = (ImageDescriptionHandle)NewHandle(4);
+  // img_descr = (ImageDescriptionHandle)NewHandle(4);
 
 #ifdef WIN32
   if ((err = CompressImage(m_gworld->portPixMap, &frame, quality, compression,
@@ -690,11 +692,11 @@ void TLevelWriterMov::save(const TImageP &img, int frameIndex) {
     throw TImageException(getFilePath(), "can't compress image");
 #endif
 
-// if ((err = CompressImage(pixmapH,
-//	                 &frame,
-//  			 quality, codecType,
-//			 img_descr, compressed_data_ptr))!=noErr)
-//  throw TImageException(getFilePath(), "can't compress image");
+    // if ((err = CompressImage(pixmapH,
+    //	                 &frame,
+    //  			 quality, codecType,
+    //			 img_descr, compressed_data_ptr))!=noErr)
+    //  throw TImageException(getFilePath(), "can't compress image");
 
 #endif
 
@@ -783,7 +785,9 @@ TLevelWriterMov::TLevelWriterMov(const TFilePath &path, TPropertyGroup *winfo)
 #else
 #define FailWithAction(cond, action, handler)                                  \
   if (cond) {                                                                  \
-    { action; }                                                                \
+    {                                                                          \
+      action;                                                                  \
+    }                                                                          \
     goto handler;                                                              \
   }
 #endif
@@ -995,16 +999,14 @@ TLevelWriterMov::~TLevelWriterMov() {
 
     QTMetaDataRef metaDataRef;
     if ((mderr = QTCopyMovieMetaData(m_movie, &metaDataRef)) != noErr)
-      throw TImageException(getFilePath(),
-                            "can't access metadata information");
+      throw TImageException(getFilePath(), "can't access metadata information");
 
     if ((mderr = QTMetaDataAddItem(
              metaDataRef, kQTMetaDataStorageFormatUserData,
              kQTMetaDataKeyFormatUserData, (const UInt8 *)firstFrameKey.c_str(),
              firstFrameKeySize, (const UInt8 *)(&m_firstFrame), sizeof(int),
              kQTMetaDataTypeUnsignedIntegerBE, 0)) != noErr)
-      throw TImageException(getFilePath(),
-                            "can't insert metadata information");
+      throw TImageException(getFilePath(), "can't insert metadata information");
 
     QTMetaDataRelease(metaDataRef);
   }
@@ -1111,7 +1113,7 @@ TLevelReaderMov::TLevelReaderMov(const TFilePath &path)
   }
 
   QString qStr = QString::fromStdWString(m_path.getWideString());
-  char *pStr = qStr.toUtf8().data();
+  char *pStr   = qStr.toUtf8().data();
 
   getFSSpecFromPosixPath(pStr, &fspec, false);
   pStr = 0;
@@ -1322,9 +1324,9 @@ inline void setMatteAndYMirror(const TRaster32P &ras) {
   ras->lock();
   TPixel32 *upRow = ras->pixels();
   TPixel32 *dwRow = ras->pixels(ras->getLy() - 1);
-  int hLy = (int)(ras->getLy() / 2. + 0.5);  // piccola pessimizzazione...
-  int wrap          = ras->getWrap();
-  int lx            = ras->getLx();
+  int hLy  = (int)(ras->getLy() / 2. + 0.5);  // piccola pessimizzazione...
+  int wrap = ras->getWrap();
+  int lx   = ras->getLx();
   TPixel32 *upPix   = 0;
   TPixel32 *lastPix = ras->pixels(hLy);
   while (upPix < lastPix) {

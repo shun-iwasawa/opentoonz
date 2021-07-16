@@ -82,7 +82,7 @@ inline QRect toRect(const QRectF &rect) {
 namespace {
 QDesktopWidget *desktop;
 void getClosestAvailableMousePosition(QPoint &globalPos);
-}
+}  // namespace
 
 //========================================================
 
@@ -712,10 +712,9 @@ DockPlaceholder *DockPlaceholder::childPlaceholder(QPoint p) {
   r = r->childRegion(i);
 
   // Finally, return child placeholder found.
-  return r->placeholders().size()
-             ? lastExtremity ? r->placeholders().back()
-                             : r->placeholders().front()
-             : this;
+  return r->placeholders().size() ? lastExtremity ? r->placeholders().back()
+                                                  : r->placeholders().front()
+                                  : this;
 }
 
 //------------------------------------------------------
@@ -981,4 +980,4 @@ void getClosestAvailableMousePosition(QPoint &globalPos) {
     globalPos.setY(rect.bottom());
 }
 
-}  // Local namespace
+}  // namespace

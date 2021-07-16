@@ -46,9 +46,9 @@ struct ProgressCallbacks {
   virtual ~ProgressCallbacks() {}
 
   virtual void setProcessedName(const QString &name) = 0;
-  virtual void setRange(int min, int max) = 0;
-  virtual void setValue(int val) = 0;
-  virtual bool canceled() const  = 0;
+  virtual void setRange(int min, int max)            = 0;
+  virtual void setValue(int val)                     = 0;
+  virtual bool canceled() const                      = 0;
 };
 
 //************************************************************************************
@@ -111,7 +111,7 @@ TImageP exportedImage(
     const TXshSimpleLevel &sl,  //!< Level host of the image to be exported.
     const TFrameId &fid,        //!< Frame of the image in sl.
     const ExportLevelOptions &opts = ExportLevelOptions()  //!< Export options.
-    );
+);
 
 //---------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ bool exportLevel(
         0,  //!< External callbacks to overwrite requests.
     ProgressCallbacks *progressCB =
         0  //!< External callbacks to progress notifications.
-    );
+);
 
 }  // namespace IoCmd
 

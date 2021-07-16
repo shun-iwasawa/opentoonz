@@ -48,7 +48,7 @@ return displacement to use with function  modifyControlPoints
 \sa modifyControlPoints
 */
   virtual TThickPoint getDisplacementForControlPoint(const TStroke &stroke,
-                                                     UINT n) const = 0;
+                                                     UINT n) const          = 0;
   virtual TThickPoint getDisplacementForControlPointLen(const TStroke &stroke,
                                                         double cpLen) const = 0;
 

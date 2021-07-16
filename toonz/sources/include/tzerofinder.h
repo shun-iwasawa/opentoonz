@@ -129,7 +129,7 @@ bool findZero_bisection(double x0, double x1, unaryOp f, double xtol,
   rtb = fx0 < 0.0 ? (dx = x1 - x0, x0) : (dx = x0 - x1, x1);
 
   for (i = 1; i <= maxIter; i++) {
-    fmid = f(xmid        = rtb + (dx *= 0.5));
+    fmid = f(xmid = rtb + (dx *= 0.5));
     if (fmid <= 0.0) rtb = xmid;
     if (fabs(dx) < xtol || fmid == 0.0) {
       x   = rtb;
@@ -220,7 +220,7 @@ bool findZero_Newton(double x0, double x1, unaryOp1 f, unaryOp2 f1, double xtol,
   double x_n = x1, x_n_plus_1;
 
   for (i = 0; i < maxIter; ++i) {
-    double den                 = f1(x_n);
+    double den = f1(x_n);
     if (den > 1e-2) x_n_plus_1 = x_n - f_x_n / den;
 
     if (den <= 1e-2 || x0 > x_n_plus_1 || x1 < x_n_plus_1)

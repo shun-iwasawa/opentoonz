@@ -237,7 +237,7 @@ void BenderTool::leftButtonUp(const TPointD &pos, const TMouseEvent &) {
   std::vector<TStroke *> oldStrokesArray(m_changedStrokes.size());
 
   int i;
-  for (i               = 0; i < (int)m_changedStrokes.size(); i++)
+  for (i = 0; i < (int)m_changedStrokes.size(); i++)
     oldStrokesArray[i] = new TStroke(*(vi->getStroke(m_changedStrokes[i])));
 
   if (3 == m_buttonDownCounter) {

@@ -1106,9 +1106,9 @@ void Jacobian::Reset() {
   // Usato nel Damped Least Squares Method
   DampingLambda   = DefaultDampingLambda;
   DampingLambdaSq = Square(DampingLambda);
-  for (int i            = 0; i < DampingLambdaSqV.GetLength(); i++)
+  for (int i = 0; i < DampingLambdaSqV.GetLength(); i++)
     DampingLambdaSqV[i] = DampingLambdaSq;
-  for (int i           = 0; i < diagMatIdentity.GetLength(); i++)
+  for (int i = 0; i < diagMatIdentity.GetLength(); i++)
     diagMatIdentity[i] = 1.0;
   // DampingLambdaSDLS = 1.5*DefaultDampingLambda;
 
@@ -1358,7 +1358,7 @@ void Jacobian::CalcDeltaThetasPseudoinverse() {
     Jcurrent.Multiply(dTheta, dTemp);
 
     VectorRn dTemp2(dScurrent.GetLength());
-    for (int k  = 0; k < dScurrent.GetLength(); k++)
+    for (int k = 0; k < dScurrent.GetLength(); k++)
       dTemp2[k] = dScurrent[k] - dTemp[k];
 
     // Moltiplico JdstPinv per dTemp2

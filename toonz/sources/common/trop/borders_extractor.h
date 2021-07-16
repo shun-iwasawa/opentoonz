@@ -89,8 +89,8 @@ void readMeshes(const TRasterPT<typename PixelSelector::pixel_type> &raster,
                 const PixelSelector &selector,
                 ContainersReader &meshesDataReader,
                 RunsMapP *rasterRunsMap = 0);
-}
-}  // namespace TRop::borders
+}  // namespace borders
+}  // namespace TRop
 
 #endif  // BORDERS_EXTRACTOR_H
 

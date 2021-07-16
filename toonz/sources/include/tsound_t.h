@@ -326,7 +326,7 @@ inside the dstChan channel from sample dst_s0
     assert(sample);
 
     T blankSample;
-    const T *endSample                   = sample + (ss1 - ss0 + 1);
+    const T *endSample = sample + (ss1 - ss0 + 1);
     while (sample < endSample) *sample++ = blankSample;
   }
 

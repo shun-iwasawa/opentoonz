@@ -112,8 +112,8 @@ inline std::string TPersist::getStreamTag() const {
 
 //-------------------------------------------------------------------
 /*!
-                This template class is used to create an instance of the class \a
-   T.
+                This template class is used to create an instance of the class
+   \a T.
         */
 template <class T>
 class TPersistDeclarationT final : public TPersistDeclaration {
@@ -133,7 +133,7 @@ public:
 
 //-------------------------------------------------------------------
 /*!	\file tpersist.h
-        */
+ */
 /*!
                 This macro must be included at the beginning of a class
    declaration,
@@ -142,10 +142,10 @@ public:
                 class TPersistDeclarationT
         */
 #define PERSIST_DECLARATION(T)                                                 \
-  \
+                                                                               \
 private:                                                                       \
   static TPersistDeclarationT<T> m_declaration;                                \
-  \
+                                                                               \
 public:                                                                        \
   const TPersistDeclaration *getDeclaration() const override {                 \
     return &m_declaration;                                                     \

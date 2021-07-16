@@ -34,6 +34,6 @@ QMap<std::wstring, bool> DVAPI getUsableCodecs(const TDimension &resolution);
 bool DVAPI canBeConfigured(const std::wstring &codecName);
 //! Oopen the configuration popup for the specified codec
 void DVAPI openConfiguration(const std::wstring &codecName, void *winId);
-}
+}  // namespace AviCodecRestrictions
 
 #endif  // AVI_CODEC_RESTRICTIONS
