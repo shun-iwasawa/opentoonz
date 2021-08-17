@@ -1283,7 +1283,7 @@ void FxSchematicPort::paint(QPainter *painter,
     } break;
 
     case eFxLinkPort:  // LinkPort
-    default: {         //ここから！！！
+    default: {
       QRect sourceRect =
           scene()->views()[0]->matrix().mapRect(boundingRect()).toRect();
       QPixmap linkPm =
