@@ -339,6 +339,7 @@ void ChangeObjectWidget::show(const QPoint &pos) {
   }
   setGeometry(pos.x(), pos.y(), m_width, itemNumber * 16 + 2);
   QListWidget::show();
+  raise();
   setFocus();
   scrollToItem(currentItem());
 }
@@ -1223,16 +1224,16 @@ void ColumnArea::DrawHeader::drawParentHandleName() const {
 
   TStageObjectId columnId = m_viewer->getObjectId(col);
   TStageObjectId parentId = xsh->getStageObjectParent(columnId);
-  p.setPen(m_viewer->getVerticalLineColor());
-  p.drawRect(parenthandleRect.adjusted(2, 0, 0, 0));
+  // p.setPen(m_viewer->getVerticalLineColor());
+  // p.drawRect(parenthandleRect.adjusted(2, 0, 0, 0));
   p.setPen(m_viewer->getTextColor());
 
   std::string handle = xsh->getStageObject(columnId)->getParentHandle();
   if (handle[0] == 'H' && handle.length() > 1) handle = handle.substr(1);
-  // if (parentId != TStageObjectId::TableId)
-  p.drawText(parenthandleRect,
-             Qt::AlignHCenter | Qt::AlignVCenter | Qt::TextSingleLine,
-             QString::fromStdString(handle));
+  if (parentId != TStageObjectId::TableId || handle != "B")
+    p.drawText(parenthandleRect,
+               Qt::AlignHCenter | Qt::AlignVCenter | Qt::TextSingleLine,
+               QString::fromStdString(handle));
 }
 
 void ColumnArea::DrawHeader::drawFilterColor() const {
@@ -2523,6 +2524,11 @@ void ColumnArea::mouseMoveEvent(QMouseEvent *event) {
   } else if (o->rect(PredefinedRect::PREVIEW_LAYER_AREA)
                  .contains(mouseInCell)) {
     m_tooltip = tr("Camera Stand Visibility Toggle");
+  } else if (o->rect(PredefinedRect::PARENT_HANDLE_NAME)
+                 .contains(mouseInCell)) {
+    m_tooltip = tr("Click to select parent handle");
+  } else if (o->rect(PredefinedRect::PEGBAR_NAME).contains(mouseInCell)) {
+    m_tooltip = tr("Click to select parent object");
   } else {
     if (column && column->getSoundColumn()) {
       // sound column
