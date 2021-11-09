@@ -78,8 +78,9 @@ void alpha_ref_mul_ref_(const RT *ref, const int height, const int width,
   const int r_max = (std::numeric_limits<RT>::max)();
   const RT *rr    = csl_top_clamped_in_h_(ref, height, width, channels, yy);
   for (int xx = 0; xx < width; ++xx) {
-    alpha_ref.at(xx) *=
-        igs::color::ref_value(&rr[xx * channels], channels, r_max, ref_mode);
+    double refv = igs::color::ref_value(&rr[xx * channels], channels, r_max, ref_mode);
+    // clamp 0 to 1 in case using HDR raster
+    alpha_ref.at(xx) *= std::min(1., std::max(0., refv));
   }
 }
 /* Scanlineで、効果を調節するデータ(alpha_ref)に、
@@ -147,6 +148,49 @@ void get_first(
     alpha_ref_mul_alpha_(out, hh, ww, ch, yy, div_val, alpha_ref);
   }
 }
+
+template <>
+void get_first(
+  const float* inn /* outと同じ高さ、幅、チャンネル数 */
+  ,
+  const float* out /* outの処理結果alpha値をinとして使用 */
+  ,
+  const int hh, const int ww, const int ch,
+  const float* ref /* outと同じ高さ、幅、チャンネル数 */
+  ,
+  const int ref_mode /* 0=R,1=G,2=B,3=A,4=Luminance,5=Nothing */
+  ,
+  const int yy, const int zz, const int margin, const bool add_blend_sw,
+  std::vector<std::vector<double>>& tracks /* sl影響範囲のpixel値 */
+  ,
+  std::vector<double>& alpha_ref /* pixel毎の変化の割合 */
+  ,
+  std::vector<double>& result /* 元値をいれといて、結果を入れる */
+) {
+  const double div_val = 1.;
+
+  /* 計算範囲の画像値を計算バッファ(tracks)に入れる */
+  int ii = margin * 2;
+  for (int yp = -margin + yy; yp <= margin + yy; ++yp, --ii) {
+    const float* sl = csl_top_clamped_in_h_(inn, hh, ww, ch, yp) + zz;
+    inn_to_track_(sl, ww, ch, div_val, margin, tracks.at(ii));
+    paint_margin_(margin, tracks.at(ii));
+  }
+  inn_to_result_(inn, hh, ww, ch, yy, zz, div_val, result);
+  if (alpha_ref.size() <= 0) {
+    return;
+  } /* alphaチャンネルを計算する場合 */
+  alpha_ref_init_one_(ww, alpha_ref);
+  if (ref != 0) {
+    alpha_ref_mul_ref_(ref, hh, ww, ch, yy, ref_mode, alpha_ref);
+  }
+  if (ch < 4) {
+    return;
+  } /* alphaチャンネルがない場合はここで終わり */
+  if (add_blend_sw) {
+    alpha_ref_mul_alpha_(out, hh, ww, ch, yy, div_val, alpha_ref);
+  }
+}
 /*--- 2番以後のスキャンラインのセット -------------------------------*/
 template <class IT, class RT>
 void get_next(const IT *inn /* outと同じ高さ、幅、チャンネル数 */
@@ -188,6 +232,48 @@ void get_next(const IT *inn /* outと同じ高さ、幅、チャンネル数 */
     alpha_ref_mul_alpha_(out, hh, ww, ch, yy, div_val, alpha_ref);
   }
 }
+template <>
+void get_next(const float* inn /* outと同じ高さ、幅、チャンネル数 */
+  ,
+  const float* out /* outの処理結果alpha値をinとして使用 */
+  ,
+  const int hh, const int ww, const int ch,
+  const float* ref /* 求める画像(out)と同じ高さ、幅、チャンネル数 */
+  ,
+  const int ref_mode /* 0=R,1=G,2=B,3=A,4=Luminance,5=Nothing */
+  ,
+  const int yy, const int zz, const int margin,
+  const bool add_blend_sw,
+  std::vector<std::vector<double>>& tracks /* sl影響範囲のpixel値 */
+  ,
+  std::vector<double>& alpha_ref /* pixel毎の変化の割合 */
+  ,
+  std::vector<double>& result /* 元値をいれといて、結果を入れる */
+) {
+  const double div_val = 1.;
+
+  const float* sl = csl_top_clamped_in_h_(inn, hh, ww, ch, yy + margin) + zz;
+  inn_to_track_(sl, ww, ch, div_val, margin, tracks.at(0));
+  paint_margin_(margin, tracks.at(0));
+
+  inn_to_result_(inn, hh, ww, ch, yy, zz, div_val, result);
+  if (alpha_ref.size() <= 0) {
+    return;
+  } /* alphaチャンネルを計算する場合 */
+  alpha_ref_init_one_(ww, alpha_ref);
+  if (ref != 0) {
+    alpha_ref_mul_ref_(ref, hh, ww, ch, yy, ref_mode, alpha_ref);
+  }
+  if (ch < 4) {
+    return;
+  } /* alphaチャンネルがない場合はここで終わり */
+  if (add_blend_sw) {
+    alpha_ref_mul_alpha_(out, hh, ww, ch, yy, div_val, alpha_ref);
+  }
+}
+
+
+
 template <class T>
 void copy(const T *inn, const int hh, const int ww, const int ch, const int yy,
           const int zz, T *out) {
@@ -197,6 +283,7 @@ void copy(const T *inn, const int hh, const int ww, const int ch, const int yy,
     dd[ch * xx] = ss[ch * xx];
   }
 }
+
 template <class T>
 void put(const std::vector<double> &result, const int hh, const int ww,
          const int ch, const int yy, const int zz, T *out) {
@@ -209,6 +296,17 @@ void put(const std::vector<double> &result, const int hh, const int ww,
   }
   // std::cout << std::endl;
 }
+
+template <>
+void put(const std::vector<double>& result, const int hh, const int ww,
+  const int ch, const int yy, const int zz, float* out) {
+  float* dd = sl_out_clamped_in_h_(out, hh, ww, ch, yy) + zz;
+  for (int xx = 0; xx < ww; ++xx) {
+    dd[ch * xx] = static_cast<float>(result.at(xx));
+  }
+}
+
+
 }
 }
 }

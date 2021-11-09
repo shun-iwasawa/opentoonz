@@ -557,6 +557,8 @@ void ComboHistogram::computeChannelsValue(int *buf, size_t size, TRasterP ras,
   TRaster64P raster64 = ras;
   bool is64bit        = !!raster64;
 
+  TRasterFP rasF = ras;
+
   int lx = ras->getLx();
   int ly = ras->getLy();
   if (lx > 1 && ly > 1) {
@@ -592,6 +594,19 @@ void ComboHistogram::computeChannelsValue(int *buf, size_t size, TRasterP ras,
             ++buf[idx(2, color.b)];
           }
           ++buf[idx(3, color.m)];
+        }
+      }
+    } else if (rasF) {
+      for (j = 0; j < ly; j++) {
+        TPixelF *pixF = rasF->pixels(j);
+        for (i = 0; i < lx; i++, pixF++) {
+          int mValue = (int)byteFromFloat(pixF->m);
+          if (mValue != 0) {
+            ++buf[idx(0, (int)byteFromFloat(pixF->r))];
+            ++buf[idx(1, (int)byteFromFloat(pixF->g))];
+            ++buf[idx(2, (int)byteFromFloat(pixF->b))];
+          }
+          ++buf[idx(3, mValue)];
         }
       }
     } else  // 8bpc raster
@@ -662,6 +677,27 @@ void ComboHistogram::updateInfo(const TPixel64 &pix, const TPointD &imagePos) {
 
 //-----------------------------------------------------------------------------
 
+void ComboHistogram::updateInfo(const TPixelF &pix, const TPointD &imagePos) {
+  if (pix == TPixelF::Transparent) {
+    m_histograms[0]->showCurrentChannelValue(-1);
+    m_histograms[1]->showCurrentChannelValue(-1);
+    m_histograms[2]->showCurrentChannelValue(-1);
+    m_rgbLabel->setColorAndUpdate(Qt::transparent);
+    m_xPosLabel->setText("");
+    m_yPosLabel->setText("");
+  } else {
+    TPixel32 pix32 = toPixel32(pix);
+    // show picked color's channel values
+    m_histograms[0]->showCurrentChannelValue((int)pix32.r);
+    m_histograms[1]->showCurrentChannelValue((int)pix32.g);
+    m_histograms[2]->showCurrentChannelValue((int)pix32.b);
+    m_rgbLabel->setColorAndUpdate(QColor::fromRgbF(pix.r, pix.g, pix.b));
+    m_xPosLabel->setText(QString::number(tround(imagePos.x)));
+    m_yPosLabel->setText(QString::number(tround(imagePos.y)));
+  }
+}
+//-----------------------------------------------------------------------------
+
 void ComboHistogram::updateAverageColor(const TPixel32 &pix) {
   if (pix == TPixel32::Transparent) {
     m_rectAverageRgbLabel->setColorAndUpdate(Qt::transparent);
@@ -679,6 +715,17 @@ void ComboHistogram::updateAverageColor(const TPixel64 &pix) {
   } else {
     m_rectAverageRgbLabel->setColorAndUpdate(QColor::fromRgba64(
         (ushort)pix.r, (ushort)pix.g, (ushort)pix.b, (ushort)pix.m));
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void ComboHistogram::updateAverageColor(const TPixelF &pix) {
+  if (pix == TPixelF::Transparent) {
+    m_rectAverageRgbLabel->setColorAndUpdate(Qt::transparent);
+  } else {
+    m_rectAverageRgbLabel->setColorAndUpdate(
+        QColor::fromRgbF(pix.r, pix.g, pix.b));
   }
 }
 

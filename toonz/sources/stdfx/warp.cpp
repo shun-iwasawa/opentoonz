@@ -22,6 +22,12 @@ template <>
 inline double convert<TPixel64>(const TPixel64 &pixel) {
   return TPixelGR16::from(pixel).value;
 }
+
+template <>
+inline double convert<TPixelF>(const TPixelF& pixel) {
+  // clamp between 0 and 1
+  return std::min(1.f, std::max(0.f, TPixelGRF::from(pixel).value));
+}
 }
 
 /*-----------------------------------------------------------------*/
@@ -297,6 +303,9 @@ void warp(TRasterP &tileRas, const TRasterP &rasIn, TRasterP &warper,
   TRaster64P rasIn64   = rasIn;
   TRaster64P tileRas64 = tileRas;
   TRaster64P warper64  = warper;
+  TRasterFP rasInF = rasIn;
+  TRasterFP tileRasF = tileRas;
+  TRasterFP warperF = warper;
 
   if (rasIn32 && tileRas32 && warper32) {
     Warper<TPixel32> warper(rasInPos, warperPos, rasIn32, warper32, tileRas32,
@@ -308,6 +317,12 @@ void warp(TRasterP &tileRas, const TRasterP &rasIn, TRasterP &warper,
                             params);
     warper.createLattice();
     warper.shepardWarp();
-  } else
+  } else if (rasInF && tileRasF && warperF) {
+    Warper<TPixelF> warper(rasInPos, warperPos, rasInF, warperF, tileRasF,
+      params);
+    warper.createLattice();
+    warper.shepardWarp();
+  }
+  else
     throw TRopException("warp: unsupported raster types");
 }

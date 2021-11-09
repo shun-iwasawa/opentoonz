@@ -104,7 +104,20 @@ void igs::maxmin::convert(
         alpha_rendering_sw, add_blend_sw, number_of_thread);
     mthread.run();
     mthread.clear();
-  } else {
-    throw std::domain_error("Bad bits,Not uchar/ushort");
+  }
+  else if ((std::numeric_limits<float>::digits == bits) &&
+    ((std::numeric_limits<float>::digits == ref_bits) ||
+      (0 == ref_bits))) {
+    igs::maxmin::multithread<float, float> mthread(
+      reinterpret_cast<const float*>(inn),
+      reinterpret_cast<float*>(out), height, width, channels,
+      reinterpret_cast<const float*>(ref), ref_mode,
+      radius, smooth_outer_range, polygon_number, roll_degree, min_sw,
+      alpha_rendering_sw, add_blend_sw, number_of_thread);
+    mthread.run();
+    mthread.clear();
+  }
+  else {
+    throw std::domain_error("Bad bits,Not uchar/ushort/float");
   }
 }

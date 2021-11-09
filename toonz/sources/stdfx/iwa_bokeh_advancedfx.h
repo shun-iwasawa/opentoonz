@@ -13,8 +13,6 @@
 #include "tfxparam.h"
 #include "traster.h"
 
-#include "kiss_fft.h"
-#include "tools/kiss_fftnd.h"
 #include "iwa_bokeh_util.h"
 
 #include <array>
@@ -37,7 +35,10 @@ protected:
     TDoubleParamP m_distance;  // The layer distance from the camera (0-1)
     TDoubleParamP m_bokehAdjustment;  // Factor for adjusting distance (= focal
                                       // distance - layer distance) (0-2.0)
-    TDoubleParamP m_hardness;         // film gamma for each layer
+    TDoubleParamP m_hardness;         // film gamma for each layer (Version1)
+    TDoubleParamP m_gamma;            // film gamma for each layer (Version2)
+    TDoubleParamP m_gammaAdjust;  // Gamma offset from the current color space gamma (Version 3)
+
     TIntParamP m_depth_ref;           // port index of depth reference image
     TDoubleParamP m_depthRange;       // distance range varies depends on the
                                       // brightness of the reference image (0-1)
@@ -67,6 +68,7 @@ public:
   const TFxPortDG* dynamicPortGroup(int g) const override {
     return (g == 0) ? &m_control : 0;
   }
+  void onFxVersionSet() final override;
 };
 
 #endif

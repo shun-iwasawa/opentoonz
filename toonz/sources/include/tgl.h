@@ -73,6 +73,7 @@ class TCubic;
 
 #define TGL_TexFmt10 GL_RGB10_A2
 #define TGL_TYPE16 GL_UNSIGNED_SHORT
+#define TGL_TYPE32F GL_FLOAT
 
 //=============================================================================
 

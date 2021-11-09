@@ -918,11 +918,11 @@ FlipBook *FlipBookPool::pop() {
 //! Saves the content of this flipbook pool.
 void FlipBookPool::save() const {
   QSettings history(toQString(m_historyPath), QSettings::IniFormat);
-  history.clear();
-
   history.setValue("count", m_overallFlipCount);
 
   history.beginGroup("flipbooks");
+  // clear all contents in the group
+  history.remove("");
 
   std::map<int, FlipBook *>::const_iterator it;
   for (it = m_pool.begin(); it != m_pool.end(); ++it) {
@@ -1602,6 +1602,9 @@ TImageP FlipBook::getCurrentImage(int frame) {
     if (Preferences::instance()->is30bitDisplayEnabled())
       ir->enable16BitRead(true);
 
+    // always enable to load float-format images
+    ir->enableFloatRead(true);
+
     TImageP img = ir->load();
 
     if (img) {
@@ -1678,7 +1681,20 @@ void FlipBook::onDrawFrame(int frame, const ImagePainter::VisualSettings &vs,
 
     if (!img) return;
 
-    m_imageViewer->setImage(img);
+    // gain control ( for now the result is not cached )
+    if (vs.m_gainStep != 0) {
+      TImageP gainedImg = img->cloneImage();
+      TSceneProperties* sp = TApp::instance()
+        ->getCurrentScene()
+        ->getScene()
+        ->getProperties();
+      double colorSpaceGamma = sp->getPreviewProperties()->getRenderSettings().m_colorSpaceGamma;
+      TRop::adjustGain(gainedImg->raster(), vs.m_gainStep, colorSpaceGamma);
+      
+      m_imageViewer->setImage(gainedImg, img);
+    }
+    else
+      m_imageViewer->setImage(img);
   } catch (...) {
     m_imageViewer->setImage(TImageP());
   }
@@ -1893,6 +1909,7 @@ void FlipBook::reset() {
 
   m_flipConsole->enableButton(FlipConsole::eDefineLoadBox, true);
   m_flipConsole->enableButton(FlipConsole::eUseLoadBox, true);
+  m_flipConsole->resetGain(true);
 
   m_lr = TLevelReaderP();
 

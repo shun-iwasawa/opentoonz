@@ -10,7 +10,10 @@ class PremultiplyFx final : public TStandardRasterFx {
   TRasterFxPort m_input;
 
 public:
-  PremultiplyFx() { addInputPort("Source", m_input); }
+  PremultiplyFx() {
+    addInputPort("Source", m_input);
+    enableComputeInFloat(true);
+  }
   ~PremultiplyFx(){};
 
   bool doGetBBox(double frame, TRectD &bBox,

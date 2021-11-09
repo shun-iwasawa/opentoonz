@@ -58,6 +58,7 @@ class SceneSettingsPopup final : public QDialog {
 
   CellMarksPopup *m_cellMarksPopup;
 
+  DVGui::DoubleLineEdit* m_colorSpaceGammaFld;
 public:
   SceneSettingsPopup();
   void configureNotify();

@@ -55,6 +55,11 @@ public:
       //!  are not).
       m_isStopMotionLevel;
 
+  double m_colorSpaceGamma; // gamma value to be used for converting linear-based
+                            // image file to nonlinear raster.
+                            // Curretly only used in EXR image levels.
+
+  static const double DefaultColorSpaceGamma;
 public:
   LevelOptions();  //!< Constructs with default values.
 
@@ -228,6 +233,14 @@ ie
     m_options.m_isStopMotionLevel = isStopMotion;
   }
   bool isStopMotionLevel() const { return m_options.m_isStopMotionLevel; }
+
+  //gamma value to be used for converting linear-based image file (EXR) to nonlinear raster.
+  void setColorSpaceGamma(double gamma) {
+    m_options.m_colorSpaceGamma = gamma;
+  }
+  double colorSpaceGamma() const {
+    return m_options.m_colorSpaceGamma;
+  }
 
 private:
   TPointD m_imageDpi;

@@ -124,9 +124,10 @@ ComboViewerPanel::ComboViewerPanel(QWidget *parent, Qt::WFlags flags)
   m_keyFrameButton->setXsheetHandle(app->getCurrentXsheet());
 
   // FlipConsole
-  std::vector<int> buttonMask = {FlipConsole::eFilledRaster,
-                                 FlipConsole::eDefineLoadBox,
-                                 FlipConsole::eUseLoadBox};
+  std::vector<int> buttonMask = {
+      FlipConsole::eFilledRaster, FlipConsole::eDefineLoadBox,
+      FlipConsole::eUseLoadBox,   FlipConsole::eDecreaseGain,
+      FlipConsole::eIncreaseGain, FlipConsole::eResetGain};
 
   /* --- layout --- */
   QVBoxLayout *mainLayout = new QVBoxLayout();

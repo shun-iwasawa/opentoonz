@@ -65,57 +65,20 @@ bool hasEmptyInputPort(const TFxP &currentFx) {
   if (currentFx->getInputPortCount() == 0) return false;
   return hasEmptyInputPort(currentFx->getInputPort(0)->getFx());
 }
-/*
-TFxP cloneInputPort(const TFxP &currentFx)
-{
-        int i;
-  for (i=0; i<getInputPortCount(); ++i)
-  {
-                TFx *inputFx = sceneFx->getInputPort(i)->getFx();
-                if(inputFx)
-                {
-                        if(TLevelColumnFx* affFx = dynamic_cast<TLevelColumnFx*
->(inputFx))
-                                currentFx->getInputPort(i)->setFx(inputFx);
-                        else
-                                currentFx->getInputPort(i)->setFx(cloneInputPort());
-                }
-                TFxPort *port = getInputPort(i);
-                if (port->getFx())
-                        fx->connect(getInputPortName(i),
-cloneInputPort(port->getFx()));
-}
-void setLevelFxInputPort(const TFxP &currentFx, const TFxP &sceneFx)
-{
-        for (int i=0; i<sceneFx->getInputPortCount(); ++i)
-        {
-                TFx *inputFx = sceneFx->getInputPort(i)->getFx();
-                if(inputFx)
-                {
-                        if(TLevelColumnFx* affFx = dynamic_cast<TLevelColumnFx*
->(inputFx))
-                                currentFx->getInputPort(i)->setFx(inputFx);
-                        else
-                                setLevelFxInputPort(currentFx->getInputPort(i)->getFx(),
-inputFx);
-                }
-        }
-}
-*/
 
 // find the field by parameter name and register the field and its label widget
-bool findItemByParamName(QLayout *layout, std::string name,
-                         QList<QWidget *> &ret) {
+bool findItemByParamName(QLayout* layout, std::string name,
+  QList<QWidget*>& ret) {
   for (int i = 0; i < layout->count(); i++) {
-    QLayoutItem *item = layout->itemAt(i);
+    QLayoutItem* item = layout->itemAt(i);
     if (!item) continue;
     if (item->widget()) {
-      ParamField *pf = dynamic_cast<ParamField *>(item->widget());
+      ParamField* pf = dynamic_cast<ParamField*>(item->widget());
       if (pf && pf->getParamName().toStdString() == name) {
         ret.push_back(pf);
         if (i > 0 && layout->itemAt(i - 1)->widget()) {
-          QLabel *label =
-              dynamic_cast<QLabel *>(layout->itemAt(i - 1)->widget());
+          QLabel* label =
+            dynamic_cast<QLabel*>(layout->itemAt(i - 1)->widget());
           if (label) ret.push_back(label);
         }
         return true;
@@ -125,13 +88,13 @@ bool findItemByParamName(QLayout *layout, std::string name,
         if (findItemByParamName(item->widget()->layout(), name, ret))
           return true;
       }
-    } else if (item->layout()) {
+    }
+    else if (item->layout()) {
       if (findItemByParamName(item->layout(), name, ret)) return true;
     }
   }
   return false;
 };
-
 }  // namespace
 
 //=============================================================================
@@ -192,6 +155,7 @@ void ParamsPage::setPageField(TIStream &is, const TFxP &fx, bool isVertical) {
       std::string name;
       is >> name;
       is.matchEndTag();
+
       /*-- Layout設定名とFxParameterの名前が一致するものを取得 --*/
       TParamP param = fx->getParams()->getParam(name);
       bool isHidden =
@@ -320,8 +284,8 @@ void ParamsPage::setPageField(TIStream &is, const TFxP &fx, bool isVertical) {
           }
           // modeChanger may be in another vbox in the page
           if (!modeChanger) {
-            QList<ModeChangerParamField *> allModeChangers =
-                findChildren<ModeChangerParamField *>();
+            QList<ModeChangerParamField*> allModeChangers =
+              findChildren<ModeChangerParamField*>();
             for (auto field : allModeChangers) {
               if (field->getParamName().toStdString() == modeSensitiveStr) {
                 modeChanger = field;
@@ -414,11 +378,12 @@ void ParamsPage::setPageField(TIStream &is, const TFxP &fx, bool isVertical) {
           is >> name;
           is.matchEndTag();
 
-          QList<QWidget *> widgets;
+          QList<QWidget*> widgets;
           if (findItemByParamName(m_mainLayout, name, widgets)) {
             if (tagName == "controller") {
-              controller_bpf = dynamic_cast<BoolParamField *>(widgets[0]);
-            } else if (tagName == "on")
+              controller_bpf = dynamic_cast<BoolParamField*>(widgets[0]);
+            }
+            else if (tagName == "on")
               on_items.append(widgets);
             else if (tagName == "off")
               off_items.append(widgets);
@@ -759,6 +724,13 @@ ParamsPageSet::ParamsPageSet(QWidget *parent, Qt::WFlags flags)
   m_helpButton->setObjectName("FxSettingsHelpButton");
   m_helpButton->setFocusPolicy(Qt::NoFocus);
 
+  m_warningMark = new QLabel(this);
+  static QIcon warningIcon(":Resources/paramignored_on.svg");
+  m_warningMark->setPixmap(warningIcon.pixmap(QSize(22, 22)));
+  m_warningMark->setFixedSize(22, 22);
+  m_warningMark->setStyleSheet(
+      "margin: 0px; padding: 0px; background-color: rgba(0,0,0,0);");
+
   //----layout
   QVBoxLayout *mainLayout = new QVBoxLayout();
   mainLayout->setMargin(0);
@@ -769,6 +741,7 @@ ParamsPageSet::ParamsPageSet(QWidget *parent, Qt::WFlags flags)
     hLayout->addSpacing(0);
     {
       hLayout->addWidget(m_tabBar);
+      hLayout->addWidget(m_warningMark);
       hLayout->addStretch(1);
       hLayout->addWidget(m_helpButton);
     }
@@ -1046,6 +1019,49 @@ void ParamsPageSet::openHelpUrl() {
   QDesktopServices::openUrl(QUrl(QString(m_helpUrl.c_str())));
 }
 
+void ParamsPageSet::updateWarnings(const TFxP &currentFx, bool isFloat) {
+  if (!isFloat) {
+    m_warningMark->hide();
+    return;
+  }
+
+  bool isFloatSupported  = true;
+
+  TMacroFx *currentFxMacro = dynamic_cast<TMacroFx *>(currentFx.getPointer());
+  if (currentFxMacro) {
+    const std::vector<TFxP> &currentFxMacroFxs = currentFxMacro->getFxs();
+    for (auto fxP : currentFxMacroFxs) {
+      TRasterFx *rasFx = dynamic_cast<TRasterFx *>(fxP.getPointer());
+      if (rasFx) {
+        isFloatSupported = isFloatSupported & rasFx->canComputeInFloat();
+      }
+      if (!isFloatSupported) break;
+    }
+  } else {
+    TRasterFx *rasFx = dynamic_cast<TRasterFx *>(currentFx.getPointer());
+    if (rasFx) {
+      isFloatSupported  = rasFx->canComputeInFloat();
+    }
+  }
+
+  bool showFloatWarning  = isFloat && !isFloatSupported;
+  if (!showFloatWarning) {
+    m_warningMark->hide();
+    return;
+  }
+
+  QString warningTxt;
+  if (showFloatWarning) {
+    warningTxt +=
+        tr("This Fx does not support rendering in floating point channel width "
+           "(32bit).\n"
+           "The output pixel values from this fx will be clamped to 0.0 - 1.0\n"
+           "and tone may be slightly discretized.");
+  }
+  m_warningMark->setToolTip(warningTxt);
+  m_warningMark->show();
+}
+
 //=============================================================================
 // ParamViewer
 //-----------------------------------------------------------------------------
@@ -1188,6 +1204,13 @@ void ParamViewer::setPointValue(int index, const TPointD &p) {
 
 ParamsPageSet *ParamViewer::getCurrentPageSet() const {
   return dynamic_cast<ParamsPageSet *>(m_tablePageSet->currentWidget());
+}
+
+//-----------------------------------------------------------------------------
+// show warning if the current Fx does not support float / linear rendering
+void ParamViewer::updateWarnings(const TFxP &currentFx, bool isFloat) {
+  if (getCurrentPageSet())
+    getCurrentPageSet()->updateWarnings(currentFx, isFloat);
 }
 
 //=============================================================================
@@ -1395,11 +1418,24 @@ void FxSettings::setFx(const TFxP &currentFx, const TFxP &actualFx) {
   ToonzScene *scene = 0;
   if (m_sceneHandle) scene = m_sceneHandle->getScene();
 
+  // check if the current render settings are float
+  bool isFloat  = false;
+  if (scene) {
+    const TRenderSettings ps =
+        scene->getProperties()->getPreviewProperties()->getRenderSettings();
+    const TRenderSettings os =
+        scene->getProperties()->getOutputProperties()->getRenderSettings();
+    isFloat  = (ps.m_bpp == 128) || (os.m_bpp == 128);
+  }
+
   int frameIndex = 0;
   if (m_frameHandle) frameIndex = m_frameHandle->getFrameIndex();
 
   m_paramViewer->setFx(currentFxWithoutCamera, actualFx, frameIndex, scene);
   m_paramViewer->setIsCameraViewMode(m_isCameraModeView);
+  // show warning if the current Fx does not support float / linear rendering
+  m_paramViewer->updateWarnings(currentFxWithoutCamera, isFloat);
+
   m_viewer->setCameraMode(m_isCameraModeView);
 
   TDimension cameraSize = TDimension(-1, -1);

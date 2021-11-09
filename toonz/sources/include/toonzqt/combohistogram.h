@@ -184,8 +184,10 @@ public:
   void setRaster(const TRasterP &raster, const TPaletteP &palette = 0);
   void updateInfo(const TPixel32 &pix, const TPointD &imagePos);
   void updateInfo(const TPixel64 &pix, const TPointD &imagePos);
+  void updateInfo(const TPixelF &pix, const TPointD &imagePos);
   void updateAverageColor(const TPixel32 &pix);
   void updateAverageColor(const TPixel64 &pix);
+  void updateAverageColor(const TPixelF &pix);
   void updateCompHistogram();
 
   void setShowCompare(bool on) {

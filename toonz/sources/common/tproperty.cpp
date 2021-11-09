@@ -231,7 +231,7 @@ void TPropertyGroup::loadData(TIStream &is) {
         double max = std::stod(is.getTagAttribute("max"));
         add(new TDoubleProperty(name, min, max, std::stod(svalue)));
       }
-      if (type == "pair") {
+      else if (type == "pair") {
         double min = std::stod(is.getTagAttribute("min"));
         double max = std::stod(is.getTagAttribute("max"));
         TDoublePairProperty::Value v(0, 0);

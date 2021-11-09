@@ -49,6 +49,8 @@ public:
     m_intensity->setValueRange(0, 300);
     m_min->setValueRange(0, 1.0);
     m_max->setValueRange(0, 1.0);
+
+    enableComputeInFloat(true);
   }
   ~PerlinNoiseFx(){};
 
@@ -226,23 +228,30 @@ void PerlinNoiseFx::doCompute(TTile &tile, double frame,
 
   TPointD pos = tile.m_pos;
 
-  TRaster32P rasOut = tile.getRaster();
-  TRaster32P rasIn  = tileIn.getRaster();
+  TRaster32P rasOut32 = tile.getRaster();
+  TRaster64P rasOut64 = tile.getRaster();
+  TRasterFP rasOutF = tile.getRaster();
 
-  if (rasOut)
-    doPerlinNoise<TPixel32, UCHAR>(rasOut, rasIn, pos, evolution, size, min,
-                                   max, offsetx, offsety, type, brad, matte,
-                                   scale);
-  else {
-    TRaster64P rasOut = tile.getRaster();
-    TRaster64P rasIn  = tileIn.getRaster();
-    if (rasOut)
-      doPerlinNoise<TPixel64, USHORT>(rasOut, rasIn, pos, evolution, size, min,
-                                      max, offsetx, offsety, type, brad, matte,
-                                      scale);
-    else
-      throw TException("Brightness&Contrast: unsupported Pixel Type");
+  if (rasOut32) {
+    TRaster32P rasIn32 = tileIn.getRaster();
+    doPerlinNoise<TPixel32, UCHAR>(rasOut32, rasIn32, pos, evolution, size, min,
+      max, offsetx, offsety, type, brad, matte,
+      scale);
   }
+  else if(rasOut64) {
+    TRaster64P rasIn64  = tileIn.getRaster();
+    doPerlinNoise<TPixel64, USHORT>(rasOut64, rasIn64, pos, evolution, size, min,
+                                    max, offsetx, offsety, type, brad, matte,
+                                    scale);
+  }
+  else if (rasOutF) {
+    TRasterFP rasInF = tileIn.getRaster();
+    doPerlinNoise<TPixelF, float>(rasOutF, rasInF, pos, evolution, size, min,
+      max, offsetx, offsety, type, brad, matte,
+      scale);
+  }
+  else
+    throw TException("PerlinNoise: unsupported Pixel Type");
 }
 
 //------------------------------------------------------------------

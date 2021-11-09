@@ -28,6 +28,8 @@ public:
 
     m_intensity->setValueRange(-1000, 1000);
     m_gridStep->setValueRange(2, 20);
+
+    enableComputeInFloat(true);
   }
   virtual ~WarpFx() {}
 

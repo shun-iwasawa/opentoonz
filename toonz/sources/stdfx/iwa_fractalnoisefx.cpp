@@ -134,6 +134,8 @@ Iwa_FractalNoiseFx::Iwa_FractalNoiseFx()
   bindParam(this, "zScale", m_zScale);
 
   bindParam(this, "alphaRendering", m_alphaRendering);
+
+  enableComputeInFloat(true);
 }
 
 //------------------------------------------------------------------
@@ -457,10 +459,13 @@ void Iwa_FractalNoiseFx::doCompute(TTile &tile, double frame,
   // convert to RGB channel values
   TRaster32P ras32 = (TRaster32P)tile.getRaster();
   TRaster64P ras64 = (TRaster64P)tile.getRaster();
+  TRasterFP rasF   = (TRasterFP)tile.getRaster();
   if (ras32)
     outputRaster<TRaster32P, TPixel32>(ras32, out_buf, param);
   else if (ras64)
     outputRaster<TRaster64P, TPixel64>(ras64, out_buf, param);
+  else if (rasF)
+    outputRaster<TRasterFP, TPixelF>(rasF, out_buf, param);
 
   out_buf_ras->unlock();
 }
@@ -516,11 +521,12 @@ void Iwa_FractalNoiseFx::outputRaster(const RASTER outRas, double *out_buf,
                                       const FNParam &param) {
   TDimension dim = outRas->getSize();
   double *buf_p  = out_buf;
+  bool doClamp   = !(outRas->getPixelSize() == 16);
   for (int j = 0; j < dim.ly; j++) {
     PIXEL *pix = outRas->pixels(j);
     for (int i = 0; i < dim.lx; i++, pix++, buf_p++) {
-      double val                   = (param.invert) ? 1.0 - (*buf_p) : (*buf_p);
-      val                          = clamp(val, 0.0, 1.0);
+      double val = (param.invert) ? 1.0 - (*buf_p) : (*buf_p);
+      if (doClamp) val = clamp(val, 0.0, 1.0);
       typename PIXEL::Channel chan = static_cast<typename PIXEL::Channel>(
           val * (double)PIXEL::maxChannelValue);
       pix->r = chan;

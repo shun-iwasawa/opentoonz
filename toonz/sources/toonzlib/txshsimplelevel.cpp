@@ -195,6 +195,7 @@ TXshSimpleLevel::TXshSimpleLevel(const std::wstring &name)
     , m_editableRangeUserInfo(L"")
     , m_isSubsequence(false)
     , m_16BitChannelLevel(false)
+    , m_floatChannelLevel(false)
     , m_isReadOnly(false)
     , m_temporaryHookMerged(false) {}
 
@@ -614,7 +615,7 @@ TImageP TXshSimpleLevel::getFrameIcon(const TFrameId &fid) const {
 
   const std::string &imgId = getImageId(fid);
   TImageP img              = ImageManager::instance()->getImage(
-      imgId, ImageManager::dontPutInCache, &extData);
+                   imgId, ImageManager::dontPutInCache, &extData);
 
   TToonzImageP timg = (TToonzImageP)img;
   if (timg && m_palette) timg->setPalette(m_palette);
@@ -942,6 +943,7 @@ void TXshSimpleLevel::loadData(TIStream &is) {
         int whiteTransp                      = 0;
         int antialiasSoftness                = 0;
         int isStopMotionLevel                = 0;
+        double colorSpaceGamma = LevelOptions::DefaultColorSpaceGamma;
         LevelProperties::DpiPolicy dpiPolicy = LevelProperties::DP_ImageDpi;
         if (is.getTagParam("dpix", v)) xdpi = std::stod(v);
         if (is.getTagParam("dpiy", v)) ydpi = std::stod(v);
@@ -955,6 +957,8 @@ void TXshSimpleLevel::loadData(TIStream &is) {
         if (is.getTagParam("whiteTransp", v)) whiteTransp = std::stoi(v);
         if (is.getTagParam("isStopMotionLevel", v))
           isStopMotionLevel = std::stoi(v);
+        if (is.getTagParam("colorSpaceGamma", v))
+          colorSpaceGamma = std::stod(v);
 
         m_properties->setDpiPolicy(dpiPolicy);
         m_properties->setDpi(TPointD(xdpi, ydpi));
@@ -963,6 +967,7 @@ void TXshSimpleLevel::loadData(TIStream &is) {
         m_properties->setDoAntialias(antialiasSoftness);
         m_properties->setWhiteTransp(whiteTransp);
         m_properties->setIsStopMotion(isStopMotionLevel);
+        m_properties->setColorSpaceGamma(colorSpaceGamma);
         if (isStopMotionLevel == 1) setIsReadOnly(true);
       } else
         throw TException("unexpected tag " + tagName);
@@ -1187,7 +1192,10 @@ void TXshSimpleLevel::load() {
         return;
       }
 
-      if (info) set16BitChannelLevel(info->m_bitsPerSample == 16);
+      if (info) {
+        set16BitChannelLevel(info->m_bitsPerSample == 16);
+        setFloatChannelLevel(info->m_bitsPerSample == 32);
+      }
     }
     if ((getType() & FULLCOLOR_TYPE) && !is16BitChannelLevel())
       setPalette(FullColorPalette::instance()->getPalette(getScene()));
@@ -1330,7 +1338,10 @@ void TXshSimpleLevel::load(const std::vector<TFrameId> &fIds) {
         setFrame(fIds[i], TImageP());
       }
       const TImageInfo *info = lr->getImageInfo(fIds[0]);
-      if (info) set16BitChannelLevel(info->m_bitsPerSample == 16);
+      if (info) {
+        set16BitChannelLevel(info->m_bitsPerSample == 16);
+        setFloatChannelLevel(info->m_bitsPerSample == 32);
+      }
     } else {
       TLevelP level = lr->loadInfo();
       for (TLevel::Iterator it = level->begin(); it != level->end(); it++) {
@@ -1339,7 +1350,10 @@ void TXshSimpleLevel::load(const std::vector<TFrameId> &fIds) {
         setFrame(it->first, TImageP());
       }
       const TImageInfo *info = lr->getImageInfo(level->begin()->first);
-      if (info) set16BitChannelLevel(info->m_bitsPerSample == 16);
+      if (info) {
+        set16BitChannelLevel(info->m_bitsPerSample == 16);
+        setFloatChannelLevel(info->m_bitsPerSample == 32);
+      }
     }
 
     if ((getType() & FULLCOLOR_TYPE) && !is16BitChannelLevel())
@@ -1409,6 +1423,9 @@ void TXshSimpleLevel::saveData(TOStream &os) {
   } else if (getProperties()->isStopMotionLevel()) {
     attr["isStopMotionLevel"] =
         std::to_string(getProperties()->isStopMotionLevel());
+  }
+  if ( !areAlmostEqual(getProperties()->colorSpaceGamma(), LevelOptions::DefaultColorSpaceGamma)) {
+    attr["colorSpaceGamma"] = std::to_string(getProperties()->colorSpaceGamma());
   }
 
   if (m_type == TZI_XSHLEVEL) attr["type"] = "s";

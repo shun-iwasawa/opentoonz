@@ -79,6 +79,8 @@ public:
     this->m_ref_mode->addItem(-1, "Nothing");
     this->m_type->addItem(1, "Uniform Length");
     this->m_intensity_correlation_with_ellipse->setValueRange(-1.0, 1.0);
+
+    enableComputeInFloat(true);
   }
   //------------------------------------------------------------
   TPointD get_render_center(const double frame, const TPointD &pos,
@@ -209,13 +211,13 @@ void fx_(const TRasterP in_ras,  // with margin
   }
 
   TRasterGR8P in_gr8(in_ras->getLy(),
-                     in_ras->getLx() * ino::channels() * sizeof(float));
+                      in_ras->getLx() * ino::channels() * sizeof(float));
   in_gr8->lock();
   ino::ras_to_float_arr(in_ras, ino::channels(),
                         reinterpret_cast<float *>(in_gr8->getRawData()));
 
   TRasterGR8P out_buffer(out_ras->getLy(),
-                         out_ras->getLx() * ino::channels() * sizeof(float));
+                          out_ras->getLx() * ino::channels() * sizeof(float));
   out_buffer->lock();
 
   igs::radial_blur::convert(
@@ -223,13 +225,15 @@ void fx_(const TRasterP in_ras,  // with margin
       reinterpret_cast<float *>(out_buffer->getRawData()), margin,
       out_ras->getSize(), ino::channels(),
       (ref_gr8) ? reinterpret_cast<float *>(ref_gr8->getRawData()) : nullptr,
-      center + TPointD(margin, margin), twist, pivot_radius, blur, radius, type,
-      anti_alias_sw, alpha_rendering_sw, ellipse_aspect_ratio, ellipse_angle,
-      intensity_correlation_with_ellipse);
+      center + TPointD(margin, margin), twist, pivot_radius, blur, radius,
+      type, anti_alias_sw, alpha_rendering_sw, ellipse_aspect_ratio,
+      ellipse_angle, intensity_correlation_with_ellipse);
 
   in_gr8->unlock();
-  ino::float_arr_to_ras(out_buffer->getRawData(), ino::channels(), out_ras, 0);
+  ino::float_arr_to_ras(out_buffer->getRawData(), ino::channels(), out_ras,
+                        0);
   out_buffer->unlock();
+
   if (ref_gr8) ref_gr8->unlock();
 }
 }  // namespace
@@ -242,7 +246,8 @@ void ino_radial_blur::doCompute(TTile &tile, double frame,
     return;
   }
   /*------ サポートしていないPixelタイプはエラーを投げる -----*/
-  if (!((TRaster32P)tile.getRaster()) && !((TRaster64P)tile.getRaster())) {
+  if (!((TRaster32P)tile.getRaster()) && !((TRaster64P)tile.getRaster()) &&
+      !((TRasterFP)tile.getRaster())) {
     throw TRopException("unsupported input pixel type");
   }
   /*------ パラメータを得る ----------------------------------*/

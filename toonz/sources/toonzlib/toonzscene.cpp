@@ -1218,6 +1218,12 @@ TXshLevel *ToonzScene::loadLevel(const TFilePath &actualPath,
       }
     }
 
+    // for EXR level, set the color space gamma to the same value as the output settings.
+    if (xl->getType() == OVL_XSHLEVEL && levelPath.getType() == "exr") {
+      double gamma = getProperties()->getOutputProperties()->getRenderSettings().m_colorSpaceGamma;
+      lp->setColorSpaceGamma(gamma);
+    }
+
     m_levelSet->insertLevel(xl);
 
     return xl;
