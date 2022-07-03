@@ -197,9 +197,8 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
   // Make Control Page
   // **********************
 
-  m_saveInFolderPopup = new PencilTestSaveInFolderPopup(this);
-  m_cameraListCombo   = new QComboBox(this);
-  m_resolutionCombo   = new QComboBox(this);
+  m_cameraListCombo = new QComboBox(this);
+  m_resolutionCombo = new QComboBox(this);
   m_resolutionCombo->setFixedWidth(fontMetrics().width("0000 x 0000") + 25);
   m_resolutionLabel                 = new QLabel(tr("Resolution: "), this);
   m_cameraStatusLabel               = new QLabel(tr("Camera Status"), this);
@@ -218,8 +217,15 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
   m_frameInfoLabel  = new QLabel("", this);
 
   m_xSheetFrameNumberEdit = new DVGui::IntLineEdit(this, 1, 1);
-  m_saveInFileFld =
-      new DVGui::FileField(this, m_saveInFolderPopup->getParentPath());
+
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  QString parentFolder =
+      scene->getProperties()->cameraCaptureSaveInPath().getQString();
+  if (parentFolder.isEmpty()) {
+    parentFolder = QString("+%1").arg(QString::fromStdString(TProject::Extras));
+  }
+
+  m_saveInFileFld                    = new DVGui::FileField(this, parentFolder);
   QToolButton *nextLevelButton       = new QToolButton(this);
   m_previousLevelButton              = new QToolButton(this);
   QPushButton *nextOpenLevelButton   = new QPushButton(this);
@@ -309,7 +315,6 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
   m_saveInFileFld->setMaximumWidth(380);
   m_levelNameEdit->setMaximumWidth(380);
 
-  m_saveInFolderPopup->hide();
   m_zoomButton = new QPushButton(tr("Check"), this);
   m_zoomButton->setFixedHeight(28);
   m_zoomButton->setStyleSheet("padding: 5 2;");
@@ -681,10 +686,10 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
     m_cameraSettingsPage->setLayout(innerSettingsLayout);
 
     // Make Options Page
-    QGroupBox *webcamBox  = new QGroupBox(tr("Webcam Options"), this);
-    QGroupBox *dslrBox    = new QGroupBox(tr("DSLR Options"), this);
-    m_timerCB             = new QGroupBox(tr("Use Time Lapse"), this);
-    m_timerIntervalFld    = new DVGui::DoubleField(this, true, 1);
+    QGroupBox *webcamBox = new QGroupBox(tr("Webcam Options"), this);
+    QGroupBox *dslrBox   = new QGroupBox(tr("DSLR Options"), this);
+    m_timerCB            = new QGroupBox(tr("Use Time Lapse"), this);
+    m_timerIntervalFld   = new DVGui::DoubleField(this, true, 1);
     m_timerCB->setCheckable(true);
     m_timerCB->setObjectName("CleanupSettingsFrame");
     m_timerCB->setChecked(false);
@@ -985,8 +990,6 @@ StopMotionController::StopMotionController(QWidget *parent) : QWidget(parent) {
                        SLOT(onOnionOpacitySliderChanged(bool)));
   ret = ret && connect(m_captureButton, SIGNAL(clicked(bool)), this,
                        SLOT(onCaptureButtonClicked(bool)));
-  // ret = ret && connect(subfolderButton, SIGNAL(clicked(bool)), this,
-  //                     SLOT(openSaveInFolderPopup()));
   ret = ret && connect(m_saveInFileFld, SIGNAL(pathChanged()), this,
                        SLOT(onSaveInPathEdited()));
   ret = ret && connect(m_fileTypeCombo, SIGNAL(activated(int)), this,
@@ -2732,20 +2735,6 @@ void StopMotionController::onIntervalStopped() {
 
 void StopMotionController::onPlaySoundToggled(bool on) {
   m_stopMotion->setPlayCaptureSound(on);
-}
-
-//-----------------------------------------------------------------------------
-
-void StopMotionController::openSaveInFolderPopup() {
-  if (m_saveInFolderPopup->exec()) {
-    QString oldPath = m_saveInFileFld->getPath();
-    m_saveInFileFld->setPath(m_saveInFolderPopup->getPath());
-    if (oldPath == m_saveInFileFld->getPath())
-      m_stopMotion->setToNextNewLevel();
-    else {
-      onSaveInPathEdited();
-    }
-  }
 }
 
 //-----------------------------------------------------------------------------

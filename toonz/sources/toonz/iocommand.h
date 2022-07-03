@@ -261,6 +261,11 @@ bool takeCareSceneFolderItemsOnSaveSceneAs(
     ToonzScene *scene, const TFilePath &newPath, TXsheet *subxsh,
     QHash<TXshLevel *, TFilePath> &orgLevelPaths);
 
+// create a sub-folder (= scene folder) and save a new empty scene in it
+bool createNewSceneFolder(QWidget *parent         = nullptr,
+                          QString initialFolder   = QString(),
+                          bool *openPopupOnLaunch = nullptr);
+
 }  // namespace IoCmd
 
 #endif  // IOCOMMAND_H

@@ -1775,6 +1775,10 @@ void MainWindow::defineActions() {
   createMenuFileAction(MI_ExportCameraTrack, QT_TR_NOOP("&Export Camera Track"),
                        "");
 
+  createMenuFileAction(MI_CreateNewSceneFolder,
+                       QT_TR_NOOP("&Create New Scene Folder"), "",
+                       "new_scene_folder");
+
   // Menu - Edit
 
   createMenuEditAction(MI_SelectAll, QT_TR_NOOP("&Select All"), "Ctrl+A",

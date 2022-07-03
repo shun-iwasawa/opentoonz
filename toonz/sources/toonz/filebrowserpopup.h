@@ -472,4 +472,25 @@ public:
   QString getPath(bool codePath = true) override;
 };
 
+//-----------------------------------------------------------------------------
+// Create a new scene and save in a folder with the same name as the scene
+// Equivalent to "PencilTestSaveInFolderPopup" (see penciltestpopup.cpp)
+
+class CreateNewSceneFolderPopup final : public FileBrowserPopup {
+  Q_OBJECT
+
+  // show the checkbox when launched from the pencil test window
+  DVGui::CheckBox *m_popupOnLaunch;
+
+public:
+  CreateNewSceneFolderPopup();
+
+  bool execute() override;
+
+  void showOptionWidget(bool *openPopupOnLaunch);
+  bool isOpenPopupOnLaunchChecked();
+protected slots:
+  void onSetDefaultBtnClicked();
+};
+
 #endif  // FILEBROWSERPOPUP_H

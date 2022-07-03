@@ -188,7 +188,7 @@ public:
 //=============================================================================
 // PencilTestSaveInFolderPopup
 //-----------------------------------------------------------------------------
-
+/*
 class PencilTestSaveInFolderPopup : public DVGui::Dialog {
   Q_OBJECT
 
@@ -218,7 +218,7 @@ protected slots:
   void onSetAsDefaultBtnPressed();
   void onOkPressed();
 };
-
+*/
 //=============================================================================
 // SubCameraButton
 // button with context menu to open preset
@@ -283,7 +283,7 @@ class PencilTestPopup : public DVGui::Dialog {
   // used only for Windows
   QPushButton* m_captureFilterSettingsBtn;
 
-  PencilTestSaveInFolderPopup* m_saveInFolderPopup;
+  // PencilTestSaveInFolderPopup* m_saveInFolderPopup;
 
   CameraCaptureLevelControl* m_camCapLevelControl;
 
