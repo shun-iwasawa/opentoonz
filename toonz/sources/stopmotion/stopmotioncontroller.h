@@ -83,9 +83,8 @@ class StopMotionController final : public QWidget {
       *m_focusFar3Button, *m_captureFilterSettingsBtn, *m_testLightsButton;
   QHBoxLayout *m_focusAndZoomLayout;
   QLabel *m_frameInfoLabel, *m_cameraSettingsLabel, *m_cameraModeLabel,
-      *m_resolutionLabel, *m_cameraStatusLabel,
-      *m_apertureLabel, *m_kelvinValueLabel, *m_isoLabel, *m_shutterSpeedLabel,
-      *m_webcamLabel;
+      *m_resolutionLabel, *m_cameraStatusLabel, *m_apertureLabel,
+      *m_kelvinValueLabel, *m_isoLabel, *m_shutterSpeedLabel, *m_webcamLabel;
   QToolButton *m_previousLevelButton, *m_previousFrameButton,
       *m_previousXSheetFrameButton;
   QSlider *m_apertureSlider, *m_shutterSpeedSlider, *m_isoSlider,
@@ -104,7 +103,6 @@ class StopMotionController final : public QWidget {
   FrameNumberLineEdit *m_frameNumberEdit;
   DVGui::IntField *m_onionOpacityFld, *m_subsamplingFld;
   DVGui::DoubleField *m_postCaptureReviewFld;
-  PencilTestSaveInFolderPopup *m_saveInFolderPopup;
   DVGui::DoubleField *m_timerIntervalFld;
   DVGui::ColorField *m_screen1ColorFld, *m_screen2ColorFld, *m_screen3ColorFld;
   QGroupBox *m_screen1Box;
@@ -273,9 +271,6 @@ protected slots:
   void onWebcamGainSliderChanged(int value);
   void onWebcamSaturationSliderChanged(int value);
   void getWebcamStatus();
-
-public slots:
-  void openSaveInFolderPopup();
 };
 
 #endif  // STOPMOTIONCONTROLLER_H

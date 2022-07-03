@@ -1701,6 +1701,10 @@ void MainWindow::defineActions() {
   createMenuFileAction(MI_ClearCacheFolder, QT_TR_NOOP("&Clear Cache Folder"),
                        "", "clear_cache");
 
+  createMenuFileAction(MI_CreateNewSceneFolder,
+                       QT_TR_NOOP("&Create New Scene Folder"), "",
+                       "new_scene_folder");
+
   // Menu - Edit
 
   createMenuEditAction(MI_SelectAll, QT_TR_NOOP("&Select All"), "Ctrl+A",

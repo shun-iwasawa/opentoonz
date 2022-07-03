@@ -2864,6 +2864,51 @@ bool IoCmd::takeCareSceneFolderItemsOnSaveSceneAs(
   return true;
 }
 
+//---------------------------------------------------------------------------
+// create a sub-folder (= scene folder) and save a new empty scene in it
+bool IoCmd::createNewSceneFolder(QWidget *parent, QString initialFolder,
+                                 bool *openPopupOnLaunch) {
+  TSelection *oldSelection =
+      TApp::instance()->getCurrentSelection()->getSelection();
+
+  IoCmd::newScene();
+
+  // check if the current scene is brand-new
+  if (TApp::instance()->getCurrentScene()->getDirtyFlag()) return false;
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene || !scene->isUntitled() ||
+      scene->getLevelSet()->getLevelCount() != 0)
+    return false;
+
+  static CreateNewSceneFolderPopup *popup = nullptr;
+  if (!popup) {
+    popup = new CreateNewSceneFolderPopup();
+  }
+  if (!initialFolder.isEmpty())
+    popup->setFolder(scene->decodeFilePath(TFilePath(initialFolder)));
+  if (parent)
+    popup->setParent(parent);
+  else
+    popup->setParent(TApp::instance()->getMainWindow());
+
+  // if the pointer is not null, show the checkbox
+  popup->showOptionWidget(openPopupOnLaunch);
+
+  popup->setWindowFlag(Qt::Dialog);
+
+  int ret = popup->exec();
+
+  if (openPopupOnLaunch)
+    *openPopupOnLaunch = popup->isOpenPopupOnLaunchChecked();
+
+  if (ret == QDialog::Accepted) {
+    return true;
+  } else {
+    TApp::instance()->getCurrentSelection()->setSelection(oldSelection);
+    return false;
+  }
+}
+
 //===========================================================================
 // Commands
 //---------------------------------------------------------------------------
@@ -3128,3 +3173,13 @@ public:
   SaveAllLevelsCommandHandler() : MenuItemHandler(MI_SaveAllLevels) {}
   void execute() { IoCmd::saveNonSceneFiles(); }
 } saveAllLevelsCommandHandler;
+
+//=============================================================================
+// Create new scene folder
+//-----------------------------------------------------------------------------
+class CreateNewSceneFolderCommandHandler : public MenuItemHandler {
+public:
+  CreateNewSceneFolderCommandHandler()
+      : MenuItemHandler(MI_CreateNewSceneFolder) {}
+  void execute() { IoCmd::createNewSceneFolder(); }
+} createNewSceneFolderCommandHandler;

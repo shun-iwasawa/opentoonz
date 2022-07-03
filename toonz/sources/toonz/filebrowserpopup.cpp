@@ -42,6 +42,7 @@
 #include "toonz/sceneproperties.h"
 #include "toonz/tstageobjecttree.h"
 #include "toonz/txshleveltypes.h"
+#include "toutputproperties.h"
 // specify in the preference whether to replace the level after saveLevelAs
 // command
 #include "toonz/preferences.h"
@@ -56,6 +57,7 @@
 #include "tiio.h"
 #include "tlevel_io.h"
 #include "tundo.h"
+#include "tenv.h"
 
 // Qt includes
 #include <QVBoxLayout>
@@ -69,6 +71,8 @@
 #include <QCoreApplication>
 #include <QMainWindow>
 #include <QApplication>
+
+extern TEnv::StringVar CamCapSaveInParentFolder;
 
 //***********************************************************************************
 //    FileBrowserPopup  implementation
@@ -1240,7 +1244,7 @@ bool LoadLevelPopup::execute() {
     args.inc                   = m_incCombo->currentIndex();
     args.doesFileActuallyExist = !m_notExistLabel->isVisible();
     args.cachingBehavior       = IoCmd::LoadResourceArguments::CacheTlvBehavior(
-        m_loadTlvBehaviorComboBox->currentData().toInt());
+              m_loadTlvBehaviorComboBox->currentData().toInt());
 
     if (m_arrLvlPropWidget->isVisible() &&
         m_levelPropertiesFrame->isEnabled()) {
@@ -2313,6 +2317,142 @@ QString BrowserPopupController::getPath(bool codePath) {
   if (scene && codePath) fp = scene->codeFilePath(fp);
   std::cout << ::to_string(fp) << std::endl;
   return toQString(fp);
+}
+
+//=============================================================================
+// CreateNewSceneFolderPopup
+
+CreateNewSceneFolderPopup::CreateNewSceneFolderPopup()
+    : FileBrowserPopup(tr("Create New Scene Folder"), Options(FOR_SAVING), "",
+                       new QWidget(0))
+    , m_popupOnLaunch(nullptr) {
+  setOkText(tr("Create"));
+  addFilterType("tnz");
+
+  QWidget *optionWidget = (QWidget *)m_customWidget;
+  m_popupOnLaunch       = new DVGui::CheckBox(
+            tr("Show This on Launch of the Camera Capture"), this);
+  QPushButton *setDefaultBtn =
+      new QPushButton(tr("Set the Current Folder As the Default Initial"));
+
+  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout->setMargin(5);
+  mainLayout->setSpacing(5);
+  {
+    mainLayout->addWidget(m_popupOnLaunch);
+    mainLayout->addWidget(setDefaultBtn, 0, Qt::AlignLeft);
+  }
+  optionWidget->setLayout(mainLayout);
+
+  connect(m_nameField, SIGNAL(returnPressedNow()), m_okButton,
+          SLOT(animateClick()));
+  connect(setDefaultBtn, SIGNAL(clicked()), this,
+          SLOT(onSetDefaultBtnClicked()));
+}
+
+bool CreateNewSceneFolderPopup::execute() {
+  if (m_selectedPaths.empty()) return false;
+
+  const TFilePath &fp = *m_selectedPaths.begin();
+
+  QString subFolderName = QString::fromStdString(fp.getName());
+
+  if (subFolderName.isEmpty() || isSpaceString(subFolderName)) {
+    DVGui::MsgBox(DVGui::WARNING, tr("Subfolder name should not be empty."));
+    return false;
+  }
+
+  int index = subFolderName.indexOf(QRegExp("[\\]:;|=,\\[\\*\\.\"/\\\\]"), 0);
+  if (index >= 0) {
+    DVGui::MsgBox(DVGui::WARNING,
+                  tr("Subfolder name should not contain following "
+                     "characters:  * . \" / \\ [ ] : ; | = , "));
+    return false;
+  }
+
+  TFilePath actualFp =
+      TApp::instance()->getCurrentScene()->getScene()->decodeFilePath(fp);
+
+  if (QFileInfo::exists(actualFp.getQString())) {
+    DVGui::MsgBox(DVGui::WARNING,
+                  tr("Folder %1 already exists.").arg(actualFp.getQString()));
+    return false;
+  }
+
+  // create folder
+  try {
+    TSystem::mkDir(actualFp);
+  } catch (...) {
+    MsgBox(DVGui::CRITICAL, tr("It is not possible to create the %1 folder.")
+                                .arg(toQString(actualFp)));
+    return false;
+  }
+
+  // create scene in folder
+  // set the output folder
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  if (!scene) return false;
+
+  // for the scene folder mode, output destination must be already set to
+  // $scenefolder or its subfolder. See TSceneProperties::onInitialize()
+  if (Preferences::instance()->getPathAliasPriority() !=
+      Preferences::SceneFolderAlias) {
+    TOutputProperties *prop = scene->getProperties()->getOutputProperties();
+    prop->setPath(prop->getPath().withParentDir(fp));
+  }
+
+  if (Preferences::instance()->getPathAliasPriority() !=
+      Preferences::ProjectFolderOnly) {
+    // set "save in" folder of the camera capture to the scene folder
+    scene->getProperties()->setCameraCaptureSaveInPath(
+        TFilePath("$scenefolder"));
+  }
+
+  // save the scene
+  TFilePath sceneFp =
+      actualFp + TFilePath(subFolderName.toStdWString()).withType("tnz");
+  IoCmd::saveScene(sceneFp, 0);
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void CreateNewSceneFolderPopup::showOptionWidget(bool *openPopupOnLaunch) {
+  if (openPopupOnLaunch == nullptr)
+    m_customWidget->hide();
+  else {
+    m_customWidget->show();
+    m_popupOnLaunch->setChecked(*openPopupOnLaunch);
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+bool CreateNewSceneFolderPopup::isOpenPopupOnLaunchChecked() {
+  return m_popupOnLaunch->isChecked();
+}
+
+//-----------------------------------------------------------------------------
+
+void CreateNewSceneFolderPopup::onSetDefaultBtnClicked() {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  Preferences::PathAliasPriority priority =
+      Preferences::instance()->getPathAliasPriority();
+
+  // temporary change the path alias priority in order to avoid "$scenefolder"
+  if (priority != Preferences::ProjectFolderOnly)
+    Preferences::instance()->setValue(pathAliasPriority,
+                                      Preferences::ProjectFolderOnly, false);
+
+  QString newDefaultPath =
+      scene->codeFilePath(m_browser->getFolder()).getQString();
+  CamCapSaveInParentFolder = newDefaultPath.toStdString();
+
+  Preferences::instance()->setValue(pathAliasPriority, priority, false);
+
+  MsgBox(DVGui::WARNING, tr("The default initial folder has been set to\n%1 .")
+                             .arg(newDefaultPath));
 }
 
 //=============================================================================

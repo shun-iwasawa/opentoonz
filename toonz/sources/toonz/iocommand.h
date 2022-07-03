@@ -95,9 +95,10 @@ struct LoadResourceArguments {
 
   enum ImportPolicy  //!  Policy adopted for resources external to current
                      //!  scene.
-  { ASK_USER,        //!< User is prompted for a resolution.
-    IMPORT,          //!< Resources are copied to scene folders (\a overwrites).
-    LOAD,            //!< Resources are loaded from their original paths.
+  {
+    ASK_USER,  //!< User is prompted for a resolution.
+    IMPORT,    //!< Resources are copied to scene folders (\a overwrites).
+    LOAD,      //!< Resources are loaded from their original paths.
   };
 
 public:
@@ -259,6 +260,11 @@ bool importLipSync(TFilePath levelPath, QList<TFrameId> frameList,
 bool takeCareSceneFolderItemsOnSaveSceneAs(
     ToonzScene *scene, const TFilePath &newPath, TXsheet *subxsh,
     QHash<TXshLevel *, TFilePath> &orgLevelPaths);
+
+// create a sub-folder (= scene folder) and save a new empty scene in it
+bool createNewSceneFolder(QWidget *parent         = nullptr,
+                          QString initialFolder   = QString(),
+                          bool *openPopupOnLaunch = nullptr);
 
 }  // namespace IoCmd
 

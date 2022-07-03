@@ -467,4 +467,6 @@
 #define MI_OpenCustomPanels "MI_OpenCustomPanels"
 #define MI_CustomPanelEditor "MI_CustomPanelEditor"
 
+#define MI_CreateNewSceneFolder "MI_CreateNewSceneFolder"
+
 #endif
