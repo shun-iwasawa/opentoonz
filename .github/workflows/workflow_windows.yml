@@ -15,6 +15,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Check MSVC
+      run: |
+        cd 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC'
+        ls
+
     - name: Checkout mypaint/libmypaint
       uses: actions/checkout@v2
       with:
@@ -38,7 +43,7 @@ jobs:
         git checkout "$env:vcpkg_ref"
         ./bootstrap-vcpkg.bat
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v1
       with:
        path: C:/vcpkg/installed
        key: ${{ runner.os }}-vcpkg-${{ env.vcpkg_ref }}-${{ github.sha }}
@@ -101,7 +106,7 @@ jobs:
         Rename-Item -Path 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe.config' -NewName 'cl_original.exe.config'
         cp 'C:/hostedtoolcache/windows/Python/3.9.13/x64/Scripts/clcache.exe' 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe'
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v1
       with:
        path: C:/Users/runneradmin/clcache
        key: ${{ runner.os }}-clcache-${{ github.sha }}
