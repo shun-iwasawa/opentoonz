@@ -682,6 +682,7 @@ void ComboHistogram::updateInfo(const TPixelF &pix, const TPointD &imagePos) {
     m_histograms[0]->showCurrentChannelValue(-1);
     m_histograms[1]->showCurrentChannelValue(-1);
     m_histograms[2]->showCurrentChannelValue(-1);
+    m_histograms[3]->showCurrentChannelValue(-1);
     m_rgbLabel->setColorAndUpdate(Qt::transparent);
     m_xPosLabel->setText("");
     m_yPosLabel->setText("");
@@ -691,7 +692,8 @@ void ComboHistogram::updateInfo(const TPixelF &pix, const TPointD &imagePos) {
     m_histograms[0]->showCurrentChannelValue((int)pix32.r);
     m_histograms[1]->showCurrentChannelValue((int)pix32.g);
     m_histograms[2]->showCurrentChannelValue((int)pix32.b);
-    m_rgbLabel->setColorAndUpdate(QColor::fromRgbF(pix.r, pix.g, pix.b));
+    m_histograms[3]->showCurrentChannelValue((int)pix32.m);
+    m_rgbLabel->setColorAndUpdate(QColor::fromRgbF(pix.r, pix.g, pix.b, pix.m));
     m_xPosLabel->setText(QString::number(tround(imagePos.x)));
     m_yPosLabel->setText(QString::number(tround(imagePos.y)));
   }
@@ -725,7 +727,7 @@ void ComboHistogram::updateAverageColor(const TPixelF &pix) {
     m_rectAverageRgbLabel->setColorAndUpdate(Qt::transparent);
   } else {
     m_rectAverageRgbLabel->setColorAndUpdate(
-        QColor::fromRgbF(pix.r, pix.g, pix.b));
+        QColor::fromRgbF(pix.r, pix.g, pix.b, pix.m));
   }
 }
 
