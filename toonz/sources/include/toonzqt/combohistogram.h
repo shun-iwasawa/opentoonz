@@ -32,6 +32,7 @@ class QColor;
 
 class RGBLabel;
 class QLabel;
+class QPushButton;
 
 #define COMBOHIST_RESOLUTION_W 256
 #define COMBOHIST_RESOLUTION_H 100
@@ -76,6 +77,7 @@ class DVAPI ChannelHistoGraph : public QWidget {
 
   int m_pickedValue;
   int m_channelIndex;
+  float m_range;
 
 public:
   bool *m_showComparePtr;
@@ -87,6 +89,7 @@ public:
   virtual void setValues(int *buf, bool isComp);
 
   void showCurrentChannelValue(int val);
+  void setRange(float range) { m_range = range; }
 
 protected:
   void paintEvent(QPaintEvent *event) override;
@@ -115,10 +118,12 @@ protected:
 class DVAPI ChannelColorBar final : public QWidget {
   Q_OBJECT
   QColor m_color;
+  float m_range;
 
 public:
   ChannelColorBar(QWidget *parent = 0, QColor m_color = QColor());
   ~ChannelColorBar() {}
+  void setRange(float range) { m_range = range; }
 
 protected:
   void paintEvent(QPaintEvent *event) override;
@@ -141,6 +146,11 @@ public:
   }
 
   void showCurrentChannelValue(int val);
+
+  void setRange(float range) { 
+    m_histogramGraph->setRange(range);
+    m_colorBar->setRange(range);
+  }
 
 protected slots:
   void onShowAlphaButtonToggled(bool visible);
@@ -169,6 +179,12 @@ class DVAPI ComboHistogram final : public QWidget {
 
   QLabel *m_xPosLabel;
   QLabel *m_yPosLabel;
+
+  // graph range control (available only with TRasterF)
+  QWidget* m_rangeControlContainer;
+  QPushButton* m_rangeUpBtn, * m_rangeDwnBtn;
+  QLabel* m_rangeLabel;
+  int m_rangeStep; // 0 = 1.0, 1 = 2.0, 2 = 4.0, 3 = 8.0...
 
   QComboBox *m_displayModeCombo;
 
@@ -199,6 +215,8 @@ public:
     if (isVisible() && m_showCompare) updateCompHistogram();
   }
 
+  void refreshHistogram();
+
 protected:
   void computeChannelsValue(int *buf, size_t size, TRasterP ras,
                             TPalette *extPlt = nullptr);
@@ -207,6 +225,8 @@ protected:
 protected slots:
   void onDisplayModeChanged();
   void onShowAlphaButtonToggled(bool);
+  void onRangeUp();
+  void onRangeDown();
 };
 
 #endif
