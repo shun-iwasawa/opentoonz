@@ -21,7 +21,11 @@ find_library(
     NAMES
         # libtiff.a 
         # use shared library instead of static
-        libtiff.dylib
+        if(BUILD_ENV_APPLE)
+            libtiff.dylib
+        else()
+            libtiff.so
+        endif()        
     HINTS
         ${SDKROOT}
     PATH_SUFFIXES
