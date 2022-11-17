@@ -575,7 +575,7 @@ void TextureStyleManager::loadItems() {
 //********************************************************************************
 //    MyPaintBrushStyleManager  implementation
 //********************************************************************************
-
+/*
 MyPaintBrushStyleManager::MyPaintBrushStyleManager(QSize chipSize)
     : BaseStyleManager(TFilePath(), QString(), chipSize) {}
 
@@ -614,7 +614,7 @@ void MyPaintBrushStyleManager::loadItems() {
 
   m_loaded = true;
 }
-
+*/
 //********************************************************************************
 //    SpecialStyleManager  implementation
 //********************************************************************************

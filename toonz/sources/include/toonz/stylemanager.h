@@ -7,7 +7,7 @@
 #include "tthread.h"
 
 #include "traster.h"
-#include "toonz/mypaintbrushstyle.h"
+//#include "toonz/mypaintbrushstyle.h"
 
 #include <QSize>
 #include <QVector>
@@ -194,7 +194,7 @@ private:
 //********************************************************************************
 //    MyPaintBrushStyleManager declaration
 //********************************************************************************
-
+/*
 class DVAPI MyPaintBrushStyleManager final : public BaseStyleManager {
   Q_OBJECT
 
@@ -210,7 +210,7 @@ public:
 
   void loadItems() override;
 };
-
+*/
 //********************************************************************************
 //    SpecialStyleManager declaration
 //********************************************************************************

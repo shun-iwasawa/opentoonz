@@ -190,7 +190,8 @@ void initImageIo(bool lightVersion) {
   Tiio::defineWriterProperties("exr", new Tiio::ExrWriterProperties());
 
 // ffmpeg
-#if !defined(_WIN32) || defined(x64) || (defined(_WIN32) && defined(__GNUC__))
+#if 0
+//#if !defined(_WIN32) || defined(x64) || (defined(_WIN32) && defined(__GNUC__))
   if (ThirdParty::checkFFmpeg()) {
     if (Ffmpeg::checkFormat("webm")) {
       TLevelWriter::define("webm", TLevelWriterWebm::create, true);
@@ -246,7 +247,8 @@ void initImageIo(bool lightVersion) {
 
 #endif  // _WIN32
 
-    if (IsQuickTimeInstalled()) {
+    if (0) {
+    //  if (IsQuickTimeInstalled()) {
       Tiio::useQuicktime(true);
 
       TLevelWriter::define("mov", TLevelWriterMov::create, true);

@@ -1,5 +1,3 @@
-// Glew include
-#include <GL/glew.h>
 
 #include "toonz/imagepainter.h"
 #include "toonz/glrasterpainter.h"
@@ -203,21 +201,6 @@ void Painter::flushRasterImages(const TRect &loadbox, double compareX,
   glDisable(GL_DITHER);
   glDisable(GL_LOGIC_OP);
   glDisable(GL_STENCIL_TEST);
-
-#ifdef GL_EXT_convolution
-  if (GLEW_EXT_convolution) {
-    glDisable(GL_CONVOLUTION_1D_EXT);
-    glDisable(GL_CONVOLUTION_2D_EXT);
-    glDisable(GL_SEPARABLE_2D_EXT);
-  }
-#endif
-
-#ifdef GL_EXT_histogram
-  if (GLEW_EXT_histogram) {
-    glDisable(GL_HISTOGRAM_EXT);
-    glDisable(GL_MINMAX_EXT);
-  }
-#endif
 
 #ifdef GL_EXT_texture3D
   if (GL_EXT_texture3D) {
