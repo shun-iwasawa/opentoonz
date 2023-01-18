@@ -91,9 +91,9 @@ std::string fidsToString(const std::vector<TFrameId> &fids) {
 std::vector<TFrameId> strToFids(std::string fidsStr) {
   std::vector<TFrameId> ret;
   QString str        = QString::fromStdString(fidsStr);
-  QStringList chunks = str.split(',', QString::SkipEmptyParts);
+  QStringList chunks = str.split(',', Qt::SkipEmptyParts);
   for (const auto &chunk : chunks) {
-    QStringList nums = chunk.split('-', QString::SkipEmptyParts);
+    QStringList nums = chunk.split('-', Qt::SkipEmptyParts);
     assert(nums.count() > 0 && nums.count() <= 2);
     if (nums.count() == 1)
       ret.push_back(TFrameId(nums[0].toInt()));

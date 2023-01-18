@@ -8,6 +8,7 @@
 #include <QOpenGLWidget>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QScreen>
 
 #include "toonzqt/pickrgbutils.h"
 
@@ -43,14 +44,12 @@ QRgb meanColor(const QImage &img, const QRect &rect) {
 
   return r | (g << 8) | (b << 16) | (m << 24);
 }
-}
+}  // namespace
 
 //==============================================================================
 
 QRgb pickRGB(QWidget *widget, const QRect &rect) {
-  QImage img(QPixmap::grabWidget(widget, rect.x(), rect.y(), rect.width(),
-                                 rect.height())
-                 .toImage());
+  QImage img(widget->grab(rect).toImage());
   return meanColor(img, img.rect());
 }
 
@@ -84,8 +83,9 @@ QRgb pickScreenRGB(const QRect &rect) {
 
 #endif
 
-  QImage img(QPixmap::grabWindow(widget->winId(), theRect.x(), theRect.y(),
-                                 theRect.width(), theRect.height())
+  QImage img(widget->screen()
+                 ->grabWindow(widget->winId(), theRect.x(), theRect.y(),
+                              theRect.width(), theRect.height())
                  .toImage());
   return meanColor(
       img, QRect(rect.left() - theRect.left(), rect.top() - theRect.top(),

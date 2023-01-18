@@ -266,7 +266,7 @@ void ParamsPage::setPageField(TIStream &is, const TFxP &fx, bool isVertical) {
           QList<int> modes;
           QStringList modeListStr =
               QString::fromStdString(is.getTagAttribute("mode"))
-                  .split(',', QString::SkipEmptyParts);
+                  .split(',', Qt::SkipEmptyParts);
           for (QString modeNum : modeListStr) modes.push_back(modeNum.toInt());
           // find the mode combobox
           ModeChangerParamField *modeChanger = nullptr;
@@ -624,7 +624,7 @@ void updateMaximumPageSize(QGridLayout *layout, int &maxLabelWidth,
     QGroupBox *gBox =
         dynamic_cast<QGroupBox *>(layout->itemAtPosition(r, 0)->widget());
     if (label) {
-      int tmpWidth = label->fontMetrics().width(label->text());
+      int tmpWidth = label->fontMetrics().horizontalAdvance(label->text());
       if (maxLabelWidth < tmpWidth) maxLabelWidth = tmpWidth;
     }
     /*-- PlugInFxのGroupパラメータのサイズ --*/
@@ -693,11 +693,7 @@ QSize ParamsPage::getPreferredSize() {
 // ParamsPageSet
 //-----------------------------------------------------------------------------
 
-#if QT_VERSION >= 0x050500
 ParamsPageSet::ParamsPageSet(QWidget *parent, Qt::WindowFlags flags)
-#else
-ParamsPageSet::ParamsPageSet(QWidget *parent, Qt::WFlags flags)
-#endif
     : QWidget(parent, flags)
     , m_preferredSize(0, 0)
     , m_helpFilePath("")
@@ -1065,11 +1061,7 @@ void ParamsPageSet::updateWarnings(const TFxP &currentFx, bool isFloat) {
 // ParamViewer
 //-----------------------------------------------------------------------------
 
-#if QT_VERSION >= 0x050500
 ParamViewer::ParamViewer(QWidget *parent, Qt::WindowFlags flags)
-#else
-ParamViewer::ParamViewer(QWidget *parent, Qt::WFlags flags)
-#endif
     : QFrame(parent, flags), m_fx(0) {
   m_tablePageSet = new QStackedWidget(this);
   m_tablePageSet->addWidget(new QWidget());

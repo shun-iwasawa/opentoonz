@@ -88,7 +88,7 @@ void pri_funct_cv_end(void) {
 
 /* Windowsではvsnprintf()の頭にアンダーバーが付く!!! */
 #if defined _WIN32
-#define vsnprintf(buf, len, fmt, ap) _vsnprintf(buf, len, fmt, ap)
+#define vsnprintf(buf, len, fmt, ap) _vsnprintf_s(buf, len, fmt, ap)
 #endif
 
 static const char *pri_param_cp_com_name = "#";
@@ -107,7 +107,7 @@ void pri_funct_msg_vr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy(buf, "bad argument for fprintf stdout");
+    (void)strcpy_s(buf, "bad argument for fprintf stdout");
   }
 
   /* 可変引数,改行 */
@@ -132,7 +132,7 @@ void pri_funct_msg_ttvr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy(buf, "bad argument for fprintf stdout");
+    (void)strcpy_s(buf, "bad argument for fprintf stdout");
   }
 
   /* ベル,タイトル,日時,可変引数,改行 */
@@ -156,7 +156,7 @@ void pri_funct_err_bttvr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy(buf, "bad argument for fprintf stderr");
+    (void)strcpy_s(buf, "bad argument for fprintf stderr");
   }
 
   /* ベル,タイトル,日時,可変引数,改行 */
@@ -1660,9 +1660,9 @@ void pixel_line_node::_get_link_line_selecter_vector(pixel_point_node *clp_crnt,
 
 pixel_point_node *pixel_line_node::_get_link_line_selecter(
     double d_xv, double d_yv, pixel_point_node *clp_crnt, int32_t i32_count) {
-  int32_t ii, i32_pos;
-  double da_xv[LINK_NEAR_COUNT], da_yv[LINK_NEAR_COUNT],
-      da_radian[LINK_NEAR_COUNT], d_radian;
+  int32_t ii, i32_pos = 0;
+  double da_xv[LINK_NEAR_COUNT] = {0.}, da_yv[LINK_NEAR_COUNT] = {0.},
+         da_radian[LINK_NEAR_COUNT] = {0.}, d_radian;
 
   /* あってはならないプログラムバグのチェック */
   assert((0.0 != d_xv) || (0.0 != d_yv));

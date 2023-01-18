@@ -513,7 +513,7 @@ bool LutManager::loadLutFile(const QString& fp) {
 
   // The third line is corrections of values at each LUT grid
   line = locals::readDataLine(stream);
-  list = line.split(" ", QString::SkipEmptyParts);
+  list = line.split(" ", Qt::SkipEmptyParts);
   if (list.size() != m_lut.meshSize) {
     file.close();
     return execWarning(QObject::tr("Failed to Load 3DLUT File."));
@@ -529,7 +529,7 @@ bool LutManager::loadLutFile(const QString& fp) {
       for (int i = 0; i < m_lut.meshSize; ++i)  // b
       {
         line = locals::readDataLine(stream);
-        list = line.split(" ", QString::SkipEmptyParts);
+        list = line.split(" ", Qt::SkipEmptyParts);
         if (list.size() != 3) {
           file.close();
           delete[] m_lut.data;
