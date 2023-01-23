@@ -526,7 +526,7 @@ void JpgExifReader::ProcessExifDir(unsigned char *DirStart,
 
   {
     unsigned char *DirEnd;
-    DirEnd = DIR_ENTRY_ADDR(DirStart, static_cast<__int64>(NumDirEntries));
+    DirEnd = DIR_ENTRY_ADDR(DirStart, static_cast<int64_t>(NumDirEntries));
     if (DirEnd + 4 > (OffsetBase + ExifLength)) {
       if (DirEnd + 2 == OffsetBase + ExifLength ||
           DirEnd == OffsetBase + ExifLength) {
@@ -553,7 +553,7 @@ void JpgExifReader::ProcessExifDir(unsigned char *DirStart,
     unsigned char *ValuePtr;
     int ByteCount;
     unsigned char *DirEntry;
-    DirEntry = DIR_ENTRY_ADDR(DirStart, static_cast<__int64>(de));
+    DirEntry = DIR_ENTRY_ADDR(DirStart, static_cast<int64_t>(de));
 
     Tag        = Get16u(DirEntry);
     Format     = Get16u(DirEntry + 2);
