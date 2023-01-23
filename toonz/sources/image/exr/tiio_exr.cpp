@@ -396,20 +396,20 @@ void ExrWriter::open(FILE* file, const TImageInfo& info) {
       (EXRChannelInfo*)malloc(sizeof(EXRChannelInfo) * m_header.num_channels);
   // Must be BGR(A) order, since most of EXR viewers expect this channel order.
   if (m_bpp == 128) {
-    strncpy_s(m_header.channels[0].name, "B", 255);
+    strncpy(m_header.channels[0].name, "B", 255);
     m_header.channels[0].name[strlen("B")] = '\0';
-    strncpy_s(m_header.channels[1].name, "G", 255);
+    strncpy(m_header.channels[1].name, "G", 255);
     m_header.channels[1].name[strlen("G")] = '\0';
-    strncpy_s(m_header.channels[2].name, "R", 255);
+    strncpy(m_header.channels[2].name, "R", 255);
     m_header.channels[2].name[strlen("R")] = '\0';
-    strncpy_s(m_header.channels[3].name, "A", 255);
+    strncpy(m_header.channels[3].name, "A", 255);
     m_header.channels[3].name[strlen("A")] = '\0';
   } else {
-    strncpy_s(m_header.channels[0].name, "B", 255);
+    strncpy(m_header.channels[0].name, "B", 255);
     m_header.channels[0].name[strlen("B")] = '\0';
-    strncpy_s(m_header.channels[1].name, "G", 255);
+    strncpy(m_header.channels[1].name, "G", 255);
     m_header.channels[1].name[strlen("G")] = '\0';
-    strncpy_s(m_header.channels[2].name, "R", 255);
+    strncpy(m_header.channels[2].name, "R", 255);
     m_header.channels[2].name[strlen("R")] = '\0';
   }
 
