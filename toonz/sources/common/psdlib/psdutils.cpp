@@ -22,13 +22,13 @@ void readrow(FILE *psd, TPSDChannelInfo *chan,
     pos     = chan->filepos + chan->rowbytes * row;
     seekres = fseek(psd, pos, SEEK_SET);
     if (seekres != -1)
-      n = (typename psdPixel)fread(inbuffer, 1, chan->rowbytes, psd);
+      n = (psdPixel)fread(inbuffer, 1, chan->rowbytes, psd);
     break;
   case RLECOMP:
     pos     = chan->rowpos[row];
     seekres = fseek(psd, pos, SEEK_SET);
     if (seekres != -1) {
-      rlebytes = (typename psdPixel)fread(tmpbuffer, 1,
+      rlebytes = (psdPixel)fread(tmpbuffer, 1,
                                           chan->rowpos[row + 1] - pos, psd);
       n        = unpackrow(inbuffer, tmpbuffer, chan->rowbytes, rlebytes);
     }
