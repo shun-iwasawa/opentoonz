@@ -107,7 +107,7 @@ void pri_funct_msg_vr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy_s(buf, "bad argument for fprintf stdout");
+    (void)strcpy(buf, "bad argument for fprintf stdout");
   }
 
   /* 可変引数,改行 */
@@ -132,7 +132,7 @@ void pri_funct_msg_ttvr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy_s(buf, "bad argument for fprintf stdout");
+    (void)strcpy(buf, "bad argument for fprintf stdout");
   }
 
   /* ベル,タイトル,日時,可変引数,改行 */
@@ -156,7 +156,7 @@ void pri_funct_err_bttvr(const char *fmt, ...) {
   i_ret = vsnprintf(buf, FILENAME_MAX, fmt, ap);
   va_end(ap);
   if (i_ret < 0) {
-    (void)strcpy_s(buf, "bad argument for fprintf stderr");
+    (void)strcpy(buf, "bad argument for fprintf stderr");
   }
 
   /* ベル,タイトル,日時,可変引数,改行 */
