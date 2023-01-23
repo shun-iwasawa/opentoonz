@@ -247,7 +247,7 @@ commandline += " -id " + task->m_id;*/
 #if defined(_WIN32)
   process->setNativeArguments(task->getCommandLineArguments());
 #else
-  process->setArguments(task->getCommandLineArguments().split(" ", Qt::SkipEmptyParts);
+  process->setArguments(task->getCommandLineArguments().split(" ", Qt::SkipEmptyParts));
 #endif
   process->start();
   process->waitForFinished(-1);
