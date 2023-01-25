@@ -784,8 +784,13 @@ void SwatchViewer::wheelEvent(QWheelEvent *event) {
     if ((m_gestureActive == true &&
          m_touchDevice == QTouchDevice::TouchScreen) ||
         m_gestureActive == false) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
       TPoint center(event->position().x() - width() / 2,
-                    -event->position().y() + height() / 2);
+        -event->position().y() + height() / 2);
+#else
+      TPoint center(event->pos().x() - width() / 2,
+        -event->pos().y() + height() / 2);
+#endif
       zoom(center, exp(0.001 * event->angleDelta().y()));
     }
   }

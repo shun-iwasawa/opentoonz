@@ -160,7 +160,11 @@ TFilePath TSystem::getTestDir(string name) {
 //------------------------------------------------------------
 
 QString TSystem::getSystemValue(const TFilePath &name) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
   QStringList strlist = toQString(name).split("\\", Qt::SkipEmptyParts);
+#else
+  QStringList strlist = toQString(name).split("\\", QString::SkipEmptyParts);
+#endif
 
   assert(strlist.size() > 3);
   assert(strlist.at(0) == "SOFTWARE");
