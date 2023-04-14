@@ -292,6 +292,13 @@ XsheetViewer::XsheetViewer(QWidget *parent, Qt::WindowFlags flags)
   m_layerFooterPanel = new LayerFooterPanel(this, this);
 
   m_frameScroller.setFrameScrollArea(m_cellScrollArea);
+
+  // install event filter to stop playing on mouse press
+  m_noteArea->installEventFilter(this);
+  m_cellArea->installEventFilter(this);
+  m_columnArea->installEventFilter(this);
+  m_rowArea->installEventFilter(this);
+
   connect(&m_frameScroller, &Spreadsheet::FrameScroller::prepareToScrollOffset,
           this, &XsheetViewer::onPrepareToScrollOffset);
   connect(&m_frameScroller, &Spreadsheet::FrameScroller::zoomScrollAdjust, this,
@@ -705,6 +712,17 @@ void XsheetViewer::timerEvent(QTimerEvent *) {
                          Qt::NoButton, Qt::MouseButtons(), m_qtModifiers);
   m_dragTool->onDrag(&mouseEvent);
   m_lastAutoPanPos += m_autoPanSpeed;
+}
+
+//-----------------------------------------------------------------------------
+
+bool XsheetViewer::eventFilter(QObject *obj, QEvent *e) {
+  if (e->type() == QEvent::MouseButtonPress) {
+    // stop playing on clicking xsheet
+    if (TApp::instance()->getCurrentFrame()->isPlaying())
+      CommandManager::instance()->execute(MI_Pause);
+  }
+  return false;
 }
 
 //-----------------------------------------------------------------------------
