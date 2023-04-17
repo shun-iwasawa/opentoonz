@@ -579,18 +579,18 @@ Please choose a valid lip sync data file to continue.</source>
 <context>
     <name>AutocenterPopup</name>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="509"/>
-        <location filename="../../toonz/scanpopup.cpp" line="521"/>
+        <location filename="../../toonz/scanpopup.cpp" line="507"/>
+        <location filename="../../toonz/scanpopup.cpp" line="519"/>
         <source>Autocenter</source>
         <translation>Автоцентр</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="527"/>
+        <location filename="../../toonz/scanpopup.cpp" line="525"/>
         <source>Pegbar Holes:</source>
         <translation>Отверстия Pegbar:</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="542"/>
+        <location filename="../../toonz/scanpopup.cpp" line="540"/>
         <source>Field Guide:</source>
         <translation>Направляющая сетка:</translation>
     </message>
@@ -3019,17 +3019,27 @@ contain the dpi information, then the current camera dpi will be used.
         <translation>Определить сканер</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="197"/>
+        <location filename="../../toonz/scanpopup.cpp" line="193"/>
+        <source>TWAIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/scanpopup.cpp" line="194"/>
+        <source>Internal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/scanpopup.cpp" line="195"/>
         <source>Scanner Driver:</source>
         <translation>Драйвер сканера:</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="202"/>
+        <location filename="../../toonz/scanpopup.cpp" line="200"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="204"/>
+        <location filename="../../toonz/scanpopup.cpp" line="202"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -3582,50 +3592,50 @@ contain the dpi information, then the current camera dpi will be used.
 <context>
     <name>ExportOCACommand</name>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="413"/>
+        <location filename="../../toonz/ocaio.cpp" line="409"/>
         <source>Save Images in EXR Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="414"/>
+        <location filename="../../toonz/ocaio.cpp" line="410"/>
         <source>Rasterize Vectors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="417"/>
+        <location filename="../../toonz/ocaio.cpp" line="413"/>
         <source>Frame Offset: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="421"/>
+        <location filename="../../toonz/ocaio.cpp" line="417"/>
         <source>Checked: Images are saved as EXR
 Unchecked: Images are saved as PNG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="424"/>
+        <location filename="../../toonz/ocaio.cpp" line="420"/>
         <source>Checked: Rasterize into EXR/PNG
 Unchecked: Vectors are saved as SVG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="426"/>
-        <location filename="../../toonz/ocaio.cpp" line="427"/>
+        <location filename="../../toonz/ocaio.cpp" line="422"/>
+        <location filename="../../toonz/ocaio.cpp" line="423"/>
         <source>Starting Frame Offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="447"/>
+        <location filename="../../toonz/ocaio.cpp" line="443"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="448"/>
+        <location filename="../../toonz/ocaio.cpp" line="444"/>
         <source>Exporting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="473"/>
+        <location filename="../../toonz/ocaio.cpp" line="469"/>
         <source>Starting...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9398,33 +9408,33 @@ What do you want to do?</source>
 <context>
     <name>MyScannerListener</name>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="669"/>
-        <location filename="../../toonz/scanpopup.cpp" line="782"/>
+        <location filename="../../toonz/scanpopup.cpp" line="667"/>
+        <location filename="../../toonz/scanpopup.cpp" line="780"/>
         <source>Scanning in progress: </source>
         <translation>Выполняется сканирование: </translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="688"/>
+        <location filename="../../toonz/scanpopup.cpp" line="686"/>
         <source>The pixel type is not supported.</source>
         <translation>Формат пикселей не поддерживается.</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="694"/>
+        <location filename="../../toonz/scanpopup.cpp" line="692"/>
         <source>The scanning process is completed.</source>
         <translation>Процесс сканирования завершен.</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="748"/>
+        <location filename="../../toonz/scanpopup.cpp" line="746"/>
         <source>There was an error during the scanning process.</source>
         <translation>Во время сканирования произошла ошибка.</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="757"/>
+        <location filename="../../toonz/scanpopup.cpp" line="755"/>
         <source>Please, place the next paper drawing on the scanner flatbed, then select the relevant command in the TWAIN interface.</source>
         <translation>Пожалуйста, разместите следующий документ на планшете сканера, затем выберите соответствующую команду в интерфейсе TWAIN.</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="761"/>
+        <location filename="../../toonz/scanpopup.cpp" line="759"/>
         <source>Please, place the next paper drawing on the scanner flatbed, then click the Scan button.</source>
         <translation>Пожалуйста, поместите следующий рисунок бумаги на планшет сканера, затем нажмите кнопку «Сканировать».</translation>
     </message>
@@ -12873,9 +12883,9 @@ Note that this mode uses regular expression for file name validation and may slo
         <location filename="../../toonz/startuppopup.cpp" line="793"/>
         <location filename="../../toonz/shortcutpopup.cpp" line="494"/>
         <location filename="../../toonz/shortcutpopup.cpp" line="543"/>
-        <location filename="../../toonz/scanpopup.cpp" line="672"/>
-        <location filename="../../toonz/scanpopup.cpp" line="764"/>
-        <location filename="../../toonz/scanpopup.cpp" line="810"/>
+        <location filename="../../toonz/scanpopup.cpp" line="670"/>
+        <location filename="../../toonz/scanpopup.cpp" line="762"/>
+        <location filename="../../toonz/scanpopup.cpp" line="808"/>
         <location filename="../../toonz/filebrowserpopup.cpp" line="490"/>
         <location filename="../../toonz/filebrowserpopup.cpp" line="1899"/>
         <location filename="../../toonz/fileselection.cpp" line="279"/>
@@ -13173,7 +13183,7 @@ Save the scene first.</source>
     <message>
         <location filename="../../toonz/cleanupsettingsmodel.cpp" line="449"/>
         <location filename="../../toonz/cleanuppopup.cpp" line="1288"/>
-        <location filename="../../toonz/scanpopup.cpp" line="715"/>
+        <location filename="../../toonz/scanpopup.cpp" line="713"/>
         <source>The autocentering failed on the current drawing.</source>
         <translation>Ошибка автоцентра на текущем рисунке.</translation>
     </message>
@@ -13702,19 +13712,19 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="454"/>
+        <location filename="../../toonz/ocaio.cpp" line="450"/>
         <source>Export Open Cel Animation (OCA)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="501"/>
+        <location filename="../../toonz/ocaio.cpp" line="497"/>
         <location filename="../../toonz/xdtsio.cpp" line="651"/>
         <location filename="../../toonz/xdtsio.cpp" line="743"/>
         <source>No columns can be exported.</source>
         <translation>Столбцы нельзя экспортировать.</translation>
     </message>
     <message>
-        <location filename="../../toonz/ocaio.cpp" line="515"/>
+        <location filename="../../toonz/ocaio.cpp" line="511"/>
         <source>%1 has been exported successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13903,7 +13913,7 @@ Do you want to overwrite it?</source>
         <location filename="../../toonz/penciltestpopup.cpp" line="3659"/>
         <location filename="../../toonz/exportxsheetpdf.cpp" line="2718"/>
         <location filename="../../toonz/tvpjson_io.cpp" line="506"/>
-        <location filename="../../toonz/ocaio.cpp" line="518"/>
+        <location filename="../../toonz/ocaio.cpp" line="514"/>
         <location filename="../../toonz/xdtsio.cpp" line="757"/>
         <location filename="../../toonz/iocommand.cpp" line="3089"/>
         <location filename="../../toonz/shortcutpopup.cpp" line="494"/>
@@ -13914,7 +13924,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../toonz/exportxsheetpdf.cpp" line="2719"/>
         <location filename="../../toonz/tvpjson_io.cpp" line="507"/>
-        <location filename="../../toonz/ocaio.cpp" line="519"/>
+        <location filename="../../toonz/ocaio.cpp" line="515"/>
         <location filename="../../toonz/xdtsio.cpp" line="758"/>
         <source>Open containing folder</source>
         <translation>Открыть содержащую папку</translation>
@@ -14602,29 +14612,29 @@ Are you sure?</source>
         <translation>Нет сканера</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="764"/>
-        <location filename="../../toonz/scanpopup.cpp" line="810"/>
+        <location filename="../../toonz/scanpopup.cpp" line="762"/>
+        <location filename="../../toonz/scanpopup.cpp" line="808"/>
         <source>Scan</source>
         <translation>Сканирование</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="808"/>
+        <location filename="../../toonz/scanpopup.cpp" line="806"/>
         <source>Some of the selected drawings were already scanned. Do you want to scan them again?</source>
         <translation>Некоторые из выбранных рисунков уже были отсканированы. Вы хотите отсканировать их снова?</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="810"/>
+        <location filename="../../toonz/scanpopup.cpp" line="808"/>
         <source>Don&apos;t Scan</source>
         <translation>Не сканировать</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="817"/>
+        <location filename="../../toonz/scanpopup.cpp" line="815"/>
         <source>There are no frames to scan.</source>
         <translation>Для сканирования нет кадров.</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="826"/>
-        <location filename="../../toonz/scanpopup.cpp" line="925"/>
+        <location filename="../../toonz/scanpopup.cpp" line="824"/>
+        <location filename="../../toonz/scanpopup.cpp" line="923"/>
         <source>TWAIN is not available.</source>
         <translation>TWAIN недоступен.</translation>
     </message>
@@ -17493,47 +17503,48 @@ Please commit or revert changes first.</source>
 <context>
     <name>ScanSettingsPopup</name>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="246"/>
+        <location filename="../../toonz/scanpopup.cpp" line="244"/>
         <source>Scan Settings</source>
         <translation>Настройки сканера</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="247"/>
+        <location filename="../../toonz/scanpopup.cpp" line="245"/>
+        <location filename="../../toonz/scanpopup.cpp" line="429"/>
         <source>[no scanner]</source>
         <translation>[Нет сканера]</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="260"/>
+        <location filename="../../toonz/scanpopup.cpp" line="258"/>
         <source>Paper Format:</source>
         <translation>Формат бумаги:</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="262"/>
+        <location filename="../../toonz/scanpopup.cpp" line="260"/>
         <source>Reverse Order</source>
         <translation>Обратный порядок</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="266"/>
+        <location filename="../../toonz/scanpopup.cpp" line="264"/>
         <source>Paper Feeder</source>
         <translation>Податчик бумаги</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="271"/>
+        <location filename="../../toonz/scanpopup.cpp" line="269"/>
         <source>Dpi: </source>
         <translation>DPI: </translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="277"/>
+        <location filename="../../toonz/scanpopup.cpp" line="275"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="280"/>
+        <location filename="../../toonz/scanpopup.cpp" line="278"/>
         <source>Threshold: </source>
         <translation>Порог: </translation>
     </message>
     <message>
-        <location filename="../../toonz/scanpopup.cpp" line="284"/>
+        <location filename="../../toonz/scanpopup.cpp" line="282"/>
         <source>Brightness: </source>
         <translation>Яркость: </translation>
     </message>
@@ -21033,6 +21044,11 @@ Please refer to the user guide for details.</source>
     <message>
         <location filename="../../toonz/xshcellviewer.cpp" line="3951"/>
         <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../toonz/xshcellviewer.cpp" line="4106"/>
+        <source>Interpolation on %1&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

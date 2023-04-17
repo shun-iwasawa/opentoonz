@@ -2321,6 +2321,14 @@ contain the dpi information, then the current camera dpi will be used.
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>TWAIN</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Internal</source>
+        <translation>内蔵ドライバ</translation>
+    </message>
 </context>
 <context>
     <name>DeleteInkDialog</name>
@@ -17177,6 +17185,10 @@ Please refer to the user guide for details.</source>
     <message>
         <source>None</source>
         <translation>なし</translation>
+    </message>
+    <message>
+        <source>Interpolation on %1&apos;s</source>
+        <translation>%1コマで補間</translation>
     </message>
 </context>
 <context>

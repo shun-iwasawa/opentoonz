@@ -2197,6 +2197,14 @@ contain the dpi information, then the current camera dpi will be used.
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>TWAIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeleteInkDialog</name>
@@ -16273,6 +16281,10 @@ Per favore fai riferimento alla Guida utente per i dettagli.</translation>
     </message>
     <message>
         <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation on %1&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

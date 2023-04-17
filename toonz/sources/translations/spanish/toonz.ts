@@ -2313,6 +2313,14 @@ contuviera información de PPP, entonces se usarán los de la cámara actual.
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
+    <message>
+        <source>TWAIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeleteInkDialog</name>
@@ -17099,6 +17107,10 @@ Por favor ver la guía de usuario para obtener más detalles.</translation>
     <message>
         <source>None</source>
         <translation>Ninguna</translation>
+    </message>
+    <message>
+        <source>Interpolation on %1&apos;s</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

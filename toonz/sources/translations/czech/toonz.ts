@@ -2321,6 +2321,14 @@ neobsahuje informace o DPI, použije se DPI aktuální kamery.
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>TWAIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeleteInkDialog</name>
@@ -17169,6 +17177,10 @@ Podrobnosti najdete v uživatelské příručce.</translation>
     </message>
     <message>
         <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation on %1&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

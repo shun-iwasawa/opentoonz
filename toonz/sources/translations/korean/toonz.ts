@@ -2281,6 +2281,14 @@ DPI 정보를 포함하면 현재 카메라 DPI가 적용됩니다. </translatio
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
+    <message>
+        <source>TWAIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeleteInkDialog</name>
@@ -16270,6 +16278,10 @@ Please refer to the user guide for details.</source>
     <message>
         <source>None</source>
         <translation>없음</translation>
+    </message>
+    <message>
+        <source>Interpolation on %1&apos;s</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
