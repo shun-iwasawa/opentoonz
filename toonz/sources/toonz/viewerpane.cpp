@@ -557,21 +557,25 @@ void BaseViewerPanel::onPlayingStatusChanged(bool playing) {
 
   // if preview behavior mode is "selected cells", release preview mode when
   // stopped
-  if (!playing && EnvViewerPreviewBehavior == 2 &&
-      FlipConsole::getCurrent() == m_flipConsole &&
-      !Previewer::instance(m_sceneViewer->getPreviewMode() ==
-                           SceneViewer::SUBCAMERA_PREVIEW)
-           ->isBusy()) {
-    if (CommandManager::instance()
+  if (!playing && FlipConsole::getCurrent() == m_flipConsole) {
+    if (Preferences::instance()->previewWhenPlayingOnViewerEnabled() ||
+        (EnvViewerPreviewBehavior == 2 &&
+         !Previewer::instance(m_sceneViewer->getPreviewMode() ==
+                              SceneViewer::SUBCAMERA_PREVIEW)
+              ->isBusy())) {
+      if (CommandManager::instance()
+              ->getAction(MI_ToggleViewerPreview)
+              ->isChecked())
+        CommandManager::instance()
             ->getAction(MI_ToggleViewerPreview)
-            ->isChecked())
-      CommandManager::instance()->getAction(MI_ToggleViewerPreview)->trigger();
-    else if (CommandManager::instance()
-                 ->getAction(MI_ToggleViewerSubCameraPreview)
-                 ->isChecked())
-      CommandManager::instance()
-          ->getAction(MI_ToggleViewerSubCameraPreview)
-          ->trigger();
+            ->trigger();
+      else if (CommandManager::instance()
+                   ->getAction(MI_ToggleViewerSubCameraPreview)
+                   ->isChecked())
+        CommandManager::instance()
+            ->getAction(MI_ToggleViewerSubCameraPreview)
+            ->trigger();
+    }
   }
 
   if (Preferences::instance()->getOnionSkinDuringPlayback()) return;
@@ -868,35 +872,78 @@ void BaseViewerPanel::load(QSettings &settings) {
 //-----------------------------------------------------------------------------
 
 void BaseViewerPanel::onPreviewStatusChanged() {
-  // if preview behavior mode is "selected cells", play once the all frames are
-  // completed
-  if (EnvViewerPreviewBehavior == 2 &&
-      FlipConsole::getCurrent() == m_flipConsole &&
+  if (FlipConsole::getCurrent() == m_flipConsole &&
       !TApp::instance()->getCurrentFrame()->isPlaying() &&
       m_sceneViewer->isPreviewEnabled() &&
       !Previewer::instance(m_sceneViewer->getPreviewMode() ==
                            SceneViewer::SUBCAMERA_PREVIEW)
            ->isBusy()) {
-    TCellSelection *cellSel =
-        dynamic_cast<TCellSelection *>(TSelection::getCurrent());
-    if (cellSel && !cellSel->isEmpty()) {
-      int r0, c0, r1, c1;
-      cellSel->getSelectedCells(r0, c0, r1, c1);
-      if (r0 < r1) {
-        // check if all frame range is rendered. this check is needed since
-        // isBusy() will not be true just after the preview is triggered
-        for (int r = r0; r <= r1; r++) {
-          if (!Previewer::instance(m_sceneViewer->getPreviewMode() ==
-                                   SceneViewer::SUBCAMERA_PREVIEW)
-                   ->isFrameReady(r)) {
-            update();
-            return;
-          }
+    int buttonId        = 0;
+    CommandId playCmdId = MI_Loop;
+    if (Preferences::instance()->previewWhenPlayingOnViewerEnabled() &&
+        m_sceneViewer->getPreviewMode() == SceneViewer::FULL_PREVIEW &&
+        CommandManager::instance()
+                ->getAction(MI_ToggleViewerPreview)
+                ->data()
+                .toInt() != 0) {
+      buttonId = CommandManager::instance()
+                     ->getAction(MI_ToggleViewerPreview)
+                     ->data()
+                     .toInt();
+      playCmdId = (buttonId == FlipConsole::ePlay) ? MI_Play : MI_Loop;
+    }
+
+    // current frame
+    if (buttonId && EnvViewerPreviewBehavior == 0) {
+      CommandManager::instance()->execute(playCmdId);
+      CommandManager::instance()
+          ->getAction(MI_ToggleViewerPreview)
+          ->setData(QVariant());
+    }
+    // all frames
+    else if (buttonId && EnvViewerPreviewBehavior == 1) {
+      int r0, r1, step;
+      ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+      scene->getProperties()->getPreviewProperties()->getRange(r0, r1, step);
+      if (r0 > r1) {
+        r0 = 0;
+        r1 = scene->getFrameCount() - 1;
+      }
+      for (int f = r0; f <= r1; f += step) {
+        if (!Previewer::instance(false)->isFrameReady(f)) {
+          update();
+          return;
         }
-        m_flipConsole->setStopAt(r1 + 1);
-        m_flipConsole->setStartAt(r0 + 1);
-        TApp::instance()->getCurrentFrame()->setFrame(r0);
-        CommandManager::instance()->execute(MI_Loop);
+      }
+      CommandManager::instance()->execute(playCmdId);
+      CommandManager::instance()
+          ->getAction(MI_ToggleViewerPreview)
+          ->setData(QVariant());
+    }
+    // if preview behavior mode is "selected cells", play once the all frames
+    // are completed
+    else if (EnvViewerPreviewBehavior == 2) {
+      TCellSelection *cellSel =
+          dynamic_cast<TCellSelection *>(TSelection::getCurrent());
+      if (cellSel && !cellSel->isEmpty()) {
+        int r0, c0, r1, c1;
+        cellSel->getSelectedCells(r0, c0, r1, c1);
+        if (r0 < r1) {
+          // check if all frame range is rendered. this check is needed since
+          // isBusy() will not be true just after the preview is triggered
+          for (int r = r0; r <= r1; r++) {
+            if (!Previewer::instance(m_sceneViewer->getPreviewMode() ==
+                                     SceneViewer::SUBCAMERA_PREVIEW)
+                     ->isFrameReady(r)) {
+              update();
+              return;
+            }
+          }
+          m_flipConsole->setStopAt(r1 + 1);
+          m_flipConsole->setStartAt(r0 + 1);
+          TApp::instance()->getCurrentFrame()->setFrame(r0);
+          CommandManager::instance()->execute(playCmdId);
+        }
       }
     }
   }

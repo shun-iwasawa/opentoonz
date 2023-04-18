@@ -628,6 +628,8 @@ void Preferences::definePreferenceItems() {
   define(fitToFlipbook, "fitToFlipbook", QMetaType::Bool, false);
   define(generatedMovieViewEnabled, "generatedMovieViewEnabled",
          QMetaType::Bool, true);
+  define(previewWhenPlayingOnViewer, "previewWhenPlayingOnViewer",
+         QMetaType::Bool, false);
 
   // Onion Skin
   define(onionSkinEnabled, "onionSkinEnabled", QMetaType::Bool, true);

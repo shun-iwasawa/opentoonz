@@ -1319,6 +1319,7 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       {previewAlwaysOpenNewFlip, tr("Display in a New Flipbook Window")},
       {fitToFlipbook, tr("Fit to Flipbook")},
       {generatedMovieViewEnabled, tr("Open Flipbook after Rendering")},
+      {previewWhenPlayingOnViewer, tr("Preview When Playing on Viewer")},
 
       // Onion Skin
       {onionSkinEnabled, tr("Onion Skin ON")},
@@ -2099,6 +2100,7 @@ QWidget* PreferencesPopup::createPreviewPage() {
   insertUI(previewAlwaysOpenNewFlip, lay);
   insertUI(fitToFlipbook, lay);
   insertUI(generatedMovieViewEnabled, lay);
+  insertUI(previewWhenPlayingOnViewer, lay);
 
   lay->setRowStretch(lay->rowCount(), 1);
   widget->setLayout(lay);

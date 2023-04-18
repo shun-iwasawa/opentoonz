@@ -1521,7 +1521,24 @@ void FlipConsole::onButtonPressed(int button) {
       }
     }
 
-    doButtonPressed(button);
+    // If play / loop is pressed, previewWhenPlayingOnViewer option is ON, and
+    // preview is disabled
+    if ((button == FlipConsole::ePlay || button == FlipConsole::eLoop) &&
+        Preferences::instance()->previewWhenPlayingOnViewerEnabled() &&
+        m_consoleOwner->isViewer() &&
+        !CommandManager::instance()
+             ->getAction("MI_ToggleViewerPreview")
+             ->isChecked()) {
+      // temporarily set the button id to specify the play type (either play or
+      // loop) after rendering is done
+      CommandManager::instance()
+          ->getAction("MI_ToggleViewerPreview")
+          ->setData(button);
+      CommandManager::instance()
+          ->getAction("MI_ToggleViewerPreview")
+          ->trigger();
+    } else
+      doButtonPressed(button);
   }
 
   if (m_areLinked) pressLinkedConsoleButton(button, this);

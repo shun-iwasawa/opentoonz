@@ -22,5 +22,7 @@ public:
 
   virtual void swapBuffers(){};
   virtual void changeSwapBehavior(bool enable){};
+  // return true when the owner is viewer panel
+  virtual bool isViewer() { return false; }
 };
 #endif

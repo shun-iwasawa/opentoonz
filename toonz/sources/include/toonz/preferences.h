@@ -450,6 +450,9 @@ public:
   bool isGeneratedMovieViewEnabled() const {
     return getBoolValue(generatedMovieViewEnabled);
   }
+  bool previewWhenPlayingOnViewerEnabled() const {
+    return getBoolValue(previewWhenPlayingOnViewer);
+  }
 
   // Onion Skin  tab
   bool isOnionSkinEnabled() const { return getBoolValue(onionSkinEnabled); }
