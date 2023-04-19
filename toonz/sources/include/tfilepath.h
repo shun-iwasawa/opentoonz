@@ -141,6 +141,7 @@ class DVAPI TFilePath {
   static bool m_useStandard;
   static bool m_acceptNonAlphabetSuffix;
   static int m_letterCountForSuffix;
+  static bool m_allowFrameZero;
 
   std::wstring m_path;
 
@@ -165,17 +166,21 @@ public:
   // ProjectPopup::updateProjectFromFields
   // returns true if something changed
   static bool setFilePathProperties(bool useStandard, bool acceptNonAlphaSuffix,
-                                    int letterCountForSuffix) {
+                                    int letterCountForSuffix,
+                                    bool allowFrameZero) {
     if (m_useStandard == useStandard &&
         m_acceptNonAlphabetSuffix == acceptNonAlphaSuffix &&
-        m_letterCountForSuffix == letterCountForSuffix)
+        m_letterCountForSuffix == letterCountForSuffix &&
+        m_allowFrameZero == allowFrameZero)
       return false;
     m_useStandard             = useStandard;
     m_acceptNonAlphabetSuffix = acceptNonAlphaSuffix;
     m_letterCountForSuffix    = letterCountForSuffix;
+    m_allowFrameZero          = allowFrameZero;
     return true;
   }
   static bool useStandard() { return m_useStandard; }
+  static bool allowFrameZero() { return m_allowFrameZero; }
   static QString fidRegExpStr();
 
   /*!This constructor creates a string removing redundances ('//', './',etc.)

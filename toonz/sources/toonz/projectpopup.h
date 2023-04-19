@@ -123,6 +123,7 @@ protected:
   QButtonGroup *m_rulePreferenceBG;
   DVGui::CheckBox *m_acceptNonAlphabetSuffixCB;
   QComboBox *m_letterCountCombo;
+  DVGui::CheckBox *m_allowFrameZeroCB;
 
 public:
   ProjectPopup(bool isModal);

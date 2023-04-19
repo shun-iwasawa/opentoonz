@@ -92,6 +92,7 @@
 #include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QPropertyAnimation>
 
 #ifdef _WIN32
 #include <dshow.h>
@@ -760,8 +761,12 @@ FrameNumberLineEdit::FrameNumberLineEdit(QWidget* parent, TFrameId fId,
     m_regexpValidator   = new QRegExpValidator(QRegExp(regExpStr), this);
     TProjectManager* pm = TProjectManager::instance();
     pm->addListener(this);
-  } else
-    m_regexpValidator = new QRegExpValidator(QRegExp("^\\d{1,4}$"), this);
+  } else {
+    if (TFilePath::allowFrameZero())
+      m_regexpValidator = new QRegExpValidator(QRegExp("^\\d{1,4}$"), this);
+    else  // ignoring the limitation of 4 digits for simplicity
+      m_regexpValidator = new QRegExpValidator(QRegExp("^0*[1-9]\d*$"), this);
+  }
 
   m_regexpValidator_alt =
       new QRegExpValidator(QRegExp("^\\d{1,3}[A-Ia-i]?$"), this);
@@ -859,10 +864,18 @@ void FrameNumberLineEdit::focusInEvent(QFocusEvent* e) {
 }
 
 void FrameNumberLineEdit::focusOutEvent(QFocusEvent* e) {
-  // if the field is empty, then revert the last input
-  if (text().isEmpty()) setText(m_textOnFocusIn);
+  // if the field is empty or invalid, then revert the last input
+  if (text().isEmpty() || !hasAcceptableInput()) {
+    setText(m_textOnFocusIn);
+    QPropertyAnimation* a = new QPropertyAnimation(this, "color");
+    a->setDuration(1000);
+    a->setStartValue(QColor(255, 0, 0, 128));
+    a->setEndValue(QColor(255, 0, 0, 0));
+    a->setEasingCurve(QEasingCurve::OutBack);
+    a->start(QPropertyAnimation::DeleteWhenStopped);
+  }
 
-  LineEdit::focusOutEvent(e);
+  QLineEdit::focusOutEvent(e);
 }
 
 //=============================================================================

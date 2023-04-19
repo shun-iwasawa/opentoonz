@@ -36,6 +36,7 @@ bool TFilePath::m_underscoreFormatAllowed = true;
 bool TFilePath::m_useStandard             = true;
 bool TFilePath::m_acceptNonAlphabetSuffix = false;
 int TFilePath::m_letterCountForSuffix     = 1;
+bool TFilePath::m_allowFrameZero          = true;
 
 namespace {
 
@@ -1077,14 +1078,18 @@ void TFilePath::split(std::wstring &head, TFilePath &tail) const {
 //-----------------------------------------------------------------------------
 
 QString TFilePath::fidRegExpStr() {
-  if (m_useStandard) return QString("(\\d+)([a-zA-Z]?)");
+  QString frameNumberLetter = (m_allowFrameZero) ? "\\d+" : "0*[1-9]\\d*";
+  if (m_useStandard) return QString("(%1)([a-zA-Z]?)").arg(frameNumberLetter);
   QString suffixLetter = (m_acceptNonAlphabetSuffix)
                              ? "[^\\._ \\\\/:,;*?\"<>|0123456789]"
                              : "[a-zA-Z]";
   QString countLetter  = (m_letterCountForSuffix == 0)
                              ? "{0,}"
                              : (QString("{0,%1}").arg(m_letterCountForSuffix));
-  return QString("(\\d+)(%1%2)").arg(suffixLetter).arg(countLetter);
+  return QString("(%1)(%2%3)")
+      .arg(frameNumberLetter)
+      .arg(suffixLetter)
+      .arg(countLetter);
   // const QString fIdRegExp("(\\d+)([a-zA-Z]?)");
 }
 

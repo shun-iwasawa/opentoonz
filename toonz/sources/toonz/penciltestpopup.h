@@ -125,6 +125,7 @@ signals:
 class FrameNumberLineEdit : public DVGui::LineEdit,
                             public TProjectManager::Listener {
   Q_OBJECT
+  Q_PROPERTY(QColor color READ color WRITE setColor)
   /* having two validators and switch them according to the preferences*/
   QRegExpValidator *m_regexpValidator, *m_regexpValidator_alt;
 
@@ -145,6 +146,15 @@ public:
   // TProjectManager::Listener
   void onProjectSwitched() override;
   void onProjectChanged() override;
+
+  void setColor(QColor color) {
+    setStyleSheet(QString("background-color: rgba(%1, %2, %3, %4);")
+                      .arg(color.red())
+                      .arg(color.green())
+                      .arg(color.blue())
+                      .arg(color.alphaF()));
+  }
+  QColor color() { return Qt::black; }
 
 protected:
   /*! If focus is lost and current text value is out of range emit signal

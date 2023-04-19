@@ -828,9 +828,9 @@ int main(int argc, char *argv[]) {
 
     // update TFilePath condition on loading the current project
     FilePathProperties *fpProp = project->getFilePathProperties();
-    TFilePath::setFilePathProperties(fpProp->useStandard(),
-                                     fpProp->acceptNonAlphabetSuffix(),
-                                     fpProp->letterCountForSuffix());
+    TFilePath::setFilePathProperties(
+        fpProp->useStandard(), fpProp->acceptNonAlphabetSuffix(),
+        fpProp->letterCountForSuffix(), fpProp->allowFrameZero());
 
     Sw1.start();
 

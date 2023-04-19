@@ -297,6 +297,8 @@ ProjectPopup::ProjectPopup(bool isModal)
   m_acceptNonAlphabetSuffixCB =
       new CheckBox(tr("Accept Non-alphabet Suffix"), this);
   m_letterCountCombo = new QComboBox(this);
+  m_allowFrameZeroCB =
+      new CheckBox(tr("Allow #0 for Level Frame Number"), this);
 
   QTabWidget *tabWidget = new QTabWidget(this);
 
@@ -405,6 +407,7 @@ Note that this mode uses regular expression for file name validation and may slo
         customLay->addWidget(
             new QLabel(tr("Maximum Letter Count For Suffix"), this), 1, 0);
         customLay->addWidget(m_letterCountCombo, 1, 1);
+        customLay->addWidget(m_allowFrameZeroCB, 2, 0, 1, 2);
       }
       customLay->setColumnStretch(2, 1);
       fpLayout->addLayout(customLay, 0);
@@ -492,11 +495,13 @@ void ProjectPopup::updateFieldsFromProject(TProject *project) {
   bool useStandard           = fpProp->useStandard();
   bool acceptNonAlphabet     = fpProp->acceptNonAlphabetSuffix();
   int letterCount            = fpProp->letterCountForSuffix();
+  bool allowFrameZero        = fpProp->allowFrameZero();
   m_rulePreferenceBG->button((useStandard) ? Rule_Standard : Rule_Custom)
       ->setChecked(true);
   m_acceptNonAlphabetSuffixCB->setChecked(acceptNonAlphabet);
   m_letterCountCombo->setCurrentIndex(
       m_letterCountCombo->findData(letterCount));
+  m_allowFrameZeroCB->setChecked(allowFrameZero);
 }
 
 //-----------------------------------------------------------------------------
@@ -520,12 +525,15 @@ void ProjectPopup::updateProjectFromFields(TProject *project) {
   bool useStandard           = m_rulePreferenceBG->checkedId() == Rule_Standard;
   bool acceptNonAlphabet     = m_acceptNonAlphabetSuffixCB->isChecked();
   int letterCount            = m_letterCountCombo->currentData().toInt();
+  bool allowFrameZero        = m_allowFrameZeroCB->isChecked();
+
   fpProp->setUseStandard(useStandard);
   fpProp->setAcceptNonAlphabetSuffix(acceptNonAlphabet);
   fpProp->setLetterCountForSuffix(letterCount);
+  fpProp->setAllowFrameZero(allowFrameZero);
 
   if (TFilePath::setFilePathProperties(useStandard, acceptNonAlphabet,
-                                       letterCount))
+                                       letterCount, allowFrameZero))
     DvDirModel::instance()->refreshFolderChild(QModelIndex());  // refresh all
 
   TProjectManager::instance()->notifyProjectChanged();
@@ -555,6 +563,7 @@ void ProjectPopup::showEvent(QShowEvent *) {
 void ProjectPopup::onRulePreferenceToggled(int id, bool on) {
   m_acceptNonAlphabetSuffixCB->setEnabled((id == Rule_Custom) == on);
   m_letterCountCombo->setEnabled((id == Rule_Custom) == on);
+  m_allowFrameZeroCB->setEnabled((id == Rule_Custom) == on);
 }
 
 //=============================================================================
@@ -594,6 +603,8 @@ ProjectSettingsPopup::ProjectSettingsPopup() : ProjectPopup(false) {
   connect(m_acceptNonAlphabetSuffixCB, SIGNAL(clicked(bool)), this,
           SLOT(onSomethingChanged()));
   connect(m_letterCountCombo, SIGNAL(activated(int)), this,
+          SLOT(onSomethingChanged()));
+  connect(m_allowFrameZeroCB, SIGNAL(clicked(bool)), this,
           SLOT(onSomethingChanged()));
 }
 
@@ -766,6 +777,7 @@ void ProjectCreatePopup::showEvent(QShowEvent *) {
   m_rulePreferenceBG->button(Rule_Standard)->setChecked(true);
   m_acceptNonAlphabetSuffixCB->setChecked(false);
   m_letterCountCombo->setCurrentIndex(m_letterCountCombo->findData(1));
+  m_allowFrameZeroCB->setChecked(true);
 }
 
 //-----------------------------------------------------------------------------
