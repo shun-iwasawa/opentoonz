@@ -53,7 +53,7 @@ public:
   void deleteCells();
   void deleteCells(bool withShift);
   void cutCells();
-  void cutCells(bool withoutCopy);
+  void cutCells(bool withoutCopy, bool withShift);
 
   /*- セルの上書きペースト -*/
   void overWritePasteCells();

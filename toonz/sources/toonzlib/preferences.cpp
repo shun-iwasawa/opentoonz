@@ -566,6 +566,8 @@ void Preferences::definePreferenceItems() {
          1);  // Cells and Column Data
   define(deleteCommandBehavior, "deleteCommandBehavior", QMetaType::Int,
          0);  // Clear Cell / Frame
+  define(cutCommandBehavior, "cutCommandBehavior", QMetaType::Int,
+         1);  // Remove and Shift Cells / Frames Up
   define(pasteCellsBehavior, "pasteCellsBehavior", QMetaType::Int,
          0);  // Insert paste whole cell data
   define(ignoreAlphaonColumn1Enabled, "ignoreAlphaonColumn1Enabled",

@@ -243,13 +243,16 @@ void TFilmstripSelection::cutFrames() {
       selectNone();
       return;
     }
-    FilmstripCmd::cut(sl, m_selectedFrames);
-    selectNone();
-    TFrameId fId = (firstSelectedIndex == 0)
-                       ? sl->getFirstFid()
-                       : sl->getFrameId(firstSelectedIndex - 1);
-    TApp::instance()->getCurrentFrame()->setFid(fId);
-    select(fId);
+    bool doShift = Preferences::instance()->getCutCommandBehaviour() == 1;
+    FilmstripCmd::cut(sl, m_selectedFrames, doShift);
+    if (doShift) {
+      selectNone();
+      TFrameId fId = (firstSelectedIndex == 0)
+                         ? sl->getFirstFid()
+                         : sl->getFrameId(firstSelectedIndex - 1);
+      TApp::instance()->getCurrentFrame()->setFid(fId);
+      select(fId);
+    }
   }
 }
 

@@ -1272,6 +1272,7 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       {xsheetAutopanEnabled, tr("Xsheet Autopan during Playback")},
       {DragCellsBehaviour, tr("Cell-dragging Behaviour:")},
       {deleteCommandBehavior, tr("Delete Command Behaviour:")},
+      {cutCommandBehavior, tr("Cut Command Behaviour:")},
       {pasteCellsBehavior, tr("Paste Cells Behaviour:")},
       {ignoreAlphaonColumn1Enabled,
        tr("Ignore Alpha Channel on Levels in Column 1")},
@@ -1447,6 +1448,9 @@ QList<ComboBoxItem> PreferencesPopup::getComboItemList(
         {tr("Cells and Column Data"), 1},
         {tr("Disable Dragging Cells"), 2}}},
       {deleteCommandBehavior,
+       {{tr("Clear Cell / Frame"), 0},
+        {tr("Remove and Shift Cells / Frames Up"), 1}}},
+      {cutCommandBehavior,
        {{tr("Clear Cell / Frame"), 0},
         {tr("Remove and Shift Cells / Frames Up"), 1}}},
       {pasteCellsBehavior,
@@ -2016,6 +2020,7 @@ QWidget* PreferencesPopup::createXsheetPage() {
   insertUI(xsheetAutopanEnabled, lay);
   insertUI(DragCellsBehaviour, lay, getComboItemList(DragCellsBehaviour));
   insertUI(deleteCommandBehavior, lay, getComboItemList(deleteCommandBehavior));
+  insertUI(cutCommandBehavior, lay, getComboItemList(cutCommandBehavior));
   insertUI(pasteCellsBehavior, lay, getComboItemList(pasteCellsBehavior));
   insertUI(ignoreAlphaonColumn1Enabled, lay);
   QGridLayout* showKeyLay =

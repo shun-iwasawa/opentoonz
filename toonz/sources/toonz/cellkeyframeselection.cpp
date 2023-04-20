@@ -106,7 +106,10 @@ void TCellKeyframeSelection::cutCellsKeyframes() {
   TUndoManager::manager()->beginBlock();
   int r0, r1, c0, c1;
   m_cellSelection->getSelectedCells(r0, c0, r1, c1);
-  m_cellSelection->cutCells(true);
+  // cut cells with shifting
+  // TODO: behavior of cutting cell+keyframe should also follow the preference
+  // option.
+  m_cellSelection->cutCells(true, true);
   m_keyframeSelection->deleteKeyframesWithShift(r0, r1, c0, c1);
   TUndoManager::manager()->endBlock();
 }

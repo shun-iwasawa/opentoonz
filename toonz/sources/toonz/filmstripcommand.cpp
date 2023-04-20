@@ -434,7 +434,8 @@ void removeFramesWithoutUndo(const TXshSimpleLevelP &sl,
 
 //-----------------------------------------------------------------------------
 
-void cutFramesWithoutUndo(TXshSimpleLevel *sl, std::set<TFrameId> &frames) {
+void cutFramesWithoutUndo(TXshSimpleLevel *sl, std::set<TFrameId> &frames,
+                          bool doShift) {
   std::map<TFrameId, QString> imageSet;
 
   HookSet *levelHooks   = sl->getHookSet();
@@ -460,7 +461,15 @@ void cutFramesWithoutUndo(TXshSimpleLevel *sl, std::set<TFrameId> &frames) {
   clipboard->setMimeData(data, QClipboard::Clipboard);
 
   for (it = frames.begin(); it != frames.end(); ++it, i++) {
-    sl->eraseFrame(*it);
+    if (doShift)  // Remove and Shift
+      sl->eraseFrame(*it);
+    else {  // Clear
+      // empty frame must be created BEFORE erasing frame or it may initialize
+      // palette.
+      TImageP emptyFrame = sl->createEmptyFrame();
+      sl->eraseFrame(*it);
+      sl->setFrame(*it, emptyFrame);
+    }
   }
 
   std::vector<TFrameId> newFids;
@@ -1122,10 +1131,15 @@ class CutFramesUndo final : public TUndo {
   std::vector<TFrameId> m_oldFrames;
   DrawingData *m_newData;
 
+  bool m_doShift;
+
 public:
   CutFramesUndo(TXshSimpleLevel *sl, std::set<TFrameId> &framesCutted,
-                std::vector<TFrameId> &oldFrames)
-      : m_sl(sl), m_framesCutted(framesCutted), m_oldFrames(oldFrames) {
+                std::vector<TFrameId> &oldFrames, bool doShift)
+      : m_sl(sl)
+      , m_framesCutted(framesCutted)
+      , m_oldFrames(oldFrames)
+      , m_doShift(doShift) {
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData *data       = cloneData(clipboard->mimeData());
     m_newData             = dynamic_cast<DrawingData *>(data);
@@ -1150,7 +1164,7 @@ public:
     QMimeData *currentData = cloneData(clipboard->mimeData());
 
     std::set<TFrameId> frames = m_framesCutted;
-    cutFramesWithoutUndo(m_sl, frames);
+    cutFramesWithoutUndo(m_sl, frames, m_doShift);
 
     // Setto il clipboard corrente
     clipboard->setMimeData(currentData, QClipboard::Clipboard);
@@ -1774,14 +1788,16 @@ void FilmstripCmd::pasteInto(TXshSimpleLevel *sl, std::set<TFrameId> &frames) {
 // cut
 //-----------------------------------------------------------------------------
 
-void FilmstripCmd::cut(TXshSimpleLevel *sl, std::set<TFrameId> &frames) {
+void FilmstripCmd::cut(TXshSimpleLevel *sl, std::set<TFrameId> &frames,
+                       bool doShift) {
   if (!sl || frames.empty() || sl->isSubsequence() || sl->isReadOnly()) return;
 
   std::set<TFrameId> framesToCut = frames;
   std::vector<TFrameId> oldFrames;
   sl->getFids(oldFrames);
-  cutFramesWithoutUndo(sl, frames);
-  TUndoManager::manager()->add(new CutFramesUndo(sl, framesToCut, oldFrames));
+  cutFramesWithoutUndo(sl, frames, doShift);
+  TUndoManager::manager()->add(
+      new CutFramesUndo(sl, framesToCut, oldFrames, doShift));
 }
 
 //=============================================================================

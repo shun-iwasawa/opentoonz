@@ -156,11 +156,14 @@ void deleteCellsWithoutUndo(int &r0, int &c0, int &r1, int &c1, bool doShift) {
 
 //-----------------------------------------------------------------------------
 
-void cutCellsWithoutUndo(int &r0, int &c0, int &r1, int &c1) {
+void cutCellsWithoutUndo(int &r0, int &c0, int &r1, int &c1, bool doShift) {
   TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
   int c;
   for (c = c0; c <= c1; c++) {
-    xsh->removeCells(r0, c, r1 - r0 + 1);
+    if (doShift)
+      xsh->removeCells(r0, c, r1 - r0 + 1);
+    else
+      xsh->clearCells(r0, c, r1 - r0 + 1);
     // when the column becomes empty after deletion,
     // ColumnCmd::DeleteColumn() will take care of column related operations
     // like disconnecting from fx nodes etc.
@@ -260,7 +263,7 @@ public:
     int c0BeforeCut = c0;
     int c1BeforeCut = c1;
     // Cut delle celle che sono in newSelection
-    cutCellsWithoutUndo(r0, c0, r1, c1);
+    cutCellsWithoutUndo(r0, c0, r1, c1, true);
     // Se le colonne erano vuote le resetto (e' necessario farlo per le colonne
     // particolari, colonne sount o palette)
     assert(c1BeforeCut - c0BeforeCut + 1 == (int)m_areOldColumnsEmpty.size());
@@ -368,10 +371,11 @@ class CutCellsUndo final : public TUndo {
   TCellData *m_data;
 
   bool m_containsSoundColumn;
+  bool m_doShift;  // whether clear cell or remove and shift cells up
 
 public:
-  CutCellsUndo(TCellSelection *selection)
-      : m_data(), m_containsSoundColumn(false) {
+  CutCellsUndo(TCellSelection *selection, bool doShift)
+      : m_data(), m_doShift(doShift), m_containsSoundColumn(false) {
     int r0, c0, r1, c1;
     selection->getSelectedCells(r0, c0, r1, c1);
     if (c0 < 0) c0 = 0;  // Ignore camera column
@@ -402,7 +406,7 @@ public:
     int r0, c0, r1, c1;
     m_selection->getSelectedCells(r0, c0, r1, c1);
 
-    pasteCellsWithoutUndo(m_data, r0, c0, r1, c1, true);
+    pasteCellsWithoutUndo(m_data, r0, c0, r1, c1, m_doShift);
     TApp::instance()->getCurrentXsheet()->notifyXsheetChanged();
     if (m_containsSoundColumn)
       TApp::instance()->getCurrentXsheet()->notifyXsheetSoundChanged();
@@ -414,7 +418,7 @@ public:
 
     int r0, c0, r1, c1;
     m_selection->getSelectedCells(r0, c0, r1, c1);
-    cutCellsWithoutUndo(r0, c0, r1, c1);
+    cutCellsWithoutUndo(r0, c0, r1, c1, m_doShift);
 
     clipboard->setMimeData(currentData, QClipboard::Clipboard);
     TApp::instance()->getCurrentXsheet()->notifyXsheetChanged();
@@ -1029,7 +1033,7 @@ public:
     QClipboard *clipboard = QApplication::clipboard();
     int c0BeforeCut       = c0;
     int c1BeforeCut       = c1;
-    cutCellsWithoutUndo(r0, c0, r1, c1);
+    cutCellsWithoutUndo(r0, c0, r1, c1, true);
 
     TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
     assert(c1BeforeCut - c0BeforeCut + 1 == (int)m_areOldColumnsEmpty.size());
@@ -1150,7 +1154,7 @@ public:
     QClipboard *clipboard = QApplication::clipboard();
     int c0BeforeCut       = c0;
     int c1BeforeCut       = c1;
-    cutCellsWithoutUndo(r0, c0, r1, c1);
+    cutCellsWithoutUndo(r0, c0, r1, c1, true);
 
     TXsheet *xsh = TApp::instance()->getCurrentXsheet()->getXsheet();
 
@@ -2602,14 +2606,20 @@ void TCellSelection::deleteCells(bool withShift) {
 
 //-----------------------------------------------------------------------------
 
-void TCellSelection::cutCells() { cutCells(false); }
+void TCellSelection::cutCells() {
+  // choose clear or remove+shift behavior
+  // 0: Clear Cell / Frame
+  // 1: Remove and Shift Cells / Frames Up
+  bool withShift = Preferences::instance()->getCutCommandBehaviour() == 1;
+  cutCells(false, withShift);
+}
 
 //-----------------------------------------------------------------------------
 
-void TCellSelection::cutCells(bool withoutCopy) {
+void TCellSelection::cutCells(bool withoutCopy, bool withShift) {
   if (isEmpty()) return;
 
-  CutCellsUndo *undo = new CutCellsUndo(new TCellSelection(m_range));
+  CutCellsUndo *undo = new CutCellsUndo(new TCellSelection(m_range), withShift);
 
   int r0, c0, r1, c1;
   getSelectedCells(r0, c0, r1, c1);
@@ -2636,7 +2646,7 @@ void TCellSelection::cutCells(bool withoutCopy) {
     }
   }
 
-  cutCellsWithoutUndo(r0, c0, r1, c1);
+  cutCellsWithoutUndo(r0, c0, r1, c1, withShift);
 
   TUndoManager::manager()->add(undo);
 
