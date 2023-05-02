@@ -797,7 +797,8 @@ SceneViewer::SceneViewer(ImageUtils::FullScreenWidget *parent)
     , m_editPreviewSubCamera(false)
     , m_locator(NULL)
     , m_isLocator(false)
-    , m_isBusyOnTabletMove(false) {
+    , m_isBusyOnTabletMove(false)
+    , m_lastSelectedPreviewMode(FULL_PREVIEW) {
   m_visualSettings.m_sceneProperties =
       TApp::instance()->getCurrentScene()->getScene()->getProperties();
 #if defined(x64)
@@ -961,6 +962,8 @@ void SceneViewer::enablePreview(int previewMode) {
 
   // Schedule as a listener to Previewer.
   if (m_previewMode != NO_PREVIEW) {
+    m_lastSelectedPreviewMode = m_previewMode;
+
     Previewer *previewer =
         Previewer::instance(m_previewMode == SUBCAMERA_PREVIEW);
 

@@ -878,27 +878,27 @@ void BaseViewerPanel::onPreviewStatusChanged() {
       !Previewer::instance(m_sceneViewer->getPreviewMode() ==
                            SceneViewer::SUBCAMERA_PREVIEW)
            ->isBusy()) {
-    int buttonId        = 0;
-    CommandId playCmdId = MI_Loop;
+    int buttonId           = 0;
+    CommandId playCmdId    = MI_Loop;
+    CommandId previewCmdId = MI_ToggleViewerPreview;
     if (Preferences::instance()->previewWhenPlayingOnViewerEnabled() &&
-        m_sceneViewer->getPreviewMode() == SceneViewer::FULL_PREVIEW &&
-        CommandManager::instance()
-                ->getAction(MI_ToggleViewerPreview)
-                ->data()
-                .toInt() != 0) {
-      buttonId = CommandManager::instance()
-                     ->getAction(MI_ToggleViewerPreview)
-                     ->data()
-                     .toInt();
-      playCmdId = (buttonId == FlipConsole::ePlay) ? MI_Play : MI_Loop;
+        m_sceneViewer->isPreviewEnabled()) {
+      previewCmdId =
+          (m_sceneViewer->getPreviewMode() == SceneViewer::FULL_PREVIEW)
+              ? MI_ToggleViewerPreview
+              : MI_ToggleViewerSubCameraPreview;
+      if (CommandManager::instance()->getAction(previewCmdId)->data().toInt() !=
+          0) {
+        buttonId =
+            CommandManager::instance()->getAction(previewCmdId)->data().toInt();
+        playCmdId = (buttonId == FlipConsole::ePlay) ? MI_Play : MI_Loop;
+      }
     }
 
     // current frame
     if (buttonId && EnvViewerPreviewBehavior == 0) {
       CommandManager::instance()->execute(playCmdId);
-      CommandManager::instance()
-          ->getAction(MI_ToggleViewerPreview)
-          ->setData(QVariant());
+      CommandManager::instance()->getAction(previewCmdId)->setData(QVariant());
     }
     // all frames
     else if (buttonId && EnvViewerPreviewBehavior == 1) {
@@ -910,15 +910,15 @@ void BaseViewerPanel::onPreviewStatusChanged() {
         r1 = scene->getFrameCount() - 1;
       }
       for (int f = r0; f <= r1; f += step) {
-        if (!Previewer::instance(false)->isFrameReady(f)) {
+        if (!Previewer::instance(m_sceneViewer->getPreviewMode() ==
+                                 SceneViewer::SUBCAMERA_PREVIEW)
+                 ->isFrameReady(f)) {
           update();
           return;
         }
       }
       CommandManager::instance()->execute(playCmdId);
-      CommandManager::instance()
-          ->getAction(MI_ToggleViewerPreview)
-          ->setData(QVariant());
+      CommandManager::instance()->getAction(previewCmdId)->setData(QVariant());
     }
     // if preview behavior mode is "selected cells", play once the all frames
     // are completed
@@ -943,6 +943,9 @@ void BaseViewerPanel::onPreviewStatusChanged() {
           m_flipConsole->setStartAt(r0 + 1);
           TApp::instance()->getCurrentFrame()->setFrame(r0);
           CommandManager::instance()->execute(playCmdId);
+          CommandManager::instance()
+              ->getAction(previewCmdId)
+              ->setData(QVariant());
         }
       }
     }

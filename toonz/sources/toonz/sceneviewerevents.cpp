@@ -237,6 +237,21 @@ void SceneViewer::onButtonPressed(FlipConsole::EGadget button) {
   case FlipConsole::eResetView:
     resetSceneViewer();
     break;
+  // If previewWhenPlayingOnViewer option is ON, execute the preview first.
+  case FlipConsole::ePlay:
+  case FlipConsole::eLoop:
+    if (Preferences::instance()->previewWhenPlayingOnViewerEnabled()) {
+      CommandId previewCmdId = (m_lastSelectedPreviewMode == FULL_PREVIEW)
+                                   ? MI_ToggleViewerPreview
+                                   : MI_ToggleViewerSubCameraPreview;
+      if (!CommandManager::instance()->getAction(previewCmdId)->isChecked()) {
+        // temporarily set the button id to specify the play type (either play
+        // or loop) after rendering is done
+        CommandManager::instance()->getAction(previewCmdId)->setData(button);
+        CommandManager::instance()->getAction(previewCmdId)->trigger();
+      }
+    }
+    break;
   default:
     break;
   }

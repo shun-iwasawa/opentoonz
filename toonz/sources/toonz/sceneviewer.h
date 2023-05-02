@@ -193,6 +193,11 @@ class SceneViewer final : public GLWidgetForHighDpi,
 
   bool m_firstInitialized = true;
 
+  // when the preference option "Preview When Playing on Viewer" is ON,
+  // whether to preview in the current camera / the subcamera is according to
+  // the previous preview.
+  int m_lastSelectedPreviewMode;
+
 public:
   enum ReferenceMode {
     NORMAL_REFERENCE   = 1,
@@ -219,6 +224,8 @@ public:
 
   bool isPreviewEnabled() const { return m_previewMode != NO_PREVIEW; }
   int getPreviewMode() const { return m_previewMode; }
+  // see FlipConsole::onButtonPressed()
+  int getLastSelectedPreviewMode() const { return m_lastSelectedPreviewMode; }
 
   void setVisual(const ImagePainter::VisualSettings &settings);
 
