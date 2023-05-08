@@ -596,6 +596,12 @@ class XsheetViewer final : public QFrame, public SaveLoadQSettings {
   Q_PROPERTY(QString LayerHeaderLockOverImage READ getLayerHeaderLockOverImage
                  WRITE setLayerHeaderLockOverImage)
 
+  // RenameCellField
+  QColor m_renameCellFieldCursorOverlapColor;
+  Q_PROPERTY(QColor RenameCellFieldCursorOverlapColor READ
+                 getRenameCellFieldCursorOverlapColor WRITE
+                     setRenameCellFieldCursorOverlapColor)
+
   XsheetScrollArea *m_cellScrollArea;
   XsheetScrollArea *m_columnScrollArea;
   XsheetScrollArea *m_rowScrollArea;
@@ -1328,6 +1334,13 @@ public:
   QString getLayerHeaderLockImage() const { return m_layerHeaderLockImage; }
   QString getLayerHeaderLockOverImage() const {
     return m_layerHeaderLockOverImage;
+  }
+  // RenameCellField
+  void setRenameCellFieldCursorOverlapColor(const QColor &color) {
+    m_renameCellFieldCursorOverlapColor = color;
+  }
+  QColor getRenameCellFieldCursorOverlapColor() const {
+    return m_renameCellFieldCursorOverlapColor;
   }
 
   void getButton(const int &btype, QColor &bgColor, QString &svgIconPath,

@@ -626,6 +626,22 @@ RenameCellField::RenameCellField(QWidget *parent, XsheetViewer *viewer)
 
 //-----------------------------------------------------------------------------
 
+void RenameCellField::paintEvent(QPaintEvent *e) {
+  // use paintEvent() of base class to do the main work
+  QLineEdit::paintEvent(e);
+  // draw cursor (if widget has focus)
+  if (hasFocus() &&
+      m_viewer->getRenameCellFieldCursorOverlapColor().alpha() > 0) {
+    QRect cRect = cursorRect();
+    double dw   = (double)(cRect.width() - 1) / 2.;
+    cRect.adjust((int)std::ceil(dw), 0, -(int)std::floor(dw), 0);
+    QPainter p(this);
+    p.fillRect(cRect, m_viewer->getRenameCellFieldCursorOverlapColor());
+  }
+}
+
+//-----------------------------------------------------------------------------
+
 void RenameCellField::showInRowCol(int row, int col, bool multiColumnSelected) {
   const Orientation *o = m_viewer->orientation();
 
@@ -675,38 +691,60 @@ void RenameCellField::showInRowCol(int row, int col, bool multiColumnSelected) {
     TFrameId fid           = cell.getFrameId();
     std::wstring levelName = cell.m_level->getName();
 
-    // convert the last one digit of the frame number to alphabet
-    // Ex.  12 -> 1B    21 -> 2A   30 -> 3
-    if (Preferences::instance()->isShowFrameNumberWithLettersEnabled() &&
-        cell.m_level->getType() != TXshLevelType::SND_TXT_XSHLEVEL)
-      setText((fid.isEmptyFrame() || fid.isNoFrame())
-                  ? QString::fromStdWString(levelName)
-              : (multiColumnSelected)
-                  ? m_viewer->getFrameNumberWithLetters(fid.getNumber())
-                  : QString::fromStdWString(levelName) + QString(" ") +
-                        m_viewer->getFrameNumberWithLetters(fid.getNumber()));
-    else {
-      QString frameNumber("");
-      if (fid.getNumber() > 0) frameNumber = QString::number(fid.getNumber());
-      if (!fid.getLetter().isEmpty()) frameNumber += fid.getLetter();
+    QString cellTxt;
+    int topPad   = o->isVerticalTimeline() ? 0 : 3;
+    int rightPad = o->isVerticalTimeline() ? 0 : 1;
+    // show text for the sound text levels
+    if (cell.m_level->getType() == TXshLevelType::SND_TXT_XSHLEVEL) {
+      TXshSoundTextLevelP textLevel = cell.m_level->getSoundTextLevel();
+      cellTxt = textLevel->getFrameText(fid.getNumber() - 1);
+    } else {
+      bool showLevelName = true;
+      if (Preferences::instance()->getLevelNameDisplayType() ==
+          Preferences::ShowLevelNameOnColumnHeader)
+        showLevelName = !checkContainsSingleLevel(xsh->getColumn(col));
 
-      // get text from sound text level
-      if (cell.m_level->getType() == TXshLevelType::SND_TXT_XSHLEVEL) {
-        TXshSoundTextLevelP textLevel = cell.m_level->getSoundTextLevel();
-        if (textLevel) {
-          std::string frameText =
-              textLevel->getFrameText(fid.getNumber() - 1).toStdString();
-          setText(textLevel->getFrameText(fid.getNumber() - 1));
+      // convert the last one digit of the frame number to alphabet
+      // Ex.  12 -> 1B    21 -> 2A   30 -> 3
+      if (Preferences::instance()->isShowFrameNumberWithLettersEnabled()) {
+        cellTxt =
+            (fid.isEmptyFrame() || fid.isNoFrame())
+                ? QString::fromStdWString(levelName)
+            : (multiColumnSelected || !showLevelName)
+                ? m_viewer->getFrameNumberWithLetters(fid.getNumber())
+                : QString::fromStdWString(levelName) + QString(" ") +
+                      m_viewer->getFrameNumberWithLetters(fid.getNumber());
+      } else {
+        QString frameNumber("");
+        if (fid.getNumber() > 0) frameNumber = QString::number(fid.getNumber());
+        if (!fid.getLetter().isEmpty()) frameNumber += fid.getLetter();
+
+        cellTxt = (frameNumber.isEmpty()) ? QString::fromStdWString(levelName)
+                  : (multiColumnSelected || !showLevelName)
+                      ? frameNumber
+                      : QString::fromStdWString(levelName) + QString(" ") +
+                            frameNumber;
+      }
+      Qt::Alignment alignFlag =
+          ((showLevelName) ? Qt::AlignRight | Qt::AlignBottom
+                           : Qt::AlignCenter);
+      setAlignment(alignFlag);
+
+      if (o->isVerticalTimeline() && fid.getNumber() > 0 && !showLevelName) {
+        rightPad = 5;
+        if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
+          TStageObject *pegbar =
+              xsh->getStageObject(m_viewer->getObjectId(col));
+          int r0, r1;
+          if (pegbar && pegbar->getKeyframeRange(r0, r1)) {
+            rightPad += o->rect(PredefinedRect::KEY_ICON).width();
+          }
         }
       }
-      // other level types
-      else {
-        setText((frameNumber.isEmpty()) ? QString::fromStdWString(levelName)
-                : (multiColumnSelected) ? frameNumber
-                                        : QString::fromStdWString(levelName) +
-                                              QString(" ") + frameNumber);
-      }
     }
+    setText(cellTxt);
+    setStyleSheet(QString("padding: %1 %2 0 1;").arg(topPad).arg(rightPad));
+
     selectAll();
   }
   // clear the field if the empty cell is clicked

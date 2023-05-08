@@ -2399,6 +2399,13 @@ XsheetViewer {
   qproperty-TimelineLockButtonOffImage: url('imgs/white/transparent.svg');
   qproperty-TimelineConfigButtonBgColor: #484848;
   qproperty-TimelineConfigButtonImage: url('imgs/white/timeline_config.svg');
+  qproperty-LayerHeaderPreviewImage: url('imgs/white/layer_header_prev_eye.svg');
+  qproperty-LayerHeaderPreviewOverImage: url('imgs/white/layer_header_prev_eye_over.svg');
+  qproperty-LayerHeaderCamstandImage: url('imgs/white/layer_header_table_view.svg');
+  qproperty-LayerHeaderCamstandOverImage: url('imgs/white/layer_header_table_view_over.svg');
+  qproperty-LayerHeaderLockImage: url('imgs/white/layer_lock_on.svg');
+  qproperty-LayerHeaderLockOverImage: url('imgs/white/layer_lock_on_over.svg');
+  qproperty-RenameCellFieldCursorOverlapColor: rgba(0, 0, 0, 0);
 }
 /* -----------------------------------------------------------------------------
    Function Editor
