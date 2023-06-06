@@ -701,8 +701,14 @@ void RenameCellField::showInRowCol(int row, int col, bool multiColumnSelected) {
     } else {
       bool showLevelName = true;
       if (Preferences::instance()->getLevelNameDisplayType() ==
-          Preferences::ShowLevelNameOnColumnHeader)
-        showLevelName = !checkContainsSingleLevel(xsh->getColumn(col));
+        Preferences::ShowLevelNameOnColumnHeader) {
+        std::string columnName = "";
+        if (col >= 0 && xsh->getStageObject(TStageObjectId::ColumnId(col))
+          ->hasSpecifiedName())
+          columnName =
+          xsh->getStageObject(TStageObjectId::ColumnId(col))->getName();
+        showLevelName = !checkContainsSingleLevel(xsh->getColumn(col), columnName);
+      }
 
       // convert the last one digit of the frame number to alphabet
       // Ex.  12 -> 1B    21 -> 2A   30 -> 3
