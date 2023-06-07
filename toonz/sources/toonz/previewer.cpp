@@ -9,6 +9,7 @@
 
 // Images includes
 #include "trasterimage.h"
+#include "tvectorimage.h"
 #include "trop.h"
 #include "tiio.h"
 #include "tpixelutils.h"
@@ -40,6 +41,11 @@
 #include "toonz/txsheet.h"
 #include "toonz/tcamera.h"
 #include "toonz/palettecontroller.h"
+#include "toonz/txshleveltypes.h"
+#include "toonz/txshsimplelevel.h"
+#include "toonz/tstageobjecttree.h"
+#include "toonz/dpiscale.h"
+#include "toonz/txshchildlevel.h"
 
 // Toonz-qt stuff
 #include "toonzqt/gutil.h"
@@ -190,6 +196,7 @@ public:
 
   void updateCamera();
   void updatePreviewRect();  // This is automatically invoked by refreshFrame()
+  TRectD &computeBoundingBox() const;
 
   // Use this method to re-render the passed frame. Infos specified with the
   // update* methods
@@ -313,11 +320,25 @@ void Previewer::Imp::updateCamera() {
   TDimension cameraRes(0, 0);
   TRectD renderArea;
 
-  if (m_subcamera && subCameraRect.getLx() > 0 && subCameraRect.getLy() > 0) {
-    cameraRes  = TDimension(subCameraRect.getLx(), subCameraRect.getLy());
-    renderArea = TRectD(subCameraRect.x0, subCameraRect.y0,
-                        subCameraRect.x1 + 1, subCameraRect.y1 + 1) +
-                 cameraPos;
+  if (m_subcamera) {
+    if (subCameraRect.getLx() > 0 && subCameraRect.getLy() > 0) {
+      cameraRes  = TDimension(subCameraRect.getLx(), subCameraRect.getLy());
+      renderArea = TRectD(subCameraRect.x0, subCameraRect.y0,
+                          subCameraRect.x1 + 1, subCameraRect.y1 + 1) +
+                   cameraPos;
+    }
+    // if the subcamera is not specified, compute the bounding box of all placed
+    // columns
+    else {
+      renderArea = computeBoundingBox();
+      if (!renderArea.isEmpty()) {
+        cameraRes = convert(renderArea).getSize();
+        cameraPos = renderArea.getP00();
+      } else {
+        cameraRes  = currCamera->getRes();
+        renderArea = TRectD(cameraPos, TDimensionD(cameraRes.lx, cameraRes.ly));
+      }
+    }
   } else {
     cameraRes  = currCamera->getRes();
     renderArea = TRectD(cameraPos, TDimensionD(cameraRes.lx, cameraRes.ly));
@@ -341,6 +362,93 @@ void Previewer::Imp::updateCamera() {
 
     m_frames.clear();
   }
+}
+//-----------------------------------------------------------------------------
+
+namespace {
+bool getObjectPlacement(TAffine &aff, TXsheet *xsh, double row,
+                        const TStageObjectId &objId, TStageObject *camera, bool isSub) {
+  TStageObject *pegbar =
+      xsh->getStageObjectTree()->getStageObject(objId, false);
+  if (!pegbar) return false;
+
+  TAffine objAff  = pegbar->getPlacement(row);
+  double objZ     = pegbar->getZ(row);
+  double noScaleZ = pegbar->getGlobalNoScaleZ();
+
+  TAffine cameraAff = (isSub) ? TAffine() : camera->getPlacement(row);
+  double cameraZ    = (isSub) ? 0.0 : camera->getZ(row);
+
+  bool ret = TStageObject::perspective(aff, cameraAff, cameraZ, objAff, objZ,
+                                       noScaleZ);
+
+  // cancel camera transformation
+  const double focus = 1000;
+  aff = TScale(focus / (focus + cameraZ)) * cameraAff.inv() * aff;
+
+  return ret;
+}
+
+TRectD &doComputeBoundingBox(TXsheet *xsh, TStageObject *camera, bool isSub = false) {
+  TAffine cameraDpiAff = getDpiAffine(camera->getCamera());
+  TRectD bbox;
+  // for each column
+  for (int c = 0; c < xsh->getColumnCount(); c++) {
+    // count only visible & simple levels
+    if (xsh->isColumnEmpty(c)) continue;
+    if (xsh->getColumn(c)->getColumnType() != TXshColumn::eLevelType) continue;
+    if (!xsh->getColumn(c)->isPreviewVisible()) continue;
+
+    int r0, r1;
+    xsh->getCellRange(c, r0, r1);
+    for (int r = r0; r <= r1; r++) {
+      if (xsh->getCell(r, c).isEmpty()) continue;
+      TXshLevelP level     = xsh->getCell(r, c).m_level;
+      TStageObjectId colId = TStageObjectId::ColumnId(c);
+      TAffine aff;
+      bool isVisible = getObjectPlacement(aff, xsh, (double)r, colId, camera, isSub);
+      if (!isVisible) continue;
+
+      int type = level->getType();
+      if (type & RASTER_TYPE) {
+        TXshSimpleLevelP sl = level->getSimpleLevel();
+        TDimension imgRes   = sl->getResolution();
+        TRectD tmpBBox(-imgRes.lx / 2, -imgRes.ly / 2, imgRes.lx / 2,
+                       imgRes.ly / 2);
+        TAffine dpiAff =
+            getDpiAffine(sl.getPointer(), xsh->getCell(r, c).m_frameId,
+                         true);  // true stands for 'force full-sampling'
+        tmpBBox = cameraDpiAff.inv() * aff * dpiAff * tmpBBox;
+        bbox += tmpBBox;
+      } else if (type & PLI_TYPE) {
+        TXshSimpleLevelP sl = level->getSimpleLevel();
+        TVectorImageP vi    = sl->getFrame(xsh->getCell(r, c).m_frameId, false);
+        TRectD tmpBBox      = vi->getBBox();
+        tmpBBox             = cameraDpiAff.inv() * aff * tmpBBox;
+        bbox += tmpBBox;
+      } else if (type & CHILD_TYPE) {
+        TXshChildLevelP cl = level->getChildLevel();
+        TXsheet *subSheet  = cl->getXsheet();
+        TRectD tmpBBox     = doComputeBoundingBox(subSheet, camera, true);
+        if (tmpBBox.isEmpty()) continue;
+        tmpBBox = cameraDpiAff.inv() * aff * cameraDpiAff * tmpBBox;
+        bbox += tmpBBox;
+      }
+    }
+  }
+  return bbox;
+}
+}  // namespace
+
+TRectD &Previewer::Imp::computeBoundingBox() const {
+  ToonzScene *scene = TApp::instance()->getCurrentScene()->getScene();
+  TXsheet *xsh      = TApp::instance()->getCurrentXsheet()->getXsheet();
+
+  TStageObjectId cameraId =
+      xsh->getStageObjectTree()->getCurrentPreviewCameraId();
+  TStageObject *camera = xsh->getStageObject(cameraId);
+
+  return doComputeBoundingBox(xsh, camera);
 }
 
 //-----------------------------------------------------------------------------
@@ -1501,3 +1609,7 @@ void Previewer::suspendRendering(bool suspend) {
   if (suspend && previewerInstanceSC)
     previewerInstanceSC->m_imp->m_renderer.stopRendering(true);
 }
+
+//-----------------------------------------------------------------------------
+
+TRectD &Previewer::getSceneBoundingBox() const { return m_imp->m_renderArea; }

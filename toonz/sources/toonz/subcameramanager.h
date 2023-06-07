@@ -104,6 +104,7 @@ public:
   bool mouseReleaseEvent(SceneViewer *viewer);
 
   void deleteSubCamera(SceneViewer *viewer);
+  void setSubCameraToFrame(SceneViewer *viewer);
 
 private:
   TPointD winToCamera(SceneViewer *viewer, const QPointF &pos) const;

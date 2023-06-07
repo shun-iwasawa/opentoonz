@@ -453,6 +453,8 @@ public slots:
 
   // delete preview-subcamera executed from context menu
   void doDeleteSubCamera();
+  // Set the sub camera to the current camera frame.
+  void doSetSubCameraToFrame();
 
   void resetTabletStatus();
 

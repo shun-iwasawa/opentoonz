@@ -1612,10 +1612,14 @@ void SceneViewer::drawPreview() {
     TRectD previewStageRectD, cameraStageRectD = currCamera->getStageRect();
 
     TRect subCameraRect(currCamera->getInterestRect());
-    if (m_previewMode == SUBCAMERA_PREVIEW && subCameraRect.getLx() > 0 &&
-        subCameraRect.getLy() > 0)
-      previewStageRectD = currCamera->getInterestStageRect();
-    else
+    if (m_previewMode == SUBCAMERA_PREVIEW) {
+      if (subCameraRect.getLx() > 0 && subCameraRect.getLy() > 0)
+        previewStageRectD = currCamera->getInterestStageRect();
+      else
+        previewStageRectD = currCamera->getCameraToStageRef() *
+                                previewer->getSceneBoundingBox() -
+                            cameraStageRectD.getP00();
+    } else
       previewStageRectD = cameraStageRectD;
 
     TAffine rasterToStageRef(
@@ -3414,6 +3418,13 @@ TRectD SceneViewer::getCameraRect() const {
  */
 void SceneViewer::doDeleteSubCamera() {
   PreviewSubCameraManager::instance()->deleteSubCamera(this);
+}
+
+//-----------------------------------------------------------------------------
+/*! Set the sub camera to the current camera frame.
+ */
+void SceneViewer::doSetSubCameraToFrame() {
+  PreviewSubCameraManager::instance()->setSubCameraToFrame(this);
 }
 
 //-----------------------------------------------------------------------------

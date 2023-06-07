@@ -90,6 +90,8 @@ public:
 
   void clearAllUnfinishedFrames();
 
+  TRectD &getSceneBoundingBox() const;
+
 private:
   friend class Imp;
   void emitStartedFrame(const TRenderPort::RenderData &renderData);

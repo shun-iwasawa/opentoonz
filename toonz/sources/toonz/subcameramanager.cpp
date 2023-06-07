@@ -393,3 +393,18 @@ void PreviewSubCameraManager::deleteSubCamera(SceneViewer *viewer) {
   // Refresh viewer
   viewer->update();
 }
+
+//-----------------------------------------------------------------------------
+/*! Set the sub camera to the current camera frame. Executed from context menu
+ * of the viewer.
+ */
+void PreviewSubCameraManager::setSubCameraToFrame(SceneViewer *viewer) {
+  TCamera *camera =
+      TApp::instance()->getCurrentScene()->getScene()->getCurrentCamera();
+  camera->setInterestRect(TRect(camera->getRes()));
+
+  Previewer::instance(true)->updateView();
+
+  // Refresh viewer
+  viewer->update();
+}
