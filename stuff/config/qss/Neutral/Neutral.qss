@@ -7,7 +7,8 @@ QToolButton,
 #CameraSettingsRadioButton::indicator,
 #ForceSquaredPixelButton,
 #EditToolLockButton::indicator,
-#flipCustomize {
+#flipCustomize,
+#ViewerTitleBarCustomize {
   background-color: transparent;
   border: 1 solid transparent;
   border-radius: 2;
@@ -21,7 +22,8 @@ QToolButton:hover,
 #colorSliderAddButton:hover,
 #colorSliderSubButton:hover,
 #EditToolLockButton::indicator:hover,
-#flipCustomize:hover {
+#flipCustomize:hover,
+#ViewerTitleBarCustomize:hover {
   background-color: #b3b3b3;
   border-color: #616161;
   color: #0d0d0d;
@@ -34,7 +36,8 @@ QToolButton:pressed,
 #colorSliderAddButton:pressed,
 #colorSliderSubButton:pressed,
 #EditToolLockButton::indicator:pressed,
-#flipCustomize:pressed {
+#flipCustomize:pressed,
+#ViewerTitleBarCustomize:pressed {
   background-color: #676767;
   border-color: #525252;
   color: #0d0d0d;
@@ -45,7 +48,8 @@ QToolButton:checked,
 #CameraSettingsRadioButton::indicator:checked,
 #ForceSquaredPixelButton:checked,
 #EditToolLockButton::indicator:checked,
-#flipCustomize:checked {
+#flipCustomize:checked,
+#ViewerTitleBarCustomize:checked {
   background-color: #8FA0B2;
   border-color: #445464;
   color: #000;
@@ -56,7 +60,8 @@ QToolButton:checked:hover,
 #CameraSettingsRadioButton::indicator:checked:hover,
 #ForceSquaredPixelButton:checked:hover,
 #EditToolLockButton::indicator:checked:hover,
-#flipCustomize:checked:hover {
+#flipCustomize:checked:hover,
+#ViewerTitleBarCustomize:checked:hover {
   background-color: #a7b5c3;
   border-color: #445464;
 }
@@ -66,7 +71,8 @@ QToolButton:disabled,
 #CameraSettingsRadioButton::indicator:disabled,
 #ForceSquaredPixelButton:disabled,
 #EditToolLockButton::indicator:disabled,
-#flipCustomize:disabled {
+#flipCustomize:disabled,
+#ViewerTitleBarCustomize:disabled {
   color: rgba(0, 0, 0, 0.4);
 }
 .button-tool:disabled:checked,
@@ -75,7 +81,8 @@ QToolButton:disabled:checked,
 #CameraSettingsRadioButton::indicator:disabled:checked,
 #ForceSquaredPixelButton:disabled:checked,
 #EditToolLockButton::indicator:disabled:checked,
-#flipCustomize:disabled:checked {
+#flipCustomize:disabled:checked,
+#ViewerTitleBarCustomize:disabled:checked {
   background-color: rgba(143, 160, 178, 0.4);
   border-color: rgba(143, 160, 178, 0.4);
 }
@@ -2235,6 +2242,18 @@ Ruler {
 }
 #enableBlankFrameButton:checked {
   border-width: 2px;
+}
+#ViewerTitleBarCustomize {
+  margin: 0;
+  padding: 2;
+  border: none;
+}
+#ViewerTitleBarCustomize::menu-button {
+  background-color: transparent;
+  width: 20;
+}
+#ViewerTitleBarCustomize::menu-arrow {
+  image: none;
 }
 /* -----------------------------------------------------------------------------
    XSheet Viewer

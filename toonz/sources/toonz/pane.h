@@ -166,7 +166,10 @@ public:
 
   // pos = widget position. n.b. if pos.x()<0 then origin is topright corner
   void add(const QPoint &pos, QWidget *widget);
-  
+
+  void clearButtons();
+  void placeButtons();
+
   QColor getTitleColor() const { return m_titleColor; }
   void setTitleColor(const QColor &color) { m_titleColor = color; }
   QColor getActiveTitleColor() const { return m_activeTitleColor; }

@@ -193,3 +193,17 @@ Ruler {
     border-width: 2px;
   }
 }
+
+#ViewerTitleBarCustomize {
+  &:extend(.button-tool all);
+  margin: 0;
+  padding: 2;
+  border: none;
+  &::menu-button {
+    background-color: transparent;
+    width: 20;
+  }
+  &::menu-arrow  {
+    image: none;
+  }
+}

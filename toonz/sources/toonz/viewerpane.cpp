@@ -64,6 +64,7 @@
 #include <QToolBar>
 #include <QMainWindow>
 #include <QSettings>
+#include <QToolButton>
 
 #include "viewerpane.h"
 
@@ -87,7 +88,7 @@ enum OldV_Parts {
 //-----------------------------------------------------------------------------
 
 BaseViewerPanel::BaseViewerPanel(QWidget *parent, Qt::WindowFlags flags)
-    : QFrame(parent) {
+    : QFrame(parent), m_titleBarMask(VTBButtons_All) {
   TApp *app = TApp::instance();
 
   setFrameStyle(QFrame::StyledPanel);
@@ -242,6 +243,17 @@ void BaseViewerPanel::onShowHideActionTriggered(QAction *act) {
 
 //-----------------------------------------------------------------------------
 
+void BaseViewerPanel::onCustomizeTitleBarPressed(QAction *act) {
+  VTitleBar_Buttons buttonId = (VTitleBar_Buttons)act->data().toUInt();
+  assert(buttonId < VTBButtons_Hamburger);
+
+  m_titleBarMask ^= buttonId;
+
+  placeTitleBarButtons();
+}
+
+//-----------------------------------------------------------------------------
+
 void BaseViewerPanel::onDrawFrame(int frame,
                                   const ImagePainter::VisualSettings &settings,
                                   QElapsedTimer *, qint64) {
@@ -373,19 +385,19 @@ void BaseViewerPanel::hideEvent(QHideEvent *event) {
 //-----------------------------------------------------------------------------
 
 void BaseViewerPanel::initializeTitleBar(TPanelTitleBar *titleBar) {
+  m_titleBar = titleBar;
+
   bool ret = true;
 
   TPanelTitleBarButtonSet *viewModeButtonSet;
   m_referenceModeBs = viewModeButtonSet = new TPanelTitleBarButtonSet();
-  int x                                 = -232;
-  int iconWidth                         = 20;
   TPanelTitleBarButton *button;
 
+  //------
   // buttons for show / hide toggle for the field guide and the safe area
   TPanelTitleBarButtonForSafeArea *safeAreaButton =
       new TPanelTitleBarButtonForSafeArea(titleBar, getIconPath("pane_safe"));
   safeAreaButton->setToolTip(tr("Safe Area (Right Click to Select)"));
-  titleBar->add(QPoint(x, 0), safeAreaButton);
   ret = ret && connect(safeAreaButton, SIGNAL(toggled(bool)),
                        CommandManager::instance()->getAction(MI_SafeArea),
                        SLOT(trigger()));
@@ -395,11 +407,11 @@ void BaseViewerPanel::initializeTitleBar(TPanelTitleBar *titleBar) {
   // initialize state
   safeAreaButton->setPressed(
       CommandManager::instance()->getAction(MI_SafeArea)->isChecked());
+  m_titleBarButtons.insert(VTBButtons_SafeArea, safeAreaButton);
 
   button = new TPanelTitleBarButton(titleBar, getIconPath("pane_grid"));
+
   button->setToolTip(tr("Field Guide"));
-  x += 1 + iconWidth;
-  titleBar->add(QPoint(x, 0), button);
   ret = ret && connect(button, SIGNAL(toggled(bool)),
                        CommandManager::instance()->getAction(MI_FieldGuide),
                        SLOT(trigger()));
@@ -408,59 +420,130 @@ void BaseViewerPanel::initializeTitleBar(TPanelTitleBar *titleBar) {
   // initialize state
   button->setPressed(
       CommandManager::instance()->getAction(MI_FieldGuide)->isChecked());
+  m_titleBarButtons.insert(VTBButtons_FieldGuide, button);
 
+  //------
   // view mode toggles
   button = new TPanelTitleBarButton(titleBar, getIconPath("pane_table"));
   button->setToolTip(tr("Camera Stand View"));
-  x += 10 + iconWidth;
-  titleBar->add(QPoint(x, 0), button);
   button->setButtonSet(viewModeButtonSet, SceneViewer::NORMAL_REFERENCE);
   button->setPressed(true);
+  m_titleBarButtons.insert(VTBButtons_ViewModeCamStand, button);
 
   button = new TPanelTitleBarButton(titleBar, getIconPath("pane_3d"));
   button->setToolTip(tr("3D View"));
-  x += 1 + iconWidth;
-  titleBar->add(QPoint(x, 0), button);
   button->setButtonSet(viewModeButtonSet, SceneViewer::CAMERA3D_REFERENCE);
+  m_titleBarButtons.insert(VTBButtons_ViewMode3D, button);
 
   button = new TPanelTitleBarButton(titleBar, getIconPath("pane_cam"));
   button->setToolTip(tr("Camera View"));
-  x += 1 + iconWidth;
-  titleBar->add(QPoint(x, 0), button);
   button->setButtonSet(viewModeButtonSet, SceneViewer::CAMERA_REFERENCE);
   ret = ret && connect(viewModeButtonSet, SIGNAL(selected(int)), m_sceneViewer,
                        SLOT(setReferenceMode(int)));
+  m_titleBarButtons.insert(VTBButtons_ViewModeCamera, button);
 
+  //------
   // freeze button
   button = new TPanelTitleBarButton(titleBar, getIconPath("pane_freeze"));
-  x += 10 + iconWidth;
-
   button->setToolTip(tr("Freeze"));
-  titleBar->add(QPoint(x, 0), button);
   ret = ret && connect(button, SIGNAL(toggled(bool)), m_sceneViewer,
                        SLOT(freeze(bool)));
+  m_titleBarButtons.insert(VTBButtons_Freeze, button);
 
+  //------
   // preview toggles
-  m_previewButton =
-      new TPanelTitleBarButtonForPreview(titleBar, getIconPath("pane_preview"));
-  x += 10 + iconWidth;
-  titleBar->add(QPoint(x, 0), m_previewButton);
+  m_previewButton = new TPanelTitleBarButtonForPreview(titleBar, getIconPath("pane_preview"));
   m_previewButton->setToolTip(tr("Preview"));
+  m_titleBarButtons.insert(VTBButtons_Preview, m_previewButton);
 
-  // ret = ret && connect(m_previewButton, SIGNAL(toggled(bool)),
-  //                      SLOT(enableFullPreview(bool)));
-
-  m_subcameraPreviewButton = new TPanelTitleBarButtonForPreview(
-      titleBar, getIconPath("pane_subpreview"));
-  x += 1 + 24;
-
-  titleBar->add(QPoint(x, 0), m_subcameraPreviewButton);
+  //------
+  m_subcameraPreviewButton = new TPanelTitleBarButtonForPreview(titleBar, getIconPath("pane_subpreview"));
   m_subcameraPreviewButton->setToolTip(tr("Sub-camera Preview"));
+  m_titleBarButtons.insert(VTBButtons_SubPreview, m_subcameraPreviewButton);
 
-  // ret = ret && connect(m_subcameraPreviewButton, SIGNAL(toggled(bool)),
-  //                      SLOT(enableSubCameraPreview(bool)));
+  //------
+  QToolButton *hamburger = new QToolButton(titleBar);
+  hamburger->setIcon(createQIcon("menu"));
+  hamburger->setObjectName("ViewerTitleBarCustomize");
+  hamburger->setIconSize(QSize(16, 16));
+  hamburger->setFixedSize(20, 20);
+  hamburger->setPopupMode(QToolButton::MenuButtonPopup);
+  QMenu *menu = new QMenu();
+  hamburger->setMenu(menu);
+  addTitleBarMenuItem(VTBButtons_SafeArea, tr("Safe Area"), menu);
+  addTitleBarMenuItem(VTBButtons_FieldGuide, tr("Field Guide"), menu);
+  menu->addSeparator();
+  addTitleBarMenuItem(VTBButtons_ViewModeCamStand, tr("Camera Stand View"),
+                      menu);
+  addTitleBarMenuItem(VTBButtons_ViewMode3D, tr("3D View"), menu);
+  addTitleBarMenuItem(VTBButtons_ViewModeCamera, tr("Camera View"), menu);
+  menu->addSeparator();
+  addTitleBarMenuItem(VTBButtons_Freeze, tr("Freeze"), menu);
+  menu->addSeparator();
+  addTitleBarMenuItem(VTBButtons_Preview, tr("Preview"), menu);
+  addTitleBarMenuItem(VTBButtons_SubPreview, tr("Sub-camera Preview"), menu);
 
+  ret = connect(menu, SIGNAL(triggered(QAction *)), this,
+                SLOT(onCustomizeTitleBarPressed(QAction *)));
+  m_titleBarButtons.insert(VTBButtons_Hamburger, hamburger);
+
+  placeTitleBarButtons();
   assert(ret);
+}
+
+//----------------------------------------------------------------------------------------------
+
+void BaseViewerPanel::addTitleBarMenuItem(UINT id, const QString &text,
+                                          QMenu *menu) {
+  QAction *a = new QAction(text, menu);
+  a->setCheckable(true);
+  a->setData(QVariant(id));
+  menu->addAction(a);
+}
+
+//-----------------------------------------------------------------------------
+
+void BaseViewerPanel::placeTitleBarButtons() {
+  const QMap<VTitleBar_Buttons, int> widthMap = {
+      {VTBButtons_SafeArea, 20},         {VTBButtons_FieldGuide, 20},
+      {VTBButtons_ViewModeCamStand, 20}, {VTBButtons_ViewMode3D, 20},
+      {VTBButtons_ViewModeCamera, 20},   {VTBButtons_Freeze, 20},
+      {VTBButtons_Preview, 24},          {VTBButtons_SubPreview, 24},
+      {VTBButtons_Hamburger, 20}};
+  // buttons which need space on the left
+  const QList<VTitleBar_Buttons> sepButtons = {
+      VTBButtons_ViewModeCamStand, VTBButtons_Freeze, VTBButtons_Preview,
+      VTBButtons_Hamburger};
+
+  m_titleBar->clearButtons();
+
+  // place the buttons from the right
+  int pos           = 21;  // keep space for the close button
+  UINT buttonId     = VTBButtons_Hamburger;
+  bool separateFlag = false;
+  while (buttonId != VTBButtons_None) {
+    QWidget *widget = m_titleBarButtons.value((VTitleBar_Buttons)buttonId);
+    if (m_titleBarMask & buttonId) {
+      if (separateFlag) {
+        pos += 10;
+        separateFlag = false;
+      } else
+        pos += 1;
+
+      pos += widthMap.value((VTitleBar_Buttons)buttonId);
+
+      // register to the title bar
+      m_titleBar->add(QPoint(-pos, 0), widget);
+      widget->setVisible(true);
+    } else
+      widget->setVisible(false);
+
+    if (sepButtons.contains((VTitleBar_Buttons)buttonId)) separateFlag = true;
+
+    buttonId = buttonId >> 1;  // next id
+  }
+
+  m_titleBar->placeButtons();
 }
 
 //-----------------------------------------------------------------------------
@@ -860,13 +943,26 @@ void BaseViewerPanel::setVisiblePartsFlag(UINT flag) {
 // SaveLoadQSettings
 void BaseViewerPanel::save(QSettings &settings) const {
   settings.setValue("viewerVisibleParts", m_visiblePartsFlag);
+  settings.setValue("titleBarVisibleButtons", m_titleBarMask);
 }
 
 void BaseViewerPanel::load(QSettings &settings) {
   checkOldVersionVisblePartsFlags(settings);
   m_visiblePartsFlag =
       settings.value("viewerVisibleParts", m_visiblePartsFlag).toUInt();
+  m_titleBarMask =
+      settings.value("titleBarVisibleButtons", m_titleBarMask).toUInt();
   updateShowHide();
+  placeTitleBarButtons();
+
+  // update visibility menu
+  QMenu *menu =
+      qobject_cast<QToolButton *>(m_titleBarButtons[VTBButtons_Hamburger])
+          ->menu();
+  for (auto a : menu->actions()) {
+    UINT id = a->data().toUInt();
+    a->setChecked(id & m_titleBarMask);
+  }
 }
 
 //-----------------------------------------------------------------------------

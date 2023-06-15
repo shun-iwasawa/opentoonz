@@ -23,6 +23,7 @@
 #include "toonzqt/paramfield.h"
 #include "toonzqt/swatchviewer.h"
 #include "toonzqt/fxhistogramrender.h"
+#include "toonzqt/intfield.h"
 
 #undef DVAPI
 #undef DVVAR

@@ -40,6 +40,20 @@ enum VP_Parts {
   VPPARTS_COMBO_ALL = VPPARTS_ALL | VPPARTS_TOOLBAR | VPPARTS_TOOLOPTIONS
 };
 
+enum VTitleBar_Buttons {
+  VTBButtons_None             = 0,
+  VTBButtons_SafeArea         = 0x1,
+  VTBButtons_FieldGuide       = 0x2,
+  VTBButtons_ViewModeCamStand = 0x4,
+  VTBButtons_ViewMode3D       = 0x8,
+  VTBButtons_ViewModeCamera   = 0x10,
+  VTBButtons_Freeze           = 0x20,
+  VTBButtons_Preview          = 0x40,
+  VTBButtons_SubPreview       = 0x80,
+  VTBButtons_Hamburger        = 0x100,
+  VTBButtons_All              = 0x200 - 1
+};
+
 class BaseViewerPanel : public QFrame,
                         public FlipConsoleOwner,
                         public SaveLoadQSettings {
@@ -66,6 +80,10 @@ protected:
   TSoundTrack *m_sound = NULL;
 
   bool m_isActive = false;
+
+  QMap<VTitleBar_Buttons, QWidget *> m_titleBarButtons;
+  TPanelTitleBar *m_titleBar;
+  UINT m_titleBarMask;
 
 public:
   BaseViewerPanel(QWidget *parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
@@ -94,6 +112,8 @@ public:
   virtual void load(QSettings &settings) override;
 
   void initializeTitleBar(TPanelTitleBar *titleBar);
+  void addTitleBarMenuItem(UINT id, const QString &text, QMenu *menu);
+  void placeTitleBarButtons();
 
   void getPreviewButtonStates(bool &prev, bool &subCamPrev);
 
@@ -130,6 +150,7 @@ protected slots:
   void onShowHideActionTriggered(QAction *);
   void onPreviewStatusChanged();
   void onActiveViewerChanged();
+  void onCustomizeTitleBarPressed(QAction *);
 };
 
 class SceneViewerPanel final : public BaseViewerPanel {

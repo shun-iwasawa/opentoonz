@@ -701,8 +701,11 @@ void TPanelTitleBar::add(const QPoint &pos, QWidget *widget) {
 
 //-----------------------------------------------------------------------------
 
-void TPanelTitleBar::resizeEvent(QResizeEvent *e) {
-  QWidget::resizeEvent(e);
+void TPanelTitleBar::clearButtons() { m_buttons.clear(); }
+
+//-----------------------------------------------------------------------------
+
+void TPanelTitleBar::placeButtons() {
   int i;
   for (i = 0; i < (int)m_buttons.size(); i++) {
     QPoint p   = m_buttons[i].first;
@@ -710,6 +713,13 @@ void TPanelTitleBar::resizeEvent(QResizeEvent *e) {
     if (p.x() < 0) p.setX(p.x() + width());
     w->move(p);
   }
+}
+
+//-----------------------------------------------------------------------------
+
+void TPanelTitleBar::resizeEvent(QResizeEvent *e) {
+  QWidget::resizeEvent(e);
+  placeButtons();
 }
 
 //=============================================================================
