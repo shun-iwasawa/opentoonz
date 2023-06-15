@@ -1596,7 +1596,8 @@ void FlipConsole::doButtonPressed(UINT button) {
   // If play / loop is pressed, previewWhenPlayingOnViewer option is ON, and
   // preview is disabled, then execute the preview first.
   // (see SceneViewer::onButtonPressed)
-  if ((button == FlipConsole::ePlay || button == FlipConsole::eLoop) &&
+  if ((button == FlipConsole::ePlay || button == FlipConsole::eLoop ||
+       button == FlipConsole::eLoopFromBegin) &&
       Preferences::instance()->previewWhenPlayingOnViewerEnabled() &&
       m_consoleOwner->isViewer() &&
       !CommandManager::instance()

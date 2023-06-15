@@ -987,7 +987,7 @@ void BaseViewerPanel::onPreviewStatusChanged() {
           0) {
         buttonId =
             CommandManager::instance()->getAction(previewCmdId)->data().toInt();
-        playCmdId = (buttonId == FlipConsole::ePlay) ? MI_Play : MI_Loop;
+        playCmdId = (buttonId == FlipConsole::ePlay) ? MI_Play : (buttonId == FlipConsole::eLoop) ? MI_Loop : MI_LoopFromBegin;
       }
     }
 

@@ -240,6 +240,7 @@ void SceneViewer::onButtonPressed(FlipConsole::EGadget button) {
   // If previewWhenPlayingOnViewer option is ON, execute the preview first.
   case FlipConsole::ePlay:
   case FlipConsole::eLoop:
+  case FlipConsole::eLoopFromBegin:
     if (Preferences::instance()->previewWhenPlayingOnViewerEnabled()) {
       CommandId previewCmdId = (m_lastSelectedPreviewMode == FULL_PREVIEW)
                                    ? MI_ToggleViewerPreview
