@@ -194,6 +194,7 @@ public:
     eBegin,
     ePlay,
     eLoop,
+    eLoopFromBegin,
     ePause,
     ePrev,
     eNext,
@@ -361,7 +362,12 @@ private:
       -1;  // used in the "play selection" mode of the viewer preview
   ImagePainter::VisualSettings m_settings;
 
-  bool m_isPlay;
+  enum PlayState {
+    Play          = EGadget::ePlay,
+    Loop          = EGadget::eLoop,
+    LoopFromBegin = EGadget::eLoopFromBegin
+  } m_playState;
+
   int m_fps, m_sceneFps;
   bool m_reverse;
   int m_markerFrom, m_markerTo;

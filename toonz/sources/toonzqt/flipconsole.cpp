@@ -422,23 +422,24 @@ void FlipSlider::mouseReleaseEvent(QMouseEvent *me) {
 //=============================================================================
 
 enum {
-  eShowCompare         = 0x001,
-  eShowBg              = 0x002,
-  eShowFramerate       = 0x004,
-  eShowVcr             = 0x008,
-  eShowcolorFilter     = 0x010,
-  eShowCustom          = 0x020,
-  eShowHisto           = 0x040,
-  eShowSave            = 0x080,
-  eShowDefineSubCamera = 0x100,
-  eShowFilledRaster    = 0x200,
-  eShowDefineLoadBox   = 0x400,
-  eShowUseLoadBox      = 0x800,
-  eShowViewerControls  = 0x1000,
-  eShowSound           = 0x2000,
-  eShowLocator         = 0x4000,
-  eShowGainControls    = 0x8000,
-  eShowHowMany         = 0x10000
+  eShowCompare          = 0x001,
+  eShowBg               = 0x002,
+  eShowFramerate        = 0x004,
+  eShowVcr              = 0x008,
+  eShowcolorFilter      = 0x010,
+  eShowCustom           = 0x020,
+  eShowHisto            = 0x040,
+  eShowSave             = 0x080,
+  eShowDefineSubCamera  = 0x100,
+  eShowFilledRaster     = 0x200,
+  eShowDefineLoadBox    = 0x400,
+  eShowUseLoadBox       = 0x800,
+  eShowViewerControls   = 0x1000,
+  eShowSound            = 0x2000,
+  eShowLocator          = 0x4000,
+  eShowGainControls     = 0x8000,
+  eShowVcrLoopFromBegin = 0x10000,
+  eShowHowMany          = 0x20000
 };
 
 FlipConsole::FlipConsole(QVBoxLayout *mainLayout, std::vector<int> gadgetsMask,
@@ -454,7 +455,7 @@ FlipConsole::FlipConsole(QVBoxLayout *mainLayout, std::vector<int> gadgetsMask,
     , m_settings()
     , m_fps(24)
     , m_sceneFps(24)
-    , m_isPlay(false)
+    , m_playState(Loop)
     , m_reverse(false)
     , m_doubleRed(0)
     , m_doubleGreen(0)
@@ -472,7 +473,8 @@ FlipConsole::FlipConsole(QVBoxLayout *mainLayout, std::vector<int> gadgetsMask,
     , m_blanksToDraw(0)
     , m_isLinkable(isLinkable)
     , m_customAction(0)
-    , m_customizeMask((eShowHowMany - 1) & ~eShowGainControls)
+    , m_customizeMask((eShowHowMany - 1) & ~eShowGainControls &
+                      ~eShowVcrLoopFromBegin)
     , m_fpsLabelAction(0)
     , m_fpsSliderAction(0)
     , m_fpsFieldAction(0)
@@ -762,8 +764,7 @@ void FlipConsole::toggleLinked() {
 
   // if we are here, flip is playing!
   m_isLinkedPlaying = m_areLinked;
-  int button =
-      m_areLinked ? (playingConsole->m_isPlay ? ePlay : eLoop) : ePause;
+  int button        = m_areLinked ? (int)playingConsole->m_playState : ePause;
 
   for (i = 0; i < m_visibleConsoles.size(); i++) {
     FlipConsole *console = m_visibleConsoles.at(i);
@@ -778,7 +779,8 @@ void FlipConsole::toggleLinked() {
 
 bool FlipConsole::drawBlanks(int from, int to, QElapsedTimer *timer,
                              qint64 target) {
-  if (m_blanksCount == 0 || m_isPlay || m_framesCount <= 1) return false;
+  if (m_blanksCount == 0 || m_playState == Play || m_framesCount <= 1)
+    return false;
 
   // enable blanks only when the blank button is pressed
   if (m_enableBlankFrameButton && !m_enableBlankFrameButton->isChecked())
@@ -829,7 +831,7 @@ void FlipConsole::onNextFrame(int fps, QElapsedTimer *timer,
       m_fpsField->setLineEditBackgroundColor(Qt::red);
   }
   if (m_stopAt > 0 && m_currentFrame >= m_stopAt &&
-      (m_isPlay || m_startAt == -1)) {
+      (m_playState == Play || m_startAt == -1)) {
     doButtonPressed(ePause);
     m_stopAt  = -1;
     m_startAt = -1;
@@ -848,9 +850,9 @@ void FlipConsole::playNextFrame(QElapsedTimer *timer, qint64 targetInstant) {
   }
 
   if (m_framesCount == 0 ||
-      (m_isPlay && m_currentFrame == (m_reverse ? from : to))) {
+      (m_playState == Play && m_currentFrame == (m_reverse ? from : to))) {
     doButtonPressed(ePause);
-    setChecked(m_isPlay ? ePlay : eLoop, false);
+    setChecked((UINT)m_playState, false);
     setChecked(ePause, true);
     if (Preferences::instance()->rewindAfterPlaybackEnabled())
       m_currentFrame = (m_reverse ? to : from);
@@ -1074,6 +1076,8 @@ void FlipConsole::applyCustomizeMask() {
   enableButton(ePause, m_customizeMask & eShowVcr);
   enableButton(ePlay, m_customizeMask & eShowVcr);
   enableButton(eLoop, m_customizeMask & eShowVcr);
+  enableButton(eLoopFromBegin, (m_customizeMask & eShowVcr) &&
+                                   (m_customizeMask & eShowVcrLoopFromBegin));
   enableButton(eNext, m_customizeMask & eShowVcr);
   enableButton(eLast, m_customizeMask & eShowVcr);
 
@@ -1167,6 +1171,7 @@ void FlipConsole::createCustomizeMenu(bool withCustomWidget) {
       addMenuItem(eShowBg, tr("Background Colors"), menu);
 
     addMenuItem(eShowVcr, tr("Playback Controls"), menu);
+    addMenuItem(eShowVcrLoopFromBegin, tr("+ Loop From the First Frame"), menu);
 
     if (hasButton(m_gadgetsMask, eRed) || hasButton(m_gadgetsMask, eGreen) ||
         hasButton(m_gadgetsMask, eBlue) || hasButton(m_gadgetsMask, eMatte))
@@ -1286,6 +1291,10 @@ void FlipConsole::createPlayToolBar(QWidget *customWidget) {
   if (hasButton(m_gadgetsMask, eLoop))
     createCheckedButtonWithBorderImage(eLoop, "loop", tr("Loop"), true,
                                        playGroup, "A_Flip_Loop");
+  if (hasButton(m_gadgetsMask, eLoopFromBegin))
+    createCheckedButtonWithBorderImage(eLoopFromBegin, "loopfrombegin",
+                                       tr("Loop From the First Frame"), true,
+                                       playGroup, "A_Flip_LoopFromBegin");
 
   if (hasButton(m_gadgetsMask, eNext))
     createButton(eNext, "framenext", tr("&Next Frame"), false);
@@ -1492,14 +1501,16 @@ void FlipConsole::pressLinkedConsoleButton(UINT button, FlipConsole *parent) {
 void FlipConsole::onButtonPressed(int button) {
   makeCurrent();
   if (m_playbackExecutor.isRunning() &&
-      (button == FlipConsole::ePlay || button == FlipConsole::eLoop)) {
+      (button == FlipConsole::ePlay || button == FlipConsole::eLoop ||
+       button == FlipConsole::eLoopFromBegin)) {
     pressButton(ePause);
   } else {
     // Sync playback state among all viewers & combo viewers.
     // Note that the property "m_isLinkable" is used for distinguishing the
     // owner between (viewer / combo viewer) and (flipbook / color model).
     if (!m_isLinkable &&
-        (button == FlipConsole::ePlay || button == FlipConsole::eLoop)) {
+        (button == FlipConsole::ePlay || button == FlipConsole::eLoop ||
+         button == FlipConsole::eLoopFromBegin)) {
       bool stoppedOther = false;
       for (auto playingConsole : m_visibleConsoles) {
         if (playingConsole == this || playingConsole->isLinkable()) continue;
@@ -1507,6 +1518,7 @@ void FlipConsole::onButtonPressed(int button) {
           playingConsole->doButtonPressed(ePause);
           playingConsole->setChecked(ePlay, false);
           playingConsole->setChecked(eLoop, false);
+          playingConsole->setChecked(eLoopFromBegin, false);
           playingConsole->setChecked(ePause, true);
           stoppedOther = true;
           m_stopAt     = -1;
@@ -1516,6 +1528,7 @@ void FlipConsole::onButtonPressed(int button) {
       if (stoppedOther) {
         setChecked(ePlay, false);
         setChecked(eLoop, false);
+        setChecked(eLoopFromBegin, false);
         setChecked(ePause, true);
         return;
       }
@@ -1623,12 +1636,15 @@ void FlipConsole::doButtonPressed(UINT button) {
     break;
   case ePlay:
   case eLoop:
+  case eLoopFromBegin:
     // if (	  isChecked(ePlay,   false);
     // setChecked(eLoop,   false);
     m_editCurrFrame->disconnect();
     m_currFrameSlider->disconnect();
 
-    m_isPlay = (button == ePlay);
+    if (button == eLoopFromBegin) m_currentFrame = from;
+
+    m_playState = (PlayState)button;
 
     if (linked && m_isLinkedPlaying) return;
 
@@ -1674,6 +1690,7 @@ void FlipConsole::doButtonPressed(UINT button) {
             playingConsole->doButtonPressed(button);
           playingConsole->setChecked(ePlay, false);
           playingConsole->setChecked(eLoop, false);
+          playingConsole->setChecked(eLoopFromBegin, false);
           playingConsole->setChecked(ePause, true);
         }
       }
@@ -1688,7 +1705,7 @@ void FlipConsole::doButtonPressed(UINT button) {
 
     m_stopAt       = -1;
     m_startAt      = -1;
-    m_isPlay       = false;
+    m_playState    = Loop;
     m_blanksToDraw = 0;
 
     m_consoleOwner->swapBuffers();
