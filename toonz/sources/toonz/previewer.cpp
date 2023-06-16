@@ -522,7 +522,8 @@ void Previewer::Imp::updatePreviewRect() {
   /*--
    * SubCameraPreviewではない場合、Viewerの表示エリアに関係なく全画面で計算を行う
    * --*/
-  if (!m_subcamera)
+  if (!m_subcamera || Preferences::instance()->getSubCameraPreviewBehavior() ==
+                          Preferences::AlwaysPreviewWholeSubCamera)
     previewRectD = m_renderArea;
   else {
     // Retrieve the view rects from each listener. Their union will form the

@@ -630,6 +630,8 @@ void Preferences::definePreferenceItems() {
          QMetaType::Bool, true);
   define(previewWhenPlayingOnViewer, "previewWhenPlayingOnViewer",
          QMetaType::Bool, false);
+  define(subCameraPreviewBehavior, "subCameraPreviewBehavior", QMetaType::Int,
+         PreviewOnlyVisiblePartInSubCamera);  // Linear
 
   // Onion Skin
   define(onionSkinEnabled, "onionSkinEnabled", QMetaType::Bool, true);

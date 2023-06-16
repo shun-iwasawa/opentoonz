@@ -118,6 +118,11 @@ public:
     ShowLevelNameOnColumnHeader
   };
 
+  enum SubCameraPreviewBehavior {
+    PreviewOnlyVisiblePartInSubCamera = 0,
+    AlwaysPreviewWholeSubCamera
+  };
+
   //--- callbacks
   // General
   void enableAutosave();
@@ -451,7 +456,10 @@ public:
     return getBoolValue(generatedMovieViewEnabled);
   }
   bool previewWhenPlayingOnViewerEnabled() const {
-    return getBoolValue(previewWhenPlayingOnViewer);
+  return getBoolValue(previewWhenPlayingOnViewer);
+  }
+  int getSubCameraPreviewBehavior() const {
+    return getIntValue(subCameraPreviewBehavior);
   }
 
   // Onion Skin  tab

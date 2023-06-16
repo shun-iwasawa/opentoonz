@@ -1320,6 +1320,7 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
       {fitToFlipbook, tr("Fit to Flipbook")},
       {generatedMovieViewEnabled, tr("Open Flipbook after Rendering")},
       {previewWhenPlayingOnViewer, tr("Preview When Playing on Viewer")},
+      {subCameraPreviewBehavior, tr("Sub-camera Preview Behavior")},
 
       // Onion Skin
       {onionSkinEnabled, tr("Onion Skin ON")},
@@ -1467,7 +1468,12 @@ QList<ComboBoxItem> PreferencesPopup::getComboItemList(
         {tr("Expression "), 7},
         {tr("File"), 8}}},
       {animatedGuidedDrawing,
-       {{tr("Arrow Markers"), 0}, {tr("Animated Guide"), 1}}}};
+       {{tr("Arrow Markers"), 0}, {tr("Animated Guide"), 1}}},
+      {subCameraPreviewBehavior,
+       {{tr("Preview Only Visible Part in Sub-camera"),
+         Preferences::PreviewOnlyVisiblePartInSubCamera},
+        {tr("Always Preview Whole Sub-camera"),
+         Preferences::AlwaysPreviewWholeSubCamera}}}};
   assert(comboItemsTable.contains(id));
   return comboItemsTable.value(id, QList<ComboBoxItem>());
 }
@@ -2101,6 +2107,8 @@ QWidget* PreferencesPopup::createPreviewPage() {
   insertUI(fitToFlipbook, lay);
   insertUI(generatedMovieViewEnabled, lay);
   insertUI(previewWhenPlayingOnViewer, lay);
+  insertUI(subCameraPreviewBehavior, lay,
+           getComboItemList(subCameraPreviewBehavior));
 
   lay->setRowStretch(lay->rowCount(), 1);
   widget->setLayout(lay);

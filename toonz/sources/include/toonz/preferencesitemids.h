@@ -159,6 +159,7 @@ enum PreferencesItemId {
   generatedMovieViewEnabled,
   shortPlayFrameCount,
   previewWhenPlayingOnViewer,
+  subCameraPreviewBehavior,
 
   //----------
   // Onion Skin
