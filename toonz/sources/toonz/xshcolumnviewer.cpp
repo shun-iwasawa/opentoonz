@@ -72,6 +72,13 @@
 //=============================================================================
 
 namespace {
+const QString CMenu_Subsampling = "CMenu_Subsampling";
+
+const QString CMenuType_Preview  = "Preview";
+const QString CMenuType_Camstand = "Camstand";
+const QString CMenuType_Lock     = "Lock";
+const QString CMenuType_Main     = "Main";
+
 const QSet<TXshLevel *> getLevels(TXshColumn *column) {
   QSet<TXshLevel *> levels;
 
@@ -1517,7 +1524,8 @@ void ColumnArea::DrawHeader::drawVolumeControl(double volume) const {
 // ColumnArea
 //-----------------------------------------------------------------------------
 ColumnArea::ColumnArea(XsheetViewer *parent, Qt::WindowFlags flags)
-    : QWidget(parent, flags)
+    : CustomContextMenuWidget("XsheetColumnArea", "XsheetGUI::ColumnArea",
+                              parent, flags)
     , m_viewer(parent)
     , m_pos(-1, -1)
     , m_tooltip(tr(""))
@@ -2891,12 +2899,7 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
       Preferences::instance()->isUnifyColumnVisibilityTogglesEnabled()) {
     menu.setObjectName("xsheetColumnAreaMenu_Preview");
 
-    menu.addAction(cmdManager->getAction("MI_EnableThisColumnOnly"));
-    menu.addAction(cmdManager->getAction("MI_EnableSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_EnableAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DisableAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DisableSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_SwapEnabledColumns"));
+    getMenu(menu, CMenuType_Preview);
   }
   //---- Preview
   else if (((isCamera && !o->isVerticalTimeline()) ||
@@ -2905,12 +2908,7 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
            !Preferences::instance()->isUnifyColumnVisibilityTogglesEnabled()) {
     menu.setObjectName("xsheetColumnAreaMenu_Preview");
 
-    menu.addAction(cmdManager->getAction("MI_EnableThisColumnOnly"));
-    menu.addAction(cmdManager->getAction("MI_EnableSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_EnableAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DisableAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DisableSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_SwapEnabledColumns"));
+    getMenu(menu, CMenuType_Preview);
   }
   //---- Camstand
   else if (((isCamera && !o->isVerticalTimeline()) ||
@@ -2919,14 +2917,7 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
            !Preferences::instance()->isUnifyColumnVisibilityTogglesEnabled()) {
     menu.setObjectName("xsheetColumnAreaMenu_Camstand");
 
-    menu.addAction(cmdManager->getAction("MI_ActivateThisColumnOnly"));
-    menu.addAction(cmdManager->getAction("MI_ActivateSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_ActivateAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DeactivateAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_DeactivateSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_ToggleColumnsActivation"));
-    // hide all columns placed on the left
-    menu.addAction(cmdManager->getAction("MI_DeactivateUpperColumns"));
+    getMenu(menu, CMenuType_Camstand);
   }
   //---- Lock
   else if ((isCamera || !xsh->isColumnEmpty(col)) &&
@@ -2935,52 +2926,31 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
                .contains(mouseInCell)) {
     menu.setObjectName("xsheetColumnAreaMenu_Lock");
 
-    menu.addAction(cmdManager->getAction("MI_LockThisColumnOnly"));
-    menu.addAction(cmdManager->getAction("MI_LockSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_LockAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_UnlockSelectedColumns"));
-    menu.addAction(cmdManager->getAction("MI_UnlockAllColumns"));
-    menu.addAction(cmdManager->getAction("MI_ToggleColumnLocks"));
+    getMenu(menu, CMenuType_Lock);
   }
   // right clicking another area / right clicking empty column head
   else {
+    uint mask = 0;
     if (!isCamera) {
+      mask |= Condition01;
       int r0, r1;
       xsh->getCellRange(col, r0, r1);
       TXshCell cell = xsh->getCell(r0, col);
-      menu.addAction(cmdManager->getAction(MI_Cut));
-      menu.addAction(cmdManager->getAction(MI_Copy));
-      menu.addAction(cmdManager->getAction(MI_Paste));
-      menu.addAction(cmdManager->getAction(MI_PasteAbove));
-      menu.addAction(cmdManager->getAction(MI_Clear));
-      menu.addAction(cmdManager->getAction(MI_Insert));
-      menu.addAction(cmdManager->getAction(MI_InsertAbove));
-      menu.addSeparator();
-      menu.addAction(cmdManager->getAction(MI_InsertFx));
-      menu.addAction(cmdManager->getAction(MI_NewNoteLevel));
-      menu.addAction(cmdManager->getAction(MI_RemoveEmptyColumns));
-      menu.addSeparator();
       if (m_viewer->getXsheet()->isColumnEmpty(col) ||
           (cell.m_level && cell.m_level->getChildLevel()))
-        menu.addAction(cmdManager->getAction(MI_OpenChild));
-
+        mask |= Condition02;
       // Close sub xsheet and move to parent sheet
       ToonzScene *scene      = TApp::instance()->getCurrentScene()->getScene();
       ChildStack *childStack = scene->getChildStack();
       if (childStack && childStack->getAncestorCount() > 0) {
-        menu.addAction(cmdManager->getAction(MI_CloseChild));
+        mask |= Condition03;
       }
-
-      menu.addAction(cmdManager->getAction(MI_Collapse));
       if (cell.m_level && cell.m_level->getChildLevel()) {
-        menu.addAction(cmdManager->getAction(MI_Resequence));
-        menu.addAction(cmdManager->getAction(MI_CloneChild));
-        menu.addAction(cmdManager->getAction(MI_ExplodeChild));
+        mask |= Condition04;
       }
-      menu.addSeparator();
     }
-    menu.addAction(cmdManager->getAction(MI_FoldColumns));
     if (Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()) {
+      mask |= Condition05;
       QAction *cameraToggle =
           cmdManager->getAction(MI_ToggleXsheetCameraColumn);
       bool cameraVisible =
@@ -2989,64 +2959,17 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
         cameraToggle->setText(tr("Hide Camera Column"));
       else
         cameraToggle->setText(tr("Show Camera Column"));
-      menu.addAction(cameraToggle);
-    }
-    menu.addSeparator();
-    menu.addAction(cmdManager->getAction(MI_ToggleXSheetToolbar));
-
-    if (isCamera) {
-      menu.exec(event->globalPos());
-      return;
     }
 
     // force the selected cells placed in n-steps
     if (!xsh->isColumnEmpty(col)) {
-      menu.addSeparator();
-      QMenu *reframeSubMenu = new QMenu(tr("Reframe"), this);
-      {
-        reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe1));
-        reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe2));
-        reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe3));
-        reframeSubMenu->addAction(cmdManager->getAction(MI_Reframe4));
-        reframeSubMenu->addAction(
-            cmdManager->getAction(MI_ReframeWithEmptyInbetweens));
-      }
-      menu.addMenu(reframeSubMenu);
-      menu.addAction(cmdManager->getAction(MI_AutoInputCellNumber));
+      mask |= Condition06;
     }
 
     if (containsRasterLevel(m_viewer->getColumnSelection())) {
-      QMenu *subsampleSubMenu = new QMenu(tr("Subsampling"), this);
-      {
-        subsampleSubMenu->addAction(m_subsampling1);
-        subsampleSubMenu->addAction(m_subsampling2);
-        subsampleSubMenu->addAction(m_subsampling3);
-        subsampleSubMenu->addAction(m_subsampling4);
-      }
-      menu.addMenu(subsampleSubMenu);
+      mask |= Condition07;
     }
-
-    if (!xsh->isColumnEmpty(col)) {
-      menu.addAction(cmdManager->getAction(MI_ReplaceLevel));
-      menu.addAction(cmdManager->getAction(MI_ReplaceParentDirectory));
-
-      // if (containsVectorLevel(col)) {
-      //  menu.addSeparator();
-      //  QAction *setMask =
-      //      new QAction(tr("Temporary Mask (Not in final render)"), this);
-      //  setMask->setCheckable(true);
-      //  setMask->setChecked(xsh->getColumn(col)->isMask());
-      //  setMask->setToolTip(
-      //      tr("Only Toonz Vector levels can be used as masks. \n Masks don't
-      //      "
-      //         "show up in final renders."));
-      //  bool ret = true;
-      //  ret      = ret &&
-      //        connect(setMask, &QAction::toggled, [=]() { onSetMask(col); });
-      //  assert(ret);
-      //  menu.addAction(setMask);
-      //}
-    }
+    getMenu(menu, CMenuType_Main, mask);
   }
 
   QAction *act  = cmdManager->getAction(MI_Insert),
@@ -3075,6 +2998,159 @@ void ColumnArea::contextMenuEvent(QContextMenuEvent *event) {
   act2->setText(act2Text);
   act3->setText(act3Text);
   act4->setText(act4Text);
+}
+
+//-----------------------------------------------------------------------------
+
+void ColumnArea::registerContextMenus() {
+  //---- Unified / Preview
+  QMenu *previewMenu = new QMenu();
+  previewMenu->addAction("MI_EnableThisColumnOnly");
+  previewMenu->addAction("MI_EnableSelectedColumns");
+  previewMenu->addAction("MI_EnableAllColumns");
+  previewMenu->addAction("MI_DisableAllColumns");
+  previewMenu->addAction("MI_DisableSelectedColumns");
+  previewMenu->addAction("MI_SwapEnabledColumns");
+  registerMenu(previewMenu, CMenuType_Preview);
+  //---- Camstand
+  QMenu *camstandMenu = new QMenu();
+  camstandMenu->addAction("MI_ActivateThisColumnOnly");
+  camstandMenu->addAction("MI_ActivateSelectedColumns");
+  camstandMenu->addAction("MI_ActivateAllColumns");
+  camstandMenu->addAction("MI_DeactivateAllColumns");
+  camstandMenu->addAction("MI_DeactivateSelectedColumns");
+  camstandMenu->addAction("MI_ToggleColumnsActivation");
+  camstandMenu->addAction("MI_DeactivateUpperColumns");
+  registerMenu(camstandMenu, CMenuType_Camstand);
+  //---- Lock
+  QMenu *lockMenu = new QMenu();
+  lockMenu->addAction("MI_LockThisColumnOnly");
+  lockMenu->addAction("MI_LockSelectedColumns");
+  lockMenu->addAction("MI_LockAllColumns");
+  lockMenu->addAction("MI_UnlockSelectedColumns");
+  lockMenu->addAction("MI_UnlockAllColumns");
+  lockMenu->addAction("MI_ToggleColumnLocks");
+  registerMenu(lockMenu, CMenuType_Lock);
+  //---- Main
+  QMenu *mainMenu = new QMenu();
+  QMap<QString, QString> commandLabels;
+  QMap<CONDITION_MASKS, QString> conditionDescriptions = {
+      {Condition01, tr("Non-camera column is clicked.")},
+      {Condition02, tr("An empty column OR a sub-xsheet column is clicked.")},
+      {Condition03, tr("The current Xsheet is sub-xsheet.")},
+      {Condition04, tr("A sub-xsheet column is clicked.")},
+      {Condition05,
+       tr("Preferences > Xsheet > Show Keyframes on Cell Area is ON.")},
+      {Condition06, tr("Non-empty column is clicked.")},
+      {Condition07,
+       tr("The selection contains a raster or toonz raster level column.")}};
+
+  auto createMenu = [&](const char *title) {
+    QMenu *ret = new QMenu(tr(title), this);
+    // store untranslated text to the icon text
+    ret->menuAction()->setIconText(title);
+    return ret;
+  };
+
+  // Condition01 : !isCamera
+  {
+    mainMenu->addAction(MI_Cut)->setData(Condition01);
+    mainMenu->addAction(MI_Copy)->setData(Condition01);
+    mainMenu->addAction(MI_Paste)->setData(Condition01);
+    mainMenu->addAction(MI_PasteAbove)->setData(Condition01);
+    mainMenu->addAction(MI_Clear)->setData(Condition01);
+    mainMenu->addAction(MI_Insert)->setData(Condition01);
+    mainMenu->addAction(MI_InsertAbove)->setData(Condition01);
+    mainMenu->addSeparator()->setData(Condition01);
+    mainMenu->addAction(MI_InsertFx)->setData(Condition01);
+    mainMenu->addAction(MI_NewNoteLevel)->setData(Condition01);
+    mainMenu->addAction(MI_RemoveEmptyColumns)->setData(Condition01);
+    mainMenu->addSeparator()->setData(Condition01);
+
+    // Condition02 : isColumnEmpty(col) || cell.m_level->getChildLevel()
+    { mainMenu->addAction(MI_OpenChild)->setData(Condition01 | Condition02); }
+
+    // Condition03 :  scene->getChildStack() && childStack->getAncestorCount() >
+    // 0)
+    { mainMenu->addAction(MI_CloseChild)->setData(Condition01 | Condition03); }
+
+    mainMenu->addAction(MI_Collapse)->setData(Condition01);
+
+    // Condition04 :  cell.m_level->getChildLevel()
+    {
+      mainMenu->addAction(MI_Resequence)->setData(Condition01 | Condition04);
+      mainMenu->addAction(MI_CloneChild)->setData(Condition01 | Condition04);
+      mainMenu->addAction(MI_ExplodeChild)->setData(Condition01 | Condition04);
+    }
+    mainMenu->addSeparator()->setData(Condition01);
+  }
+
+  mainMenu->addAction(MI_FoldColumns);
+
+  // Condition05 :
+  // Preferences::instance()->isShowKeyframesOnXsheetCellAreaEnabled()
+  { mainMenu->addAction(MI_ToggleXsheetCameraColumn)->setData(Condition05); }
+  mainMenu->addSeparator();
+  mainMenu->addAction(MI_ToggleXSheetToolbar);
+
+  // Condition01 :  !isCamera
+  {
+    // Condition06 :  !xsh->isColumnEmpty(col)
+    {
+      mainMenu->addSeparator()->setData(Condition01 | Condition06);
+      QMenu *reframeSubMenu = createMenu(QT_TR_NOOP("Reframe"));
+      {
+        reframeSubMenu->addAction(MI_Reframe1)
+            ->setData(Condition01 | Condition06);
+        reframeSubMenu->addAction(MI_Reframe2)
+            ->setData(Condition01 | Condition06);
+        reframeSubMenu->addAction(MI_Reframe3)
+            ->setData(Condition01 | Condition06);
+        reframeSubMenu->addAction(MI_Reframe4)
+            ->setData(Condition01 | Condition06);
+        reframeSubMenu->addAction(MI_ReframeWithEmptyInbetweens)
+            ->setData(Condition01 | Condition06);
+      }
+      mainMenu->addMenu(reframeSubMenu)->setData(Condition01 | Condition06);
+      mainMenu->addAction(MI_AutoInputCellNumber)
+          ->setData(Condition01 | Condition06);
+    }
+
+    // Condition07 :  containsRasterLevel(m_viewer->getColumnSelection()))
+    {
+      commandLabels.insert(CMenu_Subsampling, tr("Subsampling"));
+      mainMenu->addAction(CMenu_Subsampling)
+          ->setData(Condition01 | Condition07);
+    }
+
+    // Condition06 :  !xsh->isColumnEmpty(col)
+    {
+      mainMenu->addAction(MI_ReplaceLevel)->setData(Condition01 | Condition06);
+      mainMenu->addAction(MI_ReplaceParentDirectory)
+          ->setData(Condition01 | Condition06);
+    }
+  }
+  registerMenu(mainMenu, CMenuType_Main, commandLabels, conditionDescriptions);
+}
+
+//-----------------------------------------------------------------------------
+
+QAction *ColumnArea::customContextAction(const QString &cmdId) {
+  QAction *action = nullptr;
+  bool ret        = true;
+  if (cmdId == CMenu_Subsampling) {
+    QMenu *subsampleSubMenu = new QMenu(tr("Subsampling"), this);
+    {
+      subsampleSubMenu->addAction(m_subsampling1);
+      subsampleSubMenu->addAction(m_subsampling2);
+      subsampleSubMenu->addAction(m_subsampling3);
+      subsampleSubMenu->addAction(m_subsampling4);
+    }
+    action = subsampleSubMenu->menuAction();
+  }
+  assert(ret);
+  assert(action);
+  return action;
 }
 
 //-----------------------------------------------------------------------------

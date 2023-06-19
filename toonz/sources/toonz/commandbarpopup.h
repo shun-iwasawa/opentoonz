@@ -17,7 +17,7 @@ class QXmlStreamWriter;
 // CommandItem
 //-----------------------------------------------------------------------------
 
-class CommandItem final : public QTreeWidgetItem {
+class CommandItem : public QTreeWidgetItem {
   QAction* m_action;
 
 public:
@@ -29,7 +29,7 @@ public:
 // SeparatorItem
 //-----------------------------------------------------------------------------
 
-class SeparatorItem final : public QTreeWidgetItem {
+class SeparatorItem : public QTreeWidgetItem {
 public:
   SeparatorItem(QTreeWidgetItem* parent);
 };

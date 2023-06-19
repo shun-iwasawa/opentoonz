@@ -10,6 +10,7 @@
 #include "toonz/tscenehandle.h"
 #include "toonz/tcolumnhandle.h"
 #include "toonz/txsheet.h"
+#include "customcontextmenumanager.h"
 
 #include "../include/tundo.h"
 #include "../include/historytypes.h"
@@ -263,7 +264,7 @@ protected slots:
 };
 
 //! The class in charge of the region showing layer headers
-class ColumnArea final : public QWidget {
+class ColumnArea final : public CustomContextMenuWidget {
   Q_OBJECT
 
   enum {
@@ -382,6 +383,10 @@ protected:
   void contextMenuEvent(QContextMenuEvent *event) override;
   bool event(QEvent *event) override;
 
+public:
+  void registerContextMenus() override;  // CustomContextMenuWidget
+  QAction *customContextAction(
+      const QString &cmdId) override;  // CustomContextMenuWidget
 protected slots:
   void onSubSampling(QAction *);
   void openTransparencyPopup();

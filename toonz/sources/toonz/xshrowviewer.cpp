@@ -39,12 +39,20 @@
 
 namespace XsheetGUI {
 
+const QString CMenu_SetStartMarker = "CMenu_SetStartMarker";
+const QString CMenu_SetStopMarker  = "CMenu_SetStopMarker";
+const QString CMenu_SetAutoMarkers = "CMenu_SetAutoMarkers";
+const QString CMenu_RemoveMarkers  = "CMenu_RemoveMarkers";
+const QString CMenu_PreviewThis    = "CMenu_PreviewThis";
+const QString CMenu_Tags           = "CMenu_Tags";
+
 //=============================================================================
 // RowArea
 //-----------------------------------------------------------------------------
 
 RowArea::RowArea(XsheetViewer *parent, Qt::WindowFlags flags)
-    : QWidget(parent, flags)
+    : CustomContextMenuWidget("XsheetRowArea", "XsheetGUI::RowArea", parent,
+                              flags)
     , m_viewer(parent)
     , m_row(-1)
     , m_showOnionToSet(None)
@@ -1304,78 +1312,133 @@ void RowArea::contextMenuEvent(QContextMenuEvent *event) {
   OnionSkinMask osMask =
       TApp::instance()->getCurrentOnionSkin()->getOnionSkinMask();
 
-  QMenu *menu             = new QMenu(this);
-  QAction *setStartMarker = menu->addAction(tr("Set Start Marker"));
-  connect(setStartMarker, SIGNAL(triggered()), SLOT(onSetStartMarker()));
-  QAction *setStopMarker = menu->addAction(tr("Set Stop Marker"));
-  connect(setStopMarker, SIGNAL(triggered()), SLOT(onSetStopMarker()));
+  QMenu *menu = new QMenu(this);
 
-  QAction *setAutoMarkers = menu->addAction(tr("Set Auto Markers"));
-  connect(setAutoMarkers, SIGNAL(triggered()), SLOT(onSetAutoMarkers()));
-  setAutoMarkers->setEnabled(canSetAutoMarkers());
-
-  QAction *removeMarkers = menu->addAction(tr("Remove Markers"));
-  connect(removeMarkers, SIGNAL(triggered()), SLOT(onRemoveMarkers()));
-
-  // set both the from and to markers at the specified row
-  QAction *previewThis = menu->addAction(tr("Preview This"));
-  connect(previewThis, SIGNAL(triggered()), SLOT(onPreviewThis()));
-
-  menu->addSeparator();
+  uint mask = 0;
 
   if (Preferences::instance()->isOnionSkinEnabled()) {
-    OnioniSkinMaskGUI::addOnionSkinCommand(menu);
-    menu->addSeparator();
+    mask |= Condition01;
+    OnioniSkinMaskGUI::setContextMenuConditions(mask);
   }
 
-  CommandManager *cmdManager = CommandManager::instance();
+  getMenu(*menu, "", mask);
 
-  if (!m_viewer->orientation()->isVerticalTimeline()) {
-    menu->addAction(cmdManager->getAction(MI_ToggleCurrentTimeIndicator));
-    menu->addSeparator();
-  }
+  menu->exec(event->globalPos());
+}
 
-  menu->addAction(cmdManager->getAction(MI_InsertSceneFrame));
-  menu->addAction(cmdManager->getAction(MI_RemoveSceneFrame));
-  menu->addAction(cmdManager->getAction(MI_InsertGlobalKeyframe));
-  menu->addAction(cmdManager->getAction(MI_RemoveGlobalKeyframe));
-  menu->addAction(cmdManager->getAction(MI_DrawingSubForward));
-  menu->addAction(cmdManager->getAction(MI_DrawingSubBackward));
+//-----------------------------------------------------------------------------
+
+void RowArea::registerContextMenus() {
+  QMenu *menu = new QMenu();
+
+  QMap<QString, QString> commandLabels;
+  QMap<CONDITION_MASKS, QString> conditionDescriptions = {
+      {Condition01, tr("Preferences > Onion Skin > Onion Skin On is set.")}};
+
+  commandLabels.insert(CMenu_SetStartMarker, tr("Set Start Marker"));
+  menu->addAction(CMenu_SetStartMarker);
+
+  commandLabels.insert(CMenu_SetStopMarker, tr("Set Stop Marker"));
+  menu->addAction(CMenu_SetStopMarker);
+
+  commandLabels.insert(CMenu_SetAutoMarkers, tr("Set Auto Markers"));
+  menu->addAction(CMenu_SetAutoMarkers);
+
+  commandLabels.insert(CMenu_RemoveMarkers, tr("Remove Markers"));
+  menu->addAction(CMenu_RemoveMarkers);
+
+  // set both the from and to markers at the specified row
+  commandLabels.insert(CMenu_PreviewThis, tr("Preview This"));
+  menu->addAction(CMenu_PreviewThis);
+
   menu->addSeparator();
-  menu->addAction(cmdManager->getAction(MI_ShiftTrace));
-  menu->addAction(cmdManager->getAction(MI_EditShift));
-  menu->addAction(cmdManager->getAction(MI_NoShift));
-  menu->addAction(cmdManager->getAction(MI_ResetShift));
+
+  // Condition01: Preferences::instance()->isOnionSkinEnabled())
+  {
+    // Condition02 to 07 are registered in onion skin commands
+    OnioniSkinMaskGUI::registerOnionSkinCommand(menu, commandLabels,
+                                                conditionDescriptions);
+    menu->addSeparator()->setData(Condition01);
+  }
+
+  menu->addAction(MI_ToggleCurrentTimeIndicator);
+  menu->addSeparator();
+  menu->addAction(MI_InsertSceneFrame);
+  menu->addAction(MI_RemoveSceneFrame);
+  menu->addAction(MI_InsertGlobalKeyframe);
+  menu->addAction(MI_RemoveGlobalKeyframe);
+  menu->addAction(MI_DrawingSubForward);
+  menu->addAction(MI_DrawingSubBackward);
+  menu->addSeparator();
+  menu->addAction(MI_ShiftTrace);
+  menu->addAction(MI_EditShift);
+  menu->addAction(MI_NoShift);
+  menu->addAction(MI_ResetShift);
 
   // Tags
   menu->addSeparator();
-  menu->addAction(cmdManager->getAction(MI_ToggleTaggedFrame));
-  menu->addAction(cmdManager->getAction(MI_EditTaggedFrame));
+  menu->addAction(MI_ToggleTaggedFrame);
+  menu->addAction(MI_EditTaggedFrame);
 
-  QMenu *tagMenu          = menu->addMenu(tr("Tags"));
-  NavigationTags *navTags = m_viewer->getXsheet()->getNavigationTags();
-  QAction *tagAction;
-  if (!navTags->getCount()) {
-    tagAction = tagMenu->addAction("Empty");
-    tagAction->setEnabled(false);
-  } else {
-    std::vector<NavigationTags::Tag> tags = navTags->getTags();
-    for (int i = 0; i < tags.size(); i++) {
-      int frame     = tags[i].m_frame;
-      QString label = tr("Frame %1").arg(frame + 1);
-      if (!tags[i].m_label.isEmpty()) label += ": " + tags[i].m_label;
-      tagAction = tagMenu->addAction(label);
-      tagAction->setData(frame);
-      connect(tagAction, SIGNAL(triggered()), this, SLOT(onJumpToTag()));
+  commandLabels.insert(CMenu_Tags, tr("Tags"));
+  menu->addAction(CMenu_Tags);
+
+  menu->addAction(MI_NextTaggedFrame);
+  menu->addAction(MI_PrevTaggedFrame);
+
+  registerMenu(menu, "", commandLabels, conditionDescriptions);
+}
+
+//-----------------------------------------------------------------------------
+
+QAction *RowArea::customContextAction(const QString &cmdId) {
+  QAction *action = nullptr;
+  bool ret        = true;
+  if (cmdId == CMenu_SetStartMarker) {
+    action = new QAction(tr("Set Start Marker"));
+    ret = ret && connect(action, SIGNAL(triggered()), SLOT(onSetStartMarker()));
+  } else if (cmdId == CMenu_SetStopMarker) {
+    action = new QAction(tr("Set Stop Marker"));
+    ret = ret && connect(action, SIGNAL(triggered()), SLOT(onSetStopMarker()));
+  } else if (cmdId == CMenu_SetAutoMarkers) {
+    action = new QAction(tr("Set Auto Markers"));
+    ret = ret && connect(action, SIGNAL(triggered()), SLOT(onSetAutoMarkers()));
+    action->setEnabled(canSetAutoMarkers());
+  } else if (cmdId == CMenu_RemoveMarkers) {
+    action = new QAction(tr("Remove Markers"));
+    ret = ret && connect(action, SIGNAL(triggered()), SLOT(onRemoveMarkers()));
+  } else if (cmdId == CMenu_PreviewThis) {
+    action = new QAction(tr("Preview This"));
+    ret    = ret && connect(action, SIGNAL(triggered()), SLOT(onPreviewThis()));
+  } else if (cmdId == CMenu_Tags) {
+    QMenu *tagMenu          = new QMenu(tr("Tags"));
+    NavigationTags *navTags = m_viewer->getXsheet()->getNavigationTags();
+    QAction *tagAction;
+    if (!navTags->getCount()) {
+      tagAction = tagMenu->addAction("Empty");
+      tagAction->setEnabled(false);
+    } else {
+      std::vector<NavigationTags::Tag> tags = navTags->getTags();
+      for (int i = 0; i < tags.size(); i++) {
+        int frame     = tags[i].m_frame;
+        QString label = tr("Frame %1").arg(frame + 1);
+        if (!tags[i].m_label.isEmpty()) label += ": " + tags[i].m_label;
+        tagAction = tagMenu->addAction(label);
+        tagAction->setData(frame);
+        ret = ret && connect(tagAction, SIGNAL(triggered()), this,
+                             SLOT(onJumpToTag()));
+      }
+      tagMenu->addSeparator();
+      tagMenu->addAction(CommandManager::instance()->getAction(MI_ClearTags));
     }
-    tagMenu->addSeparator();
-    tagMenu->addAction(cmdManager->getAction(MI_ClearTags));
+
+    action = tagMenu->menuAction();
+  } else {
+    action = OnioniSkinMaskGUI::doCustomContextAction(cmdId);
   }
-
-  menu->addAction(cmdManager->getAction(MI_NextTaggedFrame));
-  menu->addAction(cmdManager->getAction(MI_PrevTaggedFrame));
-
-  menu->exec(event->globalPos());
+  assert(ret);
+  assert(action);
+  return action;
 }
 
 //-----------------------------------------------------------------------------

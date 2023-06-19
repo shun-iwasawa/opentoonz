@@ -4,6 +4,7 @@
 #define XSHROWVIEWER_H
 
 #include <QWidget>
+#include "customcontextmenumanager.h"
 
 // forward declaration
 class XsheetViewer;
@@ -18,7 +19,7 @@ class DragTool;
 //-----------------------------------------------------------------------------
 
 //! La classe si occupa della visualizzazione dell'area che gestisce le righe.
-class RowArea final : public QWidget {
+class RowArea final : public CustomContextMenuWidget {
   Q_OBJECT
   XsheetViewer *m_viewer;
   int m_row;
@@ -86,6 +87,11 @@ protected:
   bool event(QEvent *event) override;
 
   void setMarker(int index);
+
+public:
+  void registerContextMenus() override;  // CustomContextMenuWidget
+  QAction *customContextAction(
+      const QString &cmdId) override;  // CustomContextMenuWidget
 
 protected slots:
 

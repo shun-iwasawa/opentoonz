@@ -9,6 +9,7 @@
 
 #include "toonz/txshcell.h"
 #include "tundo.h"
+#include "customcontextmenumanager.h"
 
 // forward declaration
 class XsheetViewer;
@@ -72,7 +73,7 @@ protected slots:
 //-----------------------------------------------------------------------------
 
 //! La classe si occupa della visualizzazione delle celle nel viewer.
-class CellArea final : public QWidget {
+class CellArea final : public CustomContextMenuWidget {
   Q_OBJECT
 
   XsheetViewer *m_viewer;
@@ -169,21 +170,30 @@ protected:
   /*!Crea il menu' del tasto destro che si visualizza quando si clicca sulla
 cella,
 distinguendo i due casi: cella piena, cella vuota.*/
-  void createCellMenu(QMenu &menu, bool isCellSelected, TXshCell cell, int row,
-                      int col);
+  void createCellMenu(QMenu &menu, QMap<QString, QString> &commandLabels,
+                      QMap<CONDITION_MASKS, QString> &conditionDescriptions);
+  void retrieveCellMenu(QMenu &menu, bool isCellSelected, TXshCell cell,
+                        int row, int col);
   //! Crea il menu' del tasto destro che si visualizza si clicca su un key
   //! frame.
   void createKeyMenu(QMenu &menu);
   //! Crea il menu' del tasto destro che si visualizza quando si clicca sulla
   //! linea tre due key frame.
-  void createKeyLineMenu(QMenu &menu, int row, int col);
+  void createKeyLineMenu(QMenu &menu, QMap<QString, QString> &commandLabels,
+                         QMap<CONDITION_MASKS, QString> &conditionDescriptions);
+  void retrieveKeyLineMenu(QMenu &menu, int row, int col);
   //! Crea il menu' del tasto destro che si visualizza quando si sopra una nota.
-  void createNoteMenu(QMenu &menu);
+  void createNoteMenu(QMenu &menu, QMap<QString, QString> &commandLabels);
+
+public:
+  void registerContextMenus() override;  // CustomContextMenuWidget
+  QAction *customContextAction(
+      const QString &cmdId) override;  // CustomContextMenuWidget
 
 protected slots:
   void openNote();
   void deleteNote();
-  void onStepChanged(QAction *);
+  void onStepChanged();
   // replace level with another level in the cast
   void onReplaceByCastedLevel(QAction *action);
   void onSetCellMark();
