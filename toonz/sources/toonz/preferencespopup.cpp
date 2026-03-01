@@ -38,6 +38,9 @@
 #include "tsystem.h"
 #include "tfont.h"
 
+// TnzTools includes
+#include "tools/toolhandle.h"
+
 #include "kis_tablet_support_win8.h"
 
 // Qt includes
@@ -1326,6 +1329,8 @@ QString PreferencesPopup::getUIString(PreferencesItemId id) {
        tr("Geometric Tool: Click Twice to Create Arcs")},
       {tempToolSwitchTimer,
        tr("Switch Tool Temporarily Keypress Length (ms):")},
+      {animateToolHandleSize, tr("Handle Size (%):")},
+      {animateToolColor, tr("Handle Color:")},
 
       // Xsheet
       {xsheetLayoutPreference, tr("Column Header Layout*:")},
@@ -2119,6 +2124,32 @@ QWidget* PreferencesPopup::createToolsPage() {
   insertUI(clickTwiceToCreateArcs, lay);
   insertUI(tempToolSwitchTimer, lay);
 
+  QGridLayout* animateToolLay = insertGroupBox(tr("Animate Tool"), lay);
+  {
+    // Use IntField to display 100% instead of 1.0
+    IntField* handleSizeSlider = new IntField(this);
+    handleSizeSlider->setRange(100, 600);  // scale range: 100% to 600%
+
+    // Get the decimal value (e.g., 1.0) and multiply by 100 for the slider
+    double currentVal = Preferences::instance()->getAnimateToolHandleSize();
+    handleSizeSlider->setValue((int)(currentVal * 100.0));
+
+    // Divide by 100 before saving to maintain the decimal standard
+    connect(handleSizeSlider, &IntField::valueChanged, [=](bool dragging) {
+      double decimalVal = handleSizeSlider->getValue() / 100.0;
+      Preferences::instance()->setValue(animateToolHandleSize, decimalVal);
+      onAnimateToolChanged();
+    });
+
+    int row = animateToolLay->rowCount();
+    animateToolLay->addWidget(new QLabel(getUIString(animateToolHandleSize)),
+                              row, 0);
+    animateToolLay->addWidget(handleSizeSlider, row, 1);
+
+    insertUI(animateToolColor, animateToolLay);
+  }
+  // -------------------------------------------
+
   lay->setRowStretch(lay->rowCount(), 1);
   widget->setLayout(lay);
 
@@ -2126,6 +2157,11 @@ QWidget* PreferencesPopup::createToolsPage() {
                            &PreferencesPopup::notifySceneChanged);
   m_onEditedFuncMap.insert(levelBasedToolsDisplay,
                            &PreferencesPopup::onLevelBasedToolsDisplayChanged);
+
+  m_onEditedFuncMap.insert(animateToolHandleSize,
+                           &PreferencesPopup::onAnimateToolChanged);
+  m_onEditedFuncMap.insert(animateToolColor,
+                           &PreferencesPopup::onAnimateToolChanged);
 
   return widget;
 }
@@ -2644,3 +2680,10 @@ void PreferencesPopup::onColorFieldChanged(const TPixel32& color,
 //-----------------------------------------------------------------------------
 
 OpenPopupCommandHandler<PreferencesPopup> openPreferencesPopup(MI_Preferences);
+
+void PreferencesPopup::onAnimateToolChanged() {
+  ToolHandle* toolHandle = TApp::instance()->getCurrentTool();
+  if (toolHandle && toolHandle->getTool()) {
+    toolHandle->getTool()->invalidate();
+  }
+}

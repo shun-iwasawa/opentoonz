@@ -164,6 +164,8 @@ private slots:
   void onChange();
   void onColorFieldChanged(const TPixel32&, bool);
 
+  void onAnimateToolChanged();
+
   void onAutoSaveExternallyChanged();
   void onAutoSavePeriodExternallyChanged();
   void onProjectRootChanged();
