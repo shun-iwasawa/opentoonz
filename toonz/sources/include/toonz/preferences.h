@@ -363,6 +363,12 @@ public:
   int getTempToolSwitchTimer() const {
     return getIntValue(tempToolSwitchTimer);
   }
+  double getAnimateToolHandleSize() const {
+    return getDoubleValue(animateToolHandleSize);
+  }
+  TPixel32 getAnimateToolColor() const {
+    return getColorValue(animateToolColor);
+  }
 
   // Xsheet  tab
   QString getXsheetLayoutPreference() const {

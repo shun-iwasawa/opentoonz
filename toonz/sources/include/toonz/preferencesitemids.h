@@ -125,6 +125,8 @@ enum PreferencesItemId {
   useStrokeEndCursor,
   clickTwiceToCreateArcs,
   tempToolSwitchTimer,
+  animateToolHandleSize,
+  animateToolColor,
 
   //----------
   // Xsheet
