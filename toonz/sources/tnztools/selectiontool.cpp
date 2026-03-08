@@ -1195,7 +1195,7 @@ void SelectionTool::drawPolylineSelection() {
   if (m_polyline.empty()) return;
   TPixel color = ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg
                      ? TPixel32::White
-                     : TPixel32::Black;
+                     : TPixel32::Red;
   tglColor(color);
   tglDrawCircle(m_polyline[0], 2);
   glBegin(GL_LINE_STRIP);
@@ -1210,7 +1210,7 @@ void SelectionTool::drawFreehandSelection() {
   if (m_track.isEmpty()) return;
   TPixel color = ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg
                      ? TPixel32::White
-                     : TPixel32::Black;
+                     : TPixel32::Red;
   tglColor(color);
   m_track.drawAllFragments();
 }
@@ -1218,11 +1218,37 @@ void SelectionTool::drawFreehandSelection() {
 //-----------------------------------------------------------------------------
 
 void SelectionTool::drawRectSelection(const TImage *image) {
+
+  TPixel color;
+
+  // Black BG mode
+  if (ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg) {
+    color = TPixel32::White;
+  } 
+  else {
+    // detect dark viewer background
+    TPixel32 bgColor = getViewer()->getBgColor();
+    int brightness = (bgColor.r + bgColor.g + bgColor.b) / 3;
+
+    if (brightness < 128)
+      color = TPixel32::Red;   // dark viewer
+    else
+      color = TPixel32::Black; // light viewer
+  }
+
+  if (!m_polyline.empty()) {
+    m_polyline.drawRectangle(color);
+    return;
+  }
+
   const TVectorImage *vi   = dynamic_cast<const TVectorImage *>(image);
   unsigned short stipple   = 0x3F33;
   FourPoints selectingRect = m_selectingRect;
-  if (vi && m_curPos.x >= m_firstPos.x) stipple = 0xFF00;
-  drawFourPoints(selectingRect, TPixel32::Black, stipple, true);
+
+  if (vi && m_curPos.x >= m_firstPos.x)
+    stipple = 0xFF00;
+
+  drawFourPoints(selectingRect, color, stipple, true);
 }
 
 //-----------------------------------------------------------------------------
