@@ -1219,27 +1219,9 @@ void SelectionTool::drawFreehandSelection() {
 
 void SelectionTool::drawRectSelection(const TImage *image) {
 
-  TPixel color;
-
-  // Black BG mode
-  if (ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg) {
-    color = TPixel32::White;
-  } 
-  else {
-    // detect dark viewer background
-    TPixel32 bgColor = getViewer()->getBgColor();
-    int brightness = (bgColor.r + bgColor.g + bgColor.b) / 3;
-
-    if (brightness < 128)
-      color = TPixel32::Red;   // dark viewer
-    else
-      color = TPixel32::Black; // light viewer
-  }
-
-  if (!m_polyline.empty()) {
-    m_polyline.drawRectangle(color);
-    return;
-  }
+  TPixel color = ToonzCheck::instance()->getChecks() & ToonzCheck::eBlackBg
+                     ? TPixel32::White
+                     : TPixel32::Black;
 
   const TVectorImage *vi   = dynamic_cast<const TVectorImage *>(image);
   unsigned short stipple   = 0x3F33;
