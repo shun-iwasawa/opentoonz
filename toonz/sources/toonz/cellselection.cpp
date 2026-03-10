@@ -2076,8 +2076,12 @@ void TCellSelection::pasteCells() {
   const RasterImageData *rasterImageData =
       dynamic_cast<const RasterImageData *>(mimeData);
   if (rasterImageData || clipImage.height() > 0) {
-    if (isEmpty())  // Nothing selected.
+    if (isEmpty()) return;
+    // Prevent pasting raster images into the camera column (c0 < 0)
+    if (c0 < 0) {
+      DVGui::warning(QObject::tr("Cannot paste into the camera column."));
       return;
+    }
 
     // get the current image and find out the type
     TImageP img = xsh->getCell(r0, c0).getImage(false);
