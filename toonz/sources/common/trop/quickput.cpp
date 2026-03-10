@@ -27,8 +27,6 @@
 #endif*/
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
 
 #ifdef OPTIMIZE_FOR_LP64
 void quickResample_optimized(const TRasterP &dn, const TRasterP &up,
@@ -330,9 +328,6 @@ void doQuickPutFilter(const TRaster32P &dn, const TRaster32P &up,
 }
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
-
 void doQuickPutNoFilter(const TRaster32P &dn, const TRaster32P &up,
                         const TAffine &aff, const TPixel32 &colorScale,
                         bool doPremultiply, bool whiteTransp, bool firstColumn,
@@ -563,9 +558,6 @@ void doQuickPutNoFilter(const TRaster32P &dn, const TRaster32P &up,
 }
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
-
 void doQuickPutNoFilter(const TRaster32P &dn, const TRaster64P &up,
                         const TAffine &aff, bool doPremultiply,
                         bool firstColumn) {
@@ -787,9 +779,6 @@ void doQuickPutNoFilter(const TRaster32P &dn, const TRaster64P &up,
   up->unlock();
 }
 //=============================================================================
-//=============================================================================
-//=============================================================================
-
 void doQuickPutNoFilter(const TRaster32P &dn, const TRasterGR8P &up,
                         const TAffine &aff, const TPixel32 &colorScale) {
   if ((aff.a11 * aff.a22 - aff.a12 * aff.a21) == 0) return;
@@ -933,8 +922,6 @@ void doQuickPutNoFilter(const TRaster32P &dn, const TRasterGR8P &up,
   up->unlock();
 }
 //=============================================================================
-//=============================================================================
-
 void doQuickPutNoFilter(const TRaster64P &dn, const TRaster64P &up,
                         const TAffine &aff, bool doPremultiply,
                         bool firstColumn) {
@@ -1157,7 +1144,6 @@ void doQuickPutNoFilter(const TRaster64P &dn, const TRaster64P &up,
 }
 
 //=============================================================================
-
 void doQuickPutNoFilter(const TRaster64P &dn, const TRasterFP &up,
                         const TAffine &aff, bool doPremultiply,
                         bool firstColumn) {
@@ -1381,7 +1367,6 @@ void doQuickPutNoFilter(const TRaster64P &dn, const TRasterFP &up,
 }
 
 //=============================================================================
-
 void doQuickPutNoFilter(const TRasterFP &dn, const TRasterFP &up,
                         const TAffine &aff, bool doPremultiply,
                         bool firstColumn) {
@@ -1604,7 +1589,6 @@ void doQuickPutNoFilter(const TRasterFP &dn, const TRasterFP &up,
 }
 
 //=============================================================================
-
 void doQuickPutNoFilter(const TRaster64P &dn, const TRaster32P &up,
                         const TAffine &aff, bool doPremultiply,
                         bool firstColumn) {
@@ -1828,7 +1812,6 @@ void doQuickPutNoFilter(const TRaster64P &dn, const TRaster32P &up,
 }
 
 //=============================================================================
-
 void doQuickPutFilter(const TRaster32P &dn, const TRaster32P &up, double sx,
                       double sy, double tx, double ty) {
   // if aff := TAffine(sx, 0, tx, 0, sy, ty) is degenerate, the inverse image
@@ -2089,8 +2072,7 @@ void doQuickPutFilter(const TRaster32P &dn, const TRaster32P &up, double sx,
   dn->unlock();
   up->unlock();
 }
-//=============================================================================
-//=============================================================================
+
 //=============================================================================
 void doQuickPutNoFilter(const TRaster32P &dn, const TRaster32P &up, double sx,
                         double sy, double tx, double ty,
@@ -2718,10 +2700,8 @@ void doQuickResampleFilter(const TRaster32P &dn, const TRaster32P &up,
   dn->unlock();
   up->unlock();
 }
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
+//=============================================================================
 void doQuickResampleFilter(const TRaster32P &dn, const TRasterGR8P &up,
                            const TAffine &aff) {
   if ((aff.a11 * aff.a22 - aff.a12 * aff.a21) == 0) return;
@@ -2862,10 +2842,8 @@ void doQuickResampleFilter(const TRaster32P &dn, const TRasterGR8P &up,
   dn->unlock();
   up->unlock();
 }
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
+//=============================================================================
 void doQuickResampleColorFilter(const TRaster32P &dn, const TRaster32P &up,
                                 const TAffine &aff, UCHAR colorMask) {
   if ((aff.a11 * aff.a22 - aff.a12 * aff.a21) == 0) return;
@@ -2971,14 +2949,8 @@ void doQuickResampleColorFilter(const TRaster32P &dn, const TRaster32P &up,
   dn->unlock();
   up->unlock();
 }
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
-
 void doQuickResampleColorFilter(const TRaster32P &dn, const TRaster64P &up,
                                 const TAffine &aff, UCHAR colorMask) {
   if ((aff.a11 * aff.a22 - aff.a12 * aff.a21) == 0) return;
@@ -3085,10 +3057,8 @@ void doQuickResampleColorFilter(const TRaster32P &dn, const TRaster64P &up,
   dn->unlock();
   up->unlock();
 }
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
+//=============================================================================
 void doQuickResampleFilter(const TRaster32P &dn, const TRaster32P &up,
                            double sx, double sy, double tx, double ty) {
   // if aff := TAffine(sx, 0, tx, 0, sy, ty) is degenerate, the inverse image
@@ -3572,8 +3542,6 @@ void doQuickResampleFilter(const TRaster32P &dn, const TRasterGR8P &up,
 }
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
 template <typename PIX>
 void doQuickResampleNoFilter(const TRasterPT<PIX> &dn, const TRasterPT<PIX> &up,
                              double sx, double sy, double tx, double ty) {
@@ -3761,14 +3729,9 @@ void doQuickResampleNoFilter(const TRasterPT<PIX> &dn, const TRasterPT<PIX> &up,
 }
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
 
 #ifndef TNZCORE_LIGHT
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
 //=============================================================================
 //
 // doQuickPutCmapped
@@ -4064,29 +4027,26 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
       (aff * TRectD(-0.5, -0.5, up->getLx() - 0.5, up->getLy() - 0.5));
   if (boundingBoxD.x0 >= boundingBoxD.x1 || boundingBoxD.y0 >= boundingBoxD.y1)
     return;
-  int yMin       = std::max(tfloor(boundingBoxD.y0), 0);
-  int yMax       = std::min(tceil(boundingBoxD.y1), dn->getLy() - 1);
-  int xMin       = std::max(tfloor(boundingBoxD.x0), 0);
-  int xMax       = std::min(tceil(boundingBoxD.x1), dn->getLx() - 1);
+  int yMin = std::max(tfloor(boundingBoxD.y0), 0);
+  int yMax = std::min(tceil(boundingBoxD.y1), dn->getLy() - 1);
+  int xMin = std::max(tfloor(boundingBoxD.x0), 0);
+  int xMax = std::min(tceil(boundingBoxD.x1), dn->getLx() - 1);
+
   TAffine invAff = inv(aff);
-  double deltaXD = invAff.a11;
-  double deltaYD = invAff.a21;
-  int deltaXL    = tround(deltaXD * (1 << PADN));
-  int deltaYL    = tround(deltaYD * (1 << PADN));
+  int deltaXL    = tround(invAff.a11 * (1 << PADN));
+  int deltaYL    = tround(invAff.a21 * (1 << PADN));
   if ((deltaXL == 0) && (deltaYL == 0)) return;
   int lxPred = up->getLx() * (1 << PADN) - 1;
   int lyPred = up->getLy() * (1 << PADN) - 1;
   int dnWrap = dn->getWrap();
   int upWrap = up->getWrap();
-  // Build colour vectors from palette
-  std::vector<TPixel32> paints(palette->getStyleCount());
-  std::vector<TPixel32> inks(palette->getStyleCount());
 
-  // If palette has no styles, nothing can be drawn, return early
-  if (inks.empty() || paints.empty()) return;
+  int styleCount = palette->getStyleCount();
+  std::vector<TPixel32> paints(styleCount);
+  std::vector<TPixel32> inks(styleCount);
 
   if (s.m_transparencyCheck && !s.m_isOnionSkin) {
-    for (int i = 0; i < palette->getStyleCount(); i++) {
+    for (int i = 0; i < styleCount; i++) {
       if (i == s.m_gapCheckIndex || palette->getStyle(i)->getFlags() != 0) {
         paints[i] = inks[i] = applyColorScaleCMapped(
             palette->getStyle(i)->getAverageColor(), s.m_globalColorScale);
@@ -4095,14 +4055,15 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
         inks[i]   = s.m_blackBgCheck ? s.m_transpCheckBg : s.m_transpCheckInk;
       }
     }
-  } else if (s.m_globalColorScale == TPixel::Black)
-    for (int i = 0; i < palette->getStyleCount(); i++)
+  } else if (s.m_globalColorScale == TPixel::Black) {
+    for (int i = 0; i < styleCount; i++)
       paints[i] = inks[i] =
           ::premultiply(palette->getStyle(i)->getAverageColor());
-  else
-    for (int i = 0; i < palette->getStyleCount(); i++)
+  } else {
+    for (int i = 0; i < styleCount; i++)
       paints[i] = inks[i] = applyColorScaleCMapped(
           palette->getStyle(i)->getAverageColor(), s.m_globalColorScale);
+  }
 
   dn->lock();
   up->lock();
@@ -4116,6 +4077,7 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
     int yL0   = tround((a.y + 0.5) * (1 << PADN));
     int kMinX = 0, kMaxX = xMax - xMin;
     int kMinY = 0, kMaxY = xMax - xMin;
+
     if (deltaXL == 0) {
       if ((xL0 < 0) || (lxPred < xL0)) continue;
     } else if (deltaXL > 0) {
@@ -4138,7 +4100,7 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
       kMaxY = yL0 / (-deltaYL);
       if (lyPred < yL0) kMinY = (yL0 - lyPred - deltaYL - 1) / (-deltaYL);
     }
-    int kMin = std::max({kMinX, kMinY, (int)0});
+    int kMin = std::max({kMinX, kMinY, 0});
     int kMax = std::min({kMaxX, kMaxY, xMax - xMin});
 
     TPixel32 *dnPix    = dnRow + xMin + kMin;
@@ -4153,91 +4115,116 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
       int yI = yL >> PADN;
       assert((0 <= xI) && (xI <= up->getLx() - 1) && (0 <= yI) &&
              (yI <= up->getLy() - 1));
+
       TPixelCM32 *upPix = upBasePix + (yI * upWrap + xI);
       int t             = upPix->getTone();
+      int p             = upPix->getPaint();
+      int i             = upPix->getInk();
 
-      // clamp out‑of‑range paint/ink indices to 0
-      int p = (upPix->getPaint() < (int)paints.size()) ? upPix->getPaint() : 0;
-      int i = (upPix->getInk() < (int)inks.size()) ? upPix->getInk() : 0;
+      // use -1 to indicate invalid, but do not access the array
+      int p_valid = (p < styleCount) ? p : -1;
+      int i_valid = (i < styleCount) ? i : -1;
 
-      if (t == 0xff && p == 0)
-        continue;
-      else {
-        TPixel32 colorUp;
-        if (s.m_inksOnly) switch (t) {
-          case 0:
-            if (s.m_inkCheckEnabled && i == s.m_inkIndex) {
-              colorUp = s.m_inkCheckColor;
-            } else if (s.m_ink1CheckEnabled && i == 1) {
-              colorUp = s.m_ink1CheckColor;
-            } else {
-              colorUp = inks[i];
-            }
-            break;
-          case 255:
+      // Skip only the actual style 0 with tone 255 (background)
+      if (t == 0xff && p_valid == 0) continue;
+
+      TPixel32 colorUp;
+
+      if (s.m_inksOnly) {
+        if (t == 0) {
+          if (i_valid == s.m_inkIndex)
+            colorUp = s.m_inkCheckColor;
+          else if (s.m_inkCheckEnabled && i_valid == s.m_inkIndex)
+            colorUp = s.m_inkCheckColor;
+          else if (s.m_ink1CheckEnabled && i_valid == 1)
+            colorUp = s.m_ink1CheckColor;
+          else if (i_valid >= 0)
+            colorUp = inks[i_valid];
+          else
             colorUp = TPixel::Transparent;
-            break;
-          default: {
-            TPixel inkColor;
-            if (s.m_inkCheckEnabled && i == s.m_inkIndex) {
-              inkColor = s.m_inkCheckColor;
-            } else if (s.m_ink1CheckEnabled && i == 1) {
-              inkColor = s.m_ink1CheckColor;
-            } else {
-              inkColor = inks[i];
-            }
-            colorUp = antialias(inkColor, 255 - t);
-            break;
-          }
-          }
-        else
-          switch (t) {
-          case 0:
-            if (s.m_inkCheckEnabled && i == s.m_inkIndex) {
-              colorUp = s.m_inkCheckColor;
-            } else if (s.m_ink1CheckEnabled && i == 1) {
-              colorUp = s.m_ink1CheckColor;
-            } else {
-              colorUp = inks[i];
-            }
-            break;
-          case 255:
-            if (s.m_paintCheckEnabled && p == s.m_paintIndex) {
-              colorUp = s.m_paintCheckColor;
-            } else {
-              colorUp = paints[p];
-            }
-            break;
-          default: {
-            TPixel paintColor = (s.m_paintCheckEnabled && p == s.m_paintIndex)
-                                    ? s.m_paintCheckColor
-                                    : paints[p];
-            TPixel inkColor;
-            if (s.m_inkCheckEnabled && i == s.m_inkIndex) {
-              inkColor = s.m_inkCheckColor;
-            } else if (s.m_ink1CheckEnabled && i == 1) {
-              inkColor = s.m_ink1CheckColor;
-            } else {
-              inkColor = inks[i];
-            }
-            if (s.m_transparencyCheck) t = t / 2;
-            colorUp = blend(inkColor, paintColor, t, TPixelCM32::getMaxTone());
-            break;
-          }
-          }
+        } else if (t == 255) {
+          colorUp = TPixel::Transparent;
+        } else {
+          TPixel inkColor;
+          if (i_valid == s.m_inkIndex)
+            inkColor = s.m_inkCheckColor;
+          else if (s.m_inkCheckEnabled && i_valid == s.m_inkIndex)
+            inkColor = s.m_inkCheckColor;
+          else if (s.m_ink1CheckEnabled && i_valid == 1)
+            inkColor = s.m_ink1CheckColor;
+          else if (i_valid >= 0)
+            inkColor = inks[i_valid];
+          else
+            inkColor = TPixel::Transparent;
 
-        if (colorUp.m == 255)
-          *dnPix = colorUp;
-        else if (colorUp.m != 0)
-          *dnPix = quickOverPix(*dnPix, colorUp);
+          if (p_valid == 0 && s.m_transparencyCheck) t = t / 2;
+
+          colorUp = antialias(inkColor, 255 - t);
+        }
+      } else {
+        if (t == 0) {
+          if (i_valid == s.m_inkIndex)
+            colorUp = s.m_inkCheckColor;
+          else if (s.m_inkCheckEnabled && i_valid == s.m_inkIndex)
+            colorUp = s.m_inkCheckColor;
+          else if (s.m_ink1CheckEnabled && i_valid == 1)
+            colorUp = s.m_ink1CheckColor;
+          else if (i_valid >= 0)
+            colorUp = inks[i_valid];
+          else
+            colorUp = TPixel::Transparent;
+        } else if (t == 255) {
+          if (p_valid == s.m_paintIndex)
+            colorUp = s.m_paintCheckColor;
+          else if (s.m_paintCheckEnabled && p_valid == s.m_paintIndex)
+            colorUp = s.m_paintCheckColor;
+          else if (p_valid >= 0)
+            colorUp = paints[p_valid];
+          else
+            colorUp = TPixel::Transparent;
+        } else {
+          TPixel inkColor;
+          if (i_valid == s.m_inkIndex)
+            inkColor = s.m_inkCheckColor;
+          else if (s.m_inkCheckEnabled && i_valid == s.m_inkIndex)
+            inkColor = s.m_inkCheckColor;
+          else if (s.m_ink1CheckEnabled && i_valid == 1)
+            inkColor = s.m_ink1CheckColor;
+          else if (i_valid >= 0)
+            inkColor = inks[i_valid];
+          else
+            inkColor = TPixel::Transparent;
+
+          TPixel paintColor;
+          if (p_valid == s.m_paintIndex)
+            paintColor = s.m_paintCheckColor;
+          else if (s.m_paintCheckEnabled && p_valid == s.m_paintIndex)
+            paintColor = s.m_paintCheckColor;
+          else if (p_valid >= 0)
+            paintColor = paints[p_valid];
+          else
+            paintColor = TPixel::Transparent;
+
+          if (p_valid == 0 && s.m_transparencyCheck)
+            paintColor = TPixel::Transparent;
+
+          if (s.m_transparencyCheck) t = t / 2;
+
+          colorUp = blend(inkColor, paintColor, t, TPixelCM32::getMaxTone());
+        }
       }
+
+      if (colorUp.m == 255)
+        *dnPix = colorUp;
+      else if (colorUp.m != 0)
+        *dnPix = quickOverPix(*dnPix, colorUp);
     }
   }
+
   dn->unlock();
   up->unlock();
 }
 
-//=============================================================================
 //=============================================================================
 void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
                        const TPaletteP &palette, double sx, double sy,
@@ -4277,9 +4264,9 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
 
   TAffine invAff = inv(aff);  // inverse of aff
 
-  // when iterating over scanlines of boundingBoxD, moving to the next scanline
-  // implies incrementing (0, deltaYD) of the coordinates of the corresponding
-  // up pixels
+  // when iterating over scanlines of boundingBoxD, moving to the next
+  // scanline implies incrementing (0, deltaYD) of the coordinates of the
+  // corresponding up pixels
 
   // when drawing the y-th scanline of dn, moving to the next pixel
   // implies incrementing (deltaXD, 0) of the coordinates of the corresponding
@@ -4310,7 +4297,8 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
   //         kY = kMinY, ..., kMaxY
   //           with 0 <= kMinY <= kMaxY <= (yMax - yMin)
 
-  // compute kMinX, kMaxX, kMinY, kMaxY by intersecting (2) with the sides of up
+  // compute kMinX, kMaxX, kMinY, kMaxY by intersecting (2) with the sides of
+  // up
 
   // the segment [a, b] of up is the inverse image via aff of the portion
   // of scanline [ (xMin, yMin), (xMax, yMin) ] of dn
@@ -4342,7 +4330,8 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
   // yL0 initialized for rounding
   int yL0 = tround((a.y + 0.5) * (1 << PADN));
 
-  // compute kMinY, kMaxY, kMinX, kMaxX by intersecting (2) with the sides of up
+  // compute kMinY, kMaxY, kMinX, kMaxX by intersecting (2) with the sides of
+  // up
   int kMinX = 0, kMaxX = xMax - xMin;  // clipping on dn
   int kMinY = 0, kMaxY = yMax - yMin;  // clipping on dn
 
@@ -4509,9 +4498,6 @@ void doQuickPutCmapped(const TRaster32P &dn, const TRasterCM32P &up,
 }
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
-
 void doQuickResampleColorFilter(const TRaster32P &dn, const TRasterCM32P &up,
                                 const TPaletteP &plt, const TAffine &aff,
                                 UCHAR colorMask) {
@@ -4791,8 +4777,6 @@ void doQuickResampleFilter_optimized(const TRaster32P &dn, const TRaster32P &up,
 #endif
 
 //=============================================================================
-//=============================================================================
-//=============================================================================
 
 #ifdef OPTIMIZE_FOR_LP64
 
@@ -4837,9 +4821,9 @@ void doQuickResampleFilter_optimized(const TRaster32P &dn, const TRaster32P &up,
   // inverse of aff
   TAffine invAff = inv(aff);
 
-  // when iterating over scanlines of boundingBoxD, moving to the next scanline
-  // implies incrementing (0, deltaYD) of the coordinates of the corresponding
-  // up pixels
+  // when iterating over scanlines of boundingBoxD, moving to the next
+  // scanline implies incrementing (0, deltaYD) of the coordinates of the
+  // corresponding up pixels
 
   // when drawing the y-th scanline of dn, moving to the next pixel
   // implies incrementing (deltaXD, 0) of the coordinates of the corresponding
@@ -4866,7 +4850,8 @@ void doQuickResampleFilter_optimized(const TRaster32P &dn, const TRaster32P &up,
   //         kY = kMinY, ..., kMaxY
   //           with 0 <= kMinY <= kMaxY <= (yMax - yMin)
 
-  // compute kMinX, kMaxX, kMinY, kMaxY by intersecting (2) with the sides of up
+  // compute kMinX, kMaxX, kMinY, kMaxY by intersecting (2) with the sides of
+  // up
 
   // the segment [a, b] of up (with possibly reversed ends) is the inverse
   // image via aff of the portion of scanline
@@ -4885,7 +4870,8 @@ void doQuickResampleFilter_optimized(const TRaster32P &dn, const TRaster32P &up,
   int xL0 = tround(a.x * (1 << PADN));  // initialize xL0
   int yL0 = tround(a.y * (1 << PADN));  // initialize yL0
 
-  // compute kMinY, kMaxY, kMinX, kMaxX by intersecting (2) with the sides of up
+  // compute kMinY, kMaxY, kMinX, kMaxX by intersecting (2) with the sides of
+  // up
   int kMinX = 0, kMaxX = xMax - xMin;  // clipping on dn
   int kMinY = 0, kMaxY = yMax - yMin;  // clipping on dn
 
@@ -5101,7 +5087,6 @@ void TRop::quickResampleColorFilter(const TRasterP &dn, const TRasterP &up,
 
 #endif  // TNZCORE_LIGHT
 
-//=============================================================================
 //=============================================================================
 //
 // quickPut (Bilinear/Closest)
@@ -5374,7 +5359,6 @@ void quickResample_optimized(const TRasterP &dn, const TRasterP &up,
 #endif
 
 //=============================================================================
-
 void quickResample(const TRasterP &dn, const TRasterP &up, const TAffine &aff,
                    TRop::ResampleFilterType filterType) {
 #ifdef OPTIMIZE_FOR_LP64
