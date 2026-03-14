@@ -13,7 +13,6 @@
 #include "exportscenepopup.h"
 #include "separatecolorspopup.h"
 #include "tapp.h"
-
 #include "batches.h"
 
 // TnzQt includes
@@ -46,18 +45,23 @@
 #include <QUrl>
 #include <QVariant>
 #include <QMainWindow>
+#include <QFile>
 
 // C++ includes
 #include <memory>
+#include <set>
+#include <algorithm>
 
 using namespace DVGui;
 // TODO Refactor Move commands to FileBrowser class
 
 //------------------------------------------------------------------------
+// Undo classes
+//------------------------------------------------------------------------
 namespace {
 
 //=============================================================================
-//  CopyFilesUndo
+// CopyFilesUndo
 //-----------------------------------------------------------------------------
 
 class CopyFilesUndo final : public TUndo {
@@ -65,21 +69,23 @@ class CopyFilesUndo final : public TUndo {
   std::unique_ptr<QMimeData> m_newData;
 
 public:
-  CopyFilesUndo(QMimeData *oldData, QMimeData *newData)
-      : m_oldData(cloneData(oldData)), m_newData(cloneData(newData)) {}
+  // Takes ownership of the passed unique_ptrs (they already contain cloned
+  // data)
+  CopyFilesUndo(std::unique_ptr<QMimeData> oldData,
+                std::unique_ptr<QMimeData> newData)
+      : m_oldData(std::move(oldData)), m_newData(std::move(newData)) {}
 
   void undo() const override {
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setMimeData(cloneData(m_oldData.get()), QClipboard::Clipboard);
+    QApplication::clipboard()->setMimeData(cloneData(m_oldData.get()),
+                                           QClipboard::Clipboard);
   }
 
   void redo() const override {
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setMimeData(cloneData(m_newData.get()), QClipboard::Clipboard);
+    QApplication::clipboard()->setMimeData(cloneData(m_newData.get()),
+                                           QClipboard::Clipboard);
   }
 
   int getSize() const override { return sizeof(*this); }
-
   QString getHistoryString() override { return QObject::tr("Copy File"); }
 
 private:
@@ -87,7 +93,7 @@ private:
 };
 
 //=============================================================================
-//  PasteFilesUndo
+// PasteFilesUndo
 //-----------------------------------------------------------------------------
 
 class PasteFilesUndo final : public TUndo {
@@ -120,12 +126,11 @@ public:
   }
 
   int getSize() const override { return sizeof(*this); }
-
   QString getHistoryString() override {
-    QString str = QObject::tr("Paste  File  : ");
+    QString str = QObject::tr("Paste File: ");
     bool first  = true;
     for (const TFilePath &path : m_newFiles) {
-      if (!first) str += QString(", ");
+      if (!first) str += ", ";
       first = false;
       str += QString::fromStdString(path.getLevelName());
     }
@@ -137,20 +142,25 @@ private:
 };
 
 //=============================================================================
-//  DuplicateUndo
+// DuplicateUndo
 //-----------------------------------------------------------------------------
 
 class DuplicateUndo final : public TUndo {
-  std::vector<TFilePath> m_files;
-  std::vector<TFilePath> m_newFiles;
+  std::vector<TFilePath>
+      m_srcFiles;  // original files that were successfully duplicated
+  std::vector<TFilePath> m_dstFiles;  // corresponding new files
 
 public:
-  DuplicateUndo(std::vector<TFilePath> files, std::vector<TFilePath> newFiles)
-      : m_files(std::move(files)), m_newFiles(std::move(newFiles)) {}
+  DuplicateUndo(std::vector<TFilePath> srcFiles,
+                std::vector<TFilePath> dstFiles)
+      : m_srcFiles(std::move(srcFiles)), m_dstFiles(std::move(dstFiles)) {
+    // Both vectors must have the same size and be paired.
+    assert(m_srcFiles.size() == m_dstFiles.size());
+  }
 
   void undo() const override {
-    for (const TFilePath &path : m_newFiles) {
-      if (!TSystem::doesExistFileOrLevel(path)) continue;
+    for (const TFilePath &path : m_dstFiles) {
+      if (path.isEmpty() || !TSystem::doesExistFileOrLevel(path)) continue;
       if (path.getType() == "tnz")
         TSystem::rmDirTree(path.getParentDir() + (path.getName() + "_files"));
       try {
@@ -158,28 +168,37 @@ public:
       } catch (...) {
       }
     }
-    FileBrowser::refreshFolder(m_newFiles[0].getParentDir());
+    if (!m_dstFiles.empty())
+      FileBrowser::refreshFolder(m_dstFiles[0].getParentDir());
   }
 
   void redo() const override {
-    for (const TFilePath &fp : m_files) {
-      ImageUtils::duplicate(fp);
-      FileBrowser::refreshFolder(fp.getParentDir());
+    // Instead of calling ImageUtils::duplicate again (which might generate
+    // different names), we directly copy the original files to the stored
+    // destination paths.
+    for (size_t i = 0; i < m_srcFiles.size(); ++i) {
+      if (m_srcFiles[i].isEmpty() || m_dstFiles[i].isEmpty()) continue;
+      try {
+        // Use copyFileOrLevel to handle both files and levels.
+        TSystem::copyFileOrLevel(m_dstFiles[i], m_srcFiles[i]);
+      } catch (...) {
+        // Ignore errors; at least we tried.
+      }
     }
-    FileBrowser::refreshFolder(m_files[0].getParentDir());
+    if (!m_srcFiles.empty())
+      FileBrowser::refreshFolder(m_srcFiles[0].getParentDir());
   }
 
   int getSize() const override { return sizeof(*this); }
-
   QString getHistoryString() override {
-    QString str = QObject::tr("Duplicate  File  : ");
+    QString str = QObject::tr("Duplicate File: ");
     bool first  = true;
-    for (size_t i = 0; i < m_files.size(); ++i) {
-      if (!first) str += QString(",  ");
+    for (size_t i = 0; i < m_srcFiles.size(); ++i) {
+      if (!first) str += ", ";
       first = false;
       str += QString("%1 > %2")
-                 .arg(QString::fromStdString(m_files[i].getLevelName()))
-                 .arg(QString::fromStdString(m_newFiles[i].getLevelName()));
+                 .arg(QString::fromStdString(m_srcFiles[i].getLevelName()))
+                 .arg(QString::fromStdString(m_dstFiles[i].getLevelName()));
     }
     return str;
   }
@@ -188,23 +207,25 @@ private:
   Q_DISABLE_COPY_MOVE(DuplicateUndo);
 };
 
+//=============================================================================
+// Global viewed palette (for .tpl files)
+//=============================================================================
 TPaletteP viewedPalette;
 
 }  // namespace
 
 //------------------------------------------------------------------------
+// FileSelection Implementation
+//------------------------------------------------------------------------
 
-FileSelection::FileSelection() : m_exportScenePopup(nullptr) {}
+FileSelection::FileSelection() {}
 
 FileSelection::~FileSelection() {
-  // QPointer automatically nullifies, but we still own the InfoViewer objects.
-  // They are stored in m_infoViewers as QPointer; we need to delete them.
-  // However, QPointer does not own the objects; we must delete the raw
-  // pointers.
+  // Use deleteLater to safely delete InfoViewers, they will be cleaned up when
+  // the event loop runs.
   for (auto &viewer : m_infoViewers) {
-    delete viewer;  // delete if not null
+    if (viewer) viewer->deleteLater();
   }
-  // m_exportScenePopup is a unique_ptr, no manual delete needed
 }
 
 //------------------------------------------------------------------------
@@ -215,7 +236,8 @@ void FileSelection::getSelectedFiles(std::vector<TFilePath> &files) {
   for (int idx : indices) {
     QString name =
         getModel()->getItemData(idx, DvItemListModel::FullPath).toString();
-    files.emplace_back(name.toStdWString());
+    // Avoid adding empty paths (should not happen, but be safe)
+    if (!name.isEmpty()) files.emplace_back(name.toStdWString());
   }
 }
 
@@ -242,21 +264,23 @@ void FileSelection::enableCommands() {
 }
 
 //------------------------------------------------------------------------
+// Batch operations
+//------------------------------------------------------------------------
 
 void FileSelection::addToBatchRenderList() {
   if (!BatchesController::instance()->getTasksTree()) {
     QAction *taskPopup = CommandManager::instance()->getAction(MI_OpenTasks);
     taskPopup->trigger();
   }
+
   std::vector<TFilePath> files;
   getSelectedFiles(files);
+
   for (const TFilePath &fp : files)
     BatchesController::instance()->addComposerTask(fp);
 
-  DVGui::info(QObject::tr(" Task added to the Batch Render List."));
+  DVGui::info(QObject::tr("Task added to the Batch Render List."));
 }
-
-//------------------------------------------------------------------------
 
 void FileSelection::addToBatchCleanupList() {
   if (!BatchesController::instance()->getTasksTree()) {
@@ -266,12 +290,15 @@ void FileSelection::addToBatchCleanupList() {
 
   std::vector<TFilePath> files;
   getSelectedFiles(files);
+
   for (const TFilePath &fp : files)
     BatchesController::instance()->addCleanupTask(fp);
 
-  DVGui::info(QObject::tr(" Task added to the Batch Cleanup List."));
+  DVGui::info(QObject::tr("Task added to the Batch Cleanup List."));
 }
 
+//------------------------------------------------------------------------
+// Delete files/folders
 //------------------------------------------------------------------------
 
 void FileSelection::deleteFiles() {
@@ -287,21 +314,22 @@ void FileSelection::deleteFiles() {
       question = QObject::tr("Deleting folder %1. Are you sure?")
                      .arg(files[0].getQString());
     } else {
-      QString fn = QString::fromStdWString(files[0].getWideString());
-      question   = QObject::tr("Deleting %1. Are you sure?").arg(fn);
+      question = QObject::tr("Deleting %1. Are you sure?")
+                     .arg(QString::fromStdWString(files[0].getWideString()));
     }
   } else {
     question = QObject::tr("Deleting %n files. Are you sure?", "",
                            static_cast<int>(files.size()));
   }
+
   int ret =
       DVGui::MsgBox(question, QObject::tr("Delete"), QObject::tr("Cancel"), 1);
   if (ret == 2 || ret == 0) return;
 
   for (const TFilePath &fp : files) {
-    if (TFileStatus(fp).isDirectory()) {
+    if (TFileStatus(fp).isDirectory())
       QFile(fp.getQString()).moveToTrash();
-    } else {
+    else {
       TSystem::moveFileOrLevelToRecycleBin(fp);
       IconGenerator::instance()->remove(fp);
     }
@@ -310,6 +338,8 @@ void FileSelection::deleteFiles() {
   FileBrowser::refreshFolder(files[0].getParentDir());
 }
 
+//------------------------------------------------------------------------
+// Copy files (clipboard)
 //------------------------------------------------------------------------
 
 void FileSelection::copyFiles() {
@@ -325,9 +355,11 @@ void FileSelection::copyFiles() {
   std::unique_ptr<QMimeData> newData(cloneData(clipboard->mimeData()));
 
   TUndoManager::manager()->add(
-      new CopyFilesUndo(oldData.release(), newData.release()));
+      new CopyFilesUndo(std::move(oldData), std::move(newData)));
 }
 
+//------------------------------------------------------------------------
+// Paste files
 //------------------------------------------------------------------------
 
 void FileSelection::pasteFiles() {
@@ -344,6 +376,8 @@ void FileSelection::pasteFiles() {
       new PasteFilesUndo(std::move(newFiles), std::move(folder)));
 }
 
+//------------------------------------------------------------------------
+// Show folder in system explorer
 //------------------------------------------------------------------------
 
 void FileSelection::showFolderContents() {
@@ -369,11 +403,19 @@ void FileSelection::showFolderContents() {
 }
 
 //------------------------------------------------------------------------
+// View file info (reuse hidden InfoViewers)
+//------------------------------------------------------------------------
 
 void FileSelection::viewFileInfo() {
   std::vector<TFilePath> files;
   getSelectedFiles(files);
   if (files.empty()) return;
+
+  // Remove any dead viewers from the list
+  m_infoViewers.erase(
+      std::remove_if(m_infoViewers.begin(), m_infoViewers.end(),
+                     [](const QPointer<InfoViewer> &v) { return v.isNull(); }),
+      m_infoViewers.end());
 
   for (const TFilePath &fp : files) {
     QPointer<InfoViewer> infoViewer = nullptr;
@@ -397,6 +439,8 @@ void FileSelection::viewFileInfo() {
 }
 
 //------------------------------------------------------------------------
+// View file (open in flipbook or default viewer)
+//------------------------------------------------------------------------
 
 void FileSelection::viewFile() {
   std::vector<TFilePath> files;
@@ -418,13 +462,13 @@ void FileSelection::viewFile() {
       CommandManager::instance()->execute("MI_OpenPalette");
     } else {
       FlipBook *fb = ::viewFile(fp);
-      if (fb) {
-        FileBrowserPopup::setModalBrowserToParent(fb->parentWidget());
-      }
+      if (fb) FileBrowserPopup::setModalBrowserToParent(fb->parentWidget());
     }
   }
 }
 
+//------------------------------------------------------------------------
+// Convert files (safe static popup, reused without deletion)
 //------------------------------------------------------------------------
 
 void FileSelection::convertFiles() {
@@ -432,17 +476,25 @@ void FileSelection::convertFiles() {
   getSelectedFiles(files);
   if (files.empty()) return;
 
-  static std::unique_ptr<ConvertPopup> popup =
-      std::make_unique<ConvertPopup>(false);
+  static ConvertPopup *popup = nullptr;
+  if (!popup) {
+    popup = new ConvertPopup(false);
+    // Ensure the popup is not deleted when closed, to avoid crashes with
+    // background threads.
+    popup->setAttribute(Qt::WA_DeleteOnClose, false);
+  }
+
   if (popup->isConverting()) {
     DVGui::info(QObject::tr(
-        "A conversion task is in progress! wait until it stops or cancel it"));
+        "A conversion task is in progress! Wait until it stops or cancel it."));
     return;
   }
   popup->setFiles(files);
-  popup->exec();
+  popup->exec();  // modal, will block until closed
 }
 
+//------------------------------------------------------------------------
+// Premultiply files
 //------------------------------------------------------------------------
 
 void FileSelection::premultiplyFiles() {
@@ -459,44 +511,55 @@ void FileSelection::premultiplyFiles() {
 }
 
 //------------------------------------------------------------------------
+// Duplicate files
+//------------------------------------------------------------------------
 
 void FileSelection::duplicateFiles() {
-  std::vector<TFilePath> files;
-  std::vector<TFilePath> newFiles;
-  getSelectedFiles(files);
-  for (const TFilePath &fp : files) {
+  std::vector<TFilePath> selected;
+  getSelectedFiles(selected);
+  if (selected.empty()) return;
+
+  std::vector<TFilePath> srcFiles, dstFiles;
+
+  for (const TFilePath &fp : selected) {
     TFilePath newPath = ImageUtils::duplicate(fp);
-    newFiles.push_back(newPath);
-    FileBrowser::refreshFolder(fp.getParentDir());
+    if (!newPath.isEmpty()) {
+      srcFiles.push_back(fp);
+      dstFiles.push_back(newPath);
+    }
   }
+
+  if (srcFiles.empty()) return;  // nothing duplicated
+
+  // Refresh the folder of the first original file (or the first destination)
+  FileBrowser::refreshFolder(srcFiles[0].getParentDir());
+
   TUndoManager::manager()->add(
-      new DuplicateUndo(std::move(files), std::move(newFiles)));
+      new DuplicateUndo(std::move(srcFiles), std::move(dstFiles)));
 }
 
 //------------------------------------------------------------------------
+// Collect assets (with progress dialog)
+//------------------------------------------------------------------------
 
-static int collectAssets(const TFilePath &scenePath) {
+static int collectAssetsInternal(const TFilePath &scenePath) {
   ToonzScene scene;
   scene.load(scenePath);
   ResourceCollector collector(&scene);
   SceneResources resources(&scene, scene.getXsheet());
   resources.accept(&collector);
   int count = collector.getCollectedResourceCount();
-  if (count > 0) {
-    scene.save(scenePath);
-  }
+  if (count > 0) scene.save(scenePath);
   return count;
 }
-
-//------------------------------------------------------------------------
 
 void FileSelection::collectAssets() {
   std::vector<TFilePath> files;
   getSelectedFiles(files);
   if (files.empty()) return;
-  int collectedAssets = 0;
 
-  int count = static_cast<int>(files.size());
+  int collectedAssets = 0;
+  int count           = static_cast<int>(files.size());
 
   if (count > 1) {
     QMainWindow *mw = TApp::instance()->getMainWindow();
@@ -504,53 +567,35 @@ void FileSelection::collectAssets() {
                             QObject::tr("Abort"), 0, count, mw);
     progress.setWindowModality(Qt::WindowModal);
 
-    int i = 1;
-    for (const TFilePath &fp : files) {
-      collectedAssets += ::collectAssets(fp);
-      progress.setValue(i++);
+    for (int i = 0; i < count; ++i) {
+      collectedAssets += ::collectAssetsInternal(files[i]);
+      progress.setValue(i + 1);
       if (progress.wasCanceled()) break;
     }
     progress.setValue(count);
   } else {
-    collectedAssets = ::collectAssets(files[0]);
+    collectedAssets = ::collectAssetsInternal(files[0]);
   }
+
   if (collectedAssets == 0)
     DVGui::info(QObject::tr("There are no assets to collect"));
-  else if (collectedAssets == 1)
-    DVGui::info(QObject::tr("One asset imported"));
   else
     DVGui::info(QObject::tr("%1 assets imported").arg(collectedAssets));
+
   DvDirModel::instance()->refreshFolder(
       TProjectManager::instance()->getCurrentProjectPath().getParentDir());
 }
 
 //------------------------------------------------------------------------
-
-void FileSelection::separateFilesByColors() {
-  std::vector<TFilePath> files;
-  getSelectedFiles(files);
-  if (files.empty()) return;
-
-  static std::unique_ptr<SeparateColorsPopup> popup =
-      std::make_unique<SeparateColorsPopup>();
-  if (popup->isConverting()) {
-    DVGui::MsgBox(INFORMATION, QObject::tr("A separation task is in progress! "
-                                           "wait until it stops or cancel it"));
-    return;
-  }
-  popup->setFiles(files);
-  popup->show();
-  popup->raise();
-}
-
+// Import scenes (with progress dialog)
 //------------------------------------------------------------------------
 
-static int importScene(const TFilePath &scenePath) {
+static int importSceneInternal(const TFilePath &scenePath) {
   ToonzScene scene;
   try {
     IoCmd::loadScene(scene, scenePath, true);
   } catch (TException &e) {
-    DVGui::error(QObject::tr("Error loading scene %1 :%2")
+    DVGui::error(QObject::tr("Error loading scene %1 : %2")
                      .arg(toQString(scenePath))
                      .arg(QString::fromStdWString(e.getMessage())));
     return 0;
@@ -563,26 +608,23 @@ static int importScene(const TFilePath &scenePath) {
   try {
     scene.save(scene.getScenePath());
   } catch (TException &) {
-    DVGui::error(QObject::tr("There was an error saving the %1 scene.")
-                     .arg(toQString(scenePath)));
+    DVGui::error(
+        QObject::tr("Error saving scene %1").arg(toQString(scenePath)));
     return 0;
   }
 
   DvDirModel::instance()->refreshFolder(
       TProjectManager::instance()->getCurrentProjectPath().getParentDir());
-
   return 1;
 }
-
-//------------------------------------------------------------------------
 
 void FileSelection::importScenes() {
   std::vector<TFilePath> files;
   getSelectedFiles(files);
   if (files.empty()) return;
-  int importedSceneCount = 0;
 
-  int count = static_cast<int>(files.size());
+  int importedSceneCount = 0;
+  int count              = static_cast<int>(files.size());
 
   if (count > 1) {
     QMainWindow *mw = TApp::instance()->getMainWindow();
@@ -590,66 +632,89 @@ void FileSelection::importScenes() {
                             QObject::tr("Abort"), 0, count, mw);
     progress.setWindowModality(Qt::WindowModal);
 
-    int i = 1;
-    for (const TFilePath &fp : files) {
-      int ret = ::importScene(fp);
-      importedSceneCount += ret;
-      progress.setValue(i++);
+    for (int i = 0; i < count; ++i) {
+      importedSceneCount += ::importSceneInternal(files[i]);
+      progress.setValue(i + 1);
       if (progress.wasCanceled()) break;
     }
     progress.setValue(count);
   } else {
-    int ret = ::importScene(files[0]);
-    importedSceneCount += ret;
+    importedSceneCount = ::importSceneInternal(files[0]);
   }
+
   if (importedSceneCount == 0)
     DVGui::info(QObject::tr("No scene imported"));
   else if (importedSceneCount == 1)
     DVGui::info(QObject::tr("One scene imported"));
   else
-    DVGui::info(QString::number(importedSceneCount) +
-                QObject::tr(" scenes imported"));
+    DVGui::info(QObject::tr("%1 scenes imported").arg(importedSceneCount));
 }
 
+//------------------------------------------------------------------------
+// Export scenes (disposable popups with WA_DeleteOnClose)
+// Note: The constructor of ExportScenePopup currently does not accept a parent.
+// We create the popup without explicit parent it will use the default.
 //------------------------------------------------------------------------
 
 void FileSelection::exportScenes() {
   std::vector<TFilePath> files;
   getSelectedFiles(files);
-  if (!m_exportScenePopup)
-    m_exportScenePopup = std::make_unique<ExportScenePopup>(files);
-  else
-    m_exportScenePopup->setScenes(files);
-  m_exportScenePopup->show();
+  auto *popup = new ExportScenePopup(files);
+  popup->setAttribute(Qt::WA_DeleteOnClose);
+  popup->show();
+  popup->raise();
+  popup->activateWindow();
 }
-
-//------------------------------------------------------------------------
 
 void FileSelection::exportScene(TFilePath scenePath) {
   if (scenePath.isEmpty()) return;
-
-  std::vector<TFilePath> files;
-  files.push_back(std::move(scenePath));
-  if (!m_exportScenePopup)
-    m_exportScenePopup = std::make_unique<ExportScenePopup>(files);
-  else
-    m_exportScenePopup->setScenes(files);
-  m_exportScenePopup->show();
+  std::vector<TFilePath> files = {scenePath};
+  auto *popup                  = new ExportScenePopup(files);
+  popup->setAttribute(Qt::WA_DeleteOnClose);
+  popup->show();
+  popup->raise();
+  popup->activateWindow();
 }
 
+//------------------------------------------------------------------------
+// Select all
 //------------------------------------------------------------------------
 
 void FileSelection::selectAll() {
   DvItemSelection::selectAll();
-  const std::set<int> &indices = getSelectedIndices();
-  if (!indices.empty()) {
-    int firstIdx = *indices.begin();
-    QString name =
-        getModel()->getItemData(firstIdx, DvItemListModel::FullPath).toString();
-    FileBrowser::updateItemViewerPanel();
-  }
+  FileBrowser::updateItemViewerPanel();
 }
 
+//------------------------------------------------------------------------
+// Separate files by colors (safe static popup, reused without deletion)
+//------------------------------------------------------------------------
+
+void FileSelection::separateFilesByColors() {
+  std::vector<TFilePath> files;
+  getSelectedFiles(files);
+  if (files.empty()) return;
+
+  static SeparateColorsPopup *popup = nullptr;
+  if (!popup) {
+    popup = new SeparateColorsPopup();
+    // Ensure the popup is not deleted when closed.
+    popup->setAttribute(Qt::WA_DeleteOnClose, false);
+  }
+
+  if (popup->isConverting()) {
+    DVGui::MsgBox(INFORMATION,
+                  QObject::tr("A separation task is in progress! "
+                              "Wait until it stops or cancel it."));
+    return;
+  }
+  popup->setFiles(files);
+  popup->show();
+  popup->raise();
+  popup->activateWindow();
+}
+
+//-----------------------------------------------------------------------------
+// Handler for "Export Current Scene" command
 //-----------------------------------------------------------------------------
 
 class ExportCurrentSceneCommandHandler final : public MenuItemHandler {
@@ -661,15 +726,19 @@ public:
     if (!sceneHandle) return;
     ToonzScene *scene = sceneHandle->getScene();
     if (!scene) return;
-    TFilePath fp = scene->getScenePath();
 
+    TFilePath fp = scene->getScenePath();
     if (sceneHandle->getDirtyFlag() || scene->isUntitled() ||
         !TSystem::doesExistFileOrLevel(fp)) {
       DVGui::warning(tr("You must save the current scene first."));
       return;
     }
 
-    auto fs = std::make_unique<FileSelection>();
-    fs->exportScene(fp);
+    std::vector<TFilePath> files = {fp};
+    auto *popup                  = new ExportScenePopup(files);
+    popup->setAttribute(Qt::WA_DeleteOnClose);
+    popup->show();
+    popup->raise();
+    popup->activateWindow();
   }
 } ExportCurrentSceneCommandHandler;
