@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ja_JP" sourcelanguage="en">
+<TS version="2.1" language="ja_JP" sourcelanguage="en_US">
 <context>
     <name>APngWriterProperties</name>
     <message>
@@ -241,47 +241,47 @@
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="71"/>
         <source>Cannot create FFmpeg cache directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegキャッシュフォルダの作成に失敗しました：%1</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="107"/>
         <source>Cannot save non-raster image to FFmpeg</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスター形式以外の画像をFFmpegで保存することはできません</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="113"/>
         <source>Invalid or empty raster for FFmpeg</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegにとって無効か、空のラスター画像です</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="127"/>
         <source>Failed to clone raster for FFmpeg</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスター画像のクローンに失敗しました</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="136"/>
         <source>Failed to allocate 32-bit raster for FFmpeg</source>
-        <translation type="unfinished"></translation>
+        <translation>32ビットラスターのメモリ確保に失敗しました</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="163"/>
         <source>Failed to convert raster to 32-bit ARGB (after clamp)</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスター画像から（クランプ後）32ビットARGB形式への変換に失敗しました</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="174"/>
         <source>Failed to create QImage for intermediate file</source>
-        <translation type="unfinished"></translation>
+        <translation>中間ファイルのためのQImageの作成に失敗しました</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="185"/>
         <source>Failed to save intermediate image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>中間画像ファイルの保存に失敗しました：%1</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="223"/>
         <source>FFmpeg process failed for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg処理は以下の理由により失敗しました：%1</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="273"/>
@@ -291,30 +291,33 @@
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="307"/>
         <source>Cannot open audio file for writing: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込み用音声ファイル %1 が開けませんでした</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="312"/>
         <source>Failed to write audio data to file</source>
-        <translation type="unfinished"></translation>
+        <translation>音声データをファイルに書き込めませんでした</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="378"/>
         <source>Size error: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>サイズエラー：%1
+</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="386"/>
         <source>Frame rate error: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>フレームレートエラー：%1
+</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="394"/>
         <source>Frame count error: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>フレーム数エラー：%1
+</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="401"/>
@@ -322,29 +325,35 @@
 Error details:
 %2Using available data and fallback values where necessary.
 Note: Zero values in dimensions, frame count or frame rate indicate that the information could not be retrieved.</source>
-        <translation type="unfinished"></translation>
+        <translation>ffprobe を使用して動画から %1 を取得できませんでした。
+エラーの詳細：
+%2
+利用可能なデータを使用し、必要に応じてデフォルト値を採用しています。
+注：解像度、フレーム数、またはフレームレートの値が 0 の場合、その情報を取得できなかったことを示します。</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="561"/>
         <source>Unable to determine frame count for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 のフレーム数を判定できませんでした</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="609"/>
         <source>FFmpeg failed to extract frames from: %1
 Check file and codec support.</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegは %1 からフレームを抽出することができませんでした。
+ファイルとコーデックがサポートされているかご確認ください。</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="695"/>
         <source>Failed to delete file: %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル %1 の削除に失敗しました。
+%2</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="835"/>
         <source>Failed to extract frames from movie: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ムービーからコマを抽出できませんでした：%1</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_ffmpeg.cpp" line="260"/>
@@ -645,72 +654,72 @@ Please try raising the FFmpeg timeout in Preferences.</source>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="309"/>
         <source>Placebo (Smallest File)</source>
-        <translation type="unfinished"></translation>
+        <translation>プラセボ（最も小さいサイズ）</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="310"/>
         <source>Very Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>非常に遅い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="311"/>
         <source>Slower</source>
-        <translation type="unfinished"></translation>
+        <translation>かなり遅い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="312"/>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>遅い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="313"/>
         <source>Medium</source>
-        <translation type="unfinished">中</translation>
+        <translation>普通</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="314"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>早い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="315"/>
         <source>Faster</source>
-        <translation type="unfinished"></translation>
+        <translation>かなり早い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="316"/>
         <source>Very Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>非常に早い</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="318"/>
         <source>Ultra Fast (Largest File)</source>
-        <translation type="unfinished"></translation>
+        <translation>ウルトラ早い（最も大きいサイズ）</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="322"/>
         <source>Every Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>1フレーム毎</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="323"/>
         <source>Every Second</source>
-        <translation type="unfinished"></translation>
+        <translation>1秒毎</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="324"/>
         <source>Every 2 Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>2秒毎</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="325"/>
         <source>Every 5 Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>5秒毎</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="326"/>
         <source>Every 10 Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>10秒毎</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="331"/>
@@ -720,22 +729,22 @@ Please try raising the FFmpeg timeout in Preferences.</source>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="332"/>
         <source>Encoding Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>エンコード速度</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="333"/>
         <source>Keyframe Interval</source>
-        <translation type="unfinished"></translation>
+        <translation>キーフレームの間隔</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="334"/>
         <source>Preserve Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>アルファチャンネルを維持する</translation>
     </message>
     <message>
         <location filename="../../image/ffmpeg/tiio_webm.cpp" line="335"/>
         <source>Lossless</source>
-        <translation type="unfinished"></translation>
+        <translation>無劣化処理</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ja_JP" sourcelanguage="en">
+<TS version="2.1" language="ja_JP" sourcelanguage="en_US">
 <context>
     <name>AddFxContextMenu</name>
     <message>
@@ -196,16 +196,16 @@ Possibly the preset file has been corrupted</source>
     <message>
         <source>Deleting &quot;%1&quot;.
 Are you sure?</source>
-        <translation type="unfinished">&quot;%1&quot;を削除します。
+        <translation>&quot;%1&quot;を削除します。
 よろしいですか？</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">削除</translation>
+        <translation>削除</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
 </context>
 <context>
@@ -539,34 +539,38 @@ Are you sure?</source>
     <message>
         <source>Color name is not valid.
 The following characters cannot be used: \ # &lt; &gt; &quot; &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>無効な色名です。
+色名には次の記号を含むことができません： \ # &lt; &gt; &quot; &apos;</translation>
     </message>
     <message>
         <source>Color name already exists.
 Please use another name.</source>
-        <translation type="unfinished"></translation>
+        <translation>既に存在する色名です。
+別の名前を使用してください。</translation>
     </message>
     <message>
         <source>Invalid hex color format.</source>
-        <translation type="unfinished"></translation>
+        <translation>無効な16進数カラー名です。</translation>
     </message>
     <message>
         <source>Error importing color names XML:
 File not found or invalid format</source>
-        <translation type="unfinished"></translation>
+        <translation>色名リストのXMLの読み込みに失敗しました：
+ファイルが存在しないか、無効な形式です</translation>
     </message>
     <message>
         <source>Error importing color names XML:
 The file may be corrupt or have invalid format.</source>
-        <translation type="unfinished"></translation>
+        <translation>色名リストのXMLの読み込みに失敗しました：
+ファイルが壊れているか、無効な形式です</translation>
     </message>
     <message>
         <source>An unexpected error occurred while importing colors.</source>
-        <translation type="unfinished"></translation>
+        <translation>色名リストの読み込み中に不明なエラーが発生しました。</translation>
     </message>
     <message>
         <source>Failed to save user color names file.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー色名リストファイルの保存に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -956,11 +960,11 @@ Gain is shown as an f-stop and the &quot;neutral&quot; or 1.0 gain f-stop is f/8
     </message>
     <message>
         <source>&amp;Rotate Left</source>
-        <translation type="unfinished"></translation>
+        <translation>左に回転（&amp;R）</translation>
     </message>
     <message>
         <source>&amp;Rotate Right</source>
-        <translation type="unfinished"></translation>
+        <translation>右に回転（&amp;R）</translation>
     </message>
 </context>
 <context>
@@ -2641,43 +2645,43 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     </message>
     <message>
         <source>It is not possible to delete style #</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイルを削除できません：スタイル#</translation>
     </message>
     <message>
         <source>Paste Style to Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイルを貼り付け : パレット %1</translation>
     </message>
     <message>
         <source>Delete Style from Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイルを削除 :パレット  %1</translation>
     </message>
     <message>
         <source>Cut Style from Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイルを切り取り : パレット %1</translation>
     </message>
     <message>
         <source> to Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>  パレットへ : %1</translation>
     </message>
     <message>
         <source>Blend Colors in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>色を混合 : パレット %1</translation>
     </message>
     <message>
         <source>Toggle Link in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>リンクを切り替え : パレット %1</translation>
     </message>
     <message>
         <source>Remove Reference in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>スタジオパレットへの参照を消去：パレット%1</translation>
     </message>
     <message>
         <source>Set As...</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットを選択して下さい...</translation>
     </message>
     <message>
         <source>Delete Lines and Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>線および塗りを削除</translation>
     </message>
 </context>
 <context>
@@ -3051,11 +3055,11 @@ Are you sure ?</source>
     </message>
     <message>
         <source>Set As...</source>
-        <translation type="unfinished"></translation>
+        <translation>初期値のパレットに設定...</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>再読み込み</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ja_JP" sourcelanguage="en">
+<TS version="2.1" language="ja_JP" sourcelanguage="en_US">
 <context>
     <name>ArrowToolOptionsBox</name>
     <message>
@@ -327,15 +327,15 @@
     <name>EditAssistantsTool</name>
     <message>
         <source>&lt;choose to create&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;選択して作成&gt;</translation>
     </message>
     <message>
         <source>Assistant Type</source>
-        <translation type="unfinished"></translation>
+        <translation>タイプ</translation>
     </message>
     <message>
         <source>Order</source>
-        <translation type="unfinished"></translation>
+        <translation>順番</translation>
     </message>
 </context>
 <context>
@@ -620,23 +620,23 @@
     </message>
     <message>
         <source>Empty Only</source>
-        <translation type="unfinished"></translation>
+        <translation>透明部分のみ</translation>
     </message>
     <message>
         <source>Close Gap</source>
-        <translation type="unfinished"></translation>
+        <translation>隙間を閉じる</translation>
     </message>
     <message>
         <source>Refer Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>全レイヤーを参照</translation>
     </message>
     <message>
         <source>Gap Close Distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>隙間の間隔：</translation>
     </message>
     <message>
         <source>Extend Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>細い領域に拡張</translation>
     </message>
 </context>
 <context>
@@ -651,15 +651,15 @@
     </message>
     <message>
         <source>Mode:</source>
-        <translation type="unfinished">モード：</translation>
+        <translation>モード：</translation>
     </message>
     <message>
         <source>Pick</source>
-        <translation type="unfinished"></translation>
+        <translation>色を拾う</translation>
     </message>
     <message>
         <source>Empty Only</source>
-        <translation type="unfinished"></translation>
+        <translation>透明部分のみ</translation>
     </message>
 </context>
 <context>
@@ -690,7 +690,7 @@
     </message>
     <message>
         <source>Pressure</source>
-        <translation>圧力感知</translation>
+        <translation>筆圧感知</translation>
     </message>
     <message>
         <source>Opacity</source>
@@ -710,7 +710,7 @@
     </message>
     <message>
         <source>Assistants</source>
-        <translation type="unfinished"></translation>
+        <translation>パース定規</translation>
     </message>
 </context>
 <context>
@@ -757,7 +757,7 @@
     </message>
     <message>
         <source>MultiArc</source>
-        <translation type="unfinished">連続円弧</translation>
+        <translation>連続円弧</translation>
     </message>
 </context>
 <context>
@@ -800,7 +800,7 @@
     </message>
     <message>
         <source>Selective</source>
-        <translation>塗りの保護</translation>
+        <translation>選択色の範囲のみ</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -820,15 +820,15 @@
     </message>
     <message>
         <source>Empty Only</source>
-        <translation type="unfinished"></translation>
+        <translation>透明部分のみ</translation>
     </message>
     <message>
         <source>Pick</source>
-        <translation type="unfinished"></translation>
+        <translation>色を拾う</translation>
     </message>
     <message>
         <source>Paint by Filling</source>
-        <translation type="unfinished"></translation>
+        <translation>線の内側のみ</translation>
     </message>
 </context>
 <context>
@@ -1148,15 +1148,15 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Empty Only</source>
-        <translation type="unfinished"></translation>
+        <translation>透明部分のみ</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished">サイズ</translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <source>Opacity</source>
-        <translation type="unfinished">不透明度</translation>
+        <translation>不透明度</translation>
     </message>
 </context>
 <context>
@@ -1370,31 +1370,31 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Sort Vector Strokes With Palette Order Level : %1 Frame : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>パレット順にベクター線の重ね順を並べ替え&#x3000;レベル：%1&#x3000;フレーム：%2</translation>
     </message>
     <message>
         <source>Sort Vector Strokes With Palette Order Level : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>パレット順にベクター線の重ね順を並べ替え&#x3000;レベル：%1</translation>
     </message>
     <message>
         <source>The current tool cannot be used on: </source>
-        <translation type="unfinished"></translation>
+        <translation>現在のツールは以下の対象には使用できません： </translation>
     </message>
     <message>
         <source>, </source>
-        <translation type="unfinished"></translation>
+        <translation>, </translation>
     </message>
     <message>
         <source>You can use this tool on empty cell in Xsheet/Timeline.</source>
-        <translation type="unfinished"></translation>
+        <translation>このツールはタイムシート又はタイムラインの空コマ上でも使えます。</translation>
     </message>
     <message>
         <source>You can use this tool with: </source>
-        <translation type="unfinished"></translation>
+        <translation>このツールは以下の対象で使用できます： </translation>
     </message>
     <message>
         <source>Or just choose an empty cell in Xsheet/Timeline.</source>
-        <translation type="unfinished"></translation>
+        <translation>または、タイムシート／タイムラインの空コマを選択してください。</translation>
     </message>
 </context>
 <context>
@@ -1490,7 +1490,7 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Ignore AutoPaint Inks</source>
-        <translation type="unfinished"></translation>
+        <translation>色トレス線の隙間を無視</translation>
     </message>
 </context>
 <context>
@@ -1501,15 +1501,15 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>Rotate by Step</source>
-        <translation type="unfinished"></translation>
+        <translation>ステップ毎に回転</translation>
     </message>
     <message>
         <source>Step Angle:</source>
-        <translation type="unfinished"></translation>
+        <translation>ステップ角度：</translation>
     </message>
     <message>
         <source>Rotate Left/Right Angle:</source>
-        <translation type="unfinished"></translation>
+        <translation>「ビューアを左／右に回転」の回転角：</translation>
     </message>
 </context>
 <context>
@@ -1716,11 +1716,11 @@ Do you want to proceed?</source>
     </message>
     <message>
         <source>No available palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>有効なパレットが見つかりません。</translation>
     </message>
     <message>
         <source>Palette to be organized must have more than one page.</source>
-        <translation type="unfinished"></translation>
+        <translation>整理するパレットには2つ以上のページが必要です。</translation>
     </message>
 </context>
 <context>
@@ -1734,308 +1734,310 @@ moved to the end of the first page of the palette.</source>
     <message>
         <source>With this option being activated, the picked style will replace
 the current style in current level.</source>
-        <translation type="unfinished"></translation>
+        <translation>このオプションを有効にしてカラーモデルから色を拾うと、レベルの中で現在選択中のスタイルで
+描かれている部分を、サンプルされたスタイルで置き換えます。</translation>
     </message>
     <message>
         <source>With this option being activated, the picked style will be
 moved to the end of the current style&apos;s page of the palette.</source>
-        <translation type="unfinished"></translation>
+        <translation>このオプションを有効にしてカラーモデルから色を拾っていくと、サンプルされた
+スタイルが現在選択中のスタイルと同じページの末尾に順番に移動します。</translation>
     </message>
 </context>
 <context>
     <name>TAssistant</name>
     <message>
         <source>Magnetism</source>
-        <translation type="unfinished"></translation>
+        <translation>スナップ強度</translation>
     </message>
 </context>
 <context>
     <name>TAssistantBase</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>有効</translation>
     </message>
 </context>
 <context>
     <name>TAssistantEllipse</name>
     <message>
         <source>Fish Eye</source>
-        <translation type="unfinished"></translation>
+        <translation>魚眼レンズ</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation type="unfinished">円形</translation>
+        <translation>円形</translation>
     </message>
     <message>
         <source>Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>格子</translation>
     </message>
     <message>
         <source>Depth Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>奥行き格子</translation>
     </message>
     <message>
         <source>Flip Grids</source>
-        <translation type="unfinished"></translation>
+        <translation>格子を反転</translation>
     </message>
     <message>
         <source>Ellipse</source>
-        <translation type="unfinished">楕円形</translation>
+        <translation>楕円形</translation>
     </message>
     <message>
         <source>Restrict A</source>
-        <translation type="unfinished"></translation>
+        <translation>A点を固定</translation>
     </message>
     <message>
         <source>Restrict B</source>
-        <translation type="unfinished"></translation>
+        <translation>B点を固定</translation>
     </message>
     <message>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し</translation>
     </message>
     <message>
         <source>Perspective</source>
-        <translation type="unfinished"></translation>
+        <translation>遠近</translation>
     </message>
     <message>
         <source>Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>奥行き</translation>
     </message>
 </context>
 <context>
     <name>TAssistantPerspective</name>
     <message>
         <source>Perspective</source>
-        <translation type="unfinished"></translation>
+        <translation>遠近</translation>
     </message>
     <message>
         <source>Parallel X</source>
-        <translation type="unfinished"></translation>
+        <translation>X軸平行投影</translation>
     </message>
     <message>
         <source>Parallel Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y軸平行投影</translation>
     </message>
     <message>
         <source>Parallel Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Z軸平行投影</translation>
     </message>
     <message>
         <source>Grid XY</source>
-        <translation type="unfinished"></translation>
+        <translation>XY格子</translation>
     </message>
     <message>
         <source>Grid YZ</source>
-        <translation type="unfinished"></translation>
+        <translation>YZ格子</translation>
     </message>
     <message>
         <source>Grid ZX</source>
-        <translation type="unfinished"></translation>
+        <translation>ZX格子</translation>
     </message>
     <message>
         <source>Show Box</source>
-        <translation type="unfinished"></translation>
+        <translation>ボックスを表示</translation>
     </message>
 </context>
 <context>
     <name>TAssistantVanishingPoint</name>
     <message>
         <source>Vanishing Point</source>
-        <translation type="unfinished"></translation>
+        <translation>消失点</translation>
     </message>
     <message>
         <source>Pass Through</source>
-        <translation type="unfinished"></translation>
+        <translation>消失点を通過</translation>
     </message>
     <message>
         <source>Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>格子</translation>
     </message>
     <message>
         <source>Perspective</source>
-        <translation type="unfinished"></translation>
+        <translation>遠近</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation type="unfinished">直線</translation>
+        <translation>直線</translation>
     </message>
     <message>
         <source>Restrict A</source>
-        <translation type="unfinished"></translation>
+        <translation>A点を固定</translation>
     </message>
     <message>
         <source>Restrict B</source>
-        <translation type="unfinished"></translation>
+        <translation>B点を固定</translation>
     </message>
     <message>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>平行線</translation>
     </message>
 </context>
 <context>
     <name>TReplicator</name>
     <message>
         <source>Skip First Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>先頭の複製をスキップ</translation>
     </message>
     <message>
         <source>Skip Last Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>後ろの複製をスキップ</translation>
     </message>
 </context>
 <context>
     <name>TReplicatorAffine</name>
     <message>
         <source>Replicator Affine</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し - 変形</translation>
     </message>
     <message>
         <source>Fix Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>拡大縮小を固定</translation>
     </message>
     <message>
         <source>Fix Aspect</source>
-        <translation type="unfinished"></translation>
+        <translation>縦横比を固定</translation>
     </message>
     <message>
         <source>Fix Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>回転を固定</translation>
     </message>
     <message>
         <source>Fix Skew</source>
-        <translation type="unfinished"></translation>
+        <translation>せん断を固定</translation>
     </message>
     <message>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し回数</translation>
     </message>
     <message>
         <source>Inv. Count</source>
-        <translation type="unfinished"></translation>
+        <translation>逆繰り返し回数</translation>
     </message>
     <message>
         <source>Pressure</source>
-        <translation type="unfinished">圧力感知</translation>
+        <translation>筆圧補正</translation>
     </message>
 </context>
 <context>
     <name>TReplicatorGrid</name>
     <message>
         <source>Replicator Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し - 格子</translation>
     </message>
     <message>
         <source>Fix Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>回転を固定</translation>
     </message>
     <message>
         <source>Fix Skew</source>
-        <translation type="unfinished"></translation>
+        <translation>せん断を固定</translation>
     </message>
     <message>
         <source>Mirror A</source>
-        <translation type="unfinished"></translation>
+        <translation>A方向に反転</translation>
     </message>
     <message>
         <source>Mirror B</source>
-        <translation type="unfinished"></translation>
+        <translation>B方向に反転</translation>
     </message>
     <message>
         <source>Count A</source>
-        <translation type="unfinished"></translation>
+        <translation>A個数</translation>
     </message>
     <message>
         <source>Inv. Count A</source>
-        <translation type="unfinished"></translation>
+        <translation>逆A個数</translation>
     </message>
     <message>
         <source>Count B</source>
-        <translation type="unfinished"></translation>
+        <translation>B個数</translation>
     </message>
     <message>
         <source>Inv. Count B</source>
-        <translation type="unfinished"></translation>
+        <translation>逆B個数</translation>
     </message>
 </context>
 <context>
     <name>TReplicatorJitter</name>
     <message>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>ジッター</translation>
     </message>
     <message>
         <source>Period</source>
-        <translation type="unfinished"></translation>
+        <translation>周期</translation>
     </message>
     <message>
         <source>Amplitude</source>
-        <translation type="unfinished"></translation>
+        <translation>振幅</translation>
     </message>
     <message>
         <source>Fix First Point</source>
-        <translation type="unfinished"></translation>
+        <translation>最初の点を固定</translation>
     </message>
     <message>
         <source>Fix Last Point</source>
-        <translation type="unfinished"></translation>
+        <translation>最後の点を固定</translation>
     </message>
 </context>
 <context>
     <name>TReplicatorMirror</name>
     <message>
         <source>Replicator Mirror</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し - 鏡像</translation>
     </message>
     <message>
         <source>Discrete Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>離散的な傾き</translation>
     </message>
     <message>
         <source>Pressure</source>
-        <translation type="unfinished">圧力感知</translation>
+        <translation>筆圧補正</translation>
     </message>
 </context>
 <context>
     <name>TReplicatorStar</name>
     <message>
         <source>Replicator Star</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し - 星型</translation>
     </message>
     <message>
         <source>Discrete Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>離散的な傾き</translation>
     </message>
     <message>
         <source>Mirror</source>
-        <translation type="unfinished"></translation>
+        <translation>反転</translation>
     </message>
     <message>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し回数</translation>
     </message>
 </context>
 <context>
     <name>TTool</name>
     <message>
         <source>Toonz Vector Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Toonzベクター</translation>
     </message>
     <message>
         <source>Toonz Raster Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Toonzラスター</translation>
     </message>
     <message>
         <source>Raster Level</source>
-        <translation type="unfinished"></translation>
+        <translation>ラスター</translation>
     </message>
     <message>
         <source>Mesh Level</source>
-        <translation type="unfinished"></translation>
+        <translation>メッシュ</translation>
     </message>
     <message>
         <source>Assistants Level</source>
-        <translation type="unfinished"></translation>
+        <translation>パース定規</translation>
     </message>
 </context>
 <context>
@@ -2082,7 +2084,7 @@ moved to the end of the current style&apos;s page of the palette.</source>
     </message>
     <message>
         <source>Pressure</source>
-        <translation>圧力感知</translation>
+        <translation>筆圧感知</translation>
     </message>
     <message>
         <source>Lock Alpha</source>
@@ -2090,7 +2092,7 @@ moved to the end of the current style&apos;s page of the palette.</source>
     </message>
     <message>
         <source>Assistants</source>
-        <translation type="unfinished"></translation>
+        <translation>パース定規</translation>
     </message>
 </context>
 <context>
@@ -2121,7 +2123,7 @@ moved to the end of the current style&apos;s page of the palette.</source>
     </message>
     <message>
         <source>Pressure</source>
-        <translation>圧力感知</translation>
+        <translation>筆圧感知</translation>
     </message>
     <message>
         <source>Cap</source>
@@ -2201,23 +2203,23 @@ moved to the end of the current style&apos;s page of the palette.</source>
     </message>
     <message>
         <source>Draw Order:</source>
-        <translation type="unfinished">線の重ね順:</translation>
+        <translation>線の重ね順:</translation>
     </message>
     <message>
         <source>Over All</source>
-        <translation type="unfinished">上に描く</translation>
+        <translation>上に描く</translation>
     </message>
     <message>
         <source>Under All</source>
-        <translation type="unfinished">下に描く</translation>
+        <translation>下に描く</translation>
     </message>
     <message>
         <source>Palette Order</source>
-        <translation type="unfinished">パレット順</translation>
+        <translation>パレット順</translation>
     </message>
     <message>
         <source>Assistants</source>
-        <translation type="unfinished"></translation>
+        <translation>パース定規</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ja_JP" sourcelanguage="en">
+<TS version="2.1" language="ja_JP" sourcelanguage="en_US">
 <context>
     <name>Preferences</name>
     <message>
@@ -493,11 +493,11 @@
     </message>
     <message>
         <source>Set Current Style from #%1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のスタイルを#%1から%2に設定</translation>
     </message>
     <message>
         <source>%1 is not a valid color (valid color names are &apos;red&apos;, &apos;transparent&apos;, &apos;#FF8800&apos;, etc.)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1は有効な色ではありません（有効な色の名前は &apos;red&apos;, &apos;transparent&apos;, &apos;#FF8800&apos;等です。）</translation>
     </message>
 </context>
 <context>
@@ -648,23 +648,23 @@
     </message>
     <message>
         <source>Cannot set path on empty level</source>
-        <translation type="unfinished"></translation>
+        <translation>空のレベルにパスを設定できません</translation>
     </message>
     <message>
         <source>Unrecognized file type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>認識できないファイル形式 : %1</translation>
     </message>
     <message>
         <source>Can&apos;t save a %1 level to this file type: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>レベル %1 をこのファイル形式で保存できません : %2</translation>
     </message>
     <message>
         <source>cannot insert a %1 image into a level</source>
-        <translation type="unfinished"></translation>
+        <translation>画像 %1 をレベルに挿入できません</translation>
     </message>
     <message>
         <source>cannot insert a %1 image to a %2 level</source>
-        <translation type="unfinished"></translation>
+        <translation>画像 %1 をレベル %2 に挿入できません</translation>
     </message>
 </context>
 <context>
@@ -691,7 +691,7 @@
     </message>
     <message>
         <source>Invalid color: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>無効な色 : %1</translation>
     </message>
 </context>
 <context>
