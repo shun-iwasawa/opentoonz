@@ -545,34 +545,38 @@ Are you sure?</source>
     <message>
         <source>Color name is not valid.
 The following characters cannot be used: \ # &lt; &gt; &quot; &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">无效的颜色名
+以下字符被禁止使用：\ # &lt; &gt; &quot; &apos;</translation>
     </message>
     <message>
         <source>Color name already exists.
 Please use another name.</source>
-        <translation type="unfinished"></translation>
+        <translation>颜色名已被占用。
+请使用其他名字。</translation>
     </message>
     <message>
         <source>Invalid hex color format.</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的颜色格式</translation>
     </message>
     <message>
         <source>Error importing color names XML:
 File not found or invalid format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从XML中导入颜色名字时出错：
+未找到文件或格式错误</translation>
     </message>
     <message>
         <source>Error importing color names XML:
 The file may be corrupt or have invalid format.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从XML中导入颜色名字时出错：
+文件损坏或格式错误</translation>
     </message>
     <message>
         <source>An unexpected error occurred while importing colors.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">导入颜色时发生了一个意外错误</translation>
     </message>
     <message>
         <source>Failed to save user color names file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未能保存用户的颜色名文件。</translation>
     </message>
 </context>
 <context>
@@ -962,11 +966,11 @@ Gain is shown as an f-stop and the &quot;neutral&quot; or 1.0 gain f-stop is f/8
     </message>
     <message>
         <source>&amp;Rotate Left</source>
-        <translation type="unfinished"></translation>
+        <translation>向左旋转(&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Rotate Right</source>
-        <translation type="unfinished"></translation>
+        <translation>向右旋转(&amp;R)</translation>
     </message>
 </context>
 <context>
@@ -2689,43 +2693,43 @@ The second line should be &quot;Mesh [Input bit depth] [Output bit depth]&quot;<
     </message>
     <message>
         <source>It is not possible to delete style #</source>
-        <translation type="unfinished"></translation>
+        <translation>无法删除样式 #</translation>
     </message>
     <message>
         <source>Paste Style to Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴样式到调色板 %1</translation>
     </message>
     <message>
         <source>Delete Style from Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从调色板 %1 中删除样式</translation>
     </message>
     <message>
         <source>Cut Style from Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">从调色板 %1 中剪切样式</translation>
     </message>
     <message>
         <source> to Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> 到调色板: %1</translation>
     </message>
     <message>
         <source>Blend Colors in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">在调色板 %1 中混合颜色</translation>
     </message>
     <message>
         <source>Toggle Link in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">启用/停用调色板中的链接 %1</translation>
     </message>
     <message>
         <source>Remove Reference in Palette: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">移除调色板%1中的引用</translation>
     </message>
     <message>
         <source>Set As...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设为...</translation>
     </message>
     <message>
         <source>Delete Lines and Areas</source>
-        <translation type="unfinished"></translation>
+        <translation>删除线条和填充</translation>
     </message>
 </context>
 <context>
@@ -3110,11 +3114,11 @@ Are you sure ?</source>
     </message>
     <message>
         <source>Set As...</source>
-        <translation type="unfinished"></translation>
+        <translation>设为...</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>刷新</translation>
     </message>
 </context>
 <context>
