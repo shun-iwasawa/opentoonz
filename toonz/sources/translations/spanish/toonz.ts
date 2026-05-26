@@ -1010,6 +1010,10 @@ El cambio se reflejará automáticamente en este panel.</translation>
         <source>Cell Backgrounds</source>
         <translation>Fondo de celdas</translation>
     </message>
+    <message>
+        <source> [WIP]</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CameraCaptureLevelControl</name>
@@ -8035,6 +8039,16 @@ Por favor, sólo reportar errores confirmados y reproducibles, no utilizar ese s
         <source>Viewer Scrub</source>
         <translation>Arrastrar en visor</translation>
     </message>
+    <message>
+        <source> [WIP]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature is a work in progress.
+Please be advised that it may have incomplete implementation or cause unexpected behavior.
+We welcome your feedback and assistance with its development!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatchlinesDialog</name>
@@ -14239,6 +14253,10 @@ Ejemplo: A0001.png → A.0001.png
     <message>
         <source>Converting %1 to tlv format...</source>
         <translation>Convirtiendo %1 a formato TLV...</translation>
+    </message>
+    <message>
+        <source> [WIP]</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
