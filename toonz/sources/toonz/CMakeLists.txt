@@ -1,4 +1,4 @@
-set(VERSION 1.7.1)
+set(VERSION 1.8)
 
 set(MOC_HEADERS
     addfilmstripframespopup.h
