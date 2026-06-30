@@ -40,7 +40,7 @@ struct RenderContext {
   vector<int> mincutData;
 
   unique_ptr<GraphType> graph;
-  int bgClusterId = 0;
+  int bgClusterId    = 0;
   int autoScribbleId = 1;
   int blendMode;
 };
@@ -114,7 +114,6 @@ public:
     bindParam(this, "auto_scribble_threshold", m_auto_scribble_threshold);
     this->m_auto_scribble_threshold->setValueRange(0.f, 1.f);
 
-
     bindParam(this, "scr_type", m_scribble_type);
     this->m_scribble_type->addItem(1, "Hard");
 
@@ -168,42 +167,39 @@ public:
     return false;
   }
 
-  void loadData(TIStream &is) override;
-  void onObsoleteParamLoaded(const std::string &paramName) override;
+  void loadData(TIStream& is) override;
+  void onObsoleteParamLoaded(const std::string& paramName) override;
   void onFxVersionSet() override;
 
 private:
   //// Params
-  array<array<float, 5>, 5> gauKernel = {{
-    { 1.f / 256.f,  4.f / 256.f,  6.f / 256.f,  4.f / 256.f, 1.f / 256.f },
-    { 4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f },
-    { 6.f / 256.f, 24.f / 256.f, 36.f / 256.f, 24.f / 256.f, 6.f / 256.f },
-    { 4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f },
-    { 1.f / 256.f,  4.f / 256.f,  6.f / 256.f,  4.f / 256.f, 1.f / 256.f }
-  }};
+  array<array<float, 5>, 5> gauKernel = {
+      {{1.f / 256.f, 4.f / 256.f, 6.f / 256.f, 4.f / 256.f, 1.f / 256.f},
+       {4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f},
+       {6.f / 256.f, 24.f / 256.f, 36.f / 256.f, 24.f / 256.f, 6.f / 256.f},
+       {4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f},
+       {1.f / 256.f, 4.f / 256.f, 6.f / 256.f, 4.f / 256.f, 1.f / 256.f}}};
 
-  array<array<float, 3>, 3> lapKernel = {{
-    { 0.f,  1.f, 0.f },
-    { 1.f, -4.f, 1.f },
-    { 0.f,  1.f, 0.f }
-  }};
+  array<array<float, 3>, 3> lapKernel = {
+      {{0.f, 1.f, 0.f}, {1.f, -4.f, 1.f}, {0.f, 1.f, 0.f}}};
 
   //// functions
   // generate Kernel Functions
   template <size_t N>
-  void convolve(vector<float>& data, const array<array<float, N>, N>& kernel, const RenderContext& ctx);
+  void convolve(vector<float>& data, const array<array<float, N>, N>& kernel,
+                const RenderContext& ctx);
   void logFilter(vector<float>& data, RenderContext& ctx);
 
   // Intensity Culc
   // I_f = 1 - max(0, s * LoG(I))
-  void I_f(vector<float>& arg, const RenderContext& ctx) { // arg = LoG result
+  void I_f(vector<float>& arg, const RenderContext& ctx) {  // arg = LoG result
     for (int i = 0; i < ctx.rasSize; ++i) {
       arg[i] = fmax(0, 1.f - fmax(0, ctx.s * arg[i]));
     }
   }
 
   // I_p = K * (I_f ^ 2) + 1
-  void I_p(vector<float>& arg, const RenderContext& ctx) { // arg = I_f result
+  void I_p(vector<float>& arg, const RenderContext& ctx) {  // arg = I_f result
     for (int i = 0; i < ctx.rasSize; ++i) {
       arg[i] = ctx.K * arg[i] * arg[i] + 1.f;
     }
@@ -211,7 +207,7 @@ private:
 
   //-------------------------------------------------------------------
 
-  void initRasters(TRasterP& fullRas, TRasterP& refRas, TTile& fullTile,
+  void initRasters(TRasterP& srcRas, TRasterP& refRas, TTile& fullTile,
                    TTile& tile, const TRenderSettings& ri, double frame);
 
   template <typename PIXEL>
@@ -228,7 +224,8 @@ private:
   void createPalette(const Mat&, RenderContext& ctx);
 
   template <typename PIXEL>
-  void rasterToGrayVector(TRasterPT<PIXEL> ras, vector<float>& vec, const RenderContext& ctx);
+  void rasterToGrayVector(TRasterPT<PIXEL> ras, vector<float>& vec,
+                          const RenderContext& ctx);
 
   void setBaundaryScribble(RenderContext& ctx);
   void autoScribble(RenderContext& ctx);
@@ -242,29 +239,34 @@ private:
   void setMask(TRasterPT<PIXEL>& mask, const RenderContext& ctx);
 
   template <typename PIXEL>
-  void drawImgFromInt(TRasterPT<PIXEL> ras, const vector<int>& data, const RenderContext& ctx);
+  void drawImgFromInt(TRasterPT<PIXEL> ras, const vector<int>& data,
+                      const RenderContext& ctx);
 
   template <typename PIXEL>
-  void drawImgFromFloat(TRasterPT<PIXEL> ras, const vector<float>& data, const RenderContext& ctx);
+  void drawImgFromFloat(TRasterPT<PIXEL> ras, const vector<float>& data,
+                        const RenderContext& ctx);
 
   template <typename PIXEL>
-  void drawMaskAndLine(TRasterPT<PIXEL> ras, TRasterPT<PIXEL> mask, const RenderContext& ctx);
+  void drawMaskAndLine(TRasterPT<PIXEL> ras, TRasterPT<PIXEL> mask,
+                       const RenderContext& ctx);
 
   template <typename PIXEL>
   void process(TRasterPT<PIXEL> ras, double frame, RenderContext& ctx);
 
   // utils
-  int idx(int x, int y, const RenderContext& ctx) { return max(0, min(y * ctx.width + x, ctx.rasSize - 1)); }
+  int idx(int x, int y, const RenderContext& ctx) {
+    return max(0, min(y * ctx.width + x, ctx.rasSize - 1));
+  }
 
   template <typename PIXEL>
   inline float pixelToNormalizedGray(const PIXEL& pix) {
     float invMax = 1.f / (float)PIXEL::maxChannelValue;
-    float L_premult = (0.299f * pix.r + 0.587f * pix.g + 0.114f * pix.b) * invMax;
+    float L_premult =
+        (0.299f * pix.r + 0.587f * pix.g + 0.114f * pix.b) * invMax;
     float m = (float)pix.m * invMax;
     return L_premult + 1.f - m;
   }
 };
-
 
 //------------------------------------------------------------------------------
 
@@ -272,27 +274,27 @@ void naru_lazybrush::doCompute(TTile& tile, double frame,
                                const TRenderSettings& ri) {
   if (!m_input.isConnected()) return;
 
-  TRasterP fullRas;
+  TRasterP srcRas;
   TRasterP refRas;
   TTile fullTile;
-  initRasters(fullRas, refRas, fullTile, tile, ri, frame);
+  initRasters(srcRas, refRas, fullTile, tile, ri, frame);
 
   RenderContext ctx;
-  ctx.width   = fullRas->getLx();
-  ctx.height  = fullRas->getLy();
+  ctx.width   = srcRas->getLx();
+  ctx.height  = srcRas->getLy();
   ctx.rasSize = ctx.width * ctx.height;
   ctx.mode    = m_mode->getValue();
 
-  ctx.refBGColor         = toPixelF(m_bg_color->getValueD(frame));
-  ctx.enableAutoScribble = m_enable_auto_scribble->getValue();
-  ctx.autoScribbleColor  = toPixelF(m_auto_scribble_color->getValueD(frame));
-  ctx.blendMode          = m_blend_mode->getValue();
+  ctx.refBGColor           = toPixelF(m_bg_color->getValueD(frame));
+  ctx.enableAutoScribble   = m_enable_auto_scribble->getValue();
+  ctx.autoScribbleColor    = toPixelF(m_auto_scribble_color->getValueD(frame));
+  ctx.blendMode            = m_blend_mode->getValue();
   ctx.enableAutoBgScribble = m_enable_auto_bg_scribble->getValue();
 
   ctx.scribbleData.resize(ctx.rasSize, -1);
 
   // default ColorPalette
-  ctx.bgClusterId = 0;
+  ctx.bgClusterId    = 0;
   ctx.autoScribbleId = 1;
   ctx.colorPalette.clear();
   ctx.colorPalette.resize(2);
@@ -312,30 +314,29 @@ void naru_lazybrush::doCompute(TTile& tile, double frame,
   }
 
   // main process
-  if (TRaster32P ras32 = fullRas)
+  if (TRaster32P ras32 = srcRas)
     process<TPixel32>(ras32, frame, ctx);
-  else if (TRaster64P ras64 = fullRas)
+  else if (TRaster64P ras64 = srcRas)
     process<TPixel64>(ras64, frame, ctx);
-  else if (TRasterFP rasF = fullRas)
+  else if (TRasterFP rasF = srcRas)
     process<TPixelF>(rasF, frame, ctx);
   else
     throw TException("unsupported Pixel Type");
 
   // copy result to tile
-  TRasterP tileRas      = tile.getRaster();
-  TPoint startTilingPos = convert(fullTile.m_pos - tile.m_pos);
-  tileRas->copy(fullRas, startTilingPos);
+  tile.getRaster()->copy(srcRas);
 }
 
 template <typename PIXEL>
-void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& ctx) {
-  ctx.K                     = 2 * (ctx.width + ctx.height);
-  ctx.s                     = m_log_scale->getValue(frame);
-  ctx.lambda                = m_lambda->getValue(frame);
-  ctx.autoScribbleTh        = 1.0f - m_auto_scribble_threshold->getValue(frame);
-  ctx.scribbleType          = m_scribble_type->getValue();
-  ctx.weightSoft            = floorf((1.0f - ctx.lambda) * ctx.K);
-  ctx.terminalCap           = ctx.scribbleType == 0 ? 4 * ctx.weightSoft : 5 * ctx.K;
+void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame,
+                             RenderContext& ctx) {
+  ctx.K              = 2 * (ctx.width + ctx.height);
+  ctx.s              = m_log_scale->getValue(frame);
+  ctx.lambda         = m_lambda->getValue(frame);
+  ctx.autoScribbleTh = 1.0f - m_auto_scribble_threshold->getValue(frame);
+  ctx.scribbleType   = m_scribble_type->getValue();
+  ctx.weightSoft     = floorf((1.0f - ctx.lambda) * ctx.K);
+  ctx.terminalCap    = ctx.scribbleType == 0 ? 4 * ctx.weightSoft : 5 * ctx.K;
   ctx.procImgData.resize(ctx.rasSize, 0.f);
   ctx.refImgData.resize(ctx.rasSize, 0.f);
 
@@ -355,7 +356,8 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
     return;
   }
 
-  // --- BBox calculation: fast search from the boundaries & union with reference scribbles ---
+  // --- BBox calculation: fast search from the boundaries & union with
+  // reference scribbles ---
   ctx.minX = ctx.width;
   ctx.minY = ctx.height;
   ctx.maxX = -1;
@@ -366,9 +368,10 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
   for (int y = 0; y < ctx.height; ++y) {
     for (int x = 0; x < ctx.width; ++x) {
       int p = idx(x, y, ctx);
-      if ((ctx.procImgData[p] < ctx.autoScribbleTh) || (ctx.scribbleData[p] >= 1)) {
+      if ((ctx.procImgData[p] < ctx.autoScribbleTh) ||
+          (ctx.scribbleData[p] >= 1)) {
         ctx.minY = y;
-        found = true;
+        found    = true;
         break;
       }
     }
@@ -381,9 +384,10 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
     for (int y = ctx.height - 1; y >= 0; --y) {
       for (int x = 0; x < ctx.width; ++x) {
         int p = idx(x, y, ctx);
-        if ((ctx.procImgData[p] < ctx.autoScribbleTh) || (ctx.scribbleData[p] >= 1)) {
+        if ((ctx.procImgData[p] < ctx.autoScribbleTh) ||
+            (ctx.scribbleData[p] >= 1)) {
           ctx.maxY = y;
-          found = true;
+          found    = true;
           break;
         }
       }
@@ -395,9 +399,10 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
     for (int x = 0; x < ctx.width; ++x) {
       for (int y = 0; y < ctx.height; ++y) {
         int p = idx(x, y, ctx);
-        if ((ctx.procImgData[p] < ctx.autoScribbleTh) || (ctx.scribbleData[p] >= 1)) {
+        if ((ctx.procImgData[p] < ctx.autoScribbleTh) ||
+            (ctx.scribbleData[p] >= 1)) {
           ctx.minX = x;
-          found = true;
+          found    = true;
           break;
         }
       }
@@ -409,9 +414,10 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
     for (int x = ctx.width - 1; x >= 0; --x) {
       for (int y = 0; y < ctx.height; ++y) {
         int p = idx(x, y, ctx);
-        if ((ctx.procImgData[p] < ctx.autoScribbleTh) || (ctx.scribbleData[p] >= 1)) {
+        if ((ctx.procImgData[p] < ctx.autoScribbleTh) ||
+            (ctx.scribbleData[p] >= 1)) {
           ctx.maxX = x;
-          found = true;
+          found    = true;
           break;
         }
       }
@@ -425,7 +431,8 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
     ctx.maxY = -1;
   }
 
-  // Execute the auto-scribble process prior to applying I_p, and evaluate it against the unmodified I_f.
+  // Execute the auto-scribble process prior to applying I_p, and evaluate it
+  // against the unmodified I_f.
   if (ctx.enableAutoScribble) {
     autoScribble(ctx);
   }
@@ -487,35 +494,32 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
   }
 }
 
-
 //-------------------------------------------------------------------
-void naru_lazybrush::initRasters(TRasterP &fullRas, TRasterP& refRas,
-                                 TTile &fullTile, TTile& tile,
-                                 const TRenderSettings& ri,
-                                 double frame) {
+void naru_lazybrush::initRasters(TRasterP& srcRas, TRasterP& refRas,
+                                 TTile& fullTile, TTile& tile,
+                                 const TRenderSettings& ri, double frame) {
   // get BBox of the input image
-  TRectD fullBBox;
-  m_input->getBBox(frame, fullBBox, ri);
+  TRectD calcArea(tile.m_pos, TDimensionD(tile.getRaster()->getLx(),
+                                          tile.getRaster()->getLy()));
 
   // get input raster
-  TDimension size(0, 0);
-  size.lx = tceil(fullBBox.getLx());
-  size.ly = tceil(fullBBox.getLy());
-  m_input->allocateAndCompute(fullTile, fullBBox.getP00(), size,
+  TDimension size = tile.getRaster()->getSize();
+  m_input->allocateAndCompute(fullTile, calcArea.getP00(), size,
                               tile.getRaster(), frame, ri);
-  fullRas = fullTile.getRaster();
+  srcRas = fullTile.getRaster();
 
   // get reference raster
   if (m_ref.isConnected()) {
     TTile refTile;
-    m_ref->allocateAndCompute(refTile, fullBBox.getP00(), size,
-                              fullRas, frame, ri);
+    m_ref->allocateAndCompute(refTile, calcArea.getP00(), size, srcRas, frame,
+                              ri);
     refRas = refTile.getRaster();
   }
 }
 
 template <typename PIXEL>
-void naru_lazybrush::createScribbleIndexMap(TRasterPT<PIXEL> refRas, RenderContext& ctx) {
+void naru_lazybrush::createScribbleIndexMap(TRasterPT<PIXEL> refRas,
+                                            RenderContext& ctx) {
   // Cast refColors to refMat
   setMat(refRas, ctx.refMat, ctx);
 
@@ -524,7 +528,8 @@ void naru_lazybrush::createScribbleIndexMap(TRasterPT<PIXEL> refRas, RenderConte
 }
 
 template <typename PIXEL>
-void naru_lazybrush::setMat(TRasterPT<PIXEL> ras, Mat& mat, const RenderContext& ctx) {
+void naru_lazybrush::setMat(TRasterPT<PIXEL> ras, Mat& mat,
+                            const RenderContext& ctx) {
   mat.create(ctx.rasSize, 1, CV_32FC4);
   ras->lock();
   for (int y = 0; y < ctx.height; ++y) {
@@ -535,12 +540,10 @@ void naru_lazybrush::setMat(TRasterPT<PIXEL> ras, Mat& mat, const RenderContext&
       if (alpha < 1.f) {
         mat.at<Vec4f>(i) = Vec4f(0.f, 0.f, 0.f, 0.f);
       } else {
-        mat.at<Vec4f>(i) = Vec4f(
-            (float)pix[x].r / (float)PIXEL::maxChannelValue,
-            (float)pix[x].g / (float)PIXEL::maxChannelValue,
-            (float)pix[x].b / (float)PIXEL::maxChannelValue,
-            1.f
-        );
+        mat.at<Vec4f>(i) =
+            Vec4f((float)pix[x].r / (float)PIXEL::maxChannelValue,
+                  (float)pix[x].g / (float)PIXEL::maxChannelValue,
+                  (float)pix[x].b / (float)PIXEL::maxChannelValue, 1.f);
       }
     }
   }
@@ -555,20 +558,20 @@ void naru_lazybrush::createPalette(const Mat& mat, RenderContext& ctx) {
   ctx.bgClusterId = 0;
   Vec4f bgColor(ctx.refBGColor.r, ctx.refBGColor.g, ctx.refBGColor.b, 1.f);
   colorInts.push_back(colorToInt(bgColor));
-  ctx.colorPalette.push_back(TPixelF(0,0,0,0));
+  ctx.colorPalette.push_back(TPixelF(0, 0, 0, 0));
 
   // Define Auto Scribble Color
   if (ctx.enableAutoScribble) {
     ctx.autoScribbleId = 1;
-    Vec4f asColor(ctx.autoScribbleColor.r, ctx.autoScribbleColor.g, ctx.autoScribbleColor.b,
-                  1.f);
+    Vec4f asColor(ctx.autoScribbleColor.r, ctx.autoScribbleColor.g,
+                  ctx.autoScribbleColor.b, 1.f);
     int cInt = colorToInt(asColor);
     if (colorInts.size() == 0 || colorInts[0] != cInt) {
       colorInts.push_back(cInt);
       ctx.colorPalette.push_back(TPixelF(ctx.autoScribbleColor));
     }
   }
-  
+
   // Define Scribble Colors from Reference
   int pos = 0;
   for (int pi = 0; pi < ctx.rasSize; ++pi) {
@@ -589,8 +592,7 @@ void naru_lazybrush::createPalette(const Mat& mat, RenderContext& ctx) {
 
     if (found == -1) {
       // New Color
-      ctx.colorPalette.push_back(
-          TPixelF(p[0], p[1], p[2], 1.f));
+      ctx.colorPalette.push_back(TPixelF(p[0], p[1], p[2], 1.f));
       colorInts.push_back(cInt);
       found = static_cast<int>(colorInts.size() - 1);
     }
@@ -612,12 +614,12 @@ void naru_lazybrush::rasterToGrayVector(TRasterPT<PIXEL> ras,
   ras->unlock();
 }
 
-template<size_t N>
+template <size_t N>
 void naru_lazybrush::convolve(vector<float>& data,
                               const array<array<float, N>, N>& kernel,
                               const RenderContext& ctx) {
-  int kSize = kernel.size();
-  int half  = kSize / 2;
+  int kSize               = kernel.size();
+  int half                = kSize / 2;
   vector<float> inputData = data;
   for (int y = 0; y < ctx.height; ++y) {
     for (int x = 0; x < ctx.width; ++x) {
@@ -647,12 +649,12 @@ void naru_lazybrush::setCapacity(RenderContext& ctx) {
     for (int x = 0; x < ctx.width; ++x) {
       int p = idx(x, y, ctx);
       if (x < ctx.width - 1) {
-        int q = idx(x + 1, y, ctx);
+        int q        = idx(x + 1, y, ctx);
         float weight = (ctx.procImgData[p] + ctx.procImgData[q]) * 0.5f;
         ctx.graph->add_edge(p, q, weight, weight);
       }
       if (y < ctx.height - 1) {
-        int q = idx(x, y + 1, ctx);
+        int q        = idx(x, y + 1, ctx);
         float weight = (ctx.procImgData[p] + ctx.procImgData[q]) * 0.5f;
         ctx.graph->add_edge(p, q, weight, weight);
       }
@@ -683,15 +685,17 @@ void naru_lazybrush::autoScribble(RenderContext& ctx) {
   }
 }
 
-void naru_lazybrush::autoScribbleScan(int x, int y, int dx, int dy, RenderContext& ctx) {
+void naru_lazybrush::autoScribbleScan(int x, int y, int dx, int dy,
+                                      RenderContext& ctx) {
   bool foundLine = false;
   while (x >= 0 && x < ctx.width && y >= 0 && y < ctx.height) {
-    int cp = idx(x, y, ctx);
+    int cp      = idx(x, y, ctx);
     bool isLine = ctx.procImgData[cp] < ctx.autoScribbleTh;
     if (isLine) {
       foundLine = true;
     } else if (foundLine) {
-      // Mark the inner region once the scan has crossed the stroke boundary and the intensity returns above the threshold (i.e., isLine becomes false).
+      // Mark the inner region once the scan has crossed the stroke boundary and
+      // the intensity returns above the threshold (i.e., isLine becomes false).
       ctx.scribbleData[cp] = ctx.autoScribbleId;
       break;
     }
@@ -715,7 +719,7 @@ void naru_lazybrush::setBaundaryScribble(RenderContext& ctx) {
         if (x < 0 || x >= ctx.width || y < 0 || y >= ctx.height) continue;
         bool isBBEdge = (x == minX || x == maxX || y == minY || y == maxY);
         if (isBBEdge) {
-          int p = idx(x, y, ctx);
+          int p               = idx(x, y, ctx);
           ctx.scribbleData[p] = -2;
         }
       }
@@ -750,8 +754,7 @@ void naru_lazybrush::updateMincutData(int refInd, RenderContext& ctx) {
   for (int y = 0; y < ctx.height; ++y) {
     for (int x = 0; x < ctx.width; ++x) {
       int p = idx(x, y, ctx);
-      if (ctx.graph->what_segment(p, ctx.graph->SOURCE) ==
-          ctx.graph->SOURCE) {
+      if (ctx.graph->what_segment(p, ctx.graph->SOURCE) == ctx.graph->SOURCE) {
         ctx.mincutData[p] = refInd;
       }
     }
@@ -764,7 +767,7 @@ void naru_lazybrush::setMask(TRasterPT<PIXEL>& mask, const RenderContext& ctx) {
   for (int y = 0; y < ctx.height; ++y) {
     PIXEL* maskPix = mask->pixels(y);
     for (int x = 0; x < ctx.width; ++x) {
-      int p = idx(x, y, ctx);
+      int p     = idx(x, y, ctx);
       TPixelF c = ctx.colorPalette[ctx.mincutData[p]];
 
       maskPix[x].r =
@@ -787,7 +790,9 @@ void naru_lazybrush::setMask(TRasterPT<PIXEL>& mask, const RenderContext& ctx) {
 }
 
 template <typename PIXEL>
-void naru_lazybrush::drawImgFromFloat(TRasterPT<PIXEL> ras, const vector<float>& data, const RenderContext& ctx) {
+void naru_lazybrush::drawImgFromFloat(TRasterPT<PIXEL> ras,
+                                      const vector<float>& data,
+                                      const RenderContext& ctx) {
   ras->lock();
   for (int y = 0; y < ctx.height; ++y) {
     PIXEL* pix = ras->pixels(y);
@@ -806,12 +811,14 @@ void naru_lazybrush::drawImgFromFloat(TRasterPT<PIXEL> ras, const vector<float>&
 }
 
 template <typename PIXEL>
-void naru_lazybrush::drawImgFromInt(TRasterPT<PIXEL> ras, const vector<int>& data, const RenderContext& ctx) {
+void naru_lazybrush::drawImgFromInt(TRasterPT<PIXEL> ras,
+                                    const vector<int>& data,
+                                    const RenderContext& ctx) {
   ras->lock();
   for (int y = 0; y < ctx.height; ++y) {
     PIXEL* pix = ras->pixels(y);
     for (int x = 0; x < ctx.width; ++x) {
-      int p    = idx(x, y, ctx);
+      int p = idx(x, y, ctx);
       TPixelF c;
       if (data[p] == -2 || data[p] == ctx.bgClusterId)
         c = ctx.refBGColor;
@@ -859,36 +866,40 @@ void naru_lazybrush::drawMaskAndLine(TRasterPT<PIXEL> ras,
       // 4. Calculate output alpha
       float a_out = a_line + ma * (1.f - a_line);
 
-      // 5. Apply blend mode f(C_b, C_s) where C_b = mask (bottom), C_s = original (top)
+      // 5. Apply blend mode f(C_b, C_s) where C_b = mask (bottom), C_s =
+      // original (top)
       float r_blend = 0.f, g_blend = 0.f, b_blend = 0.f;
 
       switch (ctx.blendMode) {
-      case 0: // Multiply
+      case 0:  // Multiply
         r_blend = mr * br;
         g_blend = mg * bg;
         b_blend = mb * bb;
         break;
-      case 1: // Normal
+      case 1:  // Normal
         r_blend = br;
         g_blend = bg;
         b_blend = bb;
         break;
-      case 2: // Screen
+      case 2:  // Screen
         r_blend = mr + br - mr * br;
         g_blend = mg + bg - mg * bg;
         b_blend = mb + bb - mb * bb;
         break;
-      case 3: // Overlay
-        r_blend = (mr < 0.5f) ? (2.f * mr * br) : (1.f - 2.f * (1.f - mr) * (1.f - br));
-        g_blend = (mg < 0.5f) ? (2.f * mg * bg) : (1.f - 2.f * (1.f - mg) * (1.f - bg));
-        b_blend = (mb < 0.5f) ? (2.f * mb * bb) : (1.f - 2.f * (1.f - mb) * (1.f - bb));
+      case 3:  // Overlay
+        r_blend = (mr < 0.5f) ? (2.f * mr * br)
+                              : (1.f - 2.f * (1.f - mr) * (1.f - br));
+        g_blend = (mg < 0.5f) ? (2.f * mg * bg)
+                              : (1.f - 2.f * (1.f - mg) * (1.f - bg));
+        b_blend = (mb < 0.5f) ? (2.f * mb * bb)
+                              : (1.f - 2.f * (1.f - mb) * (1.f - bb));
         break;
-      case 4: // Darken
+      case 4:  // Darken
         r_blend = fmin(mr, br);
         g_blend = fmin(mg, bg);
         b_blend = fmin(mb, bb);
         break;
-      case 5: // Lighten
+      case 5:  // Lighten
         r_blend = fmax(mr, br);
         g_blend = fmax(mg, bg);
         b_blend = fmax(mb, bb);
@@ -903,16 +914,26 @@ void naru_lazybrush::drawMaskAndLine(TRasterPT<PIXEL> ras,
       // 6. Composite with alpha
       float r_out = 0.f, g_out = 0.f, b_out = 0.f;
       if (a_out > 0.f) {
-        r_out = (a_line * (1.f - ma) * br + ma * (1.f - a_line) * mr + a_line * ma * r_blend) / a_out;
-        g_out = (a_line * (1.f - ma) * bg + ma * (1.f - a_line) * mg + a_line * ma * g_blend) / a_out;
-        b_out = (a_line * (1.f - ma) * bb + ma * (1.f - a_line) * mb + a_line * ma * b_blend) / a_out;
+        r_out = (a_line * (1.f - ma) * br + ma * (1.f - a_line) * mr +
+                 a_line * ma * r_blend) /
+                a_out;
+        g_out = (a_line * (1.f - ma) * bg + ma * (1.f - a_line) * mg +
+                 a_line * ma * g_blend) /
+                a_out;
+        b_out = (a_line * (1.f - ma) * bb + ma * (1.f - a_line) * mb +
+                 a_line * ma * b_blend) /
+                a_out;
       }
 
       // Clamp and write back
-      basePix[x].r = static_cast<typename PIXEL::Channel>(fmax(0.f, fmin(r_out, 1.f)) * (float)PIXEL::maxChannelValue);
-      basePix[x].g = static_cast<typename PIXEL::Channel>(fmax(0.f, fmin(g_out, 1.f)) * (float)PIXEL::maxChannelValue);
-      basePix[x].b = static_cast<typename PIXEL::Channel>(fmax(0.f, fmin(b_out, 1.f)) * (float)PIXEL::maxChannelValue);
-      basePix[x].m = static_cast<typename PIXEL::Channel>(fmax(0.f, fmin(a_out, 1.f)) * (float)PIXEL::maxChannelValue);
+      basePix[x].r = static_cast<typename PIXEL::Channel>(
+          fmax(0.f, fmin(r_out, 1.f)) * (float)PIXEL::maxChannelValue);
+      basePix[x].g = static_cast<typename PIXEL::Channel>(
+          fmax(0.f, fmin(g_out, 1.f)) * (float)PIXEL::maxChannelValue);
+      basePix[x].b = static_cast<typename PIXEL::Channel>(
+          fmax(0.f, fmin(b_out, 1.f)) * (float)PIXEL::maxChannelValue);
+      basePix[x].m = static_cast<typename PIXEL::Channel>(
+          fmax(0.f, fmin(a_out, 1.f)) * (float)PIXEL::maxChannelValue);
     }
   }
   ras->unlock();
@@ -921,7 +942,7 @@ void naru_lazybrush::drawMaskAndLine(TRasterPT<PIXEL> ras,
 
 //------------------------------------------------------------------
 
-void naru_lazybrush::onObsoleteParamLoaded(const std::string &paramName) {
+void naru_lazybrush::onObsoleteParamLoaded(const std::string& paramName) {
   if (paramName == "mask_color") {
     m_auto_scribble_color->copy(m_mask_color.getPointer());
   } else if (paramName == "auto_scribble") {
@@ -929,7 +950,7 @@ void naru_lazybrush::onObsoleteParamLoaded(const std::string &paramName) {
   }
 }
 
-void naru_lazybrush::loadData(TIStream &is) {
+void naru_lazybrush::loadData(TIStream& is) {
   TStandardRasterFx::loadData(is);
   if (getFxVersion() < 2) {
     if (m_log_scale->getKeyframeCount() > 0) {
