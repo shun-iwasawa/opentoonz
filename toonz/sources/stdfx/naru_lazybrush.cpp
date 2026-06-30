@@ -211,7 +211,7 @@ private:
 
   //-------------------------------------------------------------------
 
-  void initRasters(TRasterP& fullRas, TRasterP& refRas, TTile& fullTile,
+  void initRasters(TRasterP& srcRas, TRasterP& refRas, TTile& fullTile,
                    TTile& tile, const TRenderSettings& ri, double frame);
 
   template <typename PIXEL>
@@ -272,14 +272,14 @@ void naru_lazybrush::doCompute(TTile& tile, double frame,
                                const TRenderSettings& ri) {
   if (!m_input.isConnected()) return;
 
-  TRasterP fullRas;
+  TRasterP srcRas;
   TRasterP refRas;
   TTile fullTile;
-  initRasters(fullRas, refRas, fullTile, tile, ri, frame);
+  initRasters(srcRas, refRas, fullTile, tile, ri, frame);
 
   RenderContext ctx;
-  ctx.width   = fullRas->getLx();
-  ctx.height  = fullRas->getLy();
+  ctx.width   = srcRas->getLx();
+  ctx.height  = srcRas->getLy();
   ctx.rasSize = ctx.width * ctx.height;
   ctx.mode    = m_mode->getValue();
 
@@ -312,19 +312,17 @@ void naru_lazybrush::doCompute(TTile& tile, double frame,
   }
 
   // main process
-  if (TRaster32P ras32 = fullRas)
+  if (TRaster32P ras32 = srcRas)
     process<TPixel32>(ras32, frame, ctx);
-  else if (TRaster64P ras64 = fullRas)
+  else if (TRaster64P ras64 = srcRas)
     process<TPixel64>(ras64, frame, ctx);
-  else if (TRasterFP rasF = fullRas)
+  else if (TRasterFP rasF = srcRas)
     process<TPixelF>(rasF, frame, ctx);
   else
     throw TException("unsupported Pixel Type");
 
   // copy result to tile
-  TRasterP tileRas      = tile.getRaster();
-  TPoint startTilingPos = convert(fullTile.m_pos - tile.m_pos);
-  tileRas->copy(fullRas, startTilingPos);
+  tile.getRaster()->copy(srcRas);
 }
 
 template <typename PIXEL>
@@ -489,27 +487,25 @@ void naru_lazybrush::process(TRasterPT<PIXEL> ras, double frame, RenderContext& 
 
 
 //-------------------------------------------------------------------
-void naru_lazybrush::initRasters(TRasterP &fullRas, TRasterP& refRas,
+void naru_lazybrush::initRasters(TRasterP &srcRas, TRasterP& refRas,
                                  TTile &fullTile, TTile& tile,
                                  const TRenderSettings& ri,
                                  double frame) {
   // get BBox of the input image
-  TRectD fullBBox;
-  m_input->getBBox(frame, fullBBox, ri);
+  TRectD calcArea(tile.m_pos, TDimensionD(tile.getRaster()->getLx(),
+                                                 tile.getRaster()->getLy()));
 
   // get input raster
-  TDimension size(0, 0);
-  size.lx = tceil(fullBBox.getLx());
-  size.ly = tceil(fullBBox.getLy());
-  m_input->allocateAndCompute(fullTile, fullBBox.getP00(), size,
+  TDimension size = tile.getRaster()->getSize();
+  m_input->allocateAndCompute(fullTile, calcArea.getP00(), size,
                               tile.getRaster(), frame, ri);
-  fullRas = fullTile.getRaster();
+  srcRas = fullTile.getRaster();
 
   // get reference raster
   if (m_ref.isConnected()) {
     TTile refTile;
-    m_ref->allocateAndCompute(refTile, fullBBox.getP00(), size,
-                              fullRas, frame, ri);
+    m_ref->allocateAndCompute(refTile, calcArea.getP00(), size,
+                              srcRas, frame, ri);
     refRas = refTile.getRaster();
   }
 }
