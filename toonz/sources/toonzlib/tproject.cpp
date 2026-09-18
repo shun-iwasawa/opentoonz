@@ -408,7 +408,7 @@ int TProject::getFolderIndex(string name) const {
   std::vector<std::string>::const_iterator it;
   it = std::find(m_folderNames.begin(), m_folderNames.end(), name);
   if (it == m_folderNames.end()) return -1;
-  return std::distance(it, m_folderNames.begin());
+  return std::distance(m_folderNames.begin(), it);
 }
 
 //-------------------------------------------------------------------
@@ -981,7 +981,7 @@ void TProjectManager::getFolderNames(std::vector<std::string> &names) {
 void TProjectManager::setCurrentProjectPath(const TFilePath &fp) {
   assert(TProject::isAProjectPath(fp));
   currentProjectPath = ::to_string(fp.getWideString());
-  currentProject     = nullptr;// init this pointer in getCurrentProject()
+  currentProject     = nullptr;  // init this pointer in getCurrentProject()
   notifyListeners();
 }
 
@@ -1036,8 +1036,8 @@ std::shared_ptr<TProject> TProjectManager::getCurrentProject() {
         \note \b scenePath must be an absolute path.\n
         Creates a new TProject. The caller gets ownership.
         Sets *notFound to true if scenes.xml not found */
-std::shared_ptr<TProject> TProjectManager::loadSceneProject(const TFilePath &scenePath, 
-    bool* notFound) {
+std::shared_ptr<TProject> TProjectManager::loadSceneProject(
+    const TFilePath &scenePath, bool *notFound) {
   // cerca il file scenes.xml nella stessa directory della scena
   // oppure in una
   // directory superiore
@@ -1076,11 +1076,10 @@ std::shared_ptr<TProject> TProjectManager::loadSceneProject(const TFilePath &sce
 
       projectPath = path;
     } catch (...) {
-        throw TException("Error while reading scenes.xml");
+      throw TException("Error while reading scenes.xml");
     }
     if (projectPath == TFilePath()) return 0;
-  }
-  else 
+  } else
     projectPath = getSandboxProjectPath();
 
   if (!TProject::isAProjectPath(projectPath)) {
@@ -1131,7 +1130,7 @@ void TProjectManager::removeListener(Listener *listener) {
         \see TSceneProperties
 */
 void TProjectManager::initializeScene(ToonzScene *scene) {
-  auto project = scene->getProject();
+  auto project            = scene->getProject();
   TSceneProperties *sprop = scene->getProperties();
 
   TFilePath currentProjectPath = getCurrentProjectPath();
