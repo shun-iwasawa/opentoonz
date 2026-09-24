@@ -405,6 +405,9 @@ TPalette* TXshSimpleLevel::getPalette() const { return m_palette.getPointer(); }
 
 void TXshSimpleLevel::setPalette(TPalette* palette) {
   m_palette = palette;  // TPaletteP handles ref counting automatically
+
+  if (m_palette && !(getType() & FULLCOLOR_TYPE))
+    m_palette->setPaletteName(getName());
 }
 
 //-----------------------------------------------------------------------------
