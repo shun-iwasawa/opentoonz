@@ -48,7 +48,7 @@ public:
     NO_SEP_NO_PAD,
     CUSTOM_PAD,
     UNDERSCORE_CUSTOM_PAD,
-    NOS_SEP_CUSTOM_PAD,
+    NO_SEP_CUSTOM_PAD,
     USE_CURRENT_FORMAT
   };  // pippo_1.tif
 
@@ -106,14 +106,21 @@ public:
   FrameFormat getCurrentFormat() const {
     switch (m_zeroPadding) {
     case 0:
-      return (m_startSeqInd == '.' ? NO_PAD : UNDERSCORE_NO_PAD);
+      return (m_startSeqInd == '.'
+                  ? NO_PAD
+                  : (m_startSeqInd == '_' ? UNDERSCORE_NO_PAD : NO_SEP_NO_PAD));
     case 4:
-      return (m_startSeqInd == '.' ? FOUR_ZEROS : UNDERSCORE_FOUR_ZEROS);
+      return (m_startSeqInd == '.'
+                  ? FOUR_ZEROS
+                  : (m_startSeqInd == '_' ? UNDERSCORE_FOUR_ZEROS
+                                          : NO_SEP_FOUR_ZEROS));
     default:
       break;
     }
 
-    return (m_startSeqInd == '.' ? CUSTOM_PAD : UNDERSCORE_CUSTOM_PAD);
+    return (m_startSeqInd == '.' ? CUSTOM_PAD
+                                 : (m_startSeqInd == '_' ? UNDERSCORE_CUSTOM_PAD
+                                                         : NO_SEP_CUSTOM_PAD));
   }
 };
 

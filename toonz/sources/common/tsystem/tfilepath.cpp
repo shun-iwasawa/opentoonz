@@ -136,7 +136,7 @@ std::string TFrameId::expand(FrameFormat format) const {
     o_buff << m_frame;
     o_buff.width(0);
   } else if (format == CUSTOM_PAD || format == UNDERSCORE_CUSTOM_PAD ||
-             format == NOS_SEP_CUSTOM_PAD) {
+             format == NO_SEP_CUSTOM_PAD) {
     o_buff.fill('0');
     o_buff.width(m_zeroPadding);
     o_buff << m_frame;
@@ -866,9 +866,11 @@ TFilePath TFilePath::withName(const std::wstring &name) const {
 
     QString ret = info.parentDir + QString::fromStdWString(name);
     if (info.fId.getNumber() != TFrameId::NO_FRAME) {
-      QString sepChar = (info.sepChar.isNull())        ? "."
-                        : (info.sepChar == QChar('#')) ? ""
-                                                       : QString(info.sepChar);
+      QString sepChar = (info.sepChar.isNull()) ? "."
+                        : (info.sepChar == QChar('#') &&
+                           info.fId.getNumber() != TFrameId::EMPTY_FRAME)
+                            ? ""
+                            : QString(info.sepChar);
       ret += sepChar + QString::fromStdString(
                            info.fId.expand(info.fId.getCurrentFormat()));
     }
@@ -913,6 +915,9 @@ TFilePath TFilePath::withParentDir(const TFilePath &dir) const {
 }
 
 //-----------------------------------------------------------------------------
+// TODO: This function might need to create a path based on
+// the value of `format` unless `format` is set to `USE_CURRENT_FORMAT`.
+// The potential impact must be investigated before making such changes.
 
 TFilePath TFilePath::withFrame(const TFrameId &frame,
                                TFrameId::FrameFormat format) const {

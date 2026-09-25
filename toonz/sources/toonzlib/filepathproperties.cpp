@@ -11,7 +11,7 @@ FilePathProperties::FilePathProperties()
 
 bool FilePathProperties::isDefault() {
   return (m_useStandard == true && m_acceptNonAlphabetSuffix == false &&
-          m_letterCountForSuffix == 1 && m_noSeparatorFormatAllowed == true);
+          m_letterCountForSuffix == 1 && m_noSeparatorFormatAllowed == false);
 }
 
 void FilePathProperties::saveData(TOStream& os) const {
